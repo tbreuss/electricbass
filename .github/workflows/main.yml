@@ -3,7 +3,7 @@ name: Build & Deploy
 on:
   push:
     branches:
-      - master
+      - main
 
 env:
   NODE_VERSION: '13.x'
