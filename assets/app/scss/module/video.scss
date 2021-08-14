@@ -1,0 +1,28 @@
+.videoList {
+  margin-top: 1.5rem;
+}
+
+.videoList__cell {
+  margin-bottom: 1.5rem;
+}
+
+.videoList__cover {
+  margin-bottom: 0.5rem;
+}
+
+.videoList__link {
+  color: #222;
+}
+
+.videoList__link:hover {
+  color: #222;
+}
+
+.videoList__title {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

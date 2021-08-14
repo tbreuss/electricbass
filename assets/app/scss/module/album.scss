@@ -1,0 +1,33 @@
+.albumlist {
+  margin-top: 1.5rem;
+}
+
+.albumlist__cell {
+  margin-bottom: 1.5rem;
+}
+
+.albumlist__cover {
+  margin-bottom: 0.5rem;
+}
+
+.albumlist__link {
+  color: #222;
+}
+
+.albumlist__link:hover {
+  color: #222;
+}
+
+.albumlist__title {
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.albumlist__artist {
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.albumlist .ratingReadonly__text {
+  display: none;
+}

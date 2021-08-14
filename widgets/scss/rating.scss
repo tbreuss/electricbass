@@ -1,0 +1,66 @@
+.rating {
+  display: flex;
+  color: #cccccc;
+  width: auto;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #ddd;
+}
+
+.rating__star {
+  cursor: pointer;
+  height: 34px;
+}
+
+.rating__star polygon {
+  fill: #d8d8d8;
+}
+
+.rating:hover .rating__star polygon {
+  fill: #ff5555 !important;
+}
+
+.rating__star:hover ~ .rating__star polygon {
+  fill: #d8d8d8 !important;
+}
+
+.rating[data-stars] .rating__star polygon {
+  fill: #ffd055;
+}
+
+.rating[data-stars="1"] .rating__star:nth-child(1) ~ .rating__star polygon {
+  fill: #d8d8d8;
+}
+
+.rating[data-stars="2"] .rating__star:nth-child(2) ~ .rating__star polygon {
+  fill: #d8d8d8;
+}
+
+.rating[data-stars="3"] .rating__star:nth-child(3) ~ .rating__star polygon {
+  fill: #d8d8d8;
+}
+
+.rating[data-stars="4"] .rating__star:nth-child(4) ~ .rating__star polygon {
+  fill: #d8d8d8;
+}
+
+.rating[data-stars="5"] .rating__star:nth-child(5) ~ .rating__star polygon {
+  fill: #d8d8d8;
+}
+
+.rating__text,
+.rating__empty {
+  color: #d8d8d8;
+  font-weight: 500;
+  font-size: 15px;
+  margin-left: 0.2em;
+  line-height: 34px;
+}
+
+.rating__text--hidden {
+  display: none;
+}
+
+.rating__empty--hidden {
+  display: none;
+}

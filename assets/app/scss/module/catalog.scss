@@ -1,0 +1,38 @@
+.cataloglist {
+  margin-top: 1.5rem;
+}
+
+.cataloglist__cell {
+  margin-bottom: 1.5rem;
+}
+
+.cataloglist__cell a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.cataloglist__link {
+  color: #222;
+}
+
+.cataloglist__link--empty {
+  background-color: #e7e5e5;
+}
+
+.cataloglist__link:hover {
+  color: #222;
+}
+
+.cataloglist__title {
+  padding-top: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-color: #fff;
+}

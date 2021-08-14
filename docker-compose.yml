@@ -1,0 +1,23 @@
+version: '3.5'
+
+services:
+
+  php:
+    build:
+      context: https://github.com/tbreuss/docker-php-builtin-server.git
+      args:
+        - PHP_IMAGE=8.0-alpine
+    environment:
+      - docroot=web
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/root-dir
+    labels:
+      - "traefik.http.routers.electricbass.rule=Host(`electricbass.test`)"
+    networks:
+      - local-dev
+
+networks:
+  local-dev:
+    external: true

@@ -1,0 +1,34 @@
+.breadcrumbs {
+  color: #c2c2c2;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 0;
+  margin-bottom: 1rem;
+  list-style: none;
+  font-size: 0.8rem;
+}
+
+.breadcrumbs__item + .breadcrumbs__item {
+  padding-left: 0.5rem;
+}
+
+.breadcrumbs__item + .breadcrumbs__item::before {
+  float: left;
+  padding-right: 0.5rem;
+  content: "/";
+}
+
+.breadcrumbs__item {
+
+  a {
+    color: #c2c2c2;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  a:hover {
+    color: #626262;
+    text-decoration: none;
+  }
+
+}

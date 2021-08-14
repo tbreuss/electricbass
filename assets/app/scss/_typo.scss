@@ -1,0 +1,80 @@
+html {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+@media (min-width: 576px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 992px) {
+  html {
+    font-size: 19px;
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1400px) {
+  html {
+    font-size: 21px;
+  }
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: #5F5C52;
+}
+
+h1 {
+  color: #423f37;
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.375;
+  margin-top: 0;
+  margin-bottom: 0.7rem;
+}
+
+h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+a {
+  color: #f04e36;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #a00e06;
+  text-decoration: none;
+}
+
+h3 a {
+  color: #5F5C52
+}
+
+h3 a:hover {
+  text-decoration: none;
+}

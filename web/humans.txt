@@ -1,0 +1,12 @@
+/* TEAM */
+Owner: Thomas Breuss
+Contact: https://www.electricbass.ch/kontakt
+Twitter: https://twitter.com/breussthomas
+GitHub: https://github.com/tbreuss/
+Location: Basel, Switzerland
+
+/* SITE */
+Last update: 2020/12/11
+Language: Deutsch / English
+Doctype: HTML5
+IDE: PhpStorm

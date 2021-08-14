@@ -1,0 +1,1 @@
+<?= eval(str_replace(['<?php', '?>'], ' ', $content)); ?>

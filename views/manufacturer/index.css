@@ -1,0 +1,34 @@
+#ctrl-manufacturer-index {
+    min-height: 42em;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+form.form-inline {
+    margin-bottom: 2em;
+}
+
+form.form-inline > div {
+    margin-right: 1em;
+}
+
+form.form-inline input[type=checkbox] {
+    margin-right: 0.25em;
+}
+
+tbody tr:hover {
+    cursor: pointer;
+    background: #f6f6f6;
+}
+
+tr[data-target] {
+    cursor: auto;
+}
+
+.icon a {
+    color: #bbb;
+}
+
+.icon a:hover {
+    color: #999;
+}

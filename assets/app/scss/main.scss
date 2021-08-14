@@ -1,0 +1,34 @@
+// See https://github.com/hellobrian/blogs/tree/master/watch-and-compile-your-sass-with-npm
+
+// scss-docs-start import-stack
+// Configuration
+@import "../../../node_modules/bootstrap/scss/bootstrap-reboot";
+@import "../../../node_modules/bootstrap/scss/bootstrap-grid";
+
+@import "./styles";
+@import "./layout";
+@import "./typo";
+@import "./breadcrumbs";
+@import "./button";
+@import "./collapsible";
+@import "./dropdown";
+@import "./flash";
+@import "./image";
+@import "./navbar";
+@import "./pagination";
+@import "./ratio";
+@import "./table";
+@import "./form";
+@import "./form_search";
+
+// modules
+@import "./module/album";
+@import "./module/catalog";
+@import "./module/video";
+@import "./module/website";
+
+// widgets
+@import "../../../widgets/scss/comments";
+@import "../../../widgets/scss/socialbar";
+@import "../../../widgets/scss/rating";
+@import "../../../widgets/scss/rating_readonly";
