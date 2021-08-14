@@ -1,0 +1,21 @@
+parameters:
+	level: 0
+	scanFiles:
+	    - vendor/yiisoft/yii2/Yii.php
+	paths:
+		- assets
+		- commands
+		- components
+		- config
+		- controllers
+		- filters
+		- helpers
+		- mail
+		- messages
+		- migrations
+		- models
+		- modules
+		- tests
+		- traits
+		- views
+		- widgets
