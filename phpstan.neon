@@ -15,7 +15,8 @@ parameters:
 		- migrations
 		- models
 		- modules
-		- tests
+		#- tests
 		- traits
 		- views
+		- web
 		- widgets

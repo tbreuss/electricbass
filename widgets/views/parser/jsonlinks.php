@@ -1,6 +1,6 @@
 <?php
-    use app\helpers\Html;
-    use yii\widgets\Spaceless;
+use app\helpers\Url;
+use yii\widgets\Spaceless;
 ?>
 
 <?php if(empty($urls)) return; ?>
@@ -29,7 +29,7 @@
                     <?php elseif(strpos($url,'@')): ?>
                         <a href="mailto:<?php echo $url ?>"><?php echo $label ?></a>
                     <?php elseif(is_file($url)): ?>
-                        <a href="<?php echo baseUrl() ?>/<?php echo $url ?>"><?php echo $label ?></a>
+                        <a href="<?php echo Url::base(true) ?>/<?php echo $url ?>"><?php echo $label ?></a>
                     <?php endif; ?>
                     <?php if(!empty($description)): ?>
                         <?php echo $description ?>

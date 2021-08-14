@@ -71,6 +71,8 @@ class m210424_073912_absolute_urls extends Migration
         foreach ($this->tables as $table) {
             $this->dropColumn($table, 'urlSegment');
         }
+
+        return true;
     }
 
     /**

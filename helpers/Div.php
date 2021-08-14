@@ -57,11 +57,12 @@ class Div
     /**
      * @param array $row
      * @return string
+     * @throws \Exception
      */
     public static function articleImage($row)
     {
         if(!isset($row['aId'])) {
-            throw new Exception('Fehler in Div::articleImage(). Key aId fehlt in Array $row.');
+            throw new \Exception('Fehler in Div::articleImage(). Key aId fehlt in Array $row.');
         }
         if(!empty($row['aFotos'])) {
             if(mb_substr($row['aFotos'],0,7,'utf-8') == 'http://') {
@@ -83,34 +84,6 @@ class Div
             }
         }
         return '';
-    }
-
-    /**
-     * Tweetet den Artikel an https://twitter.com/ElectricBassCH
-     * @return boolean
-     */
-    public static function tweet($status)
-    {
-        require_once(Yii::getPathOfAlias('application.vendors.tmhOAuth.tmhOAuth').'.php');
-        require_once(Yii::getPathOfAlias('application.vendors.tmhOAuth.tmhUtilities').'.php');
-
-        $tmhOAuth = new tmhOAuth(array(
-          'consumer_key'    => $_ENV['TWITTER_CONSUMER_KEY'],
-          'consumer_secret' => $_ENV['TWITTER_CONSUMER_SECRET'],
-          'user_token'      => $_ENV['TWITTER_USER_TOKEN'],
-          'user_secret'     => $_ENV['TWITTER_USER_SECRET'],
-        ));
-
-        $code = $tmhOAuth->request('POST', $tmhOAuth->url('1/statuses/update'), array(
-            'status' => $status
-        ));
-
-        if ($code == 200) {
-            return array('code'=>$code,'message'=>'Twitter Statusupdate erfolgreich.');
-        } else {
-            $response = json_decode($tmhOAuth->response['response']);
-            return array('code'=>$code,'message'=>$response->error);
-        }
     }
 
     /**
@@ -278,23 +251,6 @@ class Div
     }
 
     /**
-     * Wrapper für PhpThumbFactory::adaptiveResize
-     *
-     * @param string $filepath
-     * @param integer $width
-     * @param integer $height
-     * @param integer $jpgQuality
-     */
-    public static function adaptiveResizeImage($filepath, $width, $height, $jpgQuality=100)
-    {
-        require_once(Yii::getPathOfAlias('application.vendors.phpthumb.ThumbLib').'.inc.php');
-        $thumb = PhpThumbFactory::create($filepath);
-        $thumb->setOptions(array('jpegQuality' => $jpgQuality));
-        $thumb->adaptiveResize($width, $height);
-        $thumb->save($filepath);
-    }
-
-    /**
      * @param string $filename
      * @param string $pathname
      * @return string
@@ -318,7 +274,7 @@ class Div
         while(is_file($pathname.$filename)) {
             $filename = $info['filename'].'-'.$i.'.'.$info['extension'];
             $i++;
-            if($i>1000) throw new Exception('Irgendwas ist beim Upload schiefgelaufen');
+            if($i>1000) throw new \Exception('Irgendwas ist beim Upload schiefgelaufen');
         }
         return $filename;
     }

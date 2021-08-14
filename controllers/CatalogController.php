@@ -138,7 +138,6 @@ class CatalogController extends Controller
         return $this->render('view', [
             'title' => $this->getListTitle($category),
             'model' => $model,
-            'route' => sprintf("/catalog/index", $model->category),
             'amazonProductDetail' => $amazonProductDetail,
             'similars' => $similars,
             'category' => $category

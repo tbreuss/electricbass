@@ -38,7 +38,7 @@ class GlossarController extends Controller
 
     public function actionReorder()
     {
-        $glossars = Glossar::model()->findAll(array('order' => 'category, title'));
+        $glossars = Glossar::findAll(array('order' => 'category, title'));
         $i = 0;
         foreach ($glossars AS $glossar) {
             $glossar->autosort = $i;

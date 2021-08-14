@@ -49,15 +49,6 @@ class Advertisement extends ActiveRecord
 
     public $upload;
 
-    /**
-     * @param string $className
-     * @return Advertisement
-     */
-    public static function model($className = __CLASS__)
-    {
-        return parent::model($className);
-    }
-
     public function init()
     {
         $this->on(self::EVENT_AFTER_INSERT, [$this, 'onAfterInsert']);
@@ -230,7 +221,7 @@ class Advertisement extends ActiveRecord
     /**
      * @return bool
      */
-    public function handleUpload()
+    public function handleUpload(): bool
     {
         $upload = UploadedFile::getInstance($this, 'upload');
         if (is_null($upload)) {
@@ -265,6 +256,7 @@ class Advertisement extends ActiveRecord
             ->interlace(ImageInterface::INTERLACE_PLANE)
             ->save($filename, array('jpeg_quality' => 90, 'png_compression_level' => 8));
 
+        return true;
     }
 
     /**

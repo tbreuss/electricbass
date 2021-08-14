@@ -13,7 +13,7 @@ use Amazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1\PartnerType;
 use Amazon\ProductAdvertisingAPI\v1\Configuration;
 use GuzzleHttp\Client;
 
-class AmazonProductDetail
+final class AmazonProductDetail
 {
     /**
      * @var GetItemsResponse
