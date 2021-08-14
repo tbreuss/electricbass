@@ -38,8 +38,6 @@ phpunit.phar
 /phpunit.xml
 
 # config
-/config/db.php
-/config/mailer.php
 /_doc
 /runtime/cache
 /runtime/debug
