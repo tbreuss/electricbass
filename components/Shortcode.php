@@ -214,29 +214,6 @@ class Shortcode extends Component
     }
 
     /**
-     * @param array $pairs
-     * @param array $atts
-     * @param string $shortcode
-     * @return array
-     */
-    public function shortcodeAtts(array $pairs, array $atts, $shortcode = '')
-    {
-        $atts = (array) $atts;
-        $out = [];
-        foreach ($pairs as $name => $default) {
-            if (array_key_exists($name, $atts)) {
-                $out[$name] = $atts[$name];
-            } else {
-                $out[$name] = $default;
-            }
-        }
-        if ($shortcode) {
-            $out = apply_filters("shortcodeAtts{$shortcode}", $out, $pairs, $atts);
-        }
-        return $out;
-    }
-
-    /**
      * @param string $content
      * @return string
      */

@@ -27,6 +27,8 @@ class m210513_130000_cleanup_website_urls extends Migration
             $this->insert('redirect', ['from' => $row['url'], 'to' => $url]);
             $this->update('website', ['url' => $url], ['id' => $row['id']]);
         }
+
+        return true;
     }
 
     /**

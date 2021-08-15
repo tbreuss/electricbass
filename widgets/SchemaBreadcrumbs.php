@@ -71,7 +71,7 @@ class SchemaBreadcrumbs extends Breadcrumbs
 
         $this->options = array_merge($this->options, $this->defaultOptions);
 
-        echo Html::tag($this->tag, implode('', $links), $this->options);
+        return Html::tag($this->tag, implode('', $links), $this->options);
     }
 
     protected function renderItem($link, $template)
