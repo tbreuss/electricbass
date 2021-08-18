@@ -4,8 +4,11 @@ use app\models\Advertisement;
 use app\models\AdvertisementContactForm;
 use yii\captcha\Captcha;
 
-/** @var $advertisement Advertisement */
-/** @var $model AdvertisementContactForm */
+/**
+ * @var Advertisement $advertisement
+ * @var AdvertisementContactForm $model
+ * @var yii\web\View $this
+ */
 
 $this->title = 'Anbieter kontaktieren';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];

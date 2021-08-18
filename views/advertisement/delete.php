@@ -1,5 +1,12 @@
 <?php
 use app\helpers\Html;
+use app\models\Advertisement;
+use yii\web\View;
+
+/**
+ * @var Advertisement $model
+ * @var View $this
+ */
 ?>
 <?php
 $this->title = 'Inserat löschen';

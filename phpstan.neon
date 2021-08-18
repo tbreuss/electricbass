@@ -15,7 +15,7 @@ parameters:
 		#- mail
 		#- messages
 		#- migrations
-		#- models
+		- models
 		#- modules
 		#- tests
 		- traits

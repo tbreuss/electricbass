@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @var app\models\Advertisement $model
+ * @var yii\web\View $this
+ */
+
 $this->title = 'Inserat hinzufügen | Bassmarkt';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
 $this->params['breadcrumbs'][] = 'Inserat hinzufügen';

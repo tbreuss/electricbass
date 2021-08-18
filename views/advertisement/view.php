@@ -1,11 +1,20 @@
 <?php
-    use app\helpers\Html;
-    use app\widgets\Comments;
-    use app\widgets\GoogleMaps;
-    use app\widgets\Hits;
-    use app\widgets\Rating;
-    use app\widgets\SocialBar;
-    use yii\helpers\Markdown;
+
+/**
+ * @var Advertisement $model
+ * @var View $this
+ */
+
+use app\helpers\Html;
+use app\models\Advertisement;
+use app\widgets\Comments;
+use app\widgets\GoogleMaps;
+use app\widgets\Hits;
+use app\widgets\Rating;
+use app\widgets\SocialBar;
+use yii\helpers\Markdown;
+use yii\web\View;
+
 ?>
 
 <?php #$this->metaDescription = mb_strimwidth(str_replace("\n", ' ' , strip_tags(Markdown::process($model->longtext))), 0, 240, '...', 'UTF-8') ?>

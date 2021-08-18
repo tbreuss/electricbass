@@ -4,6 +4,12 @@ use app\helpers\Html;
 use app\widgets\RatingReadOnly;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
+use yii\web\View;
+
+/**
+ * @var Advertisement[] $models
+ * @var View $this
+ */
 
 $this->title = 'Bassmarkt';
 $this->params['breadcrumbs'][] = $this->title;
@@ -97,4 +103,4 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
         <?php endforeach; ?>
     </ul>
 </div>
-<?php $this->endBlock('sidebar') ?>
+<?php $this->endBlock() ?>

@@ -14,12 +14,21 @@ use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
+/**
+ * @property int $id
+ * @property string $email
+ * @property string $currency
+ * @property string $countryTranslated
+ * @property string $title
+ * @property string $url
+ * @property string $longtext
+ * @property string $country
+ * @property int $category_id
+ */
 class Advertisement extends ActiveRecord
 {
-    /**
-     * @var array
-     */
-    public static $categories = array(
+
+    public static array $categories = array(
         1 => 'Effektgeräte',
         2 => 'Bassgitarren',
         3 => 'Lautsprecher',
