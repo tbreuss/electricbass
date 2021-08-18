@@ -43,4 +43,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
-          script: /home/${{ secrets.SSH_USERNAME }}/public_html/ch.electricbass/yii migrate/up --interactive=0
+          script: php80 /home/${{ secrets.SSH_USERNAME }}/public_html/ch.electricbass/yii migrate/up --interactive=0
