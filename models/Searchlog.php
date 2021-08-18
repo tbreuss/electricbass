@@ -6,6 +6,10 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
+/**
+ * @property string $created
+ * @property string $modified
+ */
 class Searchlog extends ActiveRecord
 {
     /**

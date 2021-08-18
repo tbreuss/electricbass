@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var string $title
+ */
+?>
 <?php if (!empty($models)): ?>
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title"><?= $title ?></h3>

@@ -6,6 +6,9 @@ use app\traits\SimilarModelsByTags;
 use Yii;
 use yii\db\ActiveRecord;
 
+/**
+ * @property int $id
+ */
 class Fingering extends ActiveRecord
 {
     use SimilarModelsByTags;

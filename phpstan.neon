@@ -1,22 +1,24 @@
 parameters:
-	level: 0
+	level: 1
+	bootstrapFiles:
+	    - .phpstan/constants.php
 	scanFiles:
 	    - vendor/yiisoft/yii2/Yii.php
 	paths:
-		- assets
-		- commands
-		- components
-		- config
-		- controllers
-		- filters
+		#- assets
+		#- commands
+		#- components
+		#- config
+		#- controllers
+		#- filters
 		- helpers
-		- mail
-		- messages
-		- migrations
-		- models
-		- modules
+		#- mail
+		#- messages
+		#- migrations
+		#- models
+		#- modules
 		#- tests
 		- traits
 		- views
-		- web
+		#- web
 		- widgets

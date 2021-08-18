@@ -3,9 +3,9 @@
  * https://codepen.io/brianknapp/pen/JEotD/
  * https://css-tricks.com/five-methods-for-five-star-ratings/
  *
- * @var $style string left, right, none
- * @var $ratingCount int
- * @var $ratingAverage float
+ * @var string $style left, right, none
+ * @var int $ratingCount
+ * @var float $ratingAverage
  */
 ?>
 

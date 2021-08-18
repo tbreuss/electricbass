@@ -6,6 +6,13 @@ use app\helpers\Url;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
+/**
+ * @property int $guitars
+ * @property int $pickups
+ * @property int $amps
+ * @property int $gear
+ * @property int $strings
+ */
 class Manufacturer extends ActiveRecord
 {
     public function getSortimentForGeneratedText(): array

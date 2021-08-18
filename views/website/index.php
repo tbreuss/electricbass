@@ -4,6 +4,14 @@ use app\helpers\Html;
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;
 
+/**
+ * @var string $sort
+ * @var app\models\Website[] $latest
+ * @var app\models\Website[] $popular
+ * @var app\models\Website[] $websites
+ * @var yii\data\Pagination $pagination
+ * @var yii\web\View $this
+ */
 ?>
 
 <?php

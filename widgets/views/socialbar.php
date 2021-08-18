@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var string $url
+ * @var string $text
+ */
+?>
 <div class="socialbar">
 
     <h2 class="socialbar__title">Share</h2>

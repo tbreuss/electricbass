@@ -10,6 +10,9 @@ use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use yii\helpers\Url;
 
+/**
+ * @property int $id
+ */
 class Video extends ActiveRecord
 {
     use SimilarModelsByTags;

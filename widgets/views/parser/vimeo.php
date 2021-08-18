@@ -1,4 +1,9 @@
 <?php
+/**
+ * @var string $key
+ * @var int $width
+ * @var int $height
+ */
 use yii\widgets\Spaceless;
 
 ?>

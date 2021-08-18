@@ -7,6 +7,10 @@ use app\helpers\Html;
 use Yii;
 use yii\web\NotFoundHttpException;
 
+/**
+ * @property int $id
+ * @property int $autosort
+ */
 class Glossar extends ActiveRecord
 {
     public function attributeLabels()

@@ -7,6 +7,9 @@ use yii\data\Sort;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
+/**
+ * @property string $text_en
+ */
 class Quote extends ActiveRecord
 {
     /**

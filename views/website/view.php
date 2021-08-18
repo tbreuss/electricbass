@@ -7,6 +7,10 @@ use app\widgets\Parser;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
 
+/**
+ * @var yii\web\View $this
+ * @var app\models\Website $website
+ */
 ?>
 
 <?php

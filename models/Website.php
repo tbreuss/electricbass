@@ -9,6 +9,11 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 
+/**
+ * @property int $id
+ * @property string $website
+ * @property string $modified
+ */
 class Website extends ActiveRecord
 {
     use SimilarModelsByTags;
