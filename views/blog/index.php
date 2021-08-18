@@ -1,7 +1,19 @@
 <?php
+/**
+ * @var Pagination $pagination
+ * @var View $this
+ * @var string $sort
+ * @var Blog[] $blogs
+ * @var Blog[] $latest
+ * @var Blog[] $popular
+ */
+
+use app\models\Blog;
 use app\widgets\ListSummary;
 use app\widgets\ListView;
 use app\widgets\LinkPager;
+use yii\data\Pagination;
+use yii\web\View;
 
 ?>
 

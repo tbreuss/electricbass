@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var Advertisement $model
  * @var View $this

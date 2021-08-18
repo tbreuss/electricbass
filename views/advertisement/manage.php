@@ -1,14 +1,13 @@
 <?php
+/**
+ * @var AdvertisementEmailForm $model
+ * @var View $this
+ */
 
 use app\helpers\Html;
 use app\models\AdvertisementEmailForm;
 use yii\captcha\Captcha;
 use yii\web\View;
-
-/**
- * @var AdvertisementEmailForm $model
- * @var View $this
- */
 
 $this->title = 'Inserate verwalten | Bassmarkt';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];

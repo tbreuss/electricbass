@@ -1,9 +1,15 @@
 <?php
-use app\widgets\ListSummary;
+
+/**
+ * @var View $this
+ * @var Quote[] $models
+ */
+
+use app\models\Quote;
 use app\widgets\Comments;
-use app\widgets\LinkPager;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
+use yii\web\View;
 
 $this->title = 'Zitate von Bassisten';
 $this->params['breadcrumbs'][] = 'Zitate von Bassisten';

@@ -1,8 +1,12 @@
 <?php
-    use app\widgets\Advertisement;
-    use app\widgets\Articles;
-    use yii\helpers\Url;
-    use yii\helpers\ArrayHelper;
+/**
+ * @var View $this
+ * @var string $content
+ */
+
+use yii\helpers\ArrayHelper;
+use yii\web\View;
+
 ?>
 <?php $this->beginContent('@app/views/layouts/base.php'); ?>
     <div class="row">

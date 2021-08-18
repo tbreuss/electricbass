@@ -1,6 +1,12 @@
 <?php
+/**
+ * @var View $this
+ * @var Fingering[] $models
+ */
 
 use app\helpers\Html;
+use app\models\Fingering;
+use yii\web\View;
 
 $category = '';
 

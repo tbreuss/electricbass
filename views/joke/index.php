@@ -1,9 +1,19 @@
 <?php
+/**
+ * @var View $this
+ * @var Pagination $pagination
+ * @var string $sort
+ * @var Joke[] $models
+ */
+
+use app\models\Joke;
 use app\widgets\ListSummary;
 use app\widgets\Comments;
 use app\widgets\LinkPager;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
+use yii\data\Pagination;
+use yii\web\View;
 
 $this->title = 'Bassistenwitze';
 $this->params['breadcrumbs'][] = 'Bassistenwitze';

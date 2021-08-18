@@ -1,13 +1,15 @@
 <?php
 
-use app\helpers\Html;
-
 /**
- * @var yii\web\View $this
+ * @var View $this
  * @var array $entries
- * @var app\models\Website[] $latest
- * @var app\models\Website[] $popular
+ * @var Website[] $latest
+ * @var Website[] $popular
  */
+
+use app\helpers\Html;
+use app\models\Website;
+use yii\web\View;
 
 $this->params['pageTitle'] = 'Websites zum Thema E-Bass von A-Z';
 $this->params['metaDescription'] = 'Umfangreicher Katalog von A-Z mit Marken und Herstellern von E-Bässen und Zubehör, Blogs von Bassist*innen und Websites zum Thema E-Bass.';

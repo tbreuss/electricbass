@@ -1,12 +1,23 @@
 <?php
+/**
+ * @var Pagination $pagination
+ * @var View $this
+ * @var array<string, string> $filter
+ * @var string $sort
+ * @var Album[] $models
+ * @var Album[] $latest
+ * @var Album[] $popular
+ */
+
 use app\helpers\Html;
 use app\helpers\Url;
+use app\models\Album;
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;
 use app\widgets\RatingReadOnly;
 use yii\data\Pagination;
+use yii\web\View;
 
-/** @var Pagination $pagination */
 ?>
 
 <?php

@@ -15,10 +15,8 @@ use app\widgets\SocialBar;
 use yii\helpers\Markdown;
 use yii\web\View;
 
-?>
+#$this->metaDescription = mb_strimwidth(str_replace("\n", ' ' , strip_tags(Markdown::process($model->longtext))), 0, 240, '...', 'UTF-8');
 
-<?php #$this->metaDescription = mb_strimwidth(str_replace("\n", ' ' , strip_tags(Markdown::process($model->longtext))), 0, 240, '...', 'UTF-8') ?>
-<?php
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
 $this->params['breadcrumbs'][] = $model->title;
 $this->title = $model->getPageTitle();

@@ -1,7 +1,13 @@
 <?php
 /**
+ * @var View $this
  * @var string $title
+ * @var Website[] $models
  */
+
+use app\models\Website;
+use yii\web\View;
+
 ?>
 <?php if (!empty($models)): ?>
     <div class="sidebarWidget">

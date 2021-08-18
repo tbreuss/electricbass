@@ -1,5 +1,12 @@
 <?php
+/**
+ * @var View $this
+ * @var string $content
+ */
+
 use yii\helpers\ArrayHelper;
+use yii\web\View;
+
 ?>
 <?php $this->beginContent('@app/views/layouts/base.php'); ?>
     <?= $content ?>

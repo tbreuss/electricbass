@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var app\models\Album $model
+ * @var View $this
+ */
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Rating;
@@ -6,6 +10,7 @@ use app\widgets\SocialBar;
 use app\helpers\Html;
 use app\helpers\Url;
 use yii\helpers\Markdown;
+use yii\web\View;
 
 ?>
 

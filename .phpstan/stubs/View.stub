@@ -1,0 +1,12 @@
+<?php
+
+namespace yii\web;
+
+/**
+ * @property string $title
+ * @property array $params
+ */
+class View
+{
+
+}

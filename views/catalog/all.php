@@ -1,6 +1,17 @@
 <?php
+/**
+ * @var View $this
+ * @var string $title
+ * @var string $sidebarTitle
+ * @var array $entries
+ * @var string $category
+ * @var Catalog[] $latest
+ * @var Catalog[] $popular
+ */
 
 use app\helpers\Html;
+use app\models\Catalog;
+use yii\web\View;
 
 ?>
 <div class="content catalog-all">

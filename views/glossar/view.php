@@ -1,14 +1,21 @@
 <?php
+/**
+ * @var View $this
+ * @var Glossar $glossar
+ * @var Glossar $next
+ * @var Glossar $previous
+ * @var string $selectedCategory
+ */
+
 use app\helpers\Html;
+use app\models\Glossar;
 use app\widgets\Comments;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
 use app\widgets\Hits;
 use yii\helpers\Markdown;
+use yii\web\View;
 
-?>
-
-<?php
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
 $this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];
 $this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['glossar/index', 'category' => strtolower($glossar->category)]];;

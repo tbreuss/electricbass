@@ -1,5 +1,9 @@
 <?php
+/**
+ * @var Query $query
+ */
 use app\models\Search;
+use yii\db\Query;
 use yii\helpers\Url;
 
 // Siehe http://feeds.bbci.co.uk/news/world/rss.xml

@@ -1,15 +1,15 @@
 <?php
+/**
+ * @var Advertisement[] $models
+ * @var View $this
+ */
+
 use app\models\Advertisement;
 use app\helpers\Html;
 use app\widgets\RatingReadOnly;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 use yii\web\View;
-
-/**
- * @var Advertisement[] $models
- * @var View $this
- */
 
 $this->title = 'Bassmarkt';
 $this->params['breadcrumbs'][] = $this->title;

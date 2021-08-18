@@ -1,15 +1,18 @@
 <?php
+/**
+ * @var View $this
+ * @var Fingering $model
+ */
+
 use app\components\Fingerboard;
 use app\helpers\Html;
+use app\models\Fingering;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
 use yii\helpers\Markdown;
 
-?>
-
-<?php
 $this->title = $model->title . ' | Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];

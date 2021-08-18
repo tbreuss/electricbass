@@ -1,11 +1,14 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $name string */
-/* @var $message string */
-/* @var $exception Exception */
+/**
+ * @var View $this
+ * @var string $name
+ * @var string $message
+ * @var Exception $exception
+ */
 
 use app\helpers\Html;
+use yii\web\View;
 
 $this->title = 'Fehler';
 $this->params['breadcrumbs'][] = $this->title;

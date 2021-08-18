@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @var View $this
+ * @var ActiveDataProvider $dataProvider
+ * @var bool $searched
+ * @var string $term
+ */
+
 use app\controllers\SearchController;
 use app\helpers\Html;
 use app\widgets\LinkPager;
@@ -8,16 +15,11 @@ use app\widgets\RatingReadOnly;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
+use yii\web\View;
 
 $this->title = 'Suche';
 $this->params['breadcrumbs'][] = $this->title;
 $this->context->layout = 'onecol_empty';
-
-/**
- * @var ActiveDataProvider $dataProvider
- * @var bool $searched
- * @var string $term
- */
 
 /**
  * @param string $text

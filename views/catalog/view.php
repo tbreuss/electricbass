@@ -1,4 +1,11 @@
 <?php
+/**
+ * @var View $this
+ * @var Catalog $model
+ * @var AmazonProductDetail $amazonProductDetail
+ * @var string $title
+ */
+
 use app\components\AmazonProductDetail;
 use app\models\Catalog;
 use app\widgets\Comments;
@@ -8,11 +15,8 @@ use app\widgets\SocialBar;
 use app\helpers\Html;
 use app\helpers\Url;
 use yii\helpers\Markdown;
+use yii\web\View;
 
-/**
- * @var $model Catalog
- * @var $amazonProductDetail AmazonProductDetail
- */
 
 $this->title = $model->title . ' | ' . $title . ' | Katalog';
 $this->params['breadcrumbs'][] = ['label' => 'Katalog', 'url' => Url::to(['catalog/overview'])];

@@ -1,6 +1,13 @@
 <?php
+/**
+ * @var View $this
+ * @var string $selectedCategory
+ */
+
 use app\helpers\Html;
 use app\models\Glossar;
+use yii\web\View;
+
 ?>
 
 <?php $this->beginBlock('sidebar') ?>
