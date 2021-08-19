@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var app\models\Advertisement[] $models
+ * @var app\models\Advertisement $model
+ */
+?>
 Hallo <?php echo $model->name ?><br>
 <br>
 Vielen Dank für das Aufschalten Deines Inserats <b>&laquo;<?php echo $model->title ?>&raquo;</b> bei electricbass.ch. Nach einer Laufzeit von 60 Tagen wird es automatisch gelöscht. Anfragen auf Dein Inserat erhälst Du direkt per E-Mail. Deine E-Mail wird nicht veröffentlicht.<br>

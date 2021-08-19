@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @var yii\web\View $this
  * @var string $url
  * @var string $tableName
  * @var int $tableId

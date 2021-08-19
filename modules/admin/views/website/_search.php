@@ -1,11 +1,14 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var app\modules\admin\models\WebsiteSearch $model
+ * @var yii\widgets\ActiveForm $form
+ */
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\admin\models\WebsiteSearch */
-/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="website-search">

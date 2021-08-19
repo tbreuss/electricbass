@@ -222,7 +222,7 @@ function grap_favicon($options = array())
 
     // FOR DEBUG ONLY
     if ($DEBUG == 'debug') {
-
+        $content = '';
         // Load the Favicon from local file
         if (!function_exists('file_get_contents')) {
             $fh = @fopen($filePath, 'r');
@@ -284,6 +284,11 @@ function load($url, $DEBUG)
 function rel2abs($rel, $base)
 {
     extract(parse_url($base));
+
+    /** @var string $scheme */
+    /** @var string $host */
+    /** @var string $path */
+
     if (strpos($rel, "//") === 0) return $scheme . ':' . $rel;
     if (parse_url($rel, PHP_URL_SCHEME) != '') return $rel;
     if ($rel[0] == '#' or $rel[0] == '?') return $base . $rel;

@@ -1,11 +1,14 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var app\modules\admin\models\VideoSearch $searchModel
+ * @var yii\data\ActiveDataProvider $dataProvider
+ */
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel app\modules\admin\models\VideoSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Videos';
 $this->params['breadcrumbs'][] = $this->title;

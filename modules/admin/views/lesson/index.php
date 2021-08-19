@@ -1,11 +1,14 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var app\modules\admin\models\LessonSearch $searchModel
+ * @var yii\data\ActiveDataProvider $dataProvider
+ */
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel app\modules\admin\models\LessonSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Lessons';
 $this->params['breadcrumbs'][] = $this->title;

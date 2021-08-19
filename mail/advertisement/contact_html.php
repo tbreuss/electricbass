@@ -1,3 +1,10 @@
+<?php
+/**
+ * @var app\models\AdvertisementContactForm $model
+ * @var app\models\Advertisement $advertisement
+ * @var string $email
+ */
+?>
 <?php echo nl2br($model->message) ?>
 <br>
 <?php if(!empty($model->phone)): ?><br>Telefon: <?php echo $model->phone ?><br><?php endif; ?>

@@ -1,4 +1,13 @@
-
+<?php
+/**
+ * @var string $uniqid
+ * @var int $zoom
+ * @var string $title
+ * @var string $text
+ * @var float $latitude
+ * @var float $longitude
+ */
+?>
 <?php if (!empty($latitude) && !empty($longitude)): ?>
 
     <div class="widget widget-googlemaps">

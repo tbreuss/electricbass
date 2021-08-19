@@ -1,10 +1,12 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var app\modules\admin\models\Video $model
+ */
+
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
-/* @var $this yii\web\View */
-/* @var $model app\modules\admin\models\Video */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Videos', 'url' => ['index']];

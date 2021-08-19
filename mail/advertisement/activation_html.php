@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var app\models\Advertisement $model
+ */
+?>
 Bestätigung Deines Inserats „<?php echo $model->title ?>“ auf electricbass.ch
 
 Hallo,

@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @var app\models\Lesson[] $models
+ */
+
 use app\widgets\ListView;
 use yii\widgets\Spaceless;
 ?>

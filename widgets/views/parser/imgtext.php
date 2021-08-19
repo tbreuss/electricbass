@@ -1,4 +1,10 @@
 <?php
+/**
+ * @var string $position
+ * @var string $text
+ * @var string $title
+ * @var string $url
+ */
 use app\helpers\Html;
 use yii\helpers\Markdown;
 use yii\widgets\Spaceless;

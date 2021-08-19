@@ -2,14 +2,13 @@
 
 namespace app\widgets;
 
-use app\models\Quote as QuoteModel;
 use yii\base\Widget;
 
 class ListView extends Widget
 {
-    public $ratingStyle;
-    public $ratingContext;
-    public $models;
+    public string $ratingStyle;
+    public string $ratingContext;
+    public array $models;
     public function run()
     {
         return $this->render('listview', [

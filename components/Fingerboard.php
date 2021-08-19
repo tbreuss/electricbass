@@ -50,7 +50,7 @@ class Fingerboard {
      *
      * @param integer $numberOfResults
      * @return integer
-     * @since 2012-11-30 
+     * @since 2012-11-30
      */
     public function reduceTo($numberOfResults=1)
     {
@@ -524,14 +524,14 @@ class Fingerboard {
         if(isset($possibleResults['S'])){
           $calculatedInterval = $possibleResults['S'];
         } else {
-          $calculatedInterval = $possibleResults['N'];
+          $calculatedInterval = $possibleResults['N'] ?? '';
         }
       }
       elseif($this->is_flat($root)){
         if(isset($possibleResults['F'])){
           $calculatedInterval = $possibleResults['F'];
         } else {
-          $calculatedInterval = $possibleResults['N'];
+          $calculatedInterval = $possibleResults['N'] ?? '';
         }
       }
       else{
@@ -539,10 +539,10 @@ class Fingerboard {
           $calculatedInterval = $possibleResults['N'];
         }
         elseif(in_array($root, $flatKeys)){
-          $calculatedInterval = $possibleResults['F'];
+          $calculatedInterval = $possibleResults['F'] ?? '';
         }
         elseif(in_array($root, $sharpKeys)){
-          $calculatedInterval = $possibleResults['S'];
+          $calculatedInterval = $possibleResults['S'] ?? '';
         }
       }
       return $calculatedInterval;
@@ -565,12 +565,13 @@ class Fingerboard {
       return $flat;
     }
 
-    function getAllPossibilities($root, $notes, $position, $numberOfStrings=4)
+    function getAllPossibilities($root, $notes, $position, $numberOfStrings=4): array
     {
 
       $strings       = $this->getStringDefinitions();
       $openStrings   = $this->getOpenStringDefinitions();
       $numberedNotes = $this->getNumberedNoteDefinitons();
+      $results = [];
 
       if($numberOfStrings == '4'){
         unset($strings['C']);

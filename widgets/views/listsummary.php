@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @var string $summary
+ * @var string $sort
+ */
+
 use yii\widgets\LinkSorter;
 
 ?>

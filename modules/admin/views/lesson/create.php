@@ -1,9 +1,11 @@
 <?php
 
-use yii\helpers\Html;
+/**
+ * @var yii\web\View $this
+ * @var app\modules\admin\models\Lesson $model
+ */
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\admin\models\Lesson */
+use yii\helpers\Html;
 
 $this->title = 'Lektion hinzufügen';
 $this->params['breadcrumbs'][] = ['label' => 'Lessons', 'url' => ['index']];

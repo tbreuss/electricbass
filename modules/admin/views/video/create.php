@@ -1,9 +1,11 @@
 <?php
 
-use yii\helpers\Html;
+/**
+ * @var yii\web\View $this
+ * @var app\modules\admin\models\Video $model
+ */
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\admin\models\Video */
+use yii\helpers\Html;
 
 $this->title = 'Create Video';
 $this->params['breadcrumbs'][] = ['label' => 'Videos', 'url' => ['index']];

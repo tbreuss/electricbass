@@ -83,7 +83,7 @@ class Template {
     $this->set_file ( array (
 //      'header'                => '../mastertemplate/kopf.html',
 //      'footer'                => '../mastertemplate/fuss.html',
-//      'top_navigation'        => '../mastertemplate/nav.html',	
+//      'top_navigation'        => '../mastertemplate/nav.html',
     ));
     // allgemeine Platzhalter definieren
     $this-> set_var ( array (
@@ -92,7 +92,7 @@ class Template {
       'WEBSERVER_PATH'      => WEBSERVER_PATH,
     ));
 
-  	global $menuObj;	
+  	global $menuObj;
   	$menuObj = new Example_Menu();
   	$this->set_var(array('MENU' =>$menuObj->get()));
   	//$this->set_var(array('PATHFINDER' =>$menuObj->get_title()));
@@ -251,6 +251,7 @@ class Template {
         $this->set_var($target, $str);
       }
     } else {
+      $str = '';
       reset($varname);
       foreach($varname as $i => $v) {
         $str = $this->subst($v);
@@ -273,8 +274,10 @@ class Template {
   /* public: get_vars()
    * return all variables as an array (mostly for debugging)
    */
-  function get_vars() {
+  function get_vars(): array
+  {
     reset($this->varkeys);
+    $result = [];
     foreach ($this->varkeys as $k => $v) {
       $result[$k] = $this->get_var($k);
     }
@@ -299,6 +302,7 @@ class Template {
       return $str;
     } else {
       reset($varname);
+      $result = [];
       foreach ($varname as $k => $v) {
         if (isset($this->varvals[$v])) {
           $str = $this->varvals[$v];
@@ -329,6 +333,7 @@ class Template {
     }
 
     reset($m);
+    $result = [];
     foreach ($m as $k => $v) {
       if (!isset($this->varkeys[$v])) {
         $result[$v] = $v;

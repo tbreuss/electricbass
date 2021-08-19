@@ -1,9 +1,11 @@
 <?php
 
-use yii\helpers\Html;
+/**
+ * @var yii\web\View $this
+ * @var app\modules\admin\models\Blog $model
+ */
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\admin\models\Blog */
+use yii\helpers\Html;
 
 $this->title = 'Blog aktualisieren: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Blogs', 'url' => ['index']];

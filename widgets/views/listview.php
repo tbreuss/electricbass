@@ -1,14 +1,16 @@
 <?php
+
+/**
+ * @var string $ratingContext
+ * @var string $ratingStyle
+ * @var ActiveRecord[] $models
+ */
+
 use app\helpers\Html;
 use app\widgets\RatingReadOnly;
 use yii\db\ActiveRecord;
 use yii\helpers\Markdown;
 
-/**
- * @var $ratingContext string
- * @var $ratingStyle string
- * @var $models ActiveRecord
- */
 ?>
 
 <?php /* Siehe http://www.bootply.com/KYX5whhXoh */ ?>

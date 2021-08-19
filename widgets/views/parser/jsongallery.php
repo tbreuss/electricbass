@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var array<int, array>$gallery
+ */
+
 use app\helpers\Html;
 use yii\widgets\Spaceless;
 ?>
