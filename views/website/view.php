@@ -1,20 +1,18 @@
 <?php
 
 /**
- * @var View $this
- * @var Website $website
- * @var Website[] $similars
+ * @var yii\web\View $this
+ * @var app\models\Website $website
+ * @var app\models\Website[] $similars
  */
 
 use app\helpers\Html;
 use app\helpers\Url;
-use app\models\Website;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
-use yii\web\View;
 
 $this->title = $website->title . ' | Websites';
 $this->params['breadcrumbs'][] = ['label' => 'Websites', 'url' => Url::previous('website')];

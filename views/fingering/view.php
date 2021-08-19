@@ -1,12 +1,12 @@
 <?php
+
 /**
- * @var View $this
- * @var Fingering $model
+ * @var yii\web\View $this
+ * @var app\models\Fingering $model
  */
 
 use app\components\Fingerboard;
 use app\helpers\Html;
-use app\models\Fingering;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Rating;

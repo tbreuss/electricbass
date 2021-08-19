@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @var View $this
+ * @var yii\web\View $this
  * @var array $manufacturers
  */
 
 use app\assets\ManufacturerAsset;
 use app\helpers\Url;
-use yii\web\View;
 
 $this->title = 'Hersteller';
 $this->params['breadcrumbs'][] = ['label' => 'Katalog', 'url' => ['catalog/overview']];

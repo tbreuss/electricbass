@@ -1,8 +1,10 @@
 <?php
+
 /**
  * @var app\models\Album $model
- * @var View $this
+ * @var yii\web\View $this
  */
+
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Rating;
@@ -10,11 +12,7 @@ use app\widgets\SocialBar;
 use app\helpers\Html;
 use app\helpers\Url;
 use yii\helpers\Markdown;
-use yii\web\View;
 
-?>
-
-<?php
 $this->title = $model->title . ' | Bass-Alben | Katalog';
 $this->params['breadcrumbs'][] = ['label' => 'Katalog', 'url' => Url::to(['catalog/overview'])];
 $this->params['breadcrumbs'][] = ['label' => 'Bass-Alben', 'url' => Url::previous('album')];

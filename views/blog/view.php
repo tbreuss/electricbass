@@ -1,7 +1,12 @@
 <?php
 
-use app\models\Blog;
-use app\models\Redirect;
+/**
+ * @var app\models\Blog $blog
+ * @var app\models\Redirect $redirect
+ * @var app\models\Blog[] $similars
+ * @var yii\web\View $this
+ */
+
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
@@ -10,14 +15,6 @@ use app\widgets\SocialBar;
 use app\helpers\Html;
 use yii\helpers\Url;
 
-/**
- * @var Blog $blog
- * @var Redirect $redirect
- * @var Blog[] $similars
- */
-?>
-
-<?php
 $this->title = $blog->title . ' | Blog';
 $this->params['pageTitle'] = $blog->pageTitle;
 $this->params['metaDescription'] = $blog->metaDescription;

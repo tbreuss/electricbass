@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @var View $this
- * @var Video $video
- * @var Video[] $similarVideos
+ * @var yii\web\View $this
+ * @var app\models\Video $video
+ * @var app\models\Video[] $similarVideos
+ * @var int $height
+ * @var string $key
+ * @var int $width
  */
 
-use app\models\Video;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
 use yii\helpers\Url;
-use yii\web\View;
 
 $this->title = $video->title . ' | Videos';
 $this->params['breadcrumbs'][] = [

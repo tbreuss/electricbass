@@ -1,21 +1,19 @@
 <?php
 
 /**
- * @var View $this
- * @var Lesson $model
- * @var Lesson[] $similars
- * @var Lesson[] $latest
+ * @var yii\web\View $this
+ * @var app\models\Lesson $model
+ * @var app\models\Lesson[] $similars
+ * @var app\models\Lesson[] $latest
  * @var array $breadcrumbs
  */
 
-use app\models\Lesson;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
 use app\widgets\Rating;
 use app\widgets\RatingReadOnly;
 use app\widgets\SocialBar;
-use yii\web\View;
 
 $this->params['breadcrumbs'] = $breadcrumbs;
 $this->title = $model->title . ' | Lektionen'

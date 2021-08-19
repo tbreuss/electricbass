@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var app\models\Birthday $models
+ */
+?>
 <div class="sidebarWidget">
     <h3 class="sidebarWidget__title">
         Geboren am <?php echo Yii::$app->formatter->asDate(time(), 'd. MMMM') ?>

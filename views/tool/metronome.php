@@ -1,10 +1,8 @@
 <?php
 
 /**
- * @var View $this
+ * @var yii\web\View $this
  */
-
-use yii\web\View;
 
 $this->title = 'Tools';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];

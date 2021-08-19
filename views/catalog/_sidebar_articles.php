@@ -1,11 +1,8 @@
 <?php
 /**
- * @var Catalog[] $models
+ * @var app\models\Catalog[] $models
  * @var string $title
  */
-
-use app\models\Catalog;
-
 ?>
 <?php if (!empty($models)): ?>
     <div class="sidebarWidget sidebarWidget--simple">

@@ -1,12 +1,11 @@
 <?php
+
 /**
- * @var View $this
- * @var Glossar[] $glossars
+ * @var yii\web\View $this
+ * @var app\models\Glossar[] $glossars
  */
 
 use app\helpers\Html;
-use app\models\Glossar;
-use yii\web\View;
 
 $this->title = 'Glossar';
 $this->params['breadcrumbs'][] = $this->title;

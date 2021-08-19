@@ -2,19 +2,16 @@
 
 /**
  * @var string $sort
- * @var Website[] $latest
- * @var Website[] $popular
- * @var Website[] $websites
- * @var Pagination $pagination
- * @var View $this
+ * @var app\models\Website[] $latest
+ * @var app\models\Website[] $popular
+ * @var app\models\Website[] $websites
+ * @var yii\data\Pagination $pagination
+ * @var yii\web\View $this
  */
 
 use app\helpers\Html;
-use app\models\Website;
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;
-use yii\data\Pagination;
-use yii\web\View;
 
 $this->title = 'Websites';
 $this->params['breadcrumbs'][] = 'Websites';

@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var string $title
+ * @var app\models\Search[] $models
+ */
+?>
 <div class="widget widget-advertisement">
     <div class="panel panel-default">
         <?php if(!is_null($title)): ?>

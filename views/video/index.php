@@ -1,16 +1,14 @@
 <?php
 
 /**
- * @var View $this
- * @var Pagination $pagination
+ * @var yii\web\View $this
+ * @var yii\data\Pagination $pagination
  * @var string $sort
- * @var Video[] $videos
+ * @var app\models\Video[] $videos
  */
 
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;
-use yii\data\Pagination;
-use yii\web\View;
 
 $this->title = 'Videos';
 $this->params['breadcrumbs'][] = 'Videos';

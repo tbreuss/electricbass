@@ -1,15 +1,13 @@
 <?php
 
 /**
- * @var View $this
+ * @var yii\web\View $this
  * @var array $staticPages
- * @var Query $query
+ * @var yii\db\Query $query
  */
 
 use app\helpers\Url;
 use app\models\Search;
-use yii\db\Query;
-use yii\web\View;
 
 echo '<?xml version="1.0" encoding="UTF-8"?>';
 echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';

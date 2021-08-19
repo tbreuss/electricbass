@@ -1,14 +1,12 @@
 <?php
 
 /**
- * @var View $this
- * @var ContactForm $model
+ * @var yii\web\View $this
+ * @var app\models\ContactForm $model
  */
 
 use app\helpers\Html;
-use app\models\ContactForm;
 use yii\captcha\Captcha;
-use yii\web\View;
 
 $this->title = 'Kontakt';
 $this->params['breadcrumbs'][] = $this->title;

@@ -1,12 +1,10 @@
 <?php
 /**
- * @var Advertisement $model
- * @var View $this
+ * @var app\models\Advertisement $model
+ * @var yii\web\View $this
  */
 
 use app\helpers\Html;
-use app\models\Advertisement;
-use yii\web\View;
 
 $this->title = 'Inserat löschen';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];

@@ -1,10 +1,9 @@
 <?php
 /**
- * @var Advertisement $model
+ * @var app\models\Advertisement $model
  */
 
 use app\helpers\Html;
-use app\models\Advertisement;
 
 ?>
 

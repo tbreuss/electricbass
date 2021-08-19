@@ -1,6 +1,6 @@
 <?php
 /**
- * @var View $this
+ * @var yii\web\View $this
  * @var app\models\Album[] $latest
  * @var app\models\Album[] $popular
  * @var array $entries
@@ -8,7 +8,6 @@
  */
 
 use app\helpers\Html;
-use yii\web\View;
 
 $this->params['pageTitle'] = 'Inspirierende Musikalben von E-Bassist*innen von A-Z';
 $this->params['metaDescription'] = 'Inspirierende und hörenswerte Musikalben berühmter E-Bassisten von A-Z. Unentdeckte Alben und Songs von Bassisten wie du und ich.';
