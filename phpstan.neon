@@ -14,7 +14,7 @@ parameters:
 		- helpers
 		- mail
 		- messages
-		#- migrations
+		- migrations
 		- models
 		- modules
 		#- tests
