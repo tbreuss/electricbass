@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @var yii\web\View $this
  * @var string $name
  * @var string $message
- * @var Exception $exception
+ * @var yii\web\View $this
+ * @var yii\web\HttpException $exception
  */
 
 use app\helpers\Html;

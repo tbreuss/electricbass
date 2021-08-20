@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\LoginForm $model
+ * @var app\modules\admin\models\LoginForm $model
  */
 
 use yii\helpers\Html;

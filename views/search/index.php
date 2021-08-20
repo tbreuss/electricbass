@@ -79,6 +79,7 @@ function highlightWords(string $text, string $words): string
     <?php else: ?>
 
         <?php
+        /** @var app\models\Search $models */
         $models = $dataProvider->getModels();
         $pagination = $dataProvider->getPagination();
         ?>

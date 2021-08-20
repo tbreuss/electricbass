@@ -3,12 +3,11 @@
 /**
  * @var string $ratingContext
  * @var string $ratingStyle
- * @var ActiveRecord[] $models
+ * @var yii\db\ActiveRecord[] $models
  */
 
 use app\helpers\Html;
 use app\widgets\RatingReadOnly;
-use yii\db\ActiveRecord;
 use yii\helpers\Markdown;
 
 ?>

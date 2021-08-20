@@ -11,6 +11,8 @@ use yii\data\Sort;
 
 /**
  * @property int $id
+ * @property string $title
+ * @property string $url
  * @property string $website
  * @property string $modified
  */

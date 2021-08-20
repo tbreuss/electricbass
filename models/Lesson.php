@@ -10,6 +10,7 @@ use yii\helpers\Url;
 /**
  * @property int $id
  * @property string $title
+ * @property string $url
  */
 class Lesson extends ActiveRecord
 {

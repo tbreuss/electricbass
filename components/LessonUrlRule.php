@@ -3,6 +3,8 @@
 namespace app\components;
 
 use yii\base\BaseObject;
+use yii\web\Request;
+use yii\web\UrlManager;
 use yii\web\UrlRuleInterface;
 
 class LessonUrlRule extends BaseObject implements UrlRuleInterface
@@ -30,6 +32,7 @@ class LessonUrlRule extends BaseObject implements UrlRuleInterface
      * @param UrlManager $manager
      * @param Request $request
      * @return array|bool
+     * @throws \yii\base\InvalidConfigException
      */
     public function parseRequest($manager, $request)
     {

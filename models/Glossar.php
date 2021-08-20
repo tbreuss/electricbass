@@ -10,6 +10,10 @@ use yii\web\NotFoundHttpException;
 /**
  * @property int $id
  * @property int $autosort
+ * @property string $title
+ * @property string $category
+ * @property string $content
+ * @property string $url
  */
 class Glossar extends ActiveRecord
 {

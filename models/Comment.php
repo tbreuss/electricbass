@@ -7,6 +7,18 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
+/**
+ * @property string $name
+ * @property string $text
+ * @property string $created
+ * @property string $tableName
+ * @property int $tableId
+ * @property string $email
+ * @property string $website
+ * @property string $ipAddress
+ * @property int $active
+ * @property Search $search
+ */
 class Comment extends ActiveRecord
 {
     public static $ALLOWED = [

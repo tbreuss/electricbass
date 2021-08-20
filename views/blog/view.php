@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $blog->title;
 
     <?php if (!empty($redirect)): ?>
         <?php
-        \Yii::$app->view->registerLinkTag([
+        $this->registerLinkTag([
             'rel' => 'canonical',
             'href' => \app\helpers\Url::to($redirect->to, true)
         ]);

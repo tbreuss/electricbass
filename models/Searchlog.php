@@ -7,6 +7,9 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 
 /**
+ * @property string $term
+ * @property int $results
+ * @property int $frequency
  * @property string $created
  * @property string $modified
  */

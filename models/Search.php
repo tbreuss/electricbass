@@ -10,10 +10,15 @@ use yii\helpers\Url;
 
 /**
  * @property int $id
+ * @property string $title
  * @property string $context
  * @property string $tableName
  * @property string $contextKey
  * @property string $category
+ * @property string $url
+ * @property string $created
+ * @property string $abstract
+ * @property string $modified
  */
 class Search extends ActiveRecord
 {

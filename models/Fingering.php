@@ -8,6 +8,14 @@ use yii\db\ActiveRecord;
 
 /**
  * @property int $id
+ * @property string $title
+ * @property string $root
+ * @property string $position
+ * @property string $notes
+ * @property string $strings
+ * @property string $abstract
+ * @property string $category
+ * @property string $url
  */
 class Fingering extends ActiveRecord
 {

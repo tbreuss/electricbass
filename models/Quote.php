@@ -9,6 +9,8 @@ use yii\db\Expression;
 
 /**
  * @property string $text_en
+ * @property string $author
+ * @property string $text
  */
 class Quote extends ActiveRecord
 {

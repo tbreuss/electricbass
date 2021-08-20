@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
     <p>In <?php echo Html::a('Glossar', array('/glossar')) ?> / <?php echo Html::a($glossar->category, array('/glossar/index', 'category' => $selectedCategory)) ?></p>
 
     <?php if ($glossar->hasDefaultImage()): ?>
-        <p><?= Html::img($glossar->getDefaultImage('@web', ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title])) ?></p>
+        <p><?= Html::img($glossar->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title]) ?></p>
     <?php endif; ?>
 
     <?php

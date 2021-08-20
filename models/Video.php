@@ -12,6 +12,10 @@ use yii\helpers\Url;
 
 /**
  * @property int $id
+ * @property string $title
+ * @property string $platform
+ * @property string $key
+ * @property string $url
  */
 class Video extends ActiveRecord
 {

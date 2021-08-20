@@ -43,7 +43,7 @@ class Comments extends Widget
         $model = new Comment();
 
         if ($request->isPost) {
-            $session = Yii::$app->getSession();
+            $session = \Yii::$app->session;
             if (!$model->load($request->post())) {
                 $error = 'Beim Laden der Formulardaten ist ein Fehler aufgetreten.';
                 $session->setFlash('comment/error', $error);

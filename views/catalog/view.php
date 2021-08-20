@@ -67,7 +67,7 @@ $this->params['metaDescription'] = join($metaDescription);
     <?php endif; ?>
 
     <?php if ($model->hasDefaultImage()): ?>
-        <p><?= Html::img($model->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $model->title . ' ' . join(' · ', $model->productNumbers)]) ?></p>
+        <p><?= Html::img($model->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $model->title . ' ' . join(' · ', $model->getProductNumbers())]) ?></p>
     <?php endif; ?>
 
     <div class="markdown"><?= Markdown::process($model->text) ?></div>

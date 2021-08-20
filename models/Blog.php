@@ -12,6 +12,22 @@ use yii\data\Sort;
 
 /**
  * @property int $id
+ * @property string $text
+ * @property string $title
+ * @property string $countryCode
+ * @property string $language
+ * @property string $abstract
+ * @property int $ratings
+ * @property float $ratingAvg
+ * @property int $hits
+ * @property string $created
+ * @property string $modified
+ * @property string $urlSegment
+ * @property string $pageTitle
+ * @property string $metaDescription
+ * @property int $comments
+ * @property int $hideFoto
+ * @property string $url
  */
 class Blog extends ActiveRecord
 {
