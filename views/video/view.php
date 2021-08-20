@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = [
     'url' => Url::previous('video')
 ];
 $this->params['breadcrumbs'][] = $video->title;
-$this->context->layout = 'empty';
 $topVideos = array_slice($similarVideos, 0, 3);
 $moreVideos = array_slice($similarVideos, 3);
 ?>

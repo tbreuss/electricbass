@@ -17,7 +17,6 @@ use yii\helpers\Url;
 
 $this->title = 'Suche';
 $this->params['breadcrumbs'][] = $this->title;
-$this->context->layout = 'onecol_empty';
 
 /**
  * @param string $text

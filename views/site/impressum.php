@@ -8,7 +8,6 @@ use yii\helpers\Url;
 
 $this->title = 'Impressum';
 $this->params['breadcrumbs'][] = $this->title;
-$this->context->layout = 'onecol';
 ?>
 
 <div class="content">

@@ -13,6 +13,7 @@ class ToolController extends Controller
 
     public function actionMusicpaper()
     {
+        $this->layout = 'onecol';
         return $this->render('musicpaper');
     }
 

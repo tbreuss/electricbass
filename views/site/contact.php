@@ -10,7 +10,6 @@ use yii\captcha\Captcha;
 
 $this->title = 'Kontakt';
 $this->params['breadcrumbs'][] = $this->title;
-$this->context->layout = 'onecol';
 ?>
 <div class="content">
     <h1><?= Html::encode($this->title) ?></h1>

@@ -11,7 +11,6 @@ use app\helpers\Url;
 $this->title = 'Hersteller';
 $this->params['breadcrumbs'][] = ['label' => 'Katalog', 'url' => ['catalog/overview']];
 $this->params['breadcrumbs'][] = $this->title;
-$this->context->layout = 'empty';
 
 ManufacturerAsset::register($this);
 

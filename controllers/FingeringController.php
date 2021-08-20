@@ -36,6 +36,7 @@ class FingeringController extends Controller
             ->orderBy('category ASC, title ASC')
             ->all();
 
+        $this->layout = 'onecol';
         return $this->render('index', [
             'models' => $models
         ]);

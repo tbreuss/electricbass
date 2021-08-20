@@ -12,7 +12,6 @@ $category = '';
 $this->title = 'Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Fingersätze';
-$this->context->layout = 'onecol';
 ?>
 
 <div class="content">

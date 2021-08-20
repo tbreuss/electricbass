@@ -108,6 +108,7 @@ class SearchController extends Controller
             Searchlog::addTerm($term, $provider->getTotalCount());
         }
 
+        $this->layout = 'onecol_empty';
         return $this->render('index', array(
             'dataProvider' => $provider,
             'term' => $term,

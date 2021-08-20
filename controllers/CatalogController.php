@@ -156,6 +156,7 @@ class CatalogController extends Controller
 
     public function actionOverview()
     {
+        $this->layout = 'onecol';
         return $this->render('overview');
     }
 
