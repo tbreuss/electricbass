@@ -3,13 +3,14 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
  * @property int $value
  * @property string $created
  * @property string $modified
- * @property Search $search
+ * @property ?Search $search
  */
 class Rating extends ActiveRecord
 {
@@ -41,7 +42,7 @@ class Rating extends ActiveRecord
             ->all();
     }
 
-    public function getSearch()
+    public function getSearch(): ActiveQuery
     {
         return $this->hasOne(Search::class, ['id' => 'tableId', 'tableName' => 'tableName']);
     }

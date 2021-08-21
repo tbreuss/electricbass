@@ -1,6 +1,6 @@
 <?php
 /**
- * @var string $title
+ * @var ?string $title
  * @var app\models\Search[] $models
  */
 ?>

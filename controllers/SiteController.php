@@ -35,6 +35,7 @@ class SiteController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'offset' => 0,
+                /* @phpstan-ignore-next-line */
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];

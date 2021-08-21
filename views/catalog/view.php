@@ -3,7 +3,7 @@
 /**
  * @var yii\web\View $this
  * @var app\models\Catalog $model
- * @var app\components\AmazonProductDetail $amazonProductDetail
+ * @var app\components\AmazonProductDetail|null $amazonProductDetail
  * @var string $title
  */
 

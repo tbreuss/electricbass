@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = 'Leeres Notenpapier als PDF';
     </p>
 
     <?php
-
     $papers = [
         'Für E-Bassisten',
         [
@@ -124,28 +123,27 @@ $this->params['breadcrumbs'][] = 'Leeres Notenpapier als PDF';
             Transkriptionen von Jazzsongs oder um einfach Melodien zu notieren. DIN A4-Format.'
         ],
     ];
-
     ?>
 
     <div class="widget widget-listview">
     <?php foreach ($papers as $paper): ?>
         <?php if (is_string($paper)): ?>
             <h2><?= $paper ?></h2>
-            <?php continue; ?>
+        <?php else: ?>
+            <?php
+                $urlPdf = Yii::getAlias('@web/media/tools/notenpapier/' . $paper[0]);
+                $urlImg = str_replace('.pdf', '.png', $urlPdf);
+            ?>
+            <div class="row" style="margin-bottom:20px">
+                <div class="col-sm-3">
+                    <img class="img-fluid" src="<?= $urlImg ?>" width="200" alt="<?= $paper[1] ?>">
+                </div>
+                <div class="col-sm-9">
+                    <h3 style="margin-top:0"><?= Html::a($paper[1] . ' (' . $paper[2] . ')', $urlPdf, ['target' => '_blank']) ?></a></h3>
+                    <p><?= $paper[3] ?></p>
+                </div>
+            </div>
         <?php endif; ?>
-        <?php
-            $urlPdf = Yii::getAlias('@web/media/tools/notenpapier/' . $paper[0]);
-            $urlImg = str_replace('.pdf', '.png', $urlPdf);
-        ?>
-        <div class="row" style="margin-bottom:20px">
-            <div class="col-sm-3">
-                <img class="img-fluid" src="<?= $urlImg ?>" width="200" alt="<?= $paper[1] ?>">
-            </div>
-            <div class="col-sm-9">
-                <h3 style="margin-top:0"><?= Html::a($paper[1] . ' (' . $paper[2] . ')', $urlPdf, ['target' => '_blank']) ?></a></h3>
-                <p><?= $paper[3] ?></p>
-            </div>
-        </div>
     <?php endforeach; ?>
     </div>
 
