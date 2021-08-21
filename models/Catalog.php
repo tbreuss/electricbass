@@ -93,7 +93,7 @@ class Catalog extends ActiveRecord
         return $provider;
     }
 
-    public static function findOneOrNull(int|string $id, string $category): ?Catalog
+    public static function findOneOrNull($id, string $category): ?Catalog
     {
         $model = self::find()->where(['deleted' => 0, 'url' => $id, 'category' => $category])->one();
         if ($model) {
