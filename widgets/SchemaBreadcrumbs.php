@@ -43,10 +43,10 @@ class SchemaBreadcrumbs extends Breadcrumbs
         ];
     }
 
-    public function run()
+    public function run(): string
     {
         if (empty($this->links)) {
-            return;
+            return '';
         }
 
         $links = [];
