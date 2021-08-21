@@ -1,10 +1,13 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ */
+
 use app\helpers\Html;
 
 $this->title = 'Katalog';
 $this->params['breadcrumbs'][] = 'Katalog';
-$this->context->layout = 'onecol';
 ?>
 
 <div class="content">

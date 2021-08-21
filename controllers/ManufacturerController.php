@@ -22,6 +22,7 @@ class ManufacturerController extends Controller
             $m['visitUrl'] = strlen($m['website']) === 0 ? '' : Url::to(['visit', 'id' => $m['id']]);
         });
 
+        $this->layout = 'empty';
         return $this->render('index', [
             'manufacturers' => $manufacturers
         ]);

@@ -14,12 +14,35 @@ use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
+/**
+ * @property int $id
+ * @property string $email
+ * @property string $currency
+ * @property string $countryTranslated
+ * @property string $title
+ * @property string $name
+ * @property string $url
+ * @property string $new_price
+ * @property string $sell_price
+ * @property string $phone
+ * @property string $homepage
+ * @property string $region
+ * @property string $geocodingAddress
+ * @property float $latitude
+ * @property float $longitude
+ * @property string $longtext
+ * @property string $country
+ * @property int $category_id
+ * @property int $hidden
+ * @property int $deleted
+ * @property string $date
+ * @property string $created
+ * @property string $modified
+ */
 class Advertisement extends ActiveRecord
 {
-    /**
-     * @var array
-     */
-    public static $categories = array(
+
+    public static array $categories = array(
         1 => 'Effektgeräte',
         2 => 'Bassgitarren',
         3 => 'Lautsprecher',
@@ -135,19 +158,13 @@ class Advertisement extends ActiveRecord
         );
     }
 
-    /**
-     * @param $event
-     */
-    public function onAfterInsert($event)
+    public function onAfterInsert()
     {
         $this->updateUrlSegment();
         $this->updateGeoAddress();
     }
 
-    /**
-     * @param $event
-     */
-    public function onAfterUpdate($event)
+    public function onAfterUpdate()
     {
         $this->updateGeoAddress();
     }
@@ -352,12 +369,12 @@ class Advertisement extends ActiveRecord
     }
 
     /**
-     * @param $id
-     * @param $strict
+     * @param int|string $id
+     * @param bool $strict
      * @return self
      * @throws NotFoundHttpException
      */
-    public static function findById($id, $strict)
+    public static function findById($id, bool $strict)
     {
         $condition = is_numeric($id) ? 'id=:id' : 'url=:id';
         $condition .= empty($strict) ? '' : ' AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60';

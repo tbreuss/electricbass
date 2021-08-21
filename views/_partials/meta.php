@@ -1,8 +1,3 @@
-<?php
-
-use app\helpers\Html;
-
-?>
 <div class="meta">
     <?php if (!empty($categories)): ?>
     <div class="meta_category">Gepostet in:
@@ -10,7 +5,7 @@ use app\helpers\Html;
         $delim = '';
         foreach ($categories as $category) {
             echo $delim;
-            echo Html::a($category['label'], $category['url'], ['class' => 'meta__link']);
+            echo app\helpers\Html::a($category['label'], $category['url'], ['class' => 'meta__link']);
             $delim = ', ';
         }
         ?>

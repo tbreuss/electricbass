@@ -1,6 +1,12 @@
 <?php
-use app\components\AmazonProductDetail;
-use app\models\Catalog;
+
+/**
+ * @var yii\web\View $this
+ * @var app\models\Catalog $model
+ * @var app\components\AmazonProductDetail $amazonProductDetail
+ * @var string $title
+ */
+
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Rating;
@@ -8,11 +14,6 @@ use app\widgets\SocialBar;
 use app\helpers\Html;
 use app\helpers\Url;
 use yii\helpers\Markdown;
-
-/**
- * @var $model Catalog
- * @var $amazonProductDetail AmazonProductDetail
- */
 
 $this->title = $model->title . ' | ' . $title . ' | Katalog';
 $this->params['breadcrumbs'][] = ['label' => 'Katalog', 'url' => Url::to(['catalog/overview'])];
@@ -66,7 +67,7 @@ $this->params['metaDescription'] = join($metaDescription);
     <?php endif; ?>
 
     <?php if ($model->hasDefaultImage()): ?>
-        <p><?= Html::img($model->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $model->title . ' ' . join(' · ', $model->productNumbers)]) ?></p>
+        <p><?= Html::img($model->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $model->title . ' ' . join(' · ', $model->getProductNumbers())]) ?></p>
     <?php endif; ?>
 
     <div class="markdown"><?= Markdown::process($model->text) ?></div>

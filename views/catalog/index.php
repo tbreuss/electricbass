@@ -1,4 +1,20 @@
 <?php
+
+/**
+ * @var yii\web\View $this
+ * @var string $title
+ * @var string $sidebarTitle
+ * @var string $pageTitle
+ * @var string $metaDescription
+ * @var yii\data\Pagination $pagination
+ * @var string $category
+ * @var string $sort
+ * @var array<string, string> $filter
+ * @var app\models\Catalog[] $models
+ * @var app\models\Catalog[] $latest
+ * @var app\models\Catalog[] $popular
+ */
+
 use app\helpers\Html;
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;

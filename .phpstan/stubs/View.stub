@@ -1,0 +1,13 @@
+<?php
+
+namespace yii\base;
+
+class View
+{
+    /**
+      * @param array<string, mixed> $options
+      * @param ?string $key
+      */
+    public function registerLinkTag(array $options, string $key = null ): void
+    {}
+}

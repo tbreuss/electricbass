@@ -1,6 +1,11 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ */
+
 use app\helpers\Html;
+
 $this->title = 'Sitemap';
 
 ?>

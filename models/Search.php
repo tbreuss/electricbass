@@ -9,9 +9,18 @@ use yii\db\Query;
 use yii\helpers\Url;
 
 /**
- * Class Search
+ * @property int $id
+ * @property string $title
  * @property string $context
- * @package app\models
+ * @property int $tableId
+ * @property string $tableName
+ * @property string $contextKey
+ * @property string $contextText
+ * @property string $category
+ * @property string $url
+ * @property string $created
+ * @property string $abstract
+ * @property string $modified
  */
 class Search extends ActiveRecord
 {

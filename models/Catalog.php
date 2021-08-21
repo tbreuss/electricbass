@@ -11,6 +11,16 @@ use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use yii\helpers\Url;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $autor
+ * @property string $productNumber
+ * @property string $text
+ * @property string $url
+ * @property string $category
+ * @property string $modified
+ */
 class Catalog extends ActiveRecord
 {
     const TYPE_TEXTBOOK = 1;

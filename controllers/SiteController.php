@@ -117,6 +117,7 @@ class SiteController extends Controller
             // TODO Fehler protokollieren
             Yii::$app->session->setFlash('contact/error', $error);
         }
+        $this->layout = 'onecol';
         return $this->render('contact', [
             'model' => $model,
         ]);
@@ -129,6 +130,7 @@ class SiteController extends Controller
      */
     public function actionImpressum()
     {
+        $this->layout = 'onecol';
         return $this->render('impressum');
     }
 

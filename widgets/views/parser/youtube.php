@@ -1,7 +1,11 @@
 <?php
+/**
+ * @var string $title
+ * @var string $key
+ * @var string $text
+ */
 use yii\helpers\Markdown;
 use yii\widgets\Spaceless;
-
 ?>
 
 <?php #$this->registerCssFile("@web/css/video.css") ?>

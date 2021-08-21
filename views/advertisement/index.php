@@ -1,5 +1,9 @@
 <?php
-use app\models\Advertisement;
+/**
+ * @var app\models\Advertisement[] $models
+ * @var yii\web\View $this
+ */
+
 use app\helpers\Html;
 use app\widgets\RatingReadOnly;
 use yii\helpers\Markdown;
@@ -39,7 +43,7 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
 	<?php $categories = array(); ?>
 	<?php foreach($models AS $model): ?>
 		<?php if(!array_key_exists($model->category_id, $categories)): ?>
-			<?php $categories[$model->category_id] = array('title' => Advertisement::$categories[$model->category_id]); ?>
+			<?php $categories[$model->category_id] = array('title' => app\models\Advertisement::$categories[$model->category_id]); ?>
 			<?php $categories[$model->category_id]['counter'] = 0; ?>
 		<?php endif ?>
 		<?php $categories[$model->category_id]['counter']++ ?>
@@ -97,4 +101,4 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
         <?php endforeach; ?>
     </ul>
 </div>
-<?php $this->endBlock('sidebar') ?>
+<?php $this->endBlock() ?>

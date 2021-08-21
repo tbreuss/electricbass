@@ -1,11 +1,12 @@
 <?php
-use app\helpers\Html;
-use app\models\Advertisement;
-use app\models\AdvertisementContactForm;
-use yii\captcha\Captcha;
+/**
+ * @var app\models\Advertisement $advertisement
+ * @var app\models\AdvertisementContactForm $model
+ * @var yii\web\View $this
+ */
 
-/** @var $advertisement Advertisement */
-/** @var $model AdvertisementContactForm */
+use app\helpers\Html;
+use yii\captcha\Captcha;
 
 $this->title = 'Anbieter kontaktieren';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];

@@ -5,6 +5,12 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 
+/**
+ * @property int $value
+ * @property string $created
+ * @property string $modified
+ * @property Search $search
+ */
 class Rating extends ActiveRecord
 {
     public static $ALLOWED = [

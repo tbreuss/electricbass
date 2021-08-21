@@ -1,23 +1,20 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var app\models\Search[] $models
+ * @var int $count
+ * @var app\models\Comment[] $latestComments
+ * @var app\models\Rating[] $latestRatings
+ */
+
 use app\helpers\Html;
-use app\models\Comment;
-use app\models\Rating;
-use app\models\Search;
 use app\widgets\Advertisement;
 use app\widgets\Birthday;
 use app\widgets\Joke;
 use app\widgets\Quote;
 use app\widgets\RatingReadOnly;
 use yii\helpers\Markdown;
-
-/**
- * @var $this yii\web\View
- * @var $models Search[]
- * @var $count int
- * @var $latestComments Comment[]
- * @var $latestRatings Rating[]
- */
 
 $this->title = 'ELECTRICBASS - Alles über das bässte Instrument der Welt';
 $this->params['pageTitle'] = 'ELECTRICBASS - Alles über das bässte Instrument der Welt';

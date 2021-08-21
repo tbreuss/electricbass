@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * @var yii\web\View $this
+ * @var yii\data\Pagination $pagination
+ * @var string $sort
+ * @var app\models\Joke[] $models
+ */
+
 use app\widgets\ListSummary;
 use app\widgets\Comments;
 use app\widgets\LinkPager;

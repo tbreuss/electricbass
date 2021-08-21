@@ -7,6 +7,9 @@ use yii\db\Expression;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 
+/**
+ * @property string $joke
+ */
 class Joke extends ActiveRecord
 {
     /**

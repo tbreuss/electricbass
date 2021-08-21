@@ -1,7 +1,12 @@
 <?php
-    use app\helpers\Html;
-?>
-<?php
+
+/**
+ * @var app\models\Advertisement $model
+ * @var yii\web\View $this
+ */
+
+use app\helpers\Html;
+
 $this->title = 'Inserat verlängert';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
 $this->params['breadcrumbs'][] = 'Inserat verlängert';

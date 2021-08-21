@@ -1,4 +1,13 @@
 <?php
+/**
+ * @var yii\web\View $this
+ * @var string $title
+ * @var string $sidebarTitle
+ * @var array $entries
+ * @var string $category
+ * @var app\models\Catalog[] $latest
+ * @var app\models\Catalog[] $popular
+ */
 
 use app\helpers\Html;
 

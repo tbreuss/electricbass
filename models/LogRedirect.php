@@ -4,6 +4,17 @@ namespace app\models;
 
 use yii\db\ActiveRecord;
 
+/**
+ * @property string $request
+ * @property string $referrer
+ * @property string $redirect
+ * @property string $created
+ * @property string $signal
+ * @property int $code
+ * @property string $userAgent
+ * @property int $counter
+ * @property string $modified
+ */
 final class LogRedirect extends ActiveRecord
 {
     /**

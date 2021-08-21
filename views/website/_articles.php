@@ -1,3 +1,10 @@
+<?php
+/**
+ * @var yii\web\View $this
+ * @var string $title
+ * @var app\models\Website[] $models
+ */
+?>
 <?php if (!empty($models)): ?>
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title"><?= $title ?></h3>

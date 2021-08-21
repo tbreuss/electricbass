@@ -77,9 +77,10 @@ class Div
             throw new Exception('Key categoryId oder content fehlen in Array $row');
         }*/
         if($row['cId']==7) {
-            $data = json_decode($row['aContent']);
-            if(isset($data->key) && ($data->service=='YT') && !empty($data->key)) {
-                $url = sprintf('http://img.youtube.com/vi/%s/0.jpg', $data->key);
+            /** @var array<string, string> $data */
+            $data = json_decode($row['aContent'], true);
+            if(isset($data['key']) && ($data['service']=='YT') && !empty($data['key'])) {
+                $url = sprintf('http://img.youtube.com/vi/%s/0.jpg', $data['key']);
                 return $url;
             }
         }
@@ -145,7 +146,7 @@ class Div
 
     /**
      * @deprecated
-     * @param string $attribute
+     * @param string $urlSegment
      * @return string
      */
     public static function normalizeUrlSegment($urlSegment)
@@ -235,7 +236,8 @@ class Div
     /**
      * Wrapper für PhpThumbFactory::resize
      *
-     * @param string $filepath
+     * @param string $openPath
+     * @param string $savePath
      * @param integer $width
      * @param integer $height
      * @param integer $jpgQuality

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var array $staticPages
+ * @var yii\db\Query $query
+ */
+
 use app\helpers\Url;
 use app\models\Search;
 

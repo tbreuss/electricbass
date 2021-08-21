@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @var app\models\Comment[] $models
+ */
+
 use app\helpers\Html;
 
 $count = count($models);

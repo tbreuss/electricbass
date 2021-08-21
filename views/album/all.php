@@ -1,4 +1,11 @@
 <?php
+/**
+ * @var yii\web\View $this
+ * @var app\models\Album[] $latest
+ * @var app\models\Album[] $popular
+ * @var array $entries
+ * @var string $title
+ */
 
 use app\helpers\Html;
 

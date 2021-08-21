@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var array $entries
+ * @var app\models\Website[] $latest
+ * @var app\models\Website[] $popular
+ */
+
 use app\helpers\Html;
 
 $this->params['pageTitle'] = 'Websites zum Thema E-Bass von A-Z';

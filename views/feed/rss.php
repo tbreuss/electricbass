@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @var yii\db\Query $query
+ */
+
 use app\models\Search;
 use yii\helpers\Url;
 

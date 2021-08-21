@@ -1,7 +1,10 @@
 <?php
+/**
+ * @var app\models\Advertisement $model
+ */
+
 use app\helpers\Html;
-use app\models\Advertisement;
-/** @var $model Advertisement */
+
 ?>
 
 <?php if(Yii::$app->session->hasFlash('updateFormSubmitted')): ?>

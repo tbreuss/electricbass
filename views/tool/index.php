@@ -1,10 +1,14 @@
 <?php
-    use app\helpers\Html;
-?>
 
-<?php
+/**
+ * @var yii\web\View $this
+ */
+
+use app\helpers\Html;
+
 $this->title = 'Tools';
 $this->params['breadcrumbs'][] = 'Tools';
+
 ?>
 
 <div class="content">

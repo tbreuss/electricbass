@@ -4,6 +4,14 @@ namespace app\models;
 
 use yii\db\ActiveRecord;
 
+/**
+ * @property int $code
+ * @property string $requestUrl
+ * @property string $created
+ * @property string $referrer
+ * @property int $counter
+ * @property string $modified
+ */
 class Log404 extends ActiveRecord
 {
     /**

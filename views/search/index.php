@@ -1,23 +1,22 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var yii\data\ActiveDataProvider $dataProvider
+ * @var bool $searched
+ * @var string $term
+ */
+
 use app\controllers\SearchController;
 use app\helpers\Html;
 use app\widgets\LinkPager;
 use app\widgets\ListSummary;
 use app\widgets\RatingReadOnly;
-use yii\data\ActiveDataProvider;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 
 $this->title = 'Suche';
 $this->params['breadcrumbs'][] = $this->title;
-$this->context->layout = 'onecol_empty';
-
-/**
- * @var ActiveDataProvider $dataProvider
- * @var bool $searched
- * @var string $term
- */
 
 /**
  * @param string $text
@@ -79,6 +78,7 @@ function highlightWords(string $text, string $words): string
     <?php else: ?>
 
         <?php
+        /** @var app\models\Search[] $models */
         $models = $dataProvider->getModels();
         $pagination = $dataProvider->getPagination();
         ?>

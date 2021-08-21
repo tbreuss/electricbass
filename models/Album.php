@@ -9,6 +9,15 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 
+/**
+ * @property int $id
+ * @property string $artist
+ * @property string $title
+ * @property string $fullTitle
+ * @property string $text
+ * @property string $url
+ * @property string $modified
+ */
 class Album extends ActiveRecord
 {
     use SimilarModelsByTags;

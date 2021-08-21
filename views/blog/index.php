@@ -1,11 +1,17 @@
 <?php
+/**
+ * @var yii\data\Pagination $pagination
+ * @var yii\web\View $this
+ * @var string $sort
+ * @var app\models\Blog[] $blogs
+ * @var app\models\Blog[] $latest
+ * @var app\models\Blog[] $popular
+ */
+
 use app\widgets\ListSummary;
 use app\widgets\ListView;
 use app\widgets\LinkPager;
 
-?>
-
-<?php
 $this->title = 'Blog';
 $this->params['breadcrumbs'][] = 'Blog';
 $this->params['pageTitle'] = sprintf('Blog für Bassist*innen zum Thema E-Bass und Musik (%d/%d)', $pagination->page+1, $pagination->pageCount);

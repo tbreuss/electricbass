@@ -1,9 +1,11 @@
 <?php
 
-use yii\helpers\Html;
+/**
+ * @var yii\web\View $this
+ * @var app\modules\admin\models\Website $model
+ */
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\admin\models\Website */
+use yii\helpers\Html;
 
 $this->title = 'Create Website';
 $this->params['breadcrumbs'][] = ['label' => 'Websites', 'url' => ['index']];

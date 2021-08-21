@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var app\models\Video $video
+ * @var app\models\Video[] $similarVideos
+ * @var int $height
+ * @var string $key
+ * @var int $width
+ */
+
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
@@ -13,7 +22,6 @@ $this->params['breadcrumbs'][] = [
     'url' => Url::previous('video')
 ];
 $this->params['breadcrumbs'][] = $video->title;
-$this->context->layout = 'empty';
 $topVideos = array_slice($similarVideos, 0, 3);
 $moreVideos = array_slice($similarVideos, 3);
 ?>

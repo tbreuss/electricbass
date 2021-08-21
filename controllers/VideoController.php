@@ -31,6 +31,7 @@ class VideoController extends Controller
         //$this->migrate();
         //$this->tags();
         $provider = Video::getActiveDataProvider();
+        $this->layout = 'onecol';
         return $this->render('index', [
             'dataProvider' => $provider,
             'videos' => $provider->getModels(),
@@ -59,6 +60,7 @@ class VideoController extends Controller
 
         Url::rememberReferrer(['video/index'], 'video');
 
+        $this->layout = 'empty';
         return $this->render('view', [
             'video' => $video,
             'similarVideos' => $similarVideos

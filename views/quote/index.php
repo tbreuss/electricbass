@@ -1,7 +1,11 @@
 <?php
-use app\widgets\ListSummary;
+
+/**
+ * @var yii\web\View $this
+ * @var app\models\Quote[] $models
+ */
+
 use app\widgets\Comments;
-use app\widgets\LinkPager;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
 

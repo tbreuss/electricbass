@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @var yii\web\View $this
+ * @var app\models\Fingering[] $models
+ */
+
 use app\helpers\Html;
 
 $category = '';
@@ -7,7 +12,6 @@ $category = '';
 $this->title = 'Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Fingersätze';
-$this->context->layout = 'onecol';
 ?>
 
 <div class="content">

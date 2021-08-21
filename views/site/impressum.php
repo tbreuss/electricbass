@@ -1,12 +1,13 @@
 <?php
 
-/* @var $this yii\web\View */
+/**
+ * @var yii\web\View $this
+ */
 
 use yii\helpers\Url;
 
 $this->title = 'Impressum';
 $this->params['breadcrumbs'][] = $this->title;
-$this->context->layout = 'onecol';
 ?>
 
 <div class="content">

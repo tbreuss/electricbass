@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var app\models\Catalog[] $models
+ * @var string $title
+ */
+?>
 <?php if (!empty($models)): ?>
     <div class="sidebarWidget sidebarWidget--simple">
         <h3 class="sidebarWidget__title"><?= $title ?></h3>

@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @var yii\web\View $this
+ */
+
 use app\helpers\Html;
 use app\widgets\SocialBar;
 
@@ -6,7 +11,6 @@ $this->params['pageTitle'] = 'Leeres Notenpapier als PDF herunterladen und ausdr
 $this->params['metaDescription'] = 'Blanko Notenpapier zum Herunterladen und Ausdrucken ✓ PDFs mit Notenlinien ✚ Für alle Instrumente ✚ Für E-Bass und Gitarre mit Tabulatur ➨ Gratis!';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Leeres Notenpapier als PDF';
-$this->context->layout = 'onecol';
 ?>
 
 <div class="content">

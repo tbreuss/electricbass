@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @var yii\web\View $this
+ */
+
 $this->title = 'Tools';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Metronom';

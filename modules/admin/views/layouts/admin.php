@@ -1,10 +1,15 @@
 <?php
-/* @var $this \yii\web\View */
-/* @var $content string */
+
+/**
+ * @var yii\web\View $this
+ * @var string $content
+ */
+
 use yii\bootstrap\BootstrapPluginAsset;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\helpers\Html;
+
 BootstrapPluginAsset::register($this);
 ?>
 <?php $this->beginPage() ?>

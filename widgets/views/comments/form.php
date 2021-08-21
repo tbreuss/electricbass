@@ -1,13 +1,12 @@
 <?php
 
-use app\helpers\Html;
-use app\models\Comment;
-
 /**
- * @var $model Comment
+ * @var app\models\Comment $model
  */
-?>
 
+use app\helpers\Html;
+
+?>
 <div class="comments__form">
 
     <?php if (Yii::$app->session->hasFlash('comment/error')): ?>

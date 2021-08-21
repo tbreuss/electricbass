@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @var yii\web\View $this
+ * @var string $alphatab
+ */
+
 use app\assets\AlphaTabAsset;
 
 AlphaTabAsset::register($this);

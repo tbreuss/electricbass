@@ -50,7 +50,7 @@ class Fingerboard {
      *
      * @param integer $numberOfResults
      * @return integer
-     * @since 2012-11-30 
+     * @since 2012-11-30
      */
     public function reduceTo($numberOfResults=1)
     {
@@ -163,8 +163,8 @@ class Fingerboard {
             $notes = array();
             foreach($this->results[0] AS $tone) {
                 $tmpNote = str_replace(array_keys($enharmonics), array_values($enharmonics), $tone['absolut']);
-                $octave = preg_replace('/[A-Za-z#]/', '', $tmpNote);
-                $note = preg_replace('/[0-9]/', '', $tmpNote);
+                $octave = (int)preg_replace('/[A-Za-z#]/', '', $tmpNote);
+                $note = (string)preg_replace('/[0-9]/', '', $tmpNote);
                 $notes[] = strtolower($note.($octave+1));
             }
             $reverse = array_reverse($notes);
@@ -243,6 +243,7 @@ class Fingerboard {
                   $fretIndex = 1;
                   foreach($string AS $fret){
                     if($this->position != ''){
+                      /* @phpstan-ignore-next-line */
                       if(($fretIndex >= $this->position) && ($fretIndex < ($this->position+$this->posWidth))){
                         $tpl->set_var(array('CLASS_POSITION' => 'bgPosition' ));
                       } else {
@@ -524,14 +525,14 @@ class Fingerboard {
         if(isset($possibleResults['S'])){
           $calculatedInterval = $possibleResults['S'];
         } else {
-          $calculatedInterval = $possibleResults['N'];
+          $calculatedInterval = $possibleResults['N'] ?? '';
         }
       }
       elseif($this->is_flat($root)){
         if(isset($possibleResults['F'])){
           $calculatedInterval = $possibleResults['F'];
         } else {
-          $calculatedInterval = $possibleResults['N'];
+          $calculatedInterval = $possibleResults['N'] ?? '';
         }
       }
       else{
@@ -539,10 +540,10 @@ class Fingerboard {
           $calculatedInterval = $possibleResults['N'];
         }
         elseif(in_array($root, $flatKeys)){
-          $calculatedInterval = $possibleResults['F'];
+          $calculatedInterval = $possibleResults['F'] ?? '';
         }
         elseif(in_array($root, $sharpKeys)){
-          $calculatedInterval = $possibleResults['S'];
+          $calculatedInterval = $possibleResults['S'] ?? '';
         }
       }
       return $calculatedInterval;
@@ -565,12 +566,13 @@ class Fingerboard {
       return $flat;
     }
 
-    function getAllPossibilities($root, $notes, $position, $numberOfStrings=4)
+    function getAllPossibilities($root, $notes, $position, $numberOfStrings=4): array
     {
 
       $strings       = $this->getStringDefinitions();
       $openStrings   = $this->getOpenStringDefinitions();
       $numberedNotes = $this->getNumberedNoteDefinitons();
+      $results = [];
 
       if($numberOfStrings == '4'){
         unset($strings['C']);
@@ -599,6 +601,7 @@ class Fingerboard {
             $normalTone = preg_replace('/[0-9]/', '', $fret['N']);
 
             foreach($notes AS $key=>$note){
+              /* @phpstan-ignore-next-line */
               if(($fretIndex >= $position) && ($fretIndex < ($position+$this->posWidth))){
                 if($note == $flatTone){
                     $results[$key][] = array('string' => $stringName, 'fret' => $fretIndex, 'absolut' => $fret['F'], 'numbered' => $numberedNotes[$fret['F']] );

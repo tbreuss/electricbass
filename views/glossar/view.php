@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * @var yii\web\View $this
+ * @var app\models\Glossar $glossar
+ * @var app\models\Glossar $next
+ * @var app\models\Glossar $previous
+ * @var string $selectedCategory
+ */
+
 use app\helpers\Html;
 use app\widgets\Comments;
 use app\widgets\Rating;
@@ -6,9 +15,6 @@ use app\widgets\SocialBar;
 use app\widgets\Hits;
 use yii\helpers\Markdown;
 
-?>
-
-<?php
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
 $this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];
 $this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['glossar/index', 'category' => strtolower($glossar->category)]];;
@@ -23,7 +29,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
     <p>In <?php echo Html::a('Glossar', array('/glossar')) ?> / <?php echo Html::a($glossar->category, array('/glossar/index', 'category' => $selectedCategory)) ?></p>
 
     <?php if ($glossar->hasDefaultImage()): ?>
-        <p><?= Html::img($glossar->getDefaultImage('@web', ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title])) ?></p>
+        <p><?= Html::img($glossar->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title]) ?></p>
     <?php endif; ?>
 
     <?php

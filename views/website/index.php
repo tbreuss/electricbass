@@ -1,12 +1,18 @@
 <?php
 
+/**
+ * @var string $sort
+ * @var app\models\Website[] $latest
+ * @var app\models\Website[] $popular
+ * @var app\models\Website[] $websites
+ * @var yii\data\Pagination $pagination
+ * @var yii\web\View $this
+ */
+
 use app\helpers\Html;
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;
 
-?>
-
-<?php
 $this->title = 'Websites';
 $this->params['breadcrumbs'][] = 'Websites';
 $this->params['pageTitle'] = sprintf('Websites zum Thema E-Bass (%d/%d)', $pagination->page+1, $pagination->pageCount);

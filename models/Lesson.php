@@ -7,6 +7,11 @@ use app\traits\SimilarModelsByTags;
 use Yii;
 use yii\helpers\Url;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $url
+ */
 class Lesson extends ActiveRecord
 {
     use SimilarModelsByTags;
@@ -30,6 +35,7 @@ class Lesson extends ActiveRecord
 
         $segment = '/';
         $delim = '';
+        $conditions = [];
         foreach ($parts as $part) {
             $segment .= $delim . $part;
             $conditions[] = "url='{$segment}'";

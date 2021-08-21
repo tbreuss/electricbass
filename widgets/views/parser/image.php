@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * @var int $width
+ * @var int $height
+ * @var string $alt
+ * @var string $url
+ */
+
 use app\helpers\Html;
 use yii\widgets\Spaceless;
 

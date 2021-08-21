@@ -11,3 +11,9 @@ To analyse code base using PHPStan run the following command.
 ~~~bash
 vendor/bin/phpstan analyse --memory-limit=256M
 ~~~
+
+Oder 
+
+~~~bash
+docker-compose run php vendor/bin/phpstan analyse --memory-limit=256M
+~~~

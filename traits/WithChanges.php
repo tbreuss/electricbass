@@ -2,6 +2,9 @@
 
 namespace app\traits;
 
+/**
+ * @property string $changes
+ */
 trait WithChanges
 {
     /**

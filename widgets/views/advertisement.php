@@ -1,6 +1,11 @@
 <?php
-    use app\helpers\Html;
-    use app\helpers\Url;
+
+/**
+ * @var string $title
+ */
+
+use app\helpers\Html;
+use app\helpers\Url;
 ?>
 <?php if(!empty($rows)): ?>
     <div class="sidebarWidget">

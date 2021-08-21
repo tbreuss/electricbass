@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var app\models\Advertisement[] $models
+ * @var string $email
+ */
+?>
 Hallo <?php echo $email ?><br>
 <br>
 Du oder jemand anders hat dieses E-Mail zum Verwalten Deiner Inserate bei electricbass.ch angefordert.<br>

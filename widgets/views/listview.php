@@ -1,14 +1,15 @@
 <?php
-use app\helpers\Html;
-use app\widgets\RatingReadOnly;
-use yii\db\ActiveRecord;
-use yii\helpers\Markdown;
 
 /**
- * @var $ratingContext string
- * @var $ratingStyle string
- * @var $models ActiveRecord
+ * @var string $ratingContext
+ * @var string $ratingStyle
+ * @var app\models\Blog[]|app\models\Lesson[] $models
  */
+
+use app\helpers\Html;
+use app\widgets\RatingReadOnly;
+use yii\helpers\Markdown;
+
 ?>
 
 <?php /* Siehe http://www.bootply.com/KYX5whhXoh */ ?>
