@@ -21,7 +21,7 @@ use app\helpers\Html;
 <div class="col-12 form__row">
     <?php $errorClass = $model->hasErrors('category_id') ? 'is-invalid' : ''; ?>
     <?= Html::label($model->getAttributeLabel('category_id'), 'category_id', ['class' => 'form__label is-required']); ?>
-    <?= Html::dropDownList('Advertisement[category_id]', $model->category_id, [''=>''] +$model::$categories, ['class' => 'form__dropdown ' . $errorClass, 'autofocus' => true]); ?>
+    <?= Html::dropDownList('Advertisement[category_id]', (string)$model->category_id, [''=>''] +$model::$categories, ['class' => 'form__dropdown ' . $errorClass, 'autofocus' => true]); ?>
     <?= Html::error($model, 'category_id', ['class' => 'invalid-feedback']); ?>
 </div>
 

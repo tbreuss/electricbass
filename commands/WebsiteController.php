@@ -238,7 +238,7 @@ function grap_favicon($options = array())
     }
 
     // reset script runtime timeout
-    set_time_limit($max_execution_time); // set it back to the old value
+    set_time_limit((int)$max_execution_time); // set it back to the old value
 
     // Return Favicon Url
     return $filePath;
@@ -274,7 +274,7 @@ function load($url, $DEBUG)
             }
             fclose($fh);
         } else {
-            $content = file_get_contents($url, NULL, $context);
+            $content = file_get_contents($url, false, $context);
         }
     }
     return $content;
@@ -283,7 +283,8 @@ function load($url, $DEBUG)
 /* HELPER: Change URL from relative to absolute */
 function rel2abs($rel, $base)
 {
-    extract(parse_url($base));
+    $parsedUrl = parse_url($base);
+    extract($parsedUrl);
 
     /** @var string $scheme */
     /** @var string $host */

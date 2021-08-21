@@ -33,13 +33,10 @@ class Div
         );
     }
 
-    /**
-     * @param string $id
-     * @return string
-     */
-    public static function createAccessCode($id)
+    public static function createAccessCode(int $id): string
     {
-        return md5($id . Yii::$app->params['encryptionKey']);
+        $string = $id . Yii::$app->params['encryptionKey'];
+        return md5($string);
     }
 
     /**
@@ -118,7 +115,7 @@ class Div
         }
         $d->close();
 
-        srand((double)microtime()*1000000);
+        srand((int)microtime() * 1000000);
         return $save_dir.'/'.rand().'.mid';
     }
 
@@ -279,19 +276,6 @@ class Div
             if($i>1000) throw new \Exception('Irgendwas ist beim Upload schiefgelaufen');
         }
         return $filename;
-    }
-
-    /**
-     * @param string $delim
-     * @param string $str
-     * @return array
-     */
-    public static function explode($delim, $str)
-    {
-        $str = trim($str);
-        $parts = empty($str) ? array() : explode($delim, $str);
-        $parts = array_map('trim', $parts);
-        return $parts;
     }
 
     /**

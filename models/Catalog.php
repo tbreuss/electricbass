@@ -29,11 +29,7 @@ class Catalog extends ActiveRecord
 
     use SimilarModelsByTags;
 
-    /**
-     * @param int $category
-     * @return ActiveDataProvider
-     */
-    public static function getActiveDataProvider($category, array $filter = [])
+    public static function getActiveDataProvider(string $category, array $filter = []): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -97,12 +93,7 @@ class Catalog extends ActiveRecord
         return $provider;
     }
 
-    /**
-     * @param int|string $id
-     * @param int $category
-     * @return null|Catalog
-     */
-    public static function findOneOrNull($id, $category)
+    public static function findOneOrNull(int|string $id, string $category): ?Catalog
     {
         $model = self::find()->where(['deleted' => 0, 'url' => $id, 'category' => $category])->one();
         if ($model) {

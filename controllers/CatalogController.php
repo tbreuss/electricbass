@@ -113,13 +113,12 @@ class CatalogController extends Controller
         ]);
     }
 
+
     /**
-     * @param int|string $id
-     * @param string $category
-     * @return string
+     * @throws \yii\db\Exception
      * @throws NotFoundHttpException
      */
-    public function actionView($id, $category)
+    public function actionView(int|string $id, string $category): string
     {
         $model = Catalog::findOneOrNull('/katalog/' . $category . '/' . $id, $category);
 
