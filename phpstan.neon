@@ -36,5 +36,5 @@ parameters:
 	    - '#Call to an undefined method yii\\base\\View::registerLinkTag#'
 	    - '#Call to an undefined method yii\\base\\Component::getRoute#'
 	    - '#Access to an undefined property yii\\base\\Application::\$shortcode#'
-	    - '#PHPDoc tag @var for variable \$[a-zA-Z0-9\\_]+ has no value type specified in iterable type app\\models#'
-	    - '#Method .+ has parameter .+ with no value type specified in iterable type app\\models\\.+#'
+	    - '#PHPDoc tag @var for variable .+ has no value type specified in iterable type .+models.+#'
+	    - '#Method .+ has parameter .+ with no value type specified in iterable type .+models.+#'
