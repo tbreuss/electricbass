@@ -296,7 +296,7 @@ class Parser extends Widget
 
         $content = trim($content);
 
-        if (strlen(trim($content) > 0)) {
+        if (strlen(trim($content)) > 0) {
             $lines = explode(PHP_EOL, $content);
             foreach ($lines as $line) {
                 $cells = explode('|', $line);

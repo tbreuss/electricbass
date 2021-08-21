@@ -60,7 +60,7 @@ class DefaultController extends Controller
     public function actionLogin(): Response|string
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->render(['/admin']);
+            return $this->redirect(['/admin']);
         }
 
         $model = new LoginForm();
