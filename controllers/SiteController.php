@@ -11,10 +11,11 @@ use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use app\models\ContactForm;
 use app\models\Search;
+use yii\web\Response;
 
 class SiteController extends Controller
 {
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [
@@ -28,7 +29,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    public function actions()
+    public function actions(): array
     {
         return [
             'captcha' => [
@@ -39,7 +40,7 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionTest()
+    public function actionTest(): string
     {
         if (Yii::$app->request->headers->has('HX-Request')) {
             return $this->renderPartial('test');
@@ -47,7 +48,7 @@ class SiteController extends Controller
         return $this->render('test');
     }
 
-    public function actionMustache()
+    public function actionMustache(): string
     {
         return $this->render('mustache.mustache', [
             'comments' => Comment::findLatestComments(5),
@@ -55,12 +56,7 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $count = Search::find()->where([])->count();
 
@@ -94,12 +90,7 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return string
-     */
-    public function actionContact()
+    public function actionContact(): Response|string
     {
         $model = new ContactForm();
         if (Yii::$app->request->isPost) {
@@ -123,26 +114,18 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionImpressum()
+    public function actionImpressum(): string
     {
         $this->layout = 'onecol';
         return $this->render('impressum');
     }
 
-    /**
-     * RSS-Feed
-     */
-    public function actionFeed()
+    public function actionFeed(): Response
     {
-        $this->redirect(['feed/rss'], 301);
+        return $this->redirect(['feed/rss'], 301);
     }
 
-    public function actionError()
+    public function actionError(): Response|string
     {
         try {
             $requestUrl = Yii::$app->request->getUrl();

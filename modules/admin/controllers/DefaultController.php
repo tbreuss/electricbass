@@ -52,21 +52,12 @@ class DefaultController extends Controller
         ];
     }
 
-    /**
-     * Renders the index view for the module
-     * @return string
-     */
-    public function actionIndex()
+    public function actionIndex(): Response
     {
         return $this->redirect(['/admin/blog']);
     }
 
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
+    public function actionLogin(): Response|string
     {
         if (!Yii::$app->user->isGuest) {
             return $this->render(['/admin']);
@@ -83,15 +74,9 @@ class DefaultController extends Controller
         ]);
     }
 
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
+    public function actionLogout(): Response
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
 }

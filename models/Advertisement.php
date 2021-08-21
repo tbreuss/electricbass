@@ -455,13 +455,12 @@ class Advertisement extends ActiveRecord
         return ($numbOfRows > 0);
     }
 
-    public function delete()
+    public function softDelete(): int
     {
         $attributes = [
             'deleted' => 1
         ];
-        $numbOfRows = static::updateAll($attributes, 'id=:id', ['id' => $this->id]);
-        return ($numbOfRows > 0);
+        return static::updateAll($attributes, 'id=:id', ['id' => $this->id]);
     }
 
     public function getCountryTranslated()

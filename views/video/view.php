@@ -87,10 +87,10 @@ $moreVideos = array_slice($similarVideos, 3);
                     <div class="topVideos">
                     <h2 class="topVideos__heading">Ähnliche Videos</h2>
                         <?php foreach ($topVideos as $topVideo): ?>
-                            <a class="topVideos__item" href="<?= $topVideo['url'] ?>">
-                                <?php if ($topVideo['platform'] === 'youtube'): ?>
-                                    <img class="topVideos__image" src="https://img.youtube.com/vi/<?php echo $topVideo['key'] ?>/mqdefault.jpg" alt="<?php echo $topVideo['title'] ?>">
-                                    <span class="topVideos__label"><?= $topVideo['title'] ?></span>
+                            <a class="topVideos__item" href="<?= $topVideo->url ?>">
+                                <?php if ($topVideo->platform === 'youtube'): ?>
+                                    <img class="topVideos__image" src="https://img.youtube.com/vi/<?php echo $topVideo->key ?>/mqdefault.jpg" alt="<?php echo $topVideo->title ?>">
+                                    <span class="topVideos__label"><?= $topVideo->title ?></span>
                                 <?php endif; ?>
                             </a>
                         <?php endforeach; ?>

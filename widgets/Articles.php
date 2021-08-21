@@ -17,7 +17,7 @@ class Articles extends Widget
         $this->limit = intval($this->limit);
     }
 
-    public function run()
+    public function run(): string
     {
         $query = \app\models\Search::find();
 
@@ -42,7 +42,7 @@ class Articles extends Widget
         $models = $query->all();
 
         if (empty($models)) {
-            return;
+            return '';
         }
 
         return $this->render('articles', array(

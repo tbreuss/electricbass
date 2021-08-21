@@ -7,9 +7,11 @@ use app\models\Advertisement;
 use app\models\AdvertisementContactForm;
 use app\models\AdvertisementEmailForm;
 use Yii;
+use yii\base\BaseObject;
 use yii\db\Expression;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Class AdvertisementController
@@ -17,12 +19,8 @@ use yii\web\NotFoundHttpException;
  */
 class AdvertisementController extends Controller
 {
-    /**
-     * Index Action
-     * @param int $page
-     * @return string
-     */
-    public function actionIndex($page = 0)
+
+    public function actionIndex(int $page = 0): string
     {
         $models = Advertisement::findAllForAdvertisementIndexController();
         return $this->render('index', array(
@@ -31,12 +29,7 @@ class AdvertisementController extends Controller
         ));
     }
 
-    /**
-     * Contact Action
-     * @param int $id
-     * @return string
-     */
-    public function actionContact($id)
+    public function actionContact(int $id): Response|string
     {
         $advertisement = Advertisement::findById($id, true);
         $model = new AdvertisementContactForm;
@@ -64,12 +57,7 @@ class AdvertisementController extends Controller
 
     }
 
-    /**
-     * View Action
-     * @param int|string $id
-     * @return string
-     */
-    public function actionView($id)
+    public function actionView(string|int $id): Response|string
     {
         $model = Advertisement::findById('/kleinanzeigen/' . $id, false);
 
@@ -85,11 +73,7 @@ class AdvertisementController extends Controller
         ));
     }
 
-    /**
-     * Add Action
-     * @return string
-     */
-    public function actionAdd()
+    public function actionAdd(): Response|string
     {
         $model = new Advertisement();
         if (isset($_POST['Advertisement'])) {
@@ -113,13 +97,7 @@ class AdvertisementController extends Controller
         return $this->render('add', array('model' => $model));
     }
 
-    /**
-     * @param int $id
-     * @param string $accessCode
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionActivate($id, $accessCode)
+    public function actionActivate(string $id, string $accessCode): string
     {
         $model = Advertisement::findById($id, false);
         if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($id))) {
@@ -129,13 +107,7 @@ class AdvertisementController extends Controller
         return $this->render('renew', array('model' => $model));
     }
 
-    /**
-     * @param int $id
-     * @param string $accessCode
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionRenew($id, $accessCode)
+    public function actionRenew(string $id, string $accessCode): string
     {
         $model = Advertisement::findById($id, false);
         if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($id))) {
@@ -146,34 +118,21 @@ class AdvertisementController extends Controller
         return $this->render('renew', array('model' => $model));
     }
 
-    /**
-     * @param int $id
-     * @param string $accessCode
-     * @param int $confirmed
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionDelete($id, $accessCode, $confirmed = 0)
+    public function actionDelete(string|int $id, string $accessCode, int $confirmed = 0): Response|string
     {
         $model = Advertisement::findById($id, true);
         if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($id))) {
             throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         if (!empty($confirmed)) {
-            $model->delete();
+            $model->softDelete();
             Yii::$app->session->setFlash('deleteConfirmed');
             return $this->redirect(array('index'));
         }
         return $this->render('delete', array('model' => $model, 'confirmed' => $confirmed));
     }
 
-    /**
-     * @param int $id
-     * @param string $accessCode
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionUpdate($id, $accessCode)
+    public function actionUpdate(string|int $id, string $accessCode): Response|string
     {
         $model = Advertisement::findById($id, false);
         if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($id))) {
@@ -198,10 +157,7 @@ class AdvertisementController extends Controller
         return $this->render('update', array('model' => $model));
     }
 
-    /**
-     * @return string
-     */
-    public function actionManage()
+    public function actionManage(): Response|string
     {
         $model = new AdvertisementEmailForm();
         if (isset($_POST['AdvertisementEmailForm'])) {
@@ -224,14 +180,7 @@ class AdvertisementController extends Controller
         ]);
     }
 
-    /**
-     * @param string $to
-     * @param string $from
-     * @param string $subject
-     * @param string $textBody
-     * @return bool
-     */
-    protected function sendMail($to, $from, $subject, $textBody): bool
+    protected function sendMail(string $to, string $from, string $subject, string $textBody): bool
     {
         return Yii::$app->mailer
             ->compose()
@@ -242,12 +191,7 @@ class AdvertisementController extends Controller
             ->send();
     }
 
-    /**
-     * @param string $subject
-     * @param string $textBody
-     * @return bool
-     */
-    protected function sendAdminMail($subject, $textBody)
+    protected function sendAdminMail(string $subject, string $textBody): bool
     {
         $to = Yii::$app->params['adminEmail'];
         $from = 'noreply@electricbass.ch';
@@ -260,7 +204,7 @@ class AdvertisementController extends Controller
             ->send();
     }
 
-    protected function sendConfirmationMail($model)
+    protected function sendConfirmationMail(Advertisement $model): bool
     {
         $models = Advertisement::findAllByEmail($model->email);
 
@@ -279,12 +223,7 @@ class AdvertisementController extends Controller
         return $message->send();
     }
 
-    /**
-     * @param AdvertisementContactForm $model
-     * @param Advertisement $advertisement
-     * @return bool
-     */
-    protected function sendContactMail($model, $advertisement)
+    protected function sendContactMail(AdvertisementContactForm $model, Advertisement $advertisement): bool
     {
         $message = Yii::$app->mailer->compose([
             'html' => 'advertisement/contact_html',
@@ -303,11 +242,11 @@ class AdvertisementController extends Controller
     }
 
     /**
-     * @param array $models
+     * @param Advertisement[] $models
      * @param string $email
      * @return bool
      */
-    protected function sendManageMail(array $models, $email)
+    protected function sendManageMail(array $models, string $email): bool
     {
         $message = Yii::$app->mailer->compose([
             'html' => 'advertisement/manage_html',

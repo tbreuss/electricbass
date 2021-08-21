@@ -14,7 +14,7 @@ class Rating extends Widget
     public string $tableName;
     public int $tableId;
     public string $sessionId;
-    public float $ratingValue;
+    public int $ratingValue;
 
     public function run(): string
     {
