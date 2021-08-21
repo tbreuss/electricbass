@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var array $entries
+ * @var app\entities\AtoZGroupedEntries[] $groupedEntries
  * @var app\models\Website[] $latest
  * @var app\models\Website[] $popular
  */
@@ -17,13 +17,13 @@ $this->params['metaDescription'] = 'Umfangreicher Katalog von A-Z mit Marken und
     <h1>Websites zum Thema E-Bass von A-Z</h1>
 
     <div class="row">
-        <?php foreach ($entries as $entriesPerInitial): ?>
-            <h2><strong><?= $entriesPerInitial['initial'] ?></strong></h2>
+        <?php foreach ($groupedEntries as $group): ?>
+            <h2><strong><?= $group->getInitial() ?></strong></h2>
             <ul>
-                <?php foreach ($entriesPerInitial['entries'] as $entry): ?>
+                <?php foreach ($group->getEntries() as $entry): ?>
                     <li>
-                        <a href="<?= $entry['url'] ?>"><?= $entry['title'] ?></a>
-                        <?php if ($entry['isNew']): ?>
+                        <a href="<?= $entry->getUrl() ?>"><?= $entry->getTitle() ?></a>
+                        <?php if ($entry->isNew()): ?>
                             <span class="is-new">NEU</span>
                         <?php endif; ?>
                     </li>

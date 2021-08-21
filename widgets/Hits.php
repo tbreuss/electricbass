@@ -8,14 +8,12 @@ use yii\helpers\Url;
 
 class Hits extends Widget
 {
-    protected static $ALLOWED = ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'lesson', 'website', 'video'];
-    public $tableName;
-    public $tableId;
+    /** @var string[] */
+    protected static array $ALLOWED = ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'lesson', 'website', 'video'];
+    public string $tableName;
+    public int $tableId;
 
-    /**
-     * @return string
-     */
-    public function run()
+    public function run(): string
     {
         if ($this->isNotAllowed() || $this->hasSessionEntry()) {
             return '';
@@ -27,18 +25,12 @@ class Hits extends Widget
         ]);
     }
 
-    /**
-     * @return string
-     */
-    protected function getUrl()
+    protected function getUrl(): string
     {
         return Url::toRoute(['/api/hits']);
     }
 
-    /**
-     * @return bool
-     */
-    protected function isNotAllowed()
+    protected function isNotAllowed(): bool
     {
         if (in_array($this->tableName, self::$ALLOWED)) {
             return false;
@@ -46,7 +38,7 @@ class Hits extends Widget
         return true;
     }
 
-    protected function hasSessionEntry()
+    protected function hasSessionEntry(): bool
     {
         $sessionKey = $this->getSessionKey();
         $ids = Yii::$app->session->get($sessionKey, []);
@@ -56,7 +48,7 @@ class Hits extends Widget
         return false;
     }
 
-    protected function addSessionEntry()
+    protected function addSessionEntry(): void
     {
         $sessionKey = $this->getSessionKey();
         $ids = Yii::$app->session->get($sessionKey, []);
@@ -66,16 +58,15 @@ class Hits extends Widget
         }
     }
 
-    protected function getSessionKey()
+    protected function getSessionKey(): string
     {
-        $key = sprintf('HITS_%s_IDS', strtoupper($this->tableName));
-        return $key;
+        return sprintf('HITS_%s_IDS', strtoupper($this->tableName));
     }
 
     /**
-     * @return bool
+     * @throws \yii\db\Exception
      */
-    public function increaseHits()
+    public function increaseHits(): bool
     {
         if ($this->isNotAllowed()) {
             return false;

@@ -2,17 +2,19 @@
 
 namespace app\widgets;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Yii;
 use yii\base\Widget;
 
 class  RatingReadOnly extends Widget
 {
-    public $style;
-    public $tableName;
-    public $tableId;
-    public $ratingCount = null;
-    public $ratingAverage = null;
-    public function run()
+    public string $style;
+    public string $tableName;
+    public int $tableId;
+    public ?int $ratingCount = null;
+    public ?float $ratingAverage = null;
+
+    public function run(): string
     {
         if (!in_array($this->tableName, ['advertisement', 'album', 'blog', 'catalog', 'fingering', /*'glossar', */ 'lesson', 'website', 'video'])) {
             return '';
@@ -31,7 +33,7 @@ class  RatingReadOnly extends Widget
         ]);
     }
 
-    private function getStyle()
+    private function getStyle(): string
     {
         if (in_array($this->style, ['left', 'right', 'none'])) {
             return $this->style;
@@ -39,7 +41,11 @@ class  RatingReadOnly extends Widget
         return 'none';
     }
 
-    public function loadData()
+    /**
+     * @phpstan-return array{"ratingCount": int, "ratingAverage": float}
+     * @throws \yii\db\Exception
+     */
+    public function loadData(): array
     {
         $sql = '
             select count(id) as count, avg(value) as average

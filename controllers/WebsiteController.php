@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\entities\AtoZEntry;
+use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Website;
 use Yii;
@@ -65,20 +67,24 @@ class WebsiteController extends Controller
 
     public function actionAll()
     {
-        $entries = $this->makeAtoZ(Website::findAllAtoZ());
+        $groupedEntries = $this->makeAtoZ(Website::findAllAtoZ());
         $latest = Website::findLatest(5);
         $popular = Website::findPopular(5);
         return $this->render('all', [
-            'entries' => $entries,
+            'groupedEntries' => $groupedEntries,
             'latest' => $latest,
             'popular' => $popular
         ]);
     }
 
-    private function makeAtoZ($models)
+    /**
+     * @param Website[] $models
+     * @return AtoZGroupedEntries[]
+     */
+    private function makeAtoZ(array $models): array
     {
         $char = '';
-        $structure = [];
+        $entries = [];
         foreach ($models as $model) {
             $firstChar = strtoupper(substr($model->title, 0, 1));
             if (is_numeric($firstChar)) {
@@ -87,20 +93,18 @@ class WebsiteController extends Controller
             if ($char !== $firstChar) {
                 $char = $firstChar;
             }
-            $structure[$firstChar][] = [
-                'title' => $model->title,
-                'url' => $model->url,
-                'isNew' => $model->isNew()
-            ];
+            $entries[$firstChar][] = new AtoZEntry(
+                $model->title,
+                $model->url,
+                $model->isNew()
+            );
         }
 
-        $flat = [];
-        foreach ($structure as $key => $value) {
-            $flat[] = [
-                'initial' => $key,
-                'entries' => $value,
-            ];
+        $groups = [];
+        foreach ($entries as $key => $value) {
+            $groups[] = new AtoZGroupedEntries($key, $value);
         }
-        return $flat;
+
+        return $groups;
     }
 }

@@ -51,10 +51,9 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson $model
-     * @return array
+     * @phpstan-return array<int, array{"label": string, "url": string}>
      */
-    protected function getBreadcrumbs(Lesson $model)
+    protected function getBreadcrumbs(Lesson $model): array
     {
         $parents = Lesson::findParents($model->url);
         $breadcrumbs = [];

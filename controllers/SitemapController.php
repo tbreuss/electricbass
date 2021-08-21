@@ -27,7 +27,10 @@ class SitemapController extends Controller
         ]);
     }
 
-    private function getStaticPages()
+    /**
+     * @phpstan-return array<int, array{string, string}>
+     */
+    private function getStaticPages(): array
     {
         return [
             [

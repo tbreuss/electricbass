@@ -2,6 +2,7 @@
 /**
  * @var string $title
  * @var array $items
+ * @phpstan-var array<int, array{"type": string, "url": string, "label": string, "size": string}> $items
  */
 ?>
 
@@ -9,12 +10,12 @@
     <h3 class="downloads__title"><?= $title ?></h3>
     <div class="downloads__name">Dateien zum Herunterladen</div>
     <?php foreach ($items as $item): ?>
-    <div class="downloads__item">
-        <div class="downloads__linkSize">
-            <a class="downloads__link downloads__link--<?= strtolower($item['type']) ?>" href="<?= $item['url'] ?>"><?= $item['label'] ?></a>
-            <span class="downloads__size"><?=  $item['type'] ?>, <?=  $item['size'] ?></span>
+        <div class="downloads__item">
+            <div class="downloads__linkSize">
+                <a class="downloads__link downloads__link--<?= strtolower($item['type']) ?>" href="<?= $item['url'] ?>"><?= $item['label'] ?></a>
+                <span class="downloads__size"><?= $item['type'] ?>, <?= $item['size'] ?></span>
+            </div>
         </div>
-    </div>
     <?php endforeach; ?>
 </div>
 
@@ -26,9 +27,11 @@
         max-width: 766px;
         padding: 1rem;
     }
+
     .downloads__size:before {
         content: "[";
     }
+
     .downloads__size:after {
         content: "]";
     }

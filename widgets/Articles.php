@@ -10,6 +10,7 @@ class Articles extends Widget
     public string $tableName = '';
     public int $limit = 4;
     public string $orderBy = 'created DESC';
+    /** @var string[] */
     public array $excludeTableNames = ['advertisement', 'glossar'];
 
     public function run(): string

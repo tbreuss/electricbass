@@ -3,16 +3,18 @@
 namespace app\widgets;
 
 use app\models\Comment;
+use JetBrains\PhpStorm\NoReturn;
 use Yii;
 use yii\base\Widget;
 
 class Comments extends Widget
 {
-    public $tableName;
-    public $tableId;
-    public $models;
+    public string $tableName;
+    public int $tableId;
+    /** @var Comment[] */
+    public array $models;
 
-    public function init()
+    public function init(): void
     {
         $this->models = Comment::find()
             ->where('active = 1 AND deleted = 0 AND tableName = :tableName AND tableId = :tableId', [':tableName' => $this->tableName, ':tableId' => $this->tableId])
@@ -21,7 +23,7 @@ class Comments extends Widget
         parent::init();
     }
 
-    public function run()
+    public function run(): string
     {
         return $this->render('comments/main', [
             'list' => $this->renderComments(),
@@ -29,14 +31,14 @@ class Comments extends Widget
         ]);
     }
 
-    protected function renderComments()
+    protected function renderComments(): string
     {
         return $this->render('comments/list', [
             'models' => $this->models,
         ]);
     }
 
-    protected function renderForm()
+    protected function renderForm(): string
     {
         $request = \Yii::$app->request;
 
@@ -79,19 +81,16 @@ class Comments extends Widget
 
     /**
      * @param string $anchor
+     * @throws \yii\base\InvalidConfigException
      */
-    protected function refresh($anchor = '')
+    protected function refresh(string $anchor = ''): void
     {
         $url = Yii::$app->getRequest()->getUrl() . $anchor;
         Yii::$app->getResponse()->redirect($url)->send();
         exit;
     }
 
-    /**
-     * Sends an email to the admin.
-     * @return boolean whether the model passes validation
-     */
-    protected function sendMailToAdmin($model)
+    protected function sendMailToAdmin(Comment $model): bool
     {
         $textBody = $model->text;
         $textBody .= "\n\nName: $model->name";
@@ -114,13 +113,12 @@ class Comments extends Widget
      * @return int
      * @throws \yii\db\Exception
      */
-    protected function updateCounterOnParentTable($table, $id)
+    protected function updateCounterOnParentTable(string $table, int $id): int
     {
         $sql = sprintf('UPDATE {{%s}} SET comments = comments + 1 WHERE id=:id', $table);
-        $n = Yii::$app->db->createCommand($sql)
+        return Yii::$app->db->createCommand($sql)
             ->bindValue(':id', $id)
             ->execute();
-        return $n;
     }
 
 }

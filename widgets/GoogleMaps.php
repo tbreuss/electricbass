@@ -6,13 +6,13 @@ use yii\base\Widget;
 
 class GoogleMaps extends Widget
 {
-    public $latitude = '';
-    public $longitude = '';
-    public $text = '';
-    public $title = '';
-    public $zoom = 10;
+    public float $latitude = 0.0;
+    public float $longitude = 0.0;
+    public string $text = '';
+    public string $title = '';
+    public int $zoom = 10;
 
-    public function run()
+    public function run(): string
     {
         return $this->render('googlemaps', array(
             'latitude' => $this->latitude,
