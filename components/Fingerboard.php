@@ -163,8 +163,8 @@ class Fingerboard {
             $notes = array();
             foreach($this->results[0] AS $tone) {
                 $tmpNote = str_replace(array_keys($enharmonics), array_values($enharmonics), $tone['absolut']);
-                $octave = preg_replace('/[A-Za-z#]/', '', $tmpNote);
-                $note = preg_replace('/[0-9]/', '', $tmpNote);
+                $octave = (int)preg_replace('/[A-Za-z#]/', '', $tmpNote);
+                $note = (string)preg_replace('/[0-9]/', '', $tmpNote);
                 $notes[] = strtolower($note.($octave+1));
             }
             $reverse = array_reverse($notes);
@@ -243,6 +243,7 @@ class Fingerboard {
                   $fretIndex = 1;
                   foreach($string AS $fret){
                     if($this->position != ''){
+                      /* @phpstan-ignore-next-line */
                       if(($fretIndex >= $this->position) && ($fretIndex < ($this->position+$this->posWidth))){
                         $tpl->set_var(array('CLASS_POSITION' => 'bgPosition' ));
                       } else {
@@ -600,6 +601,7 @@ class Fingerboard {
             $normalTone = preg_replace('/[0-9]/', '', $fret['N']);
 
             foreach($notes AS $key=>$note){
+              /* @phpstan-ignore-next-line */
               if(($fretIndex >= $position) && ($fretIndex < ($position+$this->posWidth))){
                 if($note == $flatTone){
                     $results[$key][] = array('string' => $stringName, 'fret' => $fretIndex, 'absolut' => $fret['F'], 'numbered' => $numberedNotes[$fret['F']] );

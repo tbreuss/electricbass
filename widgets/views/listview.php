@@ -3,7 +3,7 @@
 /**
  * @var string $ratingContext
  * @var string $ratingStyle
- * @var yii\db\ActiveRecord[] $models
+ * @var app\models\Blog[]|app\models\Lesson[] $models
  */
 
 use app\helpers\Html;

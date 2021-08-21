@@ -12,8 +12,10 @@ use yii\helpers\Url;
  * @property int $id
  * @property string $title
  * @property string $context
+ * @property int $tableId
  * @property string $tableName
  * @property string $contextKey
+ * @property string $contextText
  * @property string $category
  * @property string $url
  * @property string $created

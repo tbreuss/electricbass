@@ -6,6 +6,8 @@ parameters:
 	    - .phpstan/constants.php
 	scanFiles:
 	    - vendor/yiisoft/yii2/Yii.php
+	stubFiles:
+	    - .phpstan/stubs/View.stub
 	paths:
 		- assets
 		- commands
@@ -26,3 +28,7 @@ parameters:
 		- widgets
 	yii2:
 	    config_path: %rootDir%/../../../config/test.php
+	ignoreErrors:
+	    - '#Call to an undefined method yii\\base\\View::registerLinkTag#'
+	    - '#Call to an undefined method yii\\base\\Component::getRoute#'
+	    - '#Access to an undefined property yii\\base\\Application::\$shortcode#'

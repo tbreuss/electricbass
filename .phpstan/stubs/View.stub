@@ -1,12 +1,13 @@
 <?php
 
-namespace yii\web;
+namespace yii\base;
 
-/**
- * @property string $title
- * @property array $params
- */
 class View
 {
-
+    /**
+      * @param array<string, mixed> $options
+      * @param ?string $key
+      */
+    public function registerLinkTag(array $options, string $key = null ): void
+    {}
 }

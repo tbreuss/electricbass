@@ -12,7 +12,7 @@ use yii\helpers\Markdown;
 class Parser extends Widget
 {
     /**
-     * @var \yii\db\ActiveRecord;
+     * @var \app\models\Blog|\app\models\Lesson|\app\models\Search;
      */
     public static $MODEL;
     public $model;
