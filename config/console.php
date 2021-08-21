@@ -15,6 +15,7 @@ $config = [
         'db' => require(__DIR__ . '/db.php'),
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
+            /* @phpstan-ignore-next-line */
             'hostInfo' => YII_ENV_DEV ? 'http://electricbass.test' : 'https://www.electricbass.ch',
             'scriptUrl' => '',
             'enablePrettyUrl' => true,
@@ -32,6 +33,7 @@ $config = [
     */
 ];
 
+/* @phpstan-ignore-next-line */
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'gii';

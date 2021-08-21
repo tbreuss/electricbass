@@ -369,12 +369,9 @@ class Advertisement extends ActiveRecord
     }
 
     /**
-     * @param int|string $id
-     * @param bool $strict
-     * @return self
      * @throws NotFoundHttpException
      */
-    public static function findById($id, bool $strict)
+    public static function findById(string|int $id, bool $strict): ?Advertisement
     {
         $condition = is_numeric($id) ? 'id=:id' : 'url=:id';
         $condition .= empty($strict) ? '' : ' AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60';

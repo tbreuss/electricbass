@@ -23,7 +23,7 @@ if (!empty($this->params['metaDescription'])) {
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
-    <?php if (!YII_ENV_DEV): ?>
+    <?php if (!YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2624727-1"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -44,14 +44,14 @@ if (!empty($this->params['metaDescription'])) {
         <title><?= Html::encode($this->title) ?> | Electricbass.ch</title>
     <?php endif; ?>
     <?php $this->head() ?>
-    <?php if (!YII_ENV_DEV): ?>
+    <?php if (!YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
         <script data-ad-client="ca-pub-6295275013493411" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <?php endif; ?>
 </head>
 <body class="controller-<?= Yii::$app->controller->id ?> action-<?= Yii::$app->controller->id ?>-<?= Yii::$app->controller->action->id ?>" itemscope itemtype="http://schema.org/WebPage">
 <?php $this->beginBody() ?>
 <main role="main">
-    <?php if (YII_ENV_DEV): ?>
+    <?php if (YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
         <div class="sizer">
             <div class="d-sm-none">X-SMALL</div>
             <div class="d-none d-sm-block d-md-none">SMALL</div>

@@ -6,16 +6,11 @@ use yii\base\Widget;
 
 class Articles extends Widget
 {
-    public $title = null;
-    public $tableName = '';
-    public $limit = 4;
-    public $orderBy = 'created DESC';
-    public $excludeTableNames = ['advertisement', 'glossar'];
-
-    public function init()
-    {
-        $this->limit = intval($this->limit);
-    }
+    public ?string $title = null;
+    public string $tableName = '';
+    public int $limit = 4;
+    public string $orderBy = 'created DESC';
+    public array $excludeTableNames = ['advertisement', 'glossar'];
 
     public function run(): string
     {

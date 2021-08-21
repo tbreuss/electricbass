@@ -102,6 +102,7 @@ $config = [
     'params' => require(__DIR__ . '/params.php'),
 ];
 
+/* @phpstan-ignore-next-line */
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
