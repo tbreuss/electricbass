@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90c84f29a0122bd3efb595becd9c7315",
+    "content-hash": "03d53ac65289e88db483186ab1b23929",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -2790,6 +2790,62 @@
             "time": "2020-10-24T14:46:40+00:00"
         },
         {
+            "name": "codeception/module-webdriver",
+            "version": "1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Codeception/module-webdriver.git",
+                "reference": "fdf7051a8ba7b69f1f5bb1a85e2d7eab84775a3e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Codeception/module-webdriver/zipball/fdf7051a8ba7b69f1f5bb1a85e2d7eab84775a3e",
+                "reference": "fdf7051a8ba7b69f1f5bb1a85e2d7eab84775a3e",
+                "shasum": ""
+            },
+            "require": {
+                "codeception/codeception": "^4.0",
+                "php": ">=5.6.0 <9.0",
+                "php-webdriver/webdriver": "^1.8.0"
+            },
+            "suggest": {
+                "codeception/phpbuiltinserver": "Start and stop PHP built-in web server for your tests"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Bodnarchuk"
+                },
+                {
+                    "name": "Gintautas Miselis"
+                },
+                {
+                    "name": "Zaahid Bateson"
+                }
+            ],
+            "description": "WebDriver module for Codeception",
+            "homepage": "http://codeception.com/",
+            "keywords": [
+                "acceptance-testing",
+                "browser-testing",
+                "codeception"
+            ],
+            "support": {
+                "issues": "https://github.com/Codeception/module-webdriver/issues",
+                "source": "https://github.com/Codeception/module-webdriver/tree/1.2.2"
+            },
+            "time": "2021-08-19T11:04:22+00:00"
+        },
+        {
             "name": "codeception/module-yii2",
             "version": "1.1.3",
             "source": {
@@ -3442,6 +3498,72 @@
                 "source": "https://github.com/phar-io/version/tree/3.1.0"
             },
             "time": "2021-02-23T14:00:09+00:00"
+        },
+        {
+            "name": "php-webdriver/webdriver",
+            "version": "1.11.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-webdriver/php-webdriver.git",
+                "reference": "da16e39968f8dd5cfb7d07eef91dc2b731c69880"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-webdriver/php-webdriver/zipball/da16e39968f8dd5cfb7d07eef91dc2b731c69880",
+                "reference": "da16e39968f8dd5cfb7d07eef91dc2b731c69880",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-zip": "*",
+                "php": "^5.6 || ~7.0 || ^8.0",
+                "symfony/polyfill-mbstring": "^1.12",
+                "symfony/process": "^2.8 || ^3.1 || ^4.0 || ^5.0"
+            },
+            "replace": {
+                "facebook/webdriver": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.0",
+                "ondram/ci-detector": "^2.1 || ^3.5 || ^4.0",
+                "php-coveralls/php-coveralls": "^2.4",
+                "php-mock/php-mock-phpunit": "^1.1 || ^2.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpunit/phpunit": "^5.7 || ^7 || ^8 || ^9",
+                "squizlabs/php_codesniffer": "^3.5",
+                "symfony/var-dumper": "^3.3 || ^4.0 || ^5.0"
+            },
+            "suggest": {
+                "ext-SimpleXML": "For Firefox profile creation"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Facebook\\WebDriver\\": "lib/"
+                },
+                "files": [
+                    "lib/Exception/TimeoutException.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A PHP client for Selenium WebDriver. Previously facebook/webdriver.",
+            "homepage": "https://github.com/php-webdriver/php-webdriver",
+            "keywords": [
+                "Chromedriver",
+                "geckodriver",
+                "php",
+                "selenium",
+                "webdriver"
+            ],
+            "support": {
+                "issues": "https://github.com/php-webdriver/php-webdriver/issues",
+                "source": "https://github.com/php-webdriver/php-webdriver/tree/1.11.1"
+            },
+            "time": "2021-05-21T15:12:49+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -6072,6 +6194,68 @@
                 }
             ],
             "time": "2021-02-19T12:13:01+00:00"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v5.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "d16634ee55b895bd85ec714dadc58e4428ecf030"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/d16634ee55b895bd85ec714dadc58e4428ecf030",
+                "reference": "d16634ee55b895bd85ec714dadc58e4428ecf030",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/polyfill-php80": "^1.16"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Executes commands in sub-processes",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/process/tree/v5.3.4"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-07-23T15:54:19+00:00"
         },
         {
             "name": "symfony/service-contracts",
