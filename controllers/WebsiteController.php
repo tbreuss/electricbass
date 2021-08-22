@@ -10,9 +10,12 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class WebsiteController extends Controller
+final class WebsiteController extends Controller
 {
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -26,7 +29,7 @@ class WebsiteController extends Controller
     /**
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $provider = Website::getActiveDataProvider();
         $latest = Website::findLatest(5);
@@ -46,7 +49,7 @@ class WebsiteController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView($id)
+    public function actionView($id): string
     {
         $website = Website::findOneOrNull('/websites/' . $id);
 
@@ -65,7 +68,7 @@ class WebsiteController extends Controller
         ]);
     }
 
-    public function actionAll()
+    public function actionAll(): string
     {
         $groupedEntries = $this->makeAtoZ(Website::findAllAtoZ());
         $latest = Website::findLatest(5);

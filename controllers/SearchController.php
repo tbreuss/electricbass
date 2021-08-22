@@ -8,11 +8,14 @@ use yii\data\ActiveDataProvider;
 use yii\data\Sort;
 use yii\web\Controller;
 
-class SearchController extends Controller
+final class SearchController extends Controller
 {
     const MIN_QUERY_LENGTH = 3;
 
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -116,12 +119,7 @@ class SearchController extends Controller
         ));
     }
 
-    /**
-     * Callback für array_filter funktion
-     * @param array $queryPart
-     * @return bool
-     */
-    private function filterQueryParts($queryPart)
+    private function filterQueryParts(string $queryPart): bool
     {
         return !empty($queryPart);
     }

@@ -17,7 +17,7 @@ use yii\web\Response;
  * Class AdvertisementController
  * @package app\controllers
  */
-class AdvertisementController extends Controller
+final class AdvertisementController extends Controller
 {
 
     public function actionIndex(int $page = 0): string

@@ -21,7 +21,7 @@ use yii\helpers\Url;
  * @property string $category
  * @property string $modified
  */
-class Catalog extends ActiveRecord
+final class Catalog extends ActiveRecord
 {
     const TYPE_TEXTBOOK = 1;
     const TYPE_READINGBOOK = 2;
@@ -29,6 +29,9 @@ class Catalog extends ActiveRecord
 
     use SimilarModelsByTags;
 
+    /**
+     * @phpstan-param array<string, string> $filter
+     */
     public static function getActiveDataProvider(string $category, array $filter = []): ActiveDataProvider
     {
         $sort = new Sort([
@@ -82,17 +85,18 @@ class Catalog extends ActiveRecord
             ->where($where)
             ->orderBy($sort->orders);
 
-        $provider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'defaultPageSize' => 24,
             ],
             'sort' => $sort,
         ]);
-
-        return $provider;
     }
 
+    /**
+     * @param int|string $id
+     */
     public static function findOneOrNull($id, string $category): ?Catalog
     {
         $model = self::find()->where(['deleted' => 0, 'url' => $id, 'category' => $category])->one();
@@ -107,15 +111,13 @@ class Catalog extends ActiveRecord
     }
 
     /**
-     * @param int $id
-     * @param array $tags
-     * @param int $limit
-     * @return array
+     * @param string[] $tags
+     * @return Catalog[]
      * @throws \yii\db\Exception
      */
     public static function findSimilars(int $id, array $tags, int $limit = 10): array
     {
-        $ids = static::findSimilarsIds($id, $tags);
+        $ids = self::findSimilarsIds($id, $tags);
         if (empty($ids)) {
             return [];
         }
@@ -127,14 +129,11 @@ class Catalog extends ActiveRecord
     }
 
     /**
-     * @param string $category
-     * @param int $limit
-     * @param int $id
-     * @return array
+     * @return Catalog[]
      */
     public static function findLatest(string $category, int $limit, int $id = 0): array
     {
-        return static::find()
+        return self::find()
             ->where(['deleted' => 0, 'category' => $category])
             ->andWhere(['<>', 'id', $id])
             ->orderBy('modified DESC')
@@ -143,14 +142,11 @@ class Catalog extends ActiveRecord
     }
 
     /**
-     * @param string $category
-     * @param int $limit
-     * @param int $id
-     * @return array
+     * @return Catalog[]
      */
     public static function findPopular(string $category, int $limit, int $id = 0): array
     {
-        return static::find()
+        return self::find()
             ->where(['deleted' => 0, 'category' => $category])
             ->andWhere(['>', 'ratingAvg', '0.0'])
             ->andWhere(['<>', 'id', $id])
@@ -159,9 +155,12 @@ class Catalog extends ActiveRecord
             ->all();
     }
 
+    /**
+     * @return Catalog[]
+     */
     public static function findAllAtoZ(string $category): array
     {
-        return static::find()
+        return self::find()
             ->select('id, category, title, url, modified')
             ->where([
                 'deleted' => 0,
@@ -174,9 +173,9 @@ class Catalog extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @phpstan-return array<int, array{"key": string, "label": string, "value": string}>
      */
-    public function getProductInfos()
+    public function getProductInfos(): array
     {
         $infos = [];
         if (!empty($this->publisher)) {
@@ -252,7 +251,7 @@ class Catalog extends ActiveRecord
         return $infos;
     }
 
-    public function isNew()
+    public function isNew(): bool
     {
         $now = time(); // or your date as well
         $date = strtotime($this->modified);
@@ -260,10 +259,6 @@ class Catalog extends ActiveRecord
         return $days < 60;
     }
 
-    /**
-     * @param string $alias
-     * @return string
-     */
     public function getDefaultImage(string $alias = ''): string
     {
         if (!empty($alias)) {
@@ -279,16 +274,13 @@ class Catalog extends ActiveRecord
         return $image;
     }
 
-    /**
-     * @return bool
-     */
     public function hasDefaultImage(): bool
     {
         $relpath = $this->getDefaultImage();
         return !empty($relpath);
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_CATALOG_IDS', []);
@@ -299,10 +291,13 @@ class Catalog extends ActiveRecord
         }
     }
 
-    public function getTracklistArray()
+    /**
+     * @phpstan-return array<int, array{"number": string, "title": string, "duration": string}>
+     */
+    public function getTracklistArray(): array
     {
         if (empty($this->tracklist)) {
-            return '';
+            return [];
         }
         $tracklist = [];
         $lines = explode("\n", $this->tracklist);
@@ -346,6 +341,9 @@ class Catalog extends ActiveRecord
         return $numbers[0] ?? '';
     }
 
+    /**
+     * @return string[]
+     */
     public function getProductNumbers(): array
     {
         $numbers = [];

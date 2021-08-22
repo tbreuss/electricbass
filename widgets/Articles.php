@@ -4,7 +4,7 @@ namespace app\widgets;
 
 use yii\base\Widget;
 
-class Articles extends Widget
+final class Articles extends Widget
 {
     public ?string $title = null;
     public string $tableName = '';

@@ -14,12 +14,12 @@ use yii\filters\VerbFilter;
 /**
  * VideoController implements the CRUD actions for Video model.
  */
-class VideoController extends Controller
+final class VideoController extends Controller
 {
     /**
-     * {@inheritdoc}
+     * @phpstan-return array<array>
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [

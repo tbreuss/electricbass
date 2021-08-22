@@ -10,12 +10,9 @@ use yii\data\Sort;
 /**
  * @property string $joke
  */
-class Joke extends ActiveRecord
+final class Joke extends ActiveRecord
 {
-    /**
-     * @return ActiveDataProvider
-     */
-    public static function getActiveDataProvider()
+    public static function getActiveDataProvider(): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -42,7 +39,7 @@ class Joke extends ActiveRecord
             ->where(['deleted' => NULL])
             ->orderBy($sort->orders);
 
-        $provider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pageSizeLimit' => [1, 200],
@@ -50,21 +47,15 @@ class Joke extends ActiveRecord
             ],
             'sort' => $sort,
         ]);
-
-        return $provider;
     }
 
-    /**
-     * @return null|ActiveRecord
-     */
-    public static function findOneRandom($maxStringLength = 100)
+    public static function findOneRandom(int $maxStringLength = 100): ?Joke
     {
-        $model = self::find()
+        return self::find()
             ->orderBy(new Expression('rand()'))
             ->where('LENGTH(joke) < :length', ['length' => $maxStringLength])
             ->limit(1)
             ->one();
-        return $model;
     }
 
 }

@@ -4,13 +4,21 @@ namespace app\modules\admin\models;
 
 final class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
+    /** @var int */
     public $id;
+    /** @var string */
     public $username;
+    /** @var string */
     public $password;
+    /** @var string */
     public $authKey;
+    /** @var string */
     public $accessToken;
 
-    private static function users()
+    /**
+     * @phpstan-return array<int, array<string, mixed>>
+     */
+    private static function users(): array
     {
         return [
             '100' => [
@@ -26,7 +34,7 @@ final class User extends \yii\base\BaseObject implements \yii\web\IdentityInterf
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id)
+    public static function findIdentity($id): ?User
     {
         $users = self::users();
         return isset($users[$id]) ? new static($users[$id]) : null;
@@ -35,7 +43,7 @@ final class User extends \yii\base\BaseObject implements \yii\web\IdentityInterf
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public static function findIdentityByAccessToken($token, $type = null): ?User
     {
         $users = self::users();
         foreach ($users as $user) {
@@ -53,7 +61,7 @@ final class User extends \yii\base\BaseObject implements \yii\web\IdentityInterf
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUsername($username): ?User
     {
         $users = self::users();
         foreach ($users as $user) {

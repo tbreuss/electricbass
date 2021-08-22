@@ -7,7 +7,7 @@ use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\Response;
 
-class ManufacturerController extends Controller
+final class ManufacturerController extends Controller
 {
     public function actionIndex(): string
     {

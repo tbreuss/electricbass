@@ -16,7 +16,7 @@ use yii\widgets\Breadcrumbs;
  * @package app\components
  * @see https://github.com/orige/yii2-schema-breadcrumbs
  */
-class SchemaBreadcrumbs extends Breadcrumbs
+final class SchemaBreadcrumbs extends Breadcrumbs
 {
     /** @var string */
     public $itemTemplate = '
@@ -34,6 +34,7 @@ class SchemaBreadcrumbs extends Breadcrumbs
 
     public int $totalLinks = 0;
 
+    /** @var array<string, mixed> */
     public array $defaultOptions = [];
 
     function __construct()
@@ -79,6 +80,7 @@ class SchemaBreadcrumbs extends Breadcrumbs
 
     /**
      * @inheritdoc
+     * @param array<string, string> $link
      */
     protected function renderItem($link, $template): string
     {

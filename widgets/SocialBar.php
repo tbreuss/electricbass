@@ -6,10 +6,10 @@ use Mobile_Detect;
 use Yii;
 use yii\base\Widget;
 
-class SocialBar extends Widget
+final class SocialBar extends Widget
 {
-    public ?int $id;
-    public string $text;
+    public ?int $id = null;
+    public string $text = '';
 
     public function run(): string
     {

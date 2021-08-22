@@ -2,7 +2,7 @@
 
 namespace app\widgets;
 
-class Breadcrumbs extends \yii\widgets\Breadcrumbs
+final class Breadcrumbs extends \yii\widgets\Breadcrumbs
 {
     /** @var array<string, string> */
     public $options = ['class' => 'breadcrumbs'];

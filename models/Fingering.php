@@ -17,15 +17,14 @@ use yii\db\ActiveRecord;
  * @property string $category
  * @property string $url
  */
-class Fingering extends ActiveRecord
+final class Fingering extends ActiveRecord
 {
     use SimilarModelsByTags;
 
     /**
      * @param int|string $id
-     * @return null|self
      */
-    public static function findOneOrNull($id)
+    public static function findOneOrNull($id): ?Fingering
     {
         $model = self::find()->where(['deleted' => 0, 'url' => $id])->one();
         if ($model) {
@@ -40,14 +39,14 @@ class Fingering extends ActiveRecord
 
     /**
      * @param int $id
-     * @param array $tags
+     * @param string[] $tags
      * @param int $limit
-     * @return array
+     * @return Fingering[]
      * @throws \yii\db\Exception
      */
     public static function findSimilars(int $id, array $tags, int $limit = 10): array
     {
-        $ids = static::findSimilarsIds($id, $tags);
+        $ids = self::findSimilarsIds($id, $tags);
         if (empty($ids)) {
             return [];
         }
@@ -58,7 +57,7 @@ class Fingering extends ActiveRecord
             ->all();
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_FINGERING_IDS', []);

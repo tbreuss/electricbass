@@ -9,19 +9,19 @@ use Yii;
 use yii\base\Widget;
 use yii\helpers\Markdown;
 
-class Parser extends Widget
+final class Parser extends Widget
 {
-    /**
-     * @var \app\models\Blog|\app\models\Lesson|\app\models\Search;
-     */
+    /** @var \app\models\Blog|\app\models\Lesson|\app\models\Search */
     public static $MODEL;
+    /** @var \app\models\Blog|\app\models\Lesson|\app\models\Search */
     public $model;
+    /** @var string */
     public $attribute;
 
-    public function run()
+    public function run(): string
     {
         // for shortcodes
-        static::$MODEL = $this->model;
+        self::$MODEL = $this->model;
 
         $parsed = str_replace('@web/', Yii::getAlias('@web'). '/', $this->model->{$this->attribute});
         $parsed = Yii::$app->shortcode->parse($parsed);
@@ -38,7 +38,10 @@ class Parser extends Widget
         return $parsed;
     }
 
-    public static function alphatab($options, $content)
+    /**
+     * @phpstan-param array<string, mixed> $options
+     */
+    public static function alphatab($options, string $content): string
     {
         // todo: $options['title']
         return self::renderPartial('alphatab', [
@@ -46,17 +49,20 @@ class Parser extends Widget
         ]);
     }
 
-    public static function amazon()
+    public static function amazon(): string
     {
         return '<div class="shortcode shortcode--amazon"></div>';
     }
 
-    public static function articles()
+    public static function articles(): string
     {
         return '<div class="shortcode shortcode--articles"></div>';
     }
 
-    public static function vimeo(array $options, $content)
+    /**
+     * @phpstan-param array<string, int|string> $options
+     */
+    public static function vimeo(array $options, string $content): string
     {
         $options = array_merge([
             'key' => '',
@@ -68,7 +74,10 @@ class Parser extends Widget
         return self::renderPartial('vimeo', $options);
     }
 
-    public static function youtube(array $options, $content)
+    /**
+     * @phpstan-param array<string, string> $options
+     */
+    public static function youtube(array $options, string $content): string
     {
         $options = array_merge([
             'title' => '',
@@ -85,7 +94,10 @@ class Parser extends Widget
         return self::renderPartial('youtube', $options);
     }
 
-    public static function image(array $options, $content)
+    /**
+     * @phpstan-param array<string, int|string> $options
+     */
+    public static function image(array $options, string $content): string
     {
         $options = array_merge([
             'title' => '',
@@ -100,21 +112,24 @@ class Parser extends Widget
         ], $options);
 
         if (!empty($options['src'])) {
-            $url = static::resolveImage($options['src']);
+            $url = self::resolveImage($options['src']);
             if (!empty($url)) {
-                $size = static::getImageSize($url);
+                $size = self::getImageSize($url);
                 if ($size) {
                     $options['width'] = $size[0];
                     $options['height'] = $size[1];
                 }
             }
-            $options['url'] = static::resolveImage($options['src']);
+            $options['url'] = self::resolveImage($options['src']);
             unset($options['src']);
         }
 
         return self::renderPartial('image', $options);
     }
 
+    /**
+     * @phpstan-return array{int, int}|null
+     */
     private static function getImageSize(string $url): ?array
     {
         $path = Yii::getAlias('@app/web/' . $url);
@@ -133,30 +148,33 @@ class Parser extends Widget
         return [$size[0], $size[1]];
     }
 
-    protected static function resolveImage($src)
+    protected static function resolveImage(string $src): string
     {
-        $table = (static::$MODEL)::getTableSchema()->name;
+        $table = (self::$MODEL)::getTableSchema()->name;
 
         if (strpos($src, '/') !== false) {
             return $src;
         }
 
         if ($table == 'search') {
-            $table = static::$MODEL->tableName;
+            $table = self::$MODEL->tableName;
         }
 
         if ($table == 'blog') {
-            return sprintf('media/blog/%d/%s', (static::$MODEL)->id, $src);
+            return sprintf('media/blog/%d/%s', (self::$MODEL)->id, $src);
         }
 
         if ($table == 'lesson') {
-            return sprintf('media/lektion/%d/%s', (static::$MODEL)->id, $src);
+            return sprintf('media/lektion/%d/%s', (self::$MODEL)->id, $src);
         }
 
         return $src;
     }
 
-    public static function imgtext(array $options, $content)
+    /**
+     * @phpstan-param array<string, string> $options
+     */
+    public static function imgtext(array $options, string $content): string
     {
         $options = array_merge([
             'title' => '',
@@ -170,14 +188,17 @@ class Parser extends Widget
         ], $options);
 
         if (!empty($options['src'])) {
-            $options['url'] = static::resolveImage($options['src']);
+            $options['url'] = self::resolveImage($options['src']);
             unset($options['src']);
         }
 
         return self::renderPartial('imgtext', $options);
     }
 
-    public static function jsongallery(array $options, $content)
+    /**
+     * @phpstan-param array{"title": string, "gallery", array} $options
+     */
+    public static function jsongallery(array $options, string $content): string
     {
         $options = array_merge([
             'title' => '',
@@ -187,7 +208,10 @@ class Parser extends Widget
         return self::renderPartial('jsongallery', $options);
     }
 
-    public static function jsonlinks(array $options, $content)
+    /**
+     * @phpstan-param array{"title": string} $options
+     */
+    public static function jsonlinks(array $options, string $content): string
     {
         $options = array_merge([
             'title' => '',
@@ -198,7 +222,10 @@ class Parser extends Widget
         return self::renderPartial('jsonlinks', $options);
     }
 
-    public static function lessonnav($options, $content)
+    /**
+     * @phpstan-param array{"type": string} $options
+     */
+    public static function lessonnav($options): string
     {
         $options = array_merge([
             'type' => '',
@@ -211,9 +238,14 @@ class Parser extends Widget
                 'models' => $models
             ]);
         }
+        return '';
     }
 
-    public static function htmlphp($options, $content)
+    /**
+     * @param string|array $options
+     * @phpstan-param string|array<string, mixed> $options
+     */
+    public static function htmlphp($options, string $content): string
     {
         $content = self::addWebAlias($content);
         try {
@@ -226,14 +258,13 @@ class Parser extends Widget
         }
     }
 
-    public static function rssfeed($options, $content)
+    public static function rssfeed(): string
     {
         return '<div class="shortcode shortcode--rssfeed"></div>';
     }
 
     /**
-     * @param array $options
-     * @return string
+     * @phpstan-param array{"label": string, "path": string} $options
      */
     public static function score(array $options): string
     {
@@ -283,7 +314,11 @@ class Parser extends Widget
         ]);
     }
 
-    public static function downloads($options, $content)
+    /**
+     * @param string|array $options
+     * @phpstan-param string|array<string, mixed> $options
+     */
+    public static function downloads($options, string $content): string
     {
         if (is_string($options)) {
             $options = [];
@@ -325,6 +360,9 @@ class Parser extends Widget
         return self::renderPartial('downloads', $options);
     }
 
+    /**
+     * @phpstan-param array{"tracks": string} $options
+     */
     public static function soundcloud(array $options): string
     {
         $options = array_merge([
@@ -335,6 +373,9 @@ class Parser extends Widget
         ]);
     }
 
+    /**
+     * @phpstan-param array{"artist": string} $options
+     */
     public static function spotify(array $options): string
     {
         $options = array_merge([
@@ -345,7 +386,10 @@ class Parser extends Widget
         ]);
     }
 
-    public static function websites(array $options, $content)
+    /**
+     * @phpstan-param array{"countrycode": string, "tags": string} $options
+     */
+    public static function websites(array $options, string $content): string
     {
         $options = array_merge([
             'countrycode' => '',
@@ -362,19 +406,21 @@ class Parser extends Widget
         ]);
     }
 
-    protected static function addWebAlias($html)
+    protected static function addWebAlias(string $html): string
     {
         $html = str_replace('"/media/', '"' . Yii::getAlias('@web') . '/media/', $html);
-        $html = str_replace("'/media/", "'" . Yii::getAlias('@web') . '/media/', $html);
-        return $html;
+        return str_replace("'/media/", "'" . Yii::getAlias('@web') . '/media/', $html);
     }
 
-    protected static function renderPartial($view, $options)
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected static function renderPartial(string $view, array $options): string
     {
         return Yii::$app->controller->renderPartial('@app/widgets/views/parser/' . $view, $options);
     }
 
-    protected static function checkYouTubeVideo($id)
+    protected static function checkYouTubeVideo(string $id): void
     {
         $cacheKey = 'youtube-' . $id;
         $data = Yii::$app->cache->get($cacheKey);
@@ -390,7 +436,7 @@ class Parser extends Widget
 
     /*protected static function getYouTubeFoto($key)
     {
-        $blog = static::$MODEL;
+        $blog = self::$MODEL;
         $dir = Yii::getAlias(sprintf('@webroot/media/blog/%d', $blog->id));
 
         if (!is_dir($dir)) {

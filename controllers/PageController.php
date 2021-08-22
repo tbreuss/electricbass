@@ -4,9 +4,13 @@ namespace app\controllers;
 
 use yii\web\Controller;
 
-class PageController extends Controller
+final class PageController extends Controller
 {
-    public function actions()
+    /**
+     * @inheritdoc
+     * @phpstan-return array<string, array<string, mixed>>
+     */
+    public function actions(): array
     {
         return [
             'index' => [

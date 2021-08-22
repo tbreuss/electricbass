@@ -2,15 +2,20 @@
 
 namespace app\controllers;
 
+use app\entities\AtoZEntry;
+use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Album;
 use app\models\Catalog;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class AlbumController extends Controller
+final class AlbumController extends Controller
 {
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -21,10 +26,7 @@ class AlbumController extends Controller
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function actionIndex($artist = '')
+    public function actionIndex(string $artist = ''): string
     {
         $filter = [];
 
@@ -49,10 +51,9 @@ class AlbumController extends Controller
 
     /**
      * @param int|string $id
-     * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView($id)
+    public function actionView($id): string
     {
         $model = Album::findOneOrNull('/katalog/alben/' . $id);
 
@@ -71,22 +72,26 @@ class AlbumController extends Controller
         ]);
     }
 
-    public function actionAll()
+    public function actionAll(): string
     {
-        $entries = $this->makeAtoZ(Album::findAllAtoZ());
+        $groupedEntries = $this->makeAtoZ(Album::findAllAtoZ());
         $latest = Album::findLatest(5);
         $popular = Album::findPopular(5);
         return $this->render('all', [
-            'entries' => $entries,
+            'groupedEntries' => $groupedEntries,
             'latest' => $latest,
             'popular' => $popular
         ]);
     }
 
-    private function makeAtoZ($models)
+    /**
+     * @param Album[] $models
+     * @return AtoZGroupedEntries[]
+     */
+    private function makeAtoZ(array $models): array
     {
         $char = '';
-        $structure = [];
+        $entries = [];
         foreach ($models as $model) {
             $firstChar = strtoupper(substr($model->artist, 0, 1));
             if (is_numeric($firstChar)) {
@@ -95,22 +100,18 @@ class AlbumController extends Controller
             if ($char !== $firstChar) {
                 $char = $firstChar;
             }
-            $structure[$firstChar][] = [
-                'artist' => $model->artist,
-                'title' => $model->title,
-                'url' => $model->url,
-                'isNew' => $model->isNew()
-            ];
+            $entries[$firstChar][] = new AtoZEntry(
+                $model->artist . ' - ' . $model->title,
+                $model->url,
+                $model->isNew()
+            );
         }
 
-        $flat = [];
-        foreach ($structure as $key => $value) {
-            $flat[] = [
-                'initial' => $key,
-                'entries' => $value,
-            ];
+        $groups = [];
+        foreach ($entries as $key => $value) {
+            $groups[] = new AtoZGroupedEntries($key, $value);
         }
 
-        return $flat;
+        return $groups;
     }
 }

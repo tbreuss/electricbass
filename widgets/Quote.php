@@ -5,7 +5,7 @@ namespace app\widgets;
 use app\models\Quote as QuoteModel;
 use yii\base\Widget;
 
-class Quote extends Widget
+final class Quote extends Widget
 {
 
     public function run()

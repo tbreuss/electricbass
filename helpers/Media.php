@@ -10,35 +10,43 @@ namespace app\helpers;
 
 use Yii;
 
-class Media
+final class Media
 {
-    protected static $CONTEXT_MAPPING = [
+    /** @var array|string[] */
+    protected static array $CONTEXT_MAPPING = [
         'advertising' => 'kleinanzeigen',
         'blog' => 'blog',
         'catalog' => 'katalog',
         'album' => 'album'
     ];
 
-    public static function getAlbumImage($id)
+    public static function getAlbumImage(int $id): string
     {
-        $images = static::getImages('album', $id);
+        $images = self::getImages('album', $id);
         return empty($images[0]) ? '' : $images[0];
     }
 
-    public static function getBlogImage($id)
+    public static function getBlogImage(int $id): string
     {
-        $images = static::getBlogImages($id);
+        $images = self::getBlogImages($id);
         return empty($images[0]) ? '' : $images[0];
     }
 
-    public static function getBlogImages($id): array
+    /**
+     * @return string[]
+     */
+    public static function getBlogImages(int $id): array
     {
         $webroot = Yii::getAlias('@webroot/');
         $allowed = ['jpeg', 'jpg', 'png', 'gif'];
         $pattern = "{$webroot}media/blog/{$id}/*.*";
-        return static::globFiles($pattern, $allowed, $webroot);
+        return self::globFiles($pattern, $allowed, $webroot);
     }
 
+    /**
+     * @param string[] $allowedFiles
+     * @return string[]
+     */
     private static function globFiles(string $pattern, array $allowedFiles, string $webroot): array
     {
         $results = glob($pattern);
@@ -58,27 +66,30 @@ class Media
         return array_unique($files);
     }
 
-    public static function getCatalogImage($id)
+    public static function getCatalogImage(int $id): string
     {
-        $images = static::getImages('catalog', $id);
+        $images = self::getImages('catalog', $id);
         return empty($images[0]) ? '' : $images[0];
     }
 
-    public static function getLessonImage($id)
+    public static function getLessonImage(int $id): string
     {
-        $images = static::getLessonImages($id);
+        $images = self::getLessonImages($id);
         return empty($images[0]) ? '' : $images[0];
     }
 
-    public static function getLessonImages($id)
+    /**
+     * @return string[]
+     */
+    public static function getLessonImages(int $id): array
     {
         $webroot = Yii::getAlias('@webroot/');
         $allowed = ['jpeg', 'jpg', 'png', 'gif'];
         $pattern = "{$webroot}media/blog/{$id}/*.*";
-        return static::globFiles($pattern, $allowed, $webroot);
+        return self::globFiles($pattern, $allowed, $webroot);
     }
 
-    public static function getWebsiteImage($url)
+    public static function getWebsiteImage(string $url): string
     {
         $url = str_replace(['http://', 'https://'], '', $url);
         if (strpos($url, 'www.') === 0) {
@@ -89,18 +100,21 @@ class Media
         $webroot = Yii::getAlias('@webroot/');
         $allowed = ['jpeg', 'jpg', 'png', 'gif'];
         $pattern = "{$webroot}media/website/{$initial}/{$url}.*";
-        $images = static::globFiles($pattern, $allowed, $webroot);
+        $images = self::globFiles($pattern, $allowed, $webroot);
 
         return empty($images[0]) ? '' : str_replace($webroot, '', $images[0]);
     }
 
-    public static function htmlImg($context, $id, $options)
+    /**
+     * @param array<string, string> $options
+     */
+    public static function htmlImg(string $context, int $id, array $options): string
     {
-        $relpath = static::getImage($context, $id);
+        $relpath = self::getImage($context, $id);
         return Html::img('@web/' . $relpath, $options);
     }
 
-    public static function xxx($id, $context)
+    public static function xxx(int $id, string $context): string
     {
 
         $relPaths = [
@@ -121,36 +135,34 @@ class Media
         return '';
     }
 
-    public static function hasImage($context, $id)
+    public static function hasImage(string $context, int $id): bool
     {
-        $images = static::getImages($context, $id);
+        $images = self::getImages($context, $id);
         return count($images) > 0;
     }
 
-    /**
-     * @param string $context
-     * @param int $id
-     * @return string Die URL ohne vorangehenden Slash "/"
-     */
     public static function getImage(string $context, int $id): string
     {
         $relpath = '';
-        $images = static::getImages($context, $id);
+        $images = self::getImages($context, $id);
         if (isset($images[0])) {
             $relpath = $images[0];
         }
         return $relpath;
     }
 
-    public static function getImages($context, $id, $type = 'media')
+    /**
+     * @return string[]
+     */
+    public static function getImages(string $context, int $id, string $type = 'media'): array
     {
-        $context = static::$CONTEXT_MAPPING[$context];
+        $context = self::$CONTEXT_MAPPING[$context];
 
         $webroot = Yii::getAlias('@webroot/');
         $allowed = ['jpeg', 'jpg', 'png', 'gif'];
         $pattern = "{$webroot}{$type}/{$context}/{$id}-*.*";
 
-        return static::globFiles($pattern, $allowed, $webroot);
+        return self::globFiles($pattern, $allowed, $webroot);
     }
 
 }

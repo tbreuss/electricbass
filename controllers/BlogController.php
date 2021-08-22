@@ -9,9 +9,12 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class BlogController extends Controller
+final class BlogController extends Controller
 {
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -25,7 +28,7 @@ class BlogController extends Controller
     /**
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $provider = Blog::getActiveDataProvider();
         $latest = Blog::findLatest(5);
@@ -45,7 +48,7 @@ class BlogController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView($id)
+    public function actionView($id): string
     {
         $blog = Blog::findOneOrNull('/blog/' . $id);
 

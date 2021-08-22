@@ -6,8 +6,9 @@ use yii\db\Query;
 /**
  * Class m210424_073912_absolute_urls
  */
-class m210424_073912_absolute_urls extends Migration
+final class m210424_073912_absolute_urls extends Migration
 {
+    /** @var string[] */
     private array $tables = ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'lesson', 'video', 'website'];
 
     /**

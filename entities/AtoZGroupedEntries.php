@@ -9,6 +9,9 @@ class AtoZGroupedEntries
     /** @var AtoZEntry[] */
     private array $entries;
 
+    /**
+     * @param AtoZEntry[] $entries
+     */
     public function __construct(string $initial, array $entries)
     {
         $this->initial = $initial;

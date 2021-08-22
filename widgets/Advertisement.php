@@ -4,7 +4,7 @@ namespace app\widgets;
 
 use yii\base\Widget;
 
-class Advertisement extends Widget
+final class Advertisement extends Widget
 {
 
     public string $title = 'Kleinanzeigen';

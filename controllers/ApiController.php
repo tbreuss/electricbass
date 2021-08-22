@@ -4,20 +4,17 @@ namespace app\controllers;
 
 use app\widgets\Hits;
 use app\widgets\Rating;
-use Exception;
+use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\rest\Controller;
 use yii\web\HttpException;
 use yii\web\ServerErrorHttpException;
 
-class ApiController extends Controller
+final class ApiController extends Controller
 {
 
-    /**
-     * @return bool
-     */
-    public function actionHits()
+    public function actionHits(): bool
     {
         if (!Yii::$app->request->isPost) {
             return false;
@@ -36,9 +33,11 @@ class ApiController extends Controller
     }
 
     /**
-     * @return array
+     * @phpstan-return array{"ratingCount": int, "ratingAverage": string, "yourRating": string}
+     * @throws HttpException
+     * @throws ServerErrorHttpException
      */
-    public function actionRate()
+    public function actionRate(): array
     {
         $request = Yii::$app->request;
 
@@ -55,7 +54,7 @@ class ApiController extends Controller
             return $widget->saveRating();
         } catch (InvalidConfigException $e) {
             throw new ServerErrorHttpException($e->getMessage());
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new ServerErrorHttpException($e->getMessage());
         }
     }

@@ -6,11 +6,11 @@ use JetBrains\PhpStorm\ArrayShape;
 use Yii;
 use yii\base\Widget;
 
-class  RatingReadOnly extends Widget
+final class  RatingReadOnly extends Widget
 {
-    public string $style;
-    public string $tableName;
-    public int $tableId;
+    public string $style = 'none';
+    public string $tableName = '';
+    public int $tableId = 0;
     public ?int $ratingCount = null;
     public ?float $ratingAverage = null;
 

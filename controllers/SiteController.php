@@ -13,8 +13,11 @@ use app\models\ContactForm;
 use app\models\Search;
 use yii\web\Response;
 
-class SiteController extends Controller
+final class SiteController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */
     public function behaviors(): array
     {
         return [
@@ -28,6 +31,7 @@ class SiteController extends Controller
 
     /**
      * @inheritdoc
+     * @phpstan-return array<string, array<string, mixed>>
      */
     public function actions(): array
     {

@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
  * @property int $counter
  * @property string $modified
  */
-class Log404 extends ActiveRecord
+final class Log404 extends ActiveRecord
 {
     /**
      * @return string the name of the table associated with this ActiveRecord class.

@@ -13,12 +13,12 @@ use yii\db\Expression;
  * @property string $created
  * @property string $modified
  */
-class Searchlog extends ActiveRecord
+final class Searchlog extends ActiveRecord
 {
     /**
-     * @return array
+     * @return array<string, string>
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return array(
             'id' => 'Id',
@@ -27,7 +27,10 @@ class Searchlog extends ActiveRecord
         );
     }
 
-    public static function findLastSearchQueries($limit = 10)
+    /**
+     * @return Searchlog[]
+     */
+    public static function findLastSearchQueries(int $limit = 10): array
     {
         return self::find()
             ->orderBy('modified DESC')
@@ -36,7 +39,10 @@ class Searchlog extends ActiveRecord
 
     }
 
-    public static function findPopularSearchQueries($limit = 10)
+    /**
+     * @return Searchlog[]
+     */
+    public static function findPopularSearchQueries(int $limit = 10): array
     {
         return self::find()
             ->orderBy('frequency DESC')
@@ -44,11 +50,7 @@ class Searchlog extends ActiveRecord
             ->all();
     }
 
-    /**
-     * @param string $term
-     * @param integer $results
-     */
-    public static function addTerm($term, $results)
+    public static function addTerm(string $term, int $results): void
     {
         $cookieSearches = Yii::$app->session->get('SEARCHLOG_TERMS', []);
 
@@ -76,9 +78,8 @@ class Searchlog extends ActiveRecord
 
     /**
      * @param bool $insert
-     * @return bool
      */
-    public function beforeSave($insert)
+    public function beforeSave($insert): bool
     {
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {

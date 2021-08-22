@@ -4,16 +4,25 @@ namespace app\models;
 
 use yii\base\Model;
 
-class AdvertisementContactForm extends Model
+final class AdvertisementContactForm extends Model
 {
+    /** @var string */
 	public $name;
+    /** @var string */
 	public $email;
+    /** @var string */
     public $phone;
+    /** @var string */
 	public $message;
+    /** @var string */
 	public $nspm;
+    /** @var string */
     public $verifyCode;
 
-    public function attributeLabels()
+    /**
+     * @return array<string, string>
+     */
+    public function attributeLabels(): array
     {
         return array(
             'name' => 'Dein Name',
@@ -25,10 +34,10 @@ class AdvertisementContactForm extends Model
         );
     }
 
-	/**
-	 * Declares the validation rules.
-	 */
-	public function rules()
+    /**
+     * @phpstan-return array<int, array>
+     */
+	public function rules(): array
 	{
 		return array(
 			// name

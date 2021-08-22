@@ -5,10 +5,13 @@ namespace app\filters;
 use app\helpers\Url;
 use yii\base\ActionFilter;
 
-class Canonical extends ActionFilter
+final class Canonical extends ActionFilter
 {
-    public $filters = [];
-    public $params = [];
+    /** @var string[] */
+    public array $filters = [];
+
+    /** @var string[] */
+    public array $params = [];
 
     public function beforeAction($action)
     {

@@ -30,6 +30,9 @@ parameters:
 	excludePaths:
 	    analyse:
 	        - components/AmazonProductDetail.php
+	        - components/Fingerboard.php
+	        - components/Shortcode.php
+	        - components/Template.php
 	yii2:
 	    config_path: %rootDir%/../../../config/test.php
 	ignoreErrors:
@@ -38,3 +41,5 @@ parameters:
 	    - '#Access to an undefined property yii\\base\\Application::\$shortcode#'
 	    - '#PHPDoc tag @var for variable .+ has no value type specified in iterable type .+models.+#'
 	    - '#Method .+ has parameter .+ with no value type specified in iterable type .+models.+#'
+	    - '#Method .+ return type has no value type specified in iterable type .+models.+#'
+	    - '#Property .+ type has no value type specified in iterable type .+models.+#'

@@ -9,12 +9,12 @@ use yii\base\Widget;
 use yii\helpers\Url;
 use yii\db\Expression;
 
-class Rating extends Widget
+final class Rating extends Widget
 {
-    public string $tableName;
-    public int $tableId;
-    public string $sessionId;
-    public int $ratingValue;
+    public string $tableName = '';
+    public int $tableId = 0;
+    public string $sessionId = '';
+    public int $ratingValue = 0;
 
     public function run(): string
     {

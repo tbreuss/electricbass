@@ -8,14 +8,14 @@ use yii\web\Controller;
 use yii\web\Response;
 use app\models\Search;
 
-class SitemapController extends Controller
+final class SitemapController extends Controller
 {
-    public function actionIndex()
+    public function actionIndex(): string
     {
         return $this->render('index');
     }
 
-    public function actionGoogle()
+    public function actionGoogle(): string
     {
         Yii::$app->response->format = Response::FORMAT_RAW;
         Yii::$app->response->headers->add('Content-Type', 'text/xml');

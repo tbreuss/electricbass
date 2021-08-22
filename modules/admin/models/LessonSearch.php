@@ -12,9 +12,9 @@ use app\modules\admin\models\Lesson;
 class LessonSearch extends Lesson
 {
     /**
-     * {@inheritdoc}
+     * @phpstan-return array<int, array>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'autosort', 'hideFoto', 'comments', 'ratings', 'hits', 'featured', 'deleted'], 'integer'],
@@ -24,22 +24,18 @@ class LessonSearch extends Lesson
     }
 
     /**
-     * {@inheritdoc}
+     * @phpstan-return array<array>
      */
-    public function scenarios()
+    public function scenarios(): array
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
     /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
+     * @phpstan-param array<string, string> $params
      */
-    public function search($params)
+    public function search(array $params): ActiveDataProvider
     {
         $query = Lesson::find();
 

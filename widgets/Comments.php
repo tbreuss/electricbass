@@ -7,12 +7,12 @@ use JetBrains\PhpStorm\NoReturn;
 use Yii;
 use yii\base\Widget;
 
-class Comments extends Widget
+final class Comments extends Widget
 {
-    public string $tableName;
-    public int $tableId;
+    public string $tableName = '';
+    public int $tableId = 0;
     /** @var Comment[] */
-    public array $models;
+    public array $models = [];
 
     public function init(): void
     {

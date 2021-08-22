@@ -2,7 +2,7 @@
 
 namespace app\widgets;
 
-class LinkPager extends \yii\widgets\LinkPager
+final class LinkPager extends \yii\widgets\LinkPager
 {
     public $maxButtonCount = 5;
     /** @var array<string, string> */

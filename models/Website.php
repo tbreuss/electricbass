@@ -16,7 +16,7 @@ use yii\data\Sort;
  * @property string $website
  * @property string $modified
  */
-class Website extends ActiveRecord
+final class Website extends ActiveRecord
 {
     use SimilarModelsByTags;
 
@@ -81,9 +81,8 @@ class Website extends ActiveRecord
 
     /**
      * @param int|string $id
-     * @return null|Website
      */
-    public static function findOneOrNull($id)
+    public static function findOneOrNull($id): ?Website
     {
         $website = self::find()->where(['deleted' => NULL, 'url' => $id])->one();
         if ($website) {
@@ -99,11 +98,11 @@ class Website extends ActiveRecord
     /**
      * @param int $limit
      * @param int $id
-     * @return array
+     * @return Website[]
      */
     public static function findLatest(int $limit, int $id = 0): array
     {
-        return static::find()
+        return self::find()
             ->where(['deleted' => null])
             ->andWhere(['<>', 'id', $id])
             ->orderBy('modified DESC')
@@ -114,11 +113,11 @@ class Website extends ActiveRecord
     /**
      * @param int $limit
      * @param int $id
-     * @return array
+     * @return Website[]
      */
     public static function findPopular(int $limit, int $id = 0): array
     {
-        return static::find()
+        return self::find()
             ->where(['deleted' => null])
             ->andWhere(['>', 'ratingAvg', 0])
             ->andWhere(['<>', 'id', $id])
@@ -127,9 +126,12 @@ class Website extends ActiveRecord
             ->all();
     }
 
+    /**
+     * @return Website[]
+     */
     public static function findAllAtoZ(): array
     {
-        return static::find()
+        return self::find()
             ->select('id, title, website, url, modified')
             ->where([
                 'deleted' => null
@@ -155,9 +157,9 @@ class Website extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @phpstan-return array<int, array{"key": string, "label": string, "value": string}>
      */
-    public function getProductInfos()
+    public function getProductInfos():array
     {
         $infos = [];
         if (!empty($this->publisher)) {
@@ -254,7 +256,7 @@ class Website extends ActiveRecord
         return !empty($relpath);
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_WEBSITE_IDS', []);
@@ -265,7 +267,7 @@ class Website extends ActiveRecord
         }
     }
 
-    public function isNew()
+    public function isNew(): bool
     {
         $now = time(); // or your date as well
         $date = strtotime($this->modified);

@@ -6,12 +6,12 @@ use Yii;
 use yii\base\Widget;
 use yii\helpers\Url;
 
-class Hits extends Widget
+final class Hits extends Widget
 {
     /** @var string[] */
     protected static array $ALLOWED = ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'lesson', 'website', 'video'];
-    public string $tableName;
-    public int $tableId;
+    public string $tableName = '';
+    public int $tableId = 0;
 
     public function run(): string
     {

@@ -3,7 +3,7 @@
  * @var yii\web\View $this
  * @var string $title
  * @var string $sidebarTitle
- * @var array $entries
+ * @var app\entities\AtoZGroupedEntries[] $groupedEntries
  * @var string $category
  * @var app\models\Catalog[] $latest
  * @var app\models\Catalog[] $popular
@@ -14,21 +14,8 @@ use app\helpers\Html;
 ?>
 <div class="content catalog-all">
     <h1><?= $title ?></h1>
-
     <div class="row">
-        <?php foreach ($entries as $entriesPerInitial): ?>
-            <h2><strong><?= $entriesPerInitial['initial'] ?></strong></h2>
-            <ul>
-            <?php foreach ($entriesPerInitial['entries'] as $entry): ?>
-                <li>
-                    <a href="<?= $entry['url'] ?>"><?= $entry['title'] ?></a>
-                    <?php if ($entry['isNew']): ?>
-                        <span class="is-new">NEU</span>
-                    <?php endif; ?>
-                </li>
-            <?php endforeach; ?>
-            </ul>
-        <?php endforeach; ?>
+        <?= $this->render('/_partials/grouped_entries', ['groupedEntries' => $groupedEntries]) ?>
     </div>
 </div>
 

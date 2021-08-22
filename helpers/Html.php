@@ -10,7 +10,7 @@ use yii\web\View;
 
 class Html extends \yii\helpers\Html
 {
-    public static function hasMetaDescription(View $view)
+    public static function hasMetaDescription(View $view): bool
     {
         foreach ($view->metaTags as $metaTag) {
             if (strpos($metaTag, 'name="description"') !== false) {
@@ -20,7 +20,7 @@ class Html extends \yii\helpers\Html
         return false;
     }
 
-    public static function tags($tags, $title = '')
+    public static function tags(string $tags, string $title = ''): string
     {
         if (empty($tags)) {
             return '';
@@ -40,43 +40,28 @@ class Html extends \yii\helpers\Html
     }
 
     /**
-     * @param string $relUrl
-     * @param integer $width
-     * @param integer $height
-     * @param array $htmlOptions
-     * @param bool $absUrl
-     * @return string
+     * @param array<string, string> $htmlOptions
      * @throws \yii\base\Exception
      */
-    public static function cachedCropedImage($relUrl, $width, $height, $htmlOptions = array(), $absUrl = false)
+    public static function cachedCropedImage(string $relUrl, int $width, int $height, array $htmlOptions = [], bool $absUrl = false): string
     {
         return self::cachedImage('adaptive', $relUrl, $width, $height, $htmlOptions, $absUrl);
     }
 
     /**
-     * @param string $relUrl
-     * @param integer $width
-     * @param integer $height
-     * @param array $htmlOptions
-     * @param boolean $absUrl
-     * @return string
+     * @param array<string, string> $htmlOptions
+     * @throws \yii\base\Exception
      */
-    public static function resizeImage($relUrl, $width, $height, $htmlOptions = array(), $absUrl = false)
+    public static function resizeImage(string $relUrl, int $width, int $height, array $htmlOptions = [], bool $absUrl = false): string
     {
         return self::cachedImage('normal', $relUrl, $width, $height, $htmlOptions, $absUrl);
     }
 
     /**
-     * @param string $type normal|adaptive
-     * @param string $absUrl
-     * @param integer $width
-     * @param integer $height
-     * @param array $htmlOptions
-     * @param boolean $returnAbsoluteUrl
-     * @return string
+     * @param array<string, string> $htmlOptions
      * @throws \yii\base\Exception
      */
-    public static function cachedImage($type, $absUrl, $width, $height, $htmlOptions = array(), $returnAbsoluteUrl = false)
+    public static function cachedImage(string $type, string $absUrl, int $width, int $height, array $htmlOptions = [], bool $returnAbsoluteUrl = false): string
     {
         // Macht aus der absoluten eine relative Url
         // Diese Url kann als Pfad benutzt werden
@@ -152,24 +137,5 @@ class Html extends \yii\helpers\Html
 
         return Html::img('@web/' . $cachedUrl, $htmlOptions);
     }
-
-    /**
-     * @param string $src
-     * @param string $alt
-     * @param array $htmlOptions
-     * @param boolean $returnAbsoluteUrl
-     * @return string
-     */
-    /*public static function image($src, $alt = '', $htmlOptions = array(), $returnAbsoluteUrl = false)
-    {
-        if (mb_substr($src, 0, 7, 'utf-8') != 'http://') {
-            $src = baseUrl() . '/' . $src;
-            if ($returnAbsoluteUrl) {
-                $src = 'http://' . $_SERVER['HTTP_HOST'] . $src;
-            }
-        }
-        $htmlOptions['alt'] = $alt;
-        return parent::img($src, $htmlOptions);
-    }*/
 
 }

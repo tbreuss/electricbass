@@ -4,7 +4,7 @@ namespace app\models;
 
 use yii\base\Model;
 
-class AdvertisementEmailForm extends Model
+final class AdvertisementEmailForm extends Model
 {
     /**
      * Fake (nur als Spamschutz benötigt)
@@ -24,9 +24,9 @@ class AdvertisementEmailForm extends Model
     public $verifyCode;
 
     /**
-     * @return array
+     * @return array<string, string>
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return array(
             'name' => 'Dein Name',
@@ -36,9 +36,9 @@ class AdvertisementEmailForm extends Model
     }
 
     /**
-     * @return array
+     * @phpstan-return array<int, array>
      */
-    public function rules()
+    public function rules(): array
     {
         return array(
             // name

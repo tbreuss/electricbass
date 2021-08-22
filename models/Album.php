@@ -18,7 +18,7 @@ use yii\data\Sort;
  * @property string $url
  * @property string $modified
  */
-class Album extends ActiveRecord
+final class Album extends ActiveRecord
 {
     use SimilarModelsByTags;
 
@@ -28,9 +28,9 @@ class Album extends ActiveRecord
     }
 
     /**
-     * @return ActiveDataProvider
+     * @phpstan-param array<string, string> $filter
      */
-    public static function getActiveDataProvider($filter)
+    public static function getActiveDataProvider(array $filter): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -83,22 +83,19 @@ class Album extends ActiveRecord
             ->where($where)
             ->orderBy($sort->orders);
 
-        $provider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'defaultPageSize' => 24,
             ],
             'sort' => $sort,
         ]);
-
-        return $provider;
     }
 
     /**
      * @param int|string $id
-     * @return null|Album
      */
-    public static function findOneOrNull($id)
+    public static function findOneOrNull($id): ?Album
     {
         $model = self::find()->where(['deleted' => 0, 'url' => $id])->one();
         if ($model) {
@@ -112,13 +109,11 @@ class Album extends ActiveRecord
     }
 
     /**
-     * @param int $limit
-     * @param int $id
-     * @return array
+     * @return Album[]
      */
     public static function findLatest(int $limit, int $id = 0): array
     {
-        return static::find()
+        return self::find()
             ->where(['deleted' => 0])
             ->andWhere(['<>', 'id', $id])
             ->orderBy('modified DESC')
@@ -127,13 +122,11 @@ class Album extends ActiveRecord
     }
 
     /**
-     * @param int $limit
-     * @param int $id
-     * @return array
+     * @return Album[]
      */
     public static function findPopular(int $limit, int $id = 0): array
     {
-        return static::find()
+        return self::find()
             ->where(['deleted' => 0])
             ->andWhere(['>', 'ratingAvg', 0])
             ->andWhere(['<>', 'id', $id])
@@ -142,9 +135,12 @@ class Album extends ActiveRecord
             ->all();
     }
 
+    /**
+     * @return Album[]
+     */
     public static function findAllAtoZ(): array
     {
-        return static::find()
+        return self::find()
             ->select('id, artist, title, url, modified')
             ->where([
                 'deleted' => 0
@@ -156,9 +152,9 @@ class Album extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @phpstan-return array<int, array{"key": string, "label": string, "value": string}>
      */
-    public function getProductInfos()
+    public function getProductInfos(): array
     {
         $infos = [];
         if (!empty($this->publisher)) {
@@ -255,10 +251,6 @@ class Album extends ActiveRecord
         return $infos;
     }
 
-    /**
-     * @param string $alias
-     * @return string
-     */
     public function getDefaultImage(string $alias = ''): string
     {
         if (!empty($alias)) {
@@ -274,16 +266,13 @@ class Album extends ActiveRecord
         return $image;
     }
 
-    /**
-     * @return bool
-     */
     public function hasDefaultImage(): bool
     {
         $relpath = $this->getDefaultImage();
         return !empty($relpath);
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_ALBUM_IDS', []);
@@ -294,10 +283,13 @@ class Album extends ActiveRecord
         }
     }
 
-    public function getTracklistArray()
+    /**
+     * @phpstan-return array<int, array{"number": string, "title": string, "duration": string}>
+     */
+    public function getTracklistArray(): array
     {
         if (empty($this->tracklist)) {
-            return '';
+            return [];
         }
         $tracklist = [];
         $lines = explode("\n", $this->tracklist);
@@ -335,7 +327,7 @@ class Album extends ActiveRecord
         return $tracklist;
     }
 
-    public function isNew()
+    public function isNew(): bool
     {
         $now = time(); // or your date as well
         $date = strtotime($this->modified);

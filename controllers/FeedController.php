@@ -8,9 +8,9 @@ use yii\db\Query;
 use yii\web\Controller;
 use yii\web\Response;
 
-class FeedController extends Controller
+final class FeedController extends Controller
 {
-    public function actionRss()
+    public function actionRss(): string
     {
         Yii::$app->response->format = Response::FORMAT_RAW;
         Yii::$app->response->headers->add('Content-Type', 'text/xml');

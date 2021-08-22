@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\helpers\Url;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
@@ -13,8 +14,11 @@ use yii\helpers\ArrayHelper;
  * @property int $gear
  * @property int $strings
  */
-class Manufacturer extends ActiveRecord
+final class Manufacturer extends ActiveRecord
 {
+    /**
+     * @return string[]
+     */
     public function getSortimentForGeneratedText(): array
     {
         $sortiment = [];
@@ -36,6 +40,9 @@ class Manufacturer extends ActiveRecord
         return $sortiment;
     }
 
+    /**
+     * @return string[]
+     */
     public function getSortiment(): array
     {
         $sortiment = [];
@@ -58,12 +65,19 @@ class Manufacturer extends ActiveRecord
         return $sortiment;
     }
 
-    public function getCountry()
+    /**
+     * @return ActiveQuery
+     */
+    public function getCountry(): ActiveQuery
     {
         return $this->hasOne(Country::class, ['id' => 'countryCode']);
     }
 
-    public static function allToArray($models)
+    /**
+     * @param Manufacturer[] $models
+     * @return array<int, array>>
+     */
+    public static function allToArray(array $models): array
     {
         return ArrayHelper::toArray($models, [
             'app\models\Manufacturer' => [

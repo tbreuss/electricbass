@@ -4,10 +4,10 @@ namespace app\widgets;
 
 use yii\base\Widget;
 
-class GoogleMaps extends Widget
+final class GoogleMaps extends Widget
 {
-    public float $latitude = 0.0;
-    public float $longitude = 0.0;
+    public ?float $latitude = null;
+    public ?float $longitude = null;
     public string $text = '';
     public string $title = '';
     public int $zoom = 10;

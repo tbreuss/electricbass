@@ -12,11 +12,8 @@ use yii\db\Expression;
  * @property string $author
  * @property string $text
  */
-class Quote extends ActiveRecord
+final class Quote extends ActiveRecord
 {
-    /**
-     * @return ActiveDataProvider
-     */
     public static function getActiveDataProvider(): ActiveDataProvider
     {
         $sort = new Sort([
@@ -56,19 +53,15 @@ class Quote extends ActiveRecord
         return $provider;
     }
 
-    /**
-     * @return null|ActiveRecord
-     */
-    public static function findOneRandom()
+    public static function findOneRandom(): ?Quote
     {
-        $model = self::find()
+        return self::find()
             ->orderBy(new Expression('rand()'))
             ->limit(1)
             ->one();
-        return $model;
     }
 
-    public function getAuthor()
+    public function getAuthor(): string
     {
         if (empty($this->author)) {
             return 'Unbekannt';
@@ -76,7 +69,7 @@ class Quote extends ActiveRecord
         return $this->author;
     }
 
-    public function getText()
+    public function getText(): string
     {
         if (!empty($this->text_de)) {
             return $this->text_de;

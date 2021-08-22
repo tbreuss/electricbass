@@ -3,7 +3,7 @@
  * @var yii\web\View $this
  * @var app\models\Album[] $latest
  * @var app\models\Album[] $popular
- * @var array $entries
+ * @var app\entities\AtoZGroupedEntries[] $groupedEntries
  * @var string $title
  */
 
@@ -15,21 +15,8 @@ $this->params['metaDescription'] = 'Inspirierende und hörenswerte Musikalben be
 ?>
 <div class="content catalog-all">
     <h1>Musikalben von E-Bassisten von A-Z</h1>
-
     <div class="row">
-        <?php foreach ($entries as $entriesPerInitial): ?>
-            <h2><strong><?= $entriesPerInitial['initial'] ?></strong></h2>
-            <ul>
-            <?php foreach ($entriesPerInitial['entries'] as $entry): ?>
-                <li>
-                    <a href="<?= $entry['url'] ?>"><?= $entry['artist'] ?> - <?= $entry['title'] ?></a>
-                    <?php if ($entry['isNew']): ?>
-                        <span class="is-new">NEU</span>
-                    <?php endif; ?>
-                </li>
-            <?php endforeach; ?>
-            </ul>
-        <?php endforeach; ?>
+        <?= $this->render('/_partials/grouped_entries', ['groupedEntries' => $groupedEntries]) ?>
     </div>
 </div>
 
