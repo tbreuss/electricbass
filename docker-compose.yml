@@ -1,23 +1,9 @@
-version: '3.5'
-
+version: '2'
 services:
-
   php:
-    build:
-      context: https://github.com/tbreuss/docker-php-builtin-server.git
-      args:
-        - PHP_IMAGE=8.0-alpine
-    environment:
-      - docroot=web
-    ports:
-      - "8000:8000"
+    image: yiisoftware/yii2-php:8.0-apache
     volumes:
-      - ./:/root-dir
-    labels:
-      - "traefik.http.routers.electricbass.rule=Host(`electricbass.test`)"
-    networks:
-      - local-dev
-
-networks:
-  local-dev:
-    external: true
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
+    ports:
+      - '8000:80'
