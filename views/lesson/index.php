@@ -6,6 +6,7 @@
  * @var app\models\Lesson[] $similars
  * @var app\models\Lesson[] $latest
  * @var array $breadcrumbs
+ * @phpstan-var array<int, array{"label": string, "url": string}> $breadcrumbs
  */
 
 use app\widgets\Comments;

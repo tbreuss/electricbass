@@ -6,7 +6,7 @@ use yii\db\Query;
 /**
  * Class m210513_130000_cleanup_website_urls
  */
-class m210513_130000_cleanup_website_urls extends Migration
+final class m210513_130000_cleanup_website_urls extends Migration
 {
     /**
      * {@inheritdoc}

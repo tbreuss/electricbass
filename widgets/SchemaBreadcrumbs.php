@@ -16,22 +16,26 @@ use yii\widgets\Breadcrumbs;
  * @package app\components
  * @see https://github.com/orige/yii2-schema-breadcrumbs
  */
-class SchemaBreadcrumbs extends Breadcrumbs
+final class SchemaBreadcrumbs extends Breadcrumbs
 {
+    /** @var string */
     public $itemTemplate = '
         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
             {link}
         </li>
     ';
+
+    /** @var string */
     public $activeItemTemplate = '
         <li class="active" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
             {link}
         </li>
     ';
 
-    public $totalLinks = 0;
+    public int $totalLinks = 0;
 
-    public $defaultOptions = [];
+    /** @var array<string, mixed> */
+    public array $defaultOptions = [];
 
     function __construct()
     {
@@ -74,7 +78,11 @@ class SchemaBreadcrumbs extends Breadcrumbs
         return Html::tag($this->tag, implode('', $links), $this->options);
     }
 
-    protected function renderItem($link, $template)
+    /**
+     * @inheritdoc
+     * @param array<string, string> $link
+     */
+    protected function renderItem($link, $template): string
     {
         $encodeLabel = ArrayHelper::remove($link, 'encode', $this->encodeLabels);
         if (array_key_exists('label', $link)) {

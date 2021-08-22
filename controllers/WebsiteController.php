@@ -2,15 +2,20 @@
 
 namespace app\controllers;
 
+use app\entities\AtoZEntry;
+use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Website;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class WebsiteController extends Controller
+final class WebsiteController extends Controller
 {
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -24,7 +29,7 @@ class WebsiteController extends Controller
     /**
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $provider = Website::getActiveDataProvider();
         $latest = Website::findLatest(5);
@@ -44,7 +49,7 @@ class WebsiteController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView($id)
+    public function actionView($id): string
     {
         $website = Website::findOneOrNull('/websites/' . $id);
 
@@ -63,22 +68,26 @@ class WebsiteController extends Controller
         ]);
     }
 
-    public function actionAll()
+    public function actionAll(): string
     {
-        $entries = $this->makeAtoZ(Website::findAllAtoZ());
+        $groupedEntries = $this->makeAtoZ(Website::findAllAtoZ());
         $latest = Website::findLatest(5);
         $popular = Website::findPopular(5);
         return $this->render('all', [
-            'entries' => $entries,
+            'groupedEntries' => $groupedEntries,
             'latest' => $latest,
             'popular' => $popular
         ]);
     }
 
-    private function makeAtoZ($models)
+    /**
+     * @param Website[] $models
+     * @return AtoZGroupedEntries[]
+     */
+    private function makeAtoZ(array $models): array
     {
         $char = '';
-        $structure = [];
+        $entries = [];
         foreach ($models as $model) {
             $firstChar = strtoupper(substr($model->title, 0, 1));
             if (is_numeric($firstChar)) {
@@ -87,20 +96,18 @@ class WebsiteController extends Controller
             if ($char !== $firstChar) {
                 $char = $firstChar;
             }
-            $structure[$firstChar][] = [
-                'title' => $model->title,
-                'url' => $model->url,
-                'isNew' => $model->isNew()
-            ];
+            $entries[$firstChar][] = new AtoZEntry(
+                $model->title,
+                $model->url,
+                $model->isNew()
+            );
         }
 
-        $flat = [];
-        foreach ($structure as $key => $value) {
-            $flat[] = [
-                'initial' => $key,
-                'entries' => $value,
-            ];
+        $groups = [];
+        foreach ($entries as $key => $value) {
+            $groups[] = new AtoZGroupedEntries($key, $value);
         }
-        return $flat;
+
+        return $groups;
     }
 }

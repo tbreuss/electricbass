@@ -5,7 +5,7 @@ namespace app\widgets;
 use app\models\Birthday as Model;
 use yii\base\Widget;
 
-class Birthday extends Widget
+final class Birthday extends Widget
 {
 
     public function run()

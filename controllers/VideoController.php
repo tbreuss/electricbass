@@ -10,9 +10,12 @@ use SimpleXMLElement;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class VideoController extends Controller
+final class VideoController extends Controller
 {
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -26,7 +29,7 @@ class VideoController extends Controller
     /**
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         //$this->migrate();
         //$this->tags();
@@ -45,7 +48,7 @@ class VideoController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView(string $eid)
+    public function actionView(string $eid): string
     {
         $video = Video::findOneOrNull('/videos/' . $eid);
 
@@ -67,7 +70,7 @@ class VideoController extends Controller
         ]);
     }
 
-    private function tags()
+    private function tags(): void
     {
         $tags = [];
         $videos = Video::find()
@@ -102,7 +105,7 @@ class VideoController extends Controller
         return implode($pass); //turn the array into a string
     }
 
-    private function migrate()
+    private function migrate(): void
     {
         $blogs = Blog::find()
             ->where(['deleted' => null, 'categoryId' => 7])

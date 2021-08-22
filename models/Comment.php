@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
@@ -19,9 +20,10 @@ use yii\db\Expression;
  * @property int $active
  * @property Search $search
  */
-class Comment extends ActiveRecord
+final class Comment extends ActiveRecord
 {
-    public static $ALLOWED = [
+    /** @var array|string[] */
+    public static array $ALLOWED = [
         'advertisement',
         'album',
         'blog',
@@ -34,24 +36,23 @@ class Comment extends ActiveRecord
         'quote'
     ];
 
-    /**
-     * Einfacher Schutz vor automatisierten Registrierungen
-     *
-     * @var string
-     */
+    /** @var string */
     public $nspm;
-
+    /** @var bool */
     public $check;
-
+    /** @var string */
     public $verifyCode;
 
-    public function init()
+    public function init(): void
     {
         #$this->on(self::EVENT_AFTER_INSERT, [$this, 'onAfterInsert']);
         #$this->on(self::EVENT_AFTER_UPDATE, [$this, 'onAfterInsert']);
     }
 
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -65,9 +66,9 @@ class Comment extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @phpstan-return array<int, array>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             // name
@@ -101,7 +102,7 @@ class Comment extends ActiveRecord
         ];
     }
 
-    public function sanitizeField($attribute, $params, $validator)
+    public function sanitizeField(string $attribute): void
     {
         if (preg_match('/ftp:|http:|https:|www\./i', $this->$attribute)) {
             $error = sprintf('Der %s darf keine Links enthalten.', $this->getAttributeLabel($attribute));
@@ -109,7 +110,10 @@ class Comment extends ActiveRecord
         }
     }
 
-    public function attributeLabels()
+    /**
+     * @return array<string, string>
+     */
+    public function attributeLabels(): array
     {
         return [
             'name' => 'Dein Nickname',
@@ -121,9 +125,12 @@ class Comment extends ActiveRecord
         ];
     }
 
-    public static function findLatestComments(int $limit)
+    /**
+     * @return Comment[]
+     */
+    public static function findLatestComments(int $limit): array
     {
-        return static::find()
+        return self::find()
             ->with('search')
             ->select(['c1.tableName', 'c1.tableId', 'c1.name', 'c1.text', 'c1.created'])
             ->from(['c1' => 'comment'])
@@ -136,7 +143,7 @@ class Comment extends ActiveRecord
             ->all();
     }
 
-    public function getSearch()
+    public function getSearch(): ActiveQuery
     {
         return $this->hasOne(Search::class, ['id' => 'tableId', 'tableName' => 'tableName']);
     }

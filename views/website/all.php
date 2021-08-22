@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var array $entries
+ * @var app\entities\AtoZGroupedEntries[] $groupedEntries
  * @var app\models\Website[] $latest
  * @var app\models\Website[] $popular
  */
@@ -15,21 +15,8 @@ $this->params['metaDescription'] = 'Umfangreicher Katalog von A-Z mit Marken und
 ?>
 <div class="content catalog-all">
     <h1>Websites zum Thema E-Bass von A-Z</h1>
-
     <div class="row">
-        <?php foreach ($entries as $entriesPerInitial): ?>
-            <h2><strong><?= $entriesPerInitial['initial'] ?></strong></h2>
-            <ul>
-                <?php foreach ($entriesPerInitial['entries'] as $entry): ?>
-                    <li>
-                        <a href="<?= $entry['url'] ?>"><?= $entry['title'] ?></a>
-                        <?php if ($entry['isNew']): ?>
-                            <span class="is-new">NEU</span>
-                        <?php endif; ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endforeach; ?>
+        <?= $this->render('/_partials/grouped_entries', ['groupedEntries' => $groupedEntries]) ?>
     </div>
 </div>
 

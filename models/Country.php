@@ -4,7 +4,7 @@ namespace app\models;
 
 use yii\db\ActiveRecord;
 
-class Country extends ActiveRecord
+final class Country extends ActiveRecord
 {
 
 }

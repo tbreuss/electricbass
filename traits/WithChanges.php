@@ -18,6 +18,7 @@ trait WithChanges
 
     /**
      * @return array
+     * @phpstan-return array<int, array{"date": string, "text": string}>
      */
     public function getChanges(): array
     {

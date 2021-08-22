@@ -15,9 +15,12 @@ use yii\web\NotFoundHttpException;
  * @property string $content
  * @property string $url
  */
-class Glossar extends ActiveRecord
+final class Glossar extends ActiveRecord
 {
-    public function attributeLabels()
+    /**
+     * @return array<string, string>
+     */
+    public function attributeLabels(): array
     {
         return array(
             'id' => 'Id',
@@ -30,7 +33,10 @@ class Glossar extends ActiveRecord
         );
     }
 
-    public function rules()
+    /**
+     * @phpstan-return array<int, array>
+     */
+    public function rules(): array
     {
         return array(
             array('category', 'filter', 'filter' => 'trim'),
@@ -41,7 +47,10 @@ class Glossar extends ActiveRecord
         );
     }
 
-    public function findAllByCategory($category)
+    /**
+     * @return Glossar[]
+     */
+    public function findAllByCategory(string $category): array
     {
         $condition = '';
         $params = array();
@@ -59,7 +68,10 @@ class Glossar extends ActiveRecord
         return $this->findAll($criteria);
     }
 
-    public static function findOneOrNull($id)
+    /**
+     * @param int|string $id
+     */
+    public static function findOneOrNull($id): ?Glossar
     {
         $glossar = Glossar::find()->where(['deleted' => 0, 'url' => $id])->one();
         if ($glossar) {
@@ -74,35 +86,36 @@ class Glossar extends ActiveRecord
 
     /**
      * @param int|string $id
-     * @return null|Glossar
      * @throws NotFoundHttpException
      */
-    public static function findOneOrThrowException($id)
+    public static function findOneOrThrowException($id): Glossar
     {
-        $glossar = static::findOneOrNull($id);
+        $glossar = self::findOneOrNull($id);
         if (is_null($glossar)) {
             throw new NotFoundHttpException();
         }
         return $glossar;
     }
 
-    public function findNextOneOrNull()
+    public function findNextOneOrNull(): ?Glossar
     {
         $condition = 'autosort>:autosort AND deleted=0 AND hidden=0';
         $params = [':autosort' => $this->autosort];
-        $record = static::find()->where($condition, $params)->orderBy('autosort ASC')->one();
-        return $record;
+        return self::find()->where($condition, $params)->orderBy('autosort ASC')->one();
     }
 
-    public function findPreviousOneOrNull()
+    public function findPreviousOneOrNull(): ?Glossar
     {
         $condition = 'autosort<:autosort AND deleted=0 AND hidden=0';
         $params = [':autosort' => $this->autosort];
-        $record = static::find()->where($condition, $params)->orderBy('autosort DESC')->one();
-        return $record;
+        return self::find()->where($condition, $params)->orderBy('autosort DESC')->one();
     }
 
-    public static function queryAllCategories()
+    /**
+     * @phpstan-return array<int, array<string, string>>
+     * @throws \yii\db\Exception
+     */
+    public static function queryAllCategories(): array
     {
         $command = Yii::$app->db->createCommand('SELECT DISTINCT category FROM glossar WHERE deleted=0 AND hidden=0 ORDER BY category');
         return $command->queryAll();
@@ -118,7 +131,7 @@ class Glossar extends ActiveRecord
         return false;
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_GLOSSAR_IDS', []);

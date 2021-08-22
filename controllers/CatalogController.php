@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Amazon\ProductAdvertisingAPI\v1\ApiException;
 use app\components\AmazonProductDetail;
+use app\entities\AtoZEntry;
+use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Catalog;
 use Throwable;
@@ -12,9 +14,12 @@ use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class CatalogController extends Controller
+final class CatalogController extends Controller
 {
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -26,9 +31,9 @@ class CatalogController extends Controller
         ];
     }
 
-    public function actionAll(string $category)
+    public function actionAll(string $category): string
     {
-        $entries = $this->makeAtoZ(Catalog::findAllAtoZ($category));
+        $groupedEntries = $this->makeAtoZ(Catalog::findAllAtoZ($category));
         $latest = Catalog::findLatest($category, 10);
         $popular = Catalog::findPopular($category, 10);
 
@@ -36,7 +41,7 @@ class CatalogController extends Controller
         Yii::$app->view->params['metaDescription'] = $this->getMetaDescriptionForAtoZ($category);
 
         return $this->render('all', [
-            'entries' => $entries,
+            'groupedEntries' => $groupedEntries,
             'title' => $this->getListTitleForAtoZ($category),
             'category' => $category,
             'sidebarTitle' => $this->getSidebarTitle($category),
@@ -45,10 +50,14 @@ class CatalogController extends Controller
         ]);
     }
 
-    private function makeAtoZ($models)
+    /**
+     * @param Catalog[] $models
+     * @return AtoZGroupedEntries[]
+     */
+    private function makeAtoZ(array $models): array
     {
         $char = '';
-        $structure = [];
+        $entries = [];
         foreach ($models as $model) {
             $firstChar = strtoupper(substr($model->title, 0, 1));
             if (is_numeric($firstChar)) {
@@ -57,29 +66,22 @@ class CatalogController extends Controller
             if ($char !== $firstChar) {
                 $char = $firstChar;
             }
-            $structure[$firstChar][] = [
-                'title' => $model->title,
-                'url' => $model->url,
-                'isNew' => $model->isNew()
-            ];
+            $entries[$firstChar][] = new AtoZEntry(
+                $model->title,
+                $model->url,
+                $model->isNew()
+            );
         }
 
-        $flat = [];
-        foreach ($structure as $key => $value) {
-            $flat[] = [
-                'initial' => $key,
-                'entries' => $value,
-            ];
+        $groups = [];
+        foreach ($entries as $key => $value) {
+            $groups[] = new AtoZGroupedEntries($key, $value);
         }
 
-        return $flat;
+        return $groups;
     }
 
-    /**
-     * @param string $category
-     * @return string
-     */
-    public function actionIndex($category, $autor = '', $publisher = '', $series = '')
+    public function actionIndex(string $category, string $autor = '', string $publisher = '', string $series = ''): string
     {
         $filter = [];
 
@@ -115,6 +117,7 @@ class CatalogController extends Controller
 
 
     /**
+     * @param int|string $id
      * @throws \yii\db\Exception
      * @throws NotFoundHttpException
      */
@@ -143,7 +146,7 @@ class CatalogController extends Controller
         ]);
     }
 
-    private function getAmazonDetail($asin)
+    private function getAmazonDetail(string $asin): ?AmazonProductDetail
     {
         try {
             return AmazonProductDetail::createByAsin($asin);
@@ -153,13 +156,13 @@ class CatalogController extends Controller
         return null;
     }
 
-    public function actionOverview()
+    public function actionOverview(): string
     {
         $this->layout = 'onecol';
         return $this->render('overview');
     }
 
-    protected function getListTitle($category)
+    protected function getListTitle(string $category): string
     {
         $categories = [
             'lehrbuecher' => 'Lehrbücher mit CDs für E-Bass',
@@ -169,7 +172,7 @@ class CatalogController extends Controller
         return $categories[$category] ?? 'Alle';
     }
 
-    protected function getListTitleForAtoZ($category)
+    protected function getListTitleForAtoZ(string $category): string
     {
         $categories = [
             'lehrbuecher' => 'Lehrbücher für E-Bass von A-Z',
@@ -214,7 +217,7 @@ class CatalogController extends Controller
             'dvds' => sprintf('Lehrbücher und -videos inkl. DVDs zum E-Bass lernen (%d/%d)', $page, $pageCount),
         ];
 
-        return isset($categories[$category]) ? $categories[$category] : 'Alle';
+        return $categories[$category] ?? 'Alle';
     }
 
     /**
@@ -229,10 +232,10 @@ class CatalogController extends Controller
             'buecher' => sprintf('Allgemeine Bücher zum Thema Bass für Bassisten, E-Bassisten und Musikinteressierte - Seite %d von %d', $pagination->page+1, $pagination->pageCount),
             'dvds' => sprintf('Du willst E-Bass spielen lernen? Hier findest du Lehrbücher/-videos mit DVDs zum selber lernen. Mit Videos, Noten, TABs und Playalongs - Seite %d von %d', $pagination->page+1, $pagination->pageCount)
         ];
-        return isset($categories[$category]) ? $categories[$category] : 'Alle';
+        return $categories[$category] ?? 'Alle';
     }
 
-    protected function getSidebarTitle($category)
+    protected function getSidebarTitle(string $category): string
     {
         $categories = [
             'lehrbuecher' => 'Lehrbücher',
@@ -242,7 +245,7 @@ class CatalogController extends Controller
         return $categories[$category] ?? 'Alle';
     }
 
-    public function getContext($category)
+    public function getContext(string $category): string
     {
         switch($category) {
             case 'buecher':
@@ -252,6 +255,7 @@ class CatalogController extends Controller
             case 'dvds':
                 return 'dvd';
         }
+        return '';
     }
 
 }

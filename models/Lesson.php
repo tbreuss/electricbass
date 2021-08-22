@@ -5,31 +5,36 @@ namespace app\models;
 use app\components\ActiveRecord;
 use app\traits\SimilarModelsByTags;
 use Yii;
-use yii\helpers\Url;
 
 /**
  * @property int $id
  * @property string $title
  * @property string $url
+ * @property string $menuTitle
  */
-class Lesson extends ActiveRecord
+final class Lesson extends ActiveRecord
 {
     use SimilarModelsByTags;
 
-    public static function findAllChildren($path = '')
+    /**
+     * @return Lesson[]
+     */
+    public static function findAllChildren(string $path = ''): array
     {
         if (!empty($path)) {
             $path .= '/';
         }
-        $models = self::find()
+        return self::find()
             ->select('id, title, abstract, url')
             ->where("deleted = 0 AND url REGEXP '^{$path}[a-z0-9_-]+$'")
             ->orderBy('autosort ASC')
             ->all();
-        return $models;
     }
 
-    public static function findParents($path)
+    /**
+     * @return Lesson[]
+     */
+    public static function findParents(string $path): array
     {
         $parts = array_filter(explode('/', $path));
 
@@ -42,22 +47,18 @@ class Lesson extends ActiveRecord
             $delim = '/';
         }
 
-        $models = self::find()
+        return self::find()
             ->select('id, title, navtitle, url')
             ->where("deleted = 0 AND (" . implode(' OR ', $conditions) . ")")
             ->all();
-
-        return $models;
     }
 
     /**
-     * @param int $id
-     * @param int $limit
-     * @return array
+     * @return Lesson[]
      */
     public static function findLatest(int $id, int $limit = 10): array
     {
-        return static::find()
+        return self::find()
             ->where(['deleted' => 0])
             ->andWhere(['<>', 'id', $id])
             ->orderBy('modified DESC')
@@ -65,24 +66,17 @@ class Lesson extends ActiveRecord
             ->all();
     }
 
-    /**
-     * @param string $alias
-     * @return string
-     */
     public function getDefaultImage(string $alias = ''): string
     {
         return '';
     }
 
-    /**
-     * @return bool
-     */
     public function hasDefaultImage(): bool
     {
         return false;
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_LESSON_IDS', []);
@@ -93,7 +87,7 @@ class Lesson extends ActiveRecord
         }
     }
 
-    public function getMenuTitle()
+    public function getMenuTitle(): string
     {
         return empty($this->navtitle) ? $this->title : $this->navtitle;
     }

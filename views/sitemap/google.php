@@ -3,6 +3,7 @@
 /**
  * @var yii\web\View $this
  * @var array $staticPages
+ * @phpstan-var array<int, array{string, string}> $staticPages
  * @var yii\db\Query $query
  */
 

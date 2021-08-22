@@ -29,15 +29,12 @@ use yii\data\Sort;
  * @property int $hideFoto
  * @property string $url
  */
-class Blog extends ActiveRecord
+final class Blog extends ActiveRecord
 {
     use SimilarModelsByTags;
     use WithChanges;
 
-    /**
-     * @return ActiveDataProvider
-     */
-    public static function getActiveDataProvider()
+    public static function getActiveDataProvider(): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -88,22 +85,19 @@ class Blog extends ActiveRecord
             ->where(['deleted' => NULL, 'movedTo' => null])
             ->orderBy($sort->orders);
 
-        $provider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'defaultPageSize' => 20,
             ],
             'sort' => $sort,
         ]);
-
-        return $provider;
     }
 
     /**
      * @param int|string $id
-     * @return null|Blog
      */
-    public static function findOneOrNull($id)
+    public static function findOneOrNull($id): ?Blog
     {
         $blog = Blog::find()->where(['deleted' => NULL, 'url' => $id])->one();
         if ($blog) {
@@ -117,13 +111,11 @@ class Blog extends ActiveRecord
     }
 
     /**
-     * @param int $limit
-     * @param int $id
-     * @return array
+     * @return Blog[]
      */
     public static function findLatest(int $limit, int $id = 0): array
     {
-        return static::find()
+        return self::find()
             ->where([
                 'deleted' => NULL,
                 'movedTo' => NULL
@@ -135,13 +127,11 @@ class Blog extends ActiveRecord
     }
 
     /**
-     * @param int $limit
-     * @param int $id
-     * @return array
+     * @return Blog[]
      */
     public static function findPopular(int $limit, int $id = 0): array
     {
-        return static::find()
+        return self::find()
             ->where([
                 'deleted' => NULL,
                 'movedTo' => NULL
@@ -153,10 +143,6 @@ class Blog extends ActiveRecord
             ->all();
     }
 
-    /**
-     * @param string $alias
-     * @return string
-     */
     public function getDefaultImage(string $alias = ''): string
     {
         if (!empty($alias)) {
@@ -172,16 +158,13 @@ class Blog extends ActiveRecord
         return $image;
     }
 
-    /**
-     * @return bool
-     */
     public function hasDefaultImage(): bool
     {
         $relpath = $this->getDefaultImage();
         return !empty($relpath);
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_BLOG_IDS', []);

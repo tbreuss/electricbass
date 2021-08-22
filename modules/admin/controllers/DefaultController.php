@@ -12,12 +12,12 @@ use yii\web\Response;
 /**
  * Default controller for the `admin` module
  */
-class DefaultController extends Controller
+final class DefaultController extends Controller
 {
     /**
-     * {@inheritdoc}
+     * @phpstan-return array<array>
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
@@ -41,8 +41,9 @@ class DefaultController extends Controller
 
     /**
      * {@inheritdoc}
+     * @phpstan-return array<string, array<string, mixed>>
      */
-    public function actions()
+    public function actions(): array
     {
         return [
             'error' => [

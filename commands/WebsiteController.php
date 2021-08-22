@@ -5,12 +5,12 @@ namespace app\commands;
 use app\models\Website;
 use yii\console\Controller;
 
-class WebsiteController extends Controller
+final class WebsiteController extends Controller
 {
     /**
      * Grab Favicons from Website URLs
      */
-    public function actionFavicons()
+    public function actionFavicons(): void
     {
         $urls = Website::findUrls();
 
@@ -76,7 +76,11 @@ https://github.com/audreyr/favicon-cheat-sheet
 */
 
 
-function grap_favicon($options = array())
+/**
+ * @param array<string, mixed> $options
+ * @return string
+ */
+function grap_favicon(array $options = []): string
 {
 
     // avoid script runtime timeout
@@ -168,7 +172,7 @@ function grap_favicon($options = array())
 
             // Favicongrabber API
             if ($random == 2 or empty($favicon)) {
-                $echo = json_decode(load('http://favicongrabber.com/api/grab/' . $domain, FALSE), TRUE);
+                $echo = json_decode(load('http://favicongrabber.com/api/grab/' . $domain, ''), TRUE);
 
                 // Get Favicon URL from Array out of json data (@ if something went wrong)
                 $favicon = @$echo['icons']['0']['src'];
@@ -246,7 +250,7 @@ function grap_favicon($options = array())
 } // END MAIN Function
 
 /* HELPER load use curl or file_get_contents (both with user_agent) and fopen/fread as fallback */
-function load($url, $DEBUG)
+function load(string $url, string $DEBUG): string
 {
     if (function_exists('curl_version')) {
         $ch = curl_init($url);
@@ -281,7 +285,7 @@ function load($url, $DEBUG)
 }
 
 /* HELPER: Change URL from relative to absolute */
-function rel2abs($rel, $base)
+function rel2abs(string $rel, string $base): string
 {
     $parsedUrl = parse_url($base);
     extract($parsedUrl);

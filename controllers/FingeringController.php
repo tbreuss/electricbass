@@ -7,9 +7,12 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class FingeringController extends Controller
+final class FingeringController extends Controller
 {
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -29,7 +32,7 @@ class FingeringController extends Controller
     /**
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $models = Fingering::find()
             ->where('deleted=0')
@@ -47,7 +50,7 @@ class FingeringController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView($id)
+    public function actionView($id): string
     {
         $model = Fingering::findOneOrNull('/tools/fingersaetze/' . $id);
 

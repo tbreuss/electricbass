@@ -6,15 +6,14 @@ use yii\base\Widget;
 use yii\data\Pagination;
 use yii\data\Sort;
 
-class ListSummary extends Widget
+final class ListSummary extends Widget
 {
-    public Pagination $pagination;
-    public Sort $sort;
+    public ?Pagination $pagination = null;
+    public ?Sort $sort = null;
 
     public function run(): string
     {
         return $this->render('listsummary', [
-            'pagination' => $this->pagination,
             'sort' => $this->sort,
             'summary' => $this->getSummary()
         ]);

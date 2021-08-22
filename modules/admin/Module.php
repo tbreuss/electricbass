@@ -9,7 +9,7 @@ use yii\web\ErrorHandler;
 /**
  * admin module definition class
  */
-class Module extends \yii\base\Module
+final class Module extends \yii\base\Module
 {
     /**
      * {@inheritdoc}
@@ -19,7 +19,7 @@ class Module extends \yii\base\Module
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init(): void
     {
         $this->layout = 'admin';
         parent::init();

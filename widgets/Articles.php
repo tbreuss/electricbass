@@ -4,12 +4,13 @@ namespace app\widgets;
 
 use yii\base\Widget;
 
-class Articles extends Widget
+final class Articles extends Widget
 {
     public ?string $title = null;
     public string $tableName = '';
     public int $limit = 4;
     public string $orderBy = 'created DESC';
+    /** @var string[] */
     public array $excludeTableNames = ['advertisement', 'glossar'];
 
     public function run(): string

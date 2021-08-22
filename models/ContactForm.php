@@ -8,19 +8,23 @@ use yii\base\Model;
 /**
  * ContactForm is the model behind the contact form.
  */
-class ContactForm extends Model
+final class ContactForm extends Model
 {
+    /** @var string */
     public $name;
+    /** @var string */
     public $email;
+    /** @var string */
     public $subject;
+    /** @var string */
     public $body;
+    /** @var string */
     public $verifyCode;
 
-
     /**
-     * @return array the validation rules.
+     * @phpstan-return array<int, array>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             // name, email, subject and body are required
@@ -33,9 +37,9 @@ class ContactForm extends Model
     }
 
     /**
-     * @return array customized attribute labels
+     * @return array<string, string>
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'name' => 'Name',

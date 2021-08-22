@@ -13,7 +13,7 @@ class LessonUrlRule extends BaseObject implements UrlRuleInterface
     /**
      * @param UrlManager $manager
      * @param string $route
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return bool|string
      */
     public function createUrl($manager, $route, $params)
@@ -32,6 +32,7 @@ class LessonUrlRule extends BaseObject implements UrlRuleInterface
      * @param UrlManager $manager
      * @param Request $request
      * @return array|bool
+     * @phpstan-return array<int, array<string, string>|string>|bool
      * @throws \yii\base\InvalidConfigException
      */
     public function parseRequest($manager, $request)

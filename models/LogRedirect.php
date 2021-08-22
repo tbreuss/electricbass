@@ -27,7 +27,7 @@ final class LogRedirect extends ActiveRecord
 
     public static function logRedirect(string $signal, int $code, string $request, string $redirect, ?string $referrer, ?string $userAgent, string $now): bool
     {
-        $model = static::find()
+        $model = self::find()
             ->where(['request' => $request])
             ->one();
 

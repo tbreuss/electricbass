@@ -7,18 +7,17 @@ use Yii;
 class Url extends \yii\helpers\Url
 {
     /**
-     * @param array $route
-     * @param string $name
+     * @param array<array>|array<int, string> $route
      */
-    public static function rememberReferrer(array $route, string $name)
+    public static function rememberReferrer(array $route, string $name): void
     {
         $referrer = Yii::$app->request->referrer;
         [$referrerPath] = explode('?', $referrer);
         $url = Url::to($route, true);
         if ($url === $referrerPath) {
-            static::remember($referrer, $name);
+            self::remember($referrer, $name);
         } else {
-            static::remember($route, $name);
+            self::remember($route, $name);
         }
     }
 

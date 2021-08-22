@@ -2,42 +2,25 @@
 
 namespace app\controllers;
 
-use app\helpers\Url;
 use app\models\Manufacturer;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\Response;
 
-class ManufacturerController extends Controller
+final class ManufacturerController extends Controller
 {
-    public function actionIndex()
+    public function actionIndex(): string
     {
-        $manufacturers = Manufacturer::find()
-            ->asArray()
-            ->orderBy('name')
-            ->all();
-
-        array_walk($manufacturers, function(array &$m) {
-            $m['visitUrl'] = strlen($m['website']) === 0 ? '' : Url::to(['visit', 'id' => $m['id']]);
-        });
-
         $this->layout = 'empty';
-        return $this->render('index', [
-            'manufacturers' => $manufacturers
-        ]);
+        return $this->render('index');
     }
 
-    public function actionData()
+    public function actionData(): string
     {
         $manufacturers = Manufacturer::find()
             ->with(['country'])
             ->orderBy('name')
             ->all();
-
-        /*array_walk($manufacturers, function(Manufacturer $m) {
-            $m->visitUrl = strlen($m->website) === 0 ? '' : Url::to(['visit', 'id' => $m->id]);
-        });*/
 
         $data = Manufacturer::allToArray($manufacturers);
 
@@ -45,7 +28,7 @@ class ManufacturerController extends Controller
         return json_encode($data);
     }
 
-    public function actionVisit(int $id)
+    public function actionVisit(int $id): Response
     {
         $manufacturer = Manufacturer::find()
             ->where(['id' => $id])

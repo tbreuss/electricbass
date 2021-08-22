@@ -13,13 +13,13 @@ use yii\filters\VerbFilter;
 /**
  * BlogController implements the CRUD actions for Blog model.
  */
-class BlogController extends Controller
+final class BlogController extends Controller
 {
 
     /**
-     * {@inheritdoc}
+     * @phpstan-return array<array>
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [

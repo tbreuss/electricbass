@@ -13,12 +13,12 @@ use yii\filters\VerbFilter;
 /**
  * LessonController implements the CRUD actions for Lesson model.
  */
-class LessonController extends Controller
+final class LessonController extends Controller
 {
     /**
-     * {@inheritdoc}
+     * @phpstan-return array<array>
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [

@@ -13,12 +13,12 @@ use yii\filters\VerbFilter;
 /**
  * WebsiteController implements the CRUD actions for Website model.
  */
-class WebsiteController extends Controller
+final class WebsiteController extends Controller
 {
     /**
-     * {@inheritdoc}
+     * @phpstan-return array<array>
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [
@@ -129,7 +129,7 @@ class WebsiteController extends Controller
      * @return Website the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Website
     {
         if (($model = Website::findOne($id)) !== null) {
             return $model;

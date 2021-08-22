@@ -9,12 +9,12 @@ use yii\base\Widget;
 use yii\helpers\Url;
 use yii\db\Expression;
 
-class Rating extends Widget
+final class Rating extends Widget
 {
-    public string $tableName;
-    public int $tableId;
-    public string $sessionId;
-    public int $ratingValue;
+    public string $tableName = '';
+    public int $tableId = 0;
+    public string $sessionId = '';
+    public int $ratingValue = 0;
 
     public function run(): string
     {
@@ -29,17 +29,11 @@ class Rating extends Widget
         ]);
     }
 
-    /**
-     * @return string
-     */
     protected function getUrl(): string
     {
         return Url::toRoute(['/api/rate']);
     }
 
-    /**
-     * @return bool
-     */
     protected function isNotAllowed(): bool
     {
         if (in_array($this->tableName, RatingModel::$ALLOWED)) {
@@ -50,6 +44,7 @@ class Rating extends Widget
 
     /**
      * @return array
+     * @phpstan-return array{"ratingCount": int, "ratingAverage": string, "yourRating": string}
      * @throws InvalidConfigException
      * @throws \Throwable
      * @throws \yii\db\Exception
@@ -113,6 +108,10 @@ class Rating extends Widget
         return $data;
     }
 
+    /**
+     * @phpstan-return array{"ratingCount": int, "ratingAverage": string, "yourRating": string}
+     * @throws \yii\db\Exception
+     */
     private function loadData(): array
     {
         Yii::$app->session->open();

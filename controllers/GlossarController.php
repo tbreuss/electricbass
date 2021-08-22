@@ -5,11 +5,12 @@ namespace app\controllers;
 use app\models\Glossar;
 use Yii;
 use yii\web\Controller;
+use yii\web\Response;
 
-class GlossarController extends Controller
+final class GlossarController extends Controller
 {
 
-    public function actionIndex($category = null)
+    public function actionIndex(?string $category = null): string
     {
         $condition = ['deleted' => 0, 'hidden' => 0];
         if (!empty($category)) {
@@ -22,7 +23,7 @@ class GlossarController extends Controller
         ));
     }
 
-    public function actionView($id, $category)
+    public function actionView(string $id, string $category): string
     {
         $glossar = Glossar::findOneOrThrowException('/glossar/' . $category . '/' . $id);
 
@@ -36,7 +37,7 @@ class GlossarController extends Controller
         ));
     }
 
-    public function actionReorder()
+    public function actionReorder(): Response
     {
         $glossars = Glossar::findAll(array('order' => 'category, title'));
         $i = 0;

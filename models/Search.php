@@ -22,14 +22,18 @@ use yii\helpers\Url;
  * @property string $abstract
  * @property string $modified
  */
-class Search extends ActiveRecord
+final class Search extends ActiveRecord
 {
-    public static function findLatestGroupedBy(array $contexts)
+    /**
+     * @param array<string, int> $contexts
+     * @return array<string, array<int, Search>>
+     */
+    public static function findLatestGroupedBy(array $contexts): array
     {
         $models = [];
         foreach ($contexts as $context => $limit) {
             $models[$context] = Search::find()
-                ->where(['context' => $context, ])
+                ->where(['context' => $context])
                 ->orderBy('modified DESC')
                 ->limit($limit)
                 ->all();
@@ -37,16 +41,15 @@ class Search extends ActiveRecord
         return $models;
     }
 
-    public static function getQueryObject()
+    public static function getQueryObject(): Query
     {
-        $query = (new Query())
+        return (new Query())
             ->select(['tableName', 'tableId', 'id', 'url', 'category', 'modified'])
             ->from('search')
             ->orderBy('modified DESC');
-        return $query;
     }
 
-    public function hasFoto()
+    public function hasFoto(): bool
     {
         return false;
     }
@@ -92,7 +95,7 @@ class Search extends ActiveRecord
         return strlen($url) > 0;
     }
 
-    public function getUrlToOverview($scheme = false)
+    public function getUrlToOverview(bool $scheme = false): string
     {
         switch ($this->tableName) {
             case 'advertisement':
@@ -117,7 +120,7 @@ class Search extends ActiveRecord
         return '';
     }
 
-    public function getContextText()
+    public function getContextText(): string
     {
         switch ($this->context) {
             case 'advertisement':
@@ -148,7 +151,7 @@ class Search extends ActiveRecord
         return '';
     }
 
-    public function getContextTextPlural()
+    public function getContextTextPlural(): string
     {
         switch ($this->context) {
             case 'advertisement':
@@ -179,7 +182,7 @@ class Search extends ActiveRecord
         return '';
     }
 
-    public function getLastModAsAtom()
+    public function getLastModAsAtom(): string
     {
         $date = empty($this->modified) ? date('Y-m-d H:i:s') : $this->modified;
         return date(\DateTime::ATOM, strtotime($date));

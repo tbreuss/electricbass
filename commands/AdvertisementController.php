@@ -8,13 +8,13 @@ use yii\console\Controller;
 use yii\db\Expression;
 
 
-class AdvertisementController extends Controller
+final class AdvertisementController extends Controller
 {
 
     /**
      * Reminder Action
      */
-    public function actionReminder()
+    public function actionReminder(): void
     {
         $message = '';
 
@@ -31,12 +31,7 @@ class AdvertisementController extends Controller
         }
     }
 
-    /**
-     * @param string $subject
-     * @param string $textBody
-     * @return bool
-     */
-    protected function sendAdminMail($subject, $textBody)
+    protected function sendAdminMail(string $subject, string $textBody): bool
     {
         $to = Yii::$app->params['adminEmail'];
         $from = Yii::$app->params['senderEmail'];
@@ -49,11 +44,7 @@ class AdvertisementController extends Controller
             ->send();
     }
 
-    /**
-     * @param Advertisement $model
-     * @return bool
-     */
-    public function sendReminderMail(Advertisement $model)
+    public function sendReminderMail(Advertisement $model): bool
     {
         $message = Yii::$app->mailer->compose([
             'html' => 'advertisement/reminder_html',

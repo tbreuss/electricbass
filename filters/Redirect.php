@@ -7,15 +7,17 @@ use yii\base\BaseObject;
 use yii\base\BootstrapInterface;
 use yii\web\Application;
 
-class Redirect extends BaseObject implements BootstrapInterface
+final class Redirect extends BaseObject implements BootstrapInterface
 {
     public bool $enable = false;
+
+    /** @var string[] */
     public array $filters = [];
 
     /**
      * {@inheritdoc}
      */
-    public function bootstrap($app)
+    public function bootstrap($app): void
     {
         if (!$this->enable) {
             return;

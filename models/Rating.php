@@ -12,8 +12,9 @@ use yii\db\ActiveRecord;
  * @property string $modified
  * @property ?Search $search
  */
-class Rating extends ActiveRecord
+final class Rating extends ActiveRecord
 {
+    /** @var string[] */
     public static $ALLOWED = [
         'advertisement',
         'album',
@@ -28,9 +29,12 @@ class Rating extends ActiveRecord
         'quote'
     ];
 
-    public static function findLatestRatings(int $limit)
+    /**
+     * @return Rating[]
+     */
+    public static function findLatestRatings(int $limit): array
     {
-        return static::find()
+        return self::find()
             ->with('search')
             ->select(['r1.tableName', 'r1.tableId', 'r1.value', 'r1.modified'])
             ->from(['r1' => 'rating'])

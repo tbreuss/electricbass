@@ -6,12 +6,12 @@ use Mobile_Detect;
 use Yii;
 use yii\base\Widget;
 
-class SocialBar extends Widget
+final class SocialBar extends Widget
 {
-    public $id;
-    public $text;
+    public ?int $id = null;
+    public string $text = '';
 
-    public function run()
+    public function run(): string
     {
         $detect = new Mobile_Detect();
         return $this->render('socialbar', [
@@ -21,7 +21,7 @@ class SocialBar extends Widget
         ]);
     }
 
-    private function getUrl()
+    private function getUrl(): string
     {
         return 'https://www.electricbass.ch/' . Yii::$app->request->pathInfo;
     }

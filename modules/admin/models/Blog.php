@@ -43,9 +43,9 @@ class Blog extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * @phpstan-return array<int, array>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['movedTo', 'pageTitle', 'metaDescription', 'changes', 'deleted'], 'default', 'value' => null],
@@ -66,9 +66,9 @@ class Blog extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
+     * @return array<string, string>
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',

@@ -17,14 +17,11 @@ use yii\helpers\Url;
  * @property string $key
  * @property string $url
  */
-class Video extends ActiveRecord
+final class Video extends ActiveRecord
 {
     use SimilarModelsByTags;
 
-    /**
-     * @return ActiveDataProvider
-     */
-    public static function getActiveDataProvider()
+    public static function getActiveDataProvider(): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -64,33 +61,27 @@ class Video extends ActiveRecord
             ]
         ]);
 
-        $query = static::find()
+        $query = self::find()
             ->select('id, title, platform, key, abstract, url, created, modified')
             ->where(['deleted' => NULL])
             ->orderBy($sort->orders);
 
-        $provider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'defaultPageSize' => 24,
             ],
             'sort' => $sort,
         ]);
-
-        return $provider;
     }
 
-    /**
-     * @param string $eid
-     * @return null|self
-     */
-    public static function findOneOrNull(string $eid)
+    public static function findOneOrNull(string $eid): ?Video
     {
-        $video = static::find()->where(['deleted' => NULL, 'url' => $eid])->one();
+        $video = self::find()->where(['deleted' => NULL, 'url' => $eid])->one();
         if ($video) {
             return $video;
         }
-        $video = static::find()->where(['deleted' => NULL, 'eid' => $eid])->one();
+        $video = self::find()->where(['deleted' => NULL, 'eid' => $eid])->one();
         if ($video) {
             return $video;
         }
@@ -98,12 +89,11 @@ class Video extends ActiveRecord
     }
 
     /**
-     * @param int $id
-     * @return array
+     * @return Video[]
      */
     public static function findLatest(int $id): array
     {
-        return static::find()
+        return self::find()
             ->select('url, platform, key, title, abstract, tags, modified')
             ->where(['deleted' => NULL])
             ->andWhere(['<>', 'id', $id])
@@ -131,16 +121,13 @@ class Video extends ActiveRecord
         return $image;
     }
 
-    /**
-     * @return bool
-     */
     public function hasDefaultImage(): bool
     {
         $relpath = $this->getDefaultImage();
         return !empty($relpath);
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_BLOG_IDS', []);

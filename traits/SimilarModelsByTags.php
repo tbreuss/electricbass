@@ -9,14 +9,15 @@ trait SimilarModelsByTags
 {
     /**
      * @param int $id
-     * @param array $tags
+     * @param string[] $tags
      * @param int $limit
      * @return array
+     * @phpstan-return \app\models\Album[]|\app\models\Blog[]|\app\models\Catalog[]|\app\models\Fingering[]|\app\models\Lesson[]|\app\models\Video[]|\app\models\Website[]
      * @throws \yii\db\Exception
      */
     public static function findSimilars(int $id, array $tags, int $limit = 10): array
     {
-        $ids = static::findSimilarsIds($id, $tags);
+        $ids = self::findSimilarsIds($id, $tags);
         if (empty($ids)) {
             return [];
         }
@@ -29,8 +30,8 @@ trait SimilarModelsByTags
 
     /**
      * @param int $id
-     * @param array $tags
-     * @return array
+     * @param string[] $tags
+     * @return int[]
      * @throws \yii\db\Exception
      */
     protected static function findSimilarsIds(int $id, array $tags): array
@@ -42,7 +43,7 @@ trait SimilarModelsByTags
         $tags = array_map('trim', $tags);
         $tags = "'" . implode("', '", $tags) . "'";
 
-        $tableName = trim(static::tableName(), '{%}');
+        $tableName = trim(self::tableName(), '{%}');
 
         // See:
         // https://stackoverflow.com/questions/17942508/sql-split-values-to-multiple-rows
@@ -72,14 +73,16 @@ trait SimilarModelsByTags
             LIMIT 10
         SQL;
 
-        $ids = static::getDb()->createCommand($sql, [
+        return self::getDb()->createCommand($sql, [
             'id' => $id,
         ])->queryColumn();
-
-        return $ids;
     }
 
-    public function getTagsAsArray(array $filters = [])
+    /**
+     * @param string[] $filters
+     * @return string[]
+     */
+    public function getTagsAsArray(array $filters = []): array
     {
         if (strlen($this->tags) === 0) {
             return [];

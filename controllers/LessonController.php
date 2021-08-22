@@ -6,9 +6,12 @@ use app\models\Lesson;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-class LessonController extends Controller
+final class LessonController extends Controller
 {
-    public function behaviors()
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
     {
         return [
             [
@@ -24,7 +27,7 @@ class LessonController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionIndex($path = '')
+    public function actionIndex($path = ''): string
     {
         $url = rtrim('/lektionen/' . $path, '/');
         $model = Lesson::find()->where('deleted = 0 AND url = :url', [':url' => $url])->one();
@@ -51,10 +54,9 @@ class LessonController extends Controller
     }
 
     /**
-     * @param Lesson $model
-     * @return array
+     * @phpstan-return array<int, array{"label": string, "url": string}>
      */
-    protected function getBreadcrumbs(Lesson $model)
+    protected function getBreadcrumbs(Lesson $model): array
     {
         $parents = Lesson::findParents($model->url);
         $breadcrumbs = [];

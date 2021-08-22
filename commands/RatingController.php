@@ -5,12 +5,12 @@ namespace app\commands;
 use app\models\Rating;
 use yii\console\Controller;
 
-class RatingController extends Controller
+final class RatingController extends Controller
 {
     /**
      * Syncronizes ratings in table rating with specific tables.
      */
-    public function actionSync()
+    public function actionSync(): void
     {
         $count = Rating::synchronizeRatings();
         echo $count . ' Eintraege aktualisiert' . PHP_EOL;
