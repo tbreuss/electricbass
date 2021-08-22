@@ -16,11 +16,21 @@ class Div
      */
 	public static function getGoogleMapCoords(string $address): array
     {
+        $default = array(
+            'latitude' => 0,
+            'longitude' => 0
+        );
+
         $query = urlencode($address);
         $request = sprintf('http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false', $query);
 		$response = file_get_contents($request);
+
+		if (is_bool($response)) {
+		    return $default;
+        }
+
         $responseArr = json_decode($response, true);
-        if($responseArr['status']=='OK') {
+        if(is_array($responseArr) && ($responseArr['status'] == 'OK')) {
             if(isset($responseArr['results'][0]['geometry']['location'])) {
                 $location = $responseArr['results'][0]['geometry']['location'];
                 return array(
@@ -29,10 +39,8 @@ class Div
                 );
             }
         }
-        return array(
-            'latitude' => 0,
-            'longitude' => 0
-        );
+
+        return $default;
     }
 
     public static function createAccessCode(int $id): string
@@ -82,30 +90,6 @@ class Div
     public static function getInitial(string $str): string
     {
         return strtoupper(mb_substr($str, 0, 1, 'utf-8'));
-    }
-
-    public static function createTempMidiFileName(): string
-    {
-        $save_dir = 'tmp';
-
-        $d = dir($save_dir);
-        while (false !== ($entry = $d->read())) {
-            if(!empty($entry) && ($entry != '.') && ($entry != '..')) {
-                $filepath = $save_dir.'/'.$entry;
-                $filemtime = filemtime($filepath);
-                if(empty($filemtime)) {
-                    touch($filepath, time());
-                }
-                $filemtime = filemtime($filepath);
-                if((time() - $filemtime) > 3660) {
-                    unlink($filepath);
-                }
-            }
-        }
-        $d->close();
-
-        srand((int)microtime() * 1000000);
-        return $save_dir.'/'.rand().'.mid';
     }
 
     /**
