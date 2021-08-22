@@ -25,7 +25,11 @@ final class ManufacturerController extends Controller
         $data = Manufacturer::allToArray($manufacturers);
 
         \Yii::$app->response->format = Response::FORMAT_JSON;
-        return json_encode($data);
+        $encoded = json_encode($data);
+        if (is_bool($encoded)) {
+            return '[]';
+        }
+        return $encoded;
     }
 
     public function actionVisit(int $id): Response

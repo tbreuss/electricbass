@@ -38,10 +38,11 @@ use yii\web\UploadedFile;
  * @property string $date
  * @property string $created
  * @property string $modified
+ * @property string|Expression $reminded
  */
-class Advertisement extends ActiveRecord
+final class Advertisement extends ActiveRecord
 {
-
+    /** @var string[] */
     public static array $categories = array(
         1 => 'Effektgeräte',
         2 => 'Bassgitarren',
@@ -56,40 +57,35 @@ class Advertisement extends ActiveRecord
         11 => 'Bandgründung'
     );
 
+    /** @var string[] */
     public static $blacklist = array(
         'gabriel.buehler@gmx.ch'
     );
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $nspm;
 
-    /**
-     * @var boolean
-     */
+    /** @var boolean */
     public $expired;
 
+    /** @var mixed */
     public $upload;
 
-    public function init()
+    public function init(): void
     {
         $this->on(self::EVENT_AFTER_INSERT, [$this, 'onAfterInsert']);
         $this->on(self::EVENT_AFTER_UPDATE, [$this, 'onAfterUpdate']);
     }
 
-    /**
-     * @return string
-     */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'advertisement';
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return array(
             'category_id' => 'Kategorie',
@@ -110,9 +106,9 @@ class Advertisement extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @phpstan-return array<int, array>
      */
-    public function rules()
+    public function rules(): array
     {
         return array(
             // category_id
@@ -158,49 +154,39 @@ class Advertisement extends ActiveRecord
         );
     }
 
-    public function onAfterInsert()
+    public function onAfterInsert(): void
     {
         $this->updateUrlSegment();
         $this->updateGeoAddress();
     }
 
-    public function onAfterUpdate()
+    public function onAfterUpdate(): void
     {
         $this->updateGeoAddress();
     }
 
-    /**
-     * Aktualisiert das URL-Segment
-     */
-    protected function updateUrlSegment()
+    protected function updateUrlSegment(): void
     {
         $urlSegment = $this->createUrlSegment();
         if(!empty($urlSegment)) {
             $attributes = [
                 'url' => $urlSegment
             ];
-            static::updateAll($attributes, 'id=:id', ['id' => $this->id]);
+            self::updateAll($attributes, 'id=:id', ['id' => $this->id]);
         }
     }
 
-    /**
-     * Aktualisiert Längen- und Breitengrad
-     */
-    protected function updateGeoAddress()
+    protected function updateGeoAddress(): void
     {
         if(!empty($this->geocodingAddress)) {
             $coords = Div::getGoogleMapCoords($this->geocodingAddress);
             if(!empty($coords) && (count($coords)==2) && (array_sum($coords)<>0)) {
-                static::updateAll($coords, 'id=:id', ['id' => $this->id]);
+                self::updateAll($coords, 'id=:id', ['id' => $this->id]);
             }
         }
     }
 
-    /**
-     * @param string $attribute
-     * @param array $params
-     */
-    public function validateCurrency($attribute, $params)
+    public function validateCurrency(string $attribute): void
     {
         if (!empty($this->new_price) && !empty($this->sell_price)) {
             if (empty($this->currency)) {
@@ -209,7 +195,7 @@ class Advertisement extends ActiveRecord
         }
     }
 
-    public function validateBlacklist($attribute, $params)
+    public function validateBlacklist(string $attribute): void
     {
         if (in_array($this->email, self::$blacklist)) {
             $this->addError($attribute, 'E-Mail steht in unserer Blacklist.');
@@ -217,9 +203,9 @@ class Advertisement extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
-    public function getInfos()
+    public function getInfos(): array
     {
         #$flag = Html::flagImage($this->country);
 
@@ -235,9 +221,6 @@ class Advertisement extends ActiveRecord
         return array_map('stripslashes', $infos);
     }
 
-    /**
-     * @return bool
-     */
     public function handleUpload(): bool
     {
         $upload = UploadedFile::getInstance($this, 'upload');
@@ -276,85 +259,75 @@ class Advertisement extends ActiveRecord
         return true;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhoto()
+    public function getPhoto(): string
     {
         $webRoot = Yii::getAlias('@webroot/');
         $pattern = sprintf('%smedia/kleinanzeigen/%d-*.*', $webRoot, $this->id);
         $result = glob($pattern, GLOB_NOSORT);
         if (isset($result[0])) {
-            $filename = str_replace($webRoot, '', $result[0]);
-            return $filename;
+            return str_replace($webRoot, '', $result[0]);
         }
         return '';
     }
 
-    /**
-     * @return string
-     */
-    public function getPageTitle()
+    public function getPageTitle(): string
     {
         return stripslashes(sprintf('%s - %d | %s | %s', $this->title, $this->id, $this->getCategory(), 'Kleinanzeige'));
     }
 
     /**
-     * @return array
+     * @return Advertisement[]
      */
-    public static function findAllForReminders()
+    public static function findAllForReminders(): array
     {
-        $models = self::find()
+        return self::find()
             ->select(['*, UNIX_TIMESTAMP(date) AS date, (DATEDIFF(NOW(), date)>60) AS expired'])
             ->where('hidden=0 AND deleted=0 AND reminded IS NULL AND DATEDIFF(NOW(), date) BETWEEN 60 AND 67')
             ->orderBy('date DESC')
             ->all();
-        return $models;
     }
 
     /**
-     *
-     * @return array
+     * @return Advertisement[]
      */
-    public static function findAllForAdvertisementIndexController()
+    public static function findAllForAdvertisementIndexController(): array
     {
-        $models = self::find()
+        return self::find()
             ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
             ->where('hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60')
             ->orderBy('date DESC')
             ->all();
-        return $models;
     }
 
     /**
-     *
-     * @return array
+     * @return Advertisement[]
      */
-    public static function findAllForFeed()
+    public static function findAllForFeed(): array
     {
-        $models = self::find()
+        return self::find()
             ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
             ->where('hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60')
             ->orderBy('date DESC')
             ->all();
-        return $models;
     }
 
     /**
      * @param string $email
-     * @return array|Advertisement[]
+     * @return Advertisement[]
      */
-    public static function findAllByEmail($email)
+    public static function findAllByEmail(string $email): array
     {
-        $models = self::find()
+        return self::find()
             ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
             ->where('email=:email AND hidden=0 AND deleted=0', array(':email' => $email))
             ->orderBy('id DESC')
             ->all();
-        return $models;
     }
 
-    public static function findAllByCoordinate($position)
+    /**
+     * @return Advertisement[]
+     */
+    public static function findAllByCoordinate(string $position): array
     {
         $coords = explode(',', $position);
         if (!empty($coords) && count($coords) == 2) {
@@ -369,6 +342,7 @@ class Advertisement extends ActiveRecord
     }
 
     /**
+     * @param int|string $id
      * @throws NotFoundHttpException
      */
     public static function findById($id, bool $strict): ?Advertisement
@@ -387,48 +361,48 @@ class Advertisement extends ActiveRecord
         return $advertisement;
     }
 
-    public function createDetailUrl($scheme = false)
+    public function createDetailUrl(bool $scheme = false): string
     {
         return Url::to($this->url, $scheme);
     }
 
-    public function getCategory()
+    public function getCategory(): string
     {
-        return isset(self::$categories[$this->category_id]) ? self::$categories[$this->category_id] : '';
+        return self::$categories[$this->category_id] ?? '';
     }
 
-    public function getShortenedText($chars = 70)
+    public function getShortenedText(int $chars = 70): string
     {
         $text = preg_replace('/\s\s+/', ' ', $this->longtext);
         return mb_strimwidth(strip_tags($text), 0, $chars, '...', 'UTF-8');
     }
 
-    public function createActivationUrl()
+    public function createActivationUrl(): string
     {
         $url = array('advertisement/activate', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
         return Url::toRoute($url, true);
     }
 
-    public function createRenewUrl()
+    public function createRenewUrl(): string
     {
         $url = array('advertisement/renew', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
         return Url::toRoute($url, true);
     }
 
-    public function createDeleteUrl($confirmed = 0)
+    public function createDeleteUrl(int $confirmed = 0): string
     {
         $url = array('advertisement/delete', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
         if ($confirmed) $url['confirmed'] = 1;
         return Url::toRoute($url, true);
     }
 
-    public function createUpdateUrl()
+    public function createUpdateUrl(): string
     {
         $url = array('advertisement/update', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
         return Url::toRoute($url, true);
     }
 
-    public function renew()
+    public function renew(): bool
     {
         $attributes = [
             'hidden' => 0,
@@ -436,11 +410,11 @@ class Advertisement extends ActiveRecord
             'date' => new Expression('NOW()'),
             'reminded' => null
         ];
-        $numbOfRows = static::updateAll($attributes, 'id=:id', ['id' => $this->id]);
+        $numbOfRows = self::updateAll($attributes, 'id=:id', ['id' => $this->id]);
         return ($numbOfRows > 0);
     }
 
-    public function activate()
+    public function activate(): bool
     {
         $attributes = [
             'hidden' => 0,
@@ -448,7 +422,7 @@ class Advertisement extends ActiveRecord
             'date' => new Expression('NOW()'),
             'reminded' => null
         ];
-        $numbOfRows = static::updateAll($attributes, 'id=:id', ['id' => $this->id]);
+        $numbOfRows = self::updateAll($attributes, 'id=:id', ['id' => $this->id]);
         return ($numbOfRows > 0);
     }
 
@@ -457,16 +431,16 @@ class Advertisement extends ActiveRecord
         $attributes = [
             'deleted' => 1
         ];
-        return static::updateAll($attributes, 'id=:id', ['id' => $this->id]);
+        return self::updateAll($attributes, 'id=:id', ['id' => $this->id]);
     }
 
-    public function getCountryTranslated()
+    public function getCountryTranslated(): string
     {
         $countries = ['DE'=>'Deutschland','CH'=>'Schweiz','AT'=>'Österreich'];
-        return isset($countries[$this->country]) ? $countries[$this->country] : '';
+        return $countries[$this->country] ?? '';
     }
 
-    public function increaseHits()
+    public function increaseHits(): void
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_ADVERTISEMENT_IDS', []);
@@ -477,9 +451,12 @@ class Advertisement extends ActiveRecord
         }
     }
 
-    public static function findLatestAsArray($limit=5)
+    /**
+     * @phpstan-return array<int, array<string, string>>
+     * @throws \yii\db\Exception
+     */
+    public static function findLatestAsArray(int $limit=5): array
     {
-        $limit = intval($limit);
         $sql = "
             SELECT id,title,date,url,country,region
             FROM advertisement
@@ -491,17 +468,14 @@ class Advertisement extends ActiveRecord
             ->queryAll();
     }
 
-    public function createUrlSegment()
+    public function createUrlSegment(): string
     {
         $segment = $this->title.'-'.$this->id;
         $segment = str_replace('/', '-', $segment);
         return '/kleinanzeigen/' . Div::normalizeUrlSegment($segment);
     }
 
-    /**
-     * @return bool
-     */
-    public function unlinkPhoto()
+    public function unlinkPhoto(): bool
     {
         $fotos = $this->getAllFotos();
 
@@ -519,7 +493,7 @@ class Advertisement extends ActiveRecord
         return ($deleted > 0);
     }
 
-    public function unlinkCachedImages()
+    public function unlinkCachedImages(): bool
     {
         $cachePath = sprintf('cache/kleinanzeigen-%d-*', (int)$this->id);
         foreach(glob($cachePath) AS $file) {
@@ -531,9 +505,9 @@ class Advertisement extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
-    protected function getAllFotos()
+    protected function getAllFotos(): array
     {
         $webRoot = Yii::getAlias('@webroot/');
         $pattern = sprintf('%smedia/kleinanzeigen/%d-*.*', $webRoot, $this->id);

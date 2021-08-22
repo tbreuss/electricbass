@@ -3,7 +3,6 @@
 namespace app\widgets;
 
 use app\models\Comment;
-use JetBrains\PhpStorm\NoReturn;
 use Yii;
 use yii\base\Widget;
 

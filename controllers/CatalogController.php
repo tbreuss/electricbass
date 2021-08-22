@@ -10,7 +10,7 @@ use app\helpers\Url;
 use app\models\Catalog;
 use Throwable;
 use Yii;
-use yii\data\Pagination;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -105,8 +105,8 @@ final class CatalogController extends Controller
             'sort' => $provider->getSort(),
             'title' => $this->getListTitle($category),
             'sidebarTitle' => $this->getSidebarTitle($category),
-            'pageTitle' => $this->getPageTitle($category, $provider->getPagination()),
-            'metaDescription' => $this->getMetaDescription($category,$provider->getPagination()),
+            'pageTitle' => $this->getPageTitle($category, $provider),
+            'metaDescription' => $this->getMetaDescription($category,$provider),
             'filter' => $filter,
             'category' => $category,
             'context' => $this->getContext($category),
@@ -202,13 +202,13 @@ final class CatalogController extends Controller
         return $categories[$category] ?? 'Alle';
     }
 
-    /**
-     * @param string $category
-     * @param Pagination $pagination
-     * @return string Maximal 60 Zeichen
-     */
-    protected function getPageTitle(string $category, Pagination $pagination): string
+    protected function getPageTitle(string $category, ActiveDataProvider $provider): string
     {
+        $pagination = $provider->getPagination();
+        if (is_bool($pagination)) {
+            return ''; // TODO return better text if no pagination available
+        }
+
         $page = $pagination->getPage() + 1;
         $pageCount = $pagination->getPageCount();
         $categories = [
@@ -217,22 +217,22 @@ final class CatalogController extends Controller
             'dvds' => sprintf('Lehrbücher und -videos inkl. DVDs zum E-Bass lernen (%d/%d)', $page, $pageCount),
         ];
 
-        return $categories[$category] ?? 'Alle';
+        return $categories[$category] ?? '';
     }
 
-    /**
-     * @param string $category
-     * @param Pagination $pagination
-     * @return string Maximal 155 Zeichen
-     */
-    protected function getMetaDescription(string $category, Pagination $pagination): string
+    protected function getMetaDescription(string $category, ActiveDataProvider $provider): string
     {
+        $pagination = $provider->getPagination();
+        if (is_bool($pagination)) {
+            return ''; // TODO return better text if no pagination available
+        }
+
         $categories = [
             'lehrbuecher' => sprintf('Du willst E-Bass spielen lernen? Hier findest du Lehrbücher mit CDs zum selber lernen. Mit Noten, TABs und Playalongs - Seite %d von %d', $pagination->page+1, $pagination->pageCount),
             'buecher' => sprintf('Allgemeine Bücher zum Thema Bass für Bassisten, E-Bassisten und Musikinteressierte - Seite %d von %d', $pagination->page+1, $pagination->pageCount),
             'dvds' => sprintf('Du willst E-Bass spielen lernen? Hier findest du Lehrbücher/-videos mit DVDs zum selber lernen. Mit Videos, Noten, TABs und Playalongs - Seite %d von %d', $pagination->page+1, $pagination->pageCount)
         ];
-        return $categories[$category] ?? 'Alle';
+        return $categories[$category] ?? '';
     }
 
     protected function getSidebarTitle(string $category): string

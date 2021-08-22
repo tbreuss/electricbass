@@ -9,6 +9,7 @@ use Yii;
 /**
  * @property int $id
  * @property string $title
+ * @property string $abstract
  * @property string $url
  * @property string $menuTitle
  */

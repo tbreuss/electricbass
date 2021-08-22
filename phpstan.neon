@@ -1,11 +1,13 @@
 includes:
 	- vendor/proget-hq/phpstan-yii2/extension.neon
 parameters:
-	level: 6
+	level: 7
 	bootstrapFiles:
 	    - .phpstan/constants.php
 	scanFiles:
 	    - vendor/yiisoft/yii2/Yii.php
+	    - vendor/yiisoft/yii2/base/Widget.php
+	    - vendor/yiisoft/yii2/base/ViewContextInterface.php
 	stubFiles:
 	    - .phpstan/stubs/View.stub
 	paths:
