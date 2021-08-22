@@ -118,7 +118,7 @@ class CatalogController extends Controller
      * @throws \yii\db\Exception
      * @throws NotFoundHttpException
      */
-    public function actionView(int|string $id, string $category): string
+    public function actionView($id, string $category): string
     {
         $model = Catalog::findOneOrNull('/katalog/' . $category . '/' . $id, $category);
 

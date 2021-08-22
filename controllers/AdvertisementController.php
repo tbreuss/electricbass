@@ -29,7 +29,7 @@ class AdvertisementController extends Controller
         ));
     }
 
-    public function actionContact(int $id): Response|string
+    public function actionContact(string $id): Response|string
     {
         $advertisement = Advertisement::findById($id, true);
         $model = new AdvertisementContactForm;
@@ -57,7 +57,7 @@ class AdvertisementController extends Controller
 
     }
 
-    public function actionView(string|int $id): Response|string
+    public function actionView(string $id): Response|string
     {
         $model = Advertisement::findById('/kleinanzeigen/' . $id, false);
 
@@ -118,7 +118,7 @@ class AdvertisementController extends Controller
         return $this->render('renew', array('model' => $model));
     }
 
-    public function actionDelete(string|int $id, string $accessCode, int $confirmed = 0): Response|string
+    public function actionDelete(string $id, string $accessCode, int $confirmed = 0): Response|string
     {
         $model = Advertisement::findById($id, true);
         if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
@@ -132,7 +132,7 @@ class AdvertisementController extends Controller
         return $this->render('delete', array('model' => $model, 'confirmed' => $confirmed));
     }
 
-    public function actionUpdate(string|int $id, string $accessCode): Response|string
+    public function actionUpdate(string $id, string $accessCode): Response|string
     {
         $model = Advertisement::findById($id, false);
         if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {

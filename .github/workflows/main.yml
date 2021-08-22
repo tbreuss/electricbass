@@ -21,8 +21,8 @@ jobs:
 
       - name: Cleanup directory
         run: |
-          rm -rf .git .github _migration tests
-          rm .gitignore *.json *.lock
+          rm -rf .bowerrc .git .github .phpstan _migration tests
+          rm .gitignore *.json *.lock docker-compose.yml Dockerfile phpstan.neon requirements.php webpack.config.js
 
       - name: Deploy to server via scp
         uses: appleboy/scp-action@master
