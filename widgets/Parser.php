@@ -4,7 +4,6 @@ namespace app\widgets;
 
 use app\models\Lesson;
 use app\models\Website;
-use ParseError;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Markdown;
@@ -95,7 +94,7 @@ final class Parser extends Widget
     }
 
     /**
-     * @phpstan-param array<string, int|string> $options
+     * @phpstan-param array<string, mixed> $options
      */
     public static function image(array $options, string $content): string
     {
@@ -129,23 +128,26 @@ final class Parser extends Widget
 
     /**
      * @phpstan-return array{int, int}|null
+     * @todo Log error
      */
     private static function getImageSize(string $url): ?array
     {
-        $path = Yii::getAlias('@app/web/' . $url);
         try {
+            $path = Yii::getAlias('@app/web/' . $url);
+            if (is_bool($path)) {
+                return null;
+            }
             $size = getimagesize($path);
-        } catch(\Exception $e) {
-            // TODO Fehler protokollieren
+            if ($size === false) {
+                return null;
+            }
+            if (!isset($size[0]) || !isset($size[1])) {
+                return null;
+            }
+            return [$size[0], $size[1]];
+        } catch(\Throwable) {
             return null;
         }
-        if ($size === false) {
-            return null;
-        }
-        if (!isset($size[0]) || !isset($size[1])) {
-            return null;
-        }
-        return [$size[0], $size[1]];
     }
 
     protected static function resolveImage(string $src): string
@@ -252,7 +254,7 @@ final class Parser extends Widget
             return self::renderPartial('htmlphp', [
                 'content' => $content
             ]);
-        } catch (ParseError $e) {
+        } catch (\Throwable) {
             // TODO Fehler protokollieren
             return $content;
         }

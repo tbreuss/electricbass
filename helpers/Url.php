@@ -4,7 +4,7 @@ namespace app\helpers;
 
 use Yii;
 
-class Url extends \yii\helpers\Url
+final class Url extends \yii\helpers\Url
 {
     /**
      * @param array<array>|array<int, string> $route

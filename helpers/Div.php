@@ -8,7 +8,7 @@ use Imagine\Image\ImageInterface;
 use Yii;
 use yii\db\ActiveRecord;
 
-class Div
+final class Div
 {
 
     /**

@@ -8,7 +8,7 @@ use Imagine\Image\ImageInterface;
 use yii\helpers\FileHelper;
 use yii\web\View;
 
-class Html extends \yii\helpers\Html
+final class Html extends \yii\helpers\Html
 {
     public static function hasMetaDescription(View $view): bool
     {

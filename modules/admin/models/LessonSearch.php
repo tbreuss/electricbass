@@ -9,7 +9,7 @@ use app\modules\admin\models\Lesson;
 /**
  * LessonSearch represents the model behind the search form of `app\modules\admin\models\Lesson`.
  */
-class LessonSearch extends Lesson
+final class LessonSearch extends Lesson
 {
     /**
      * @phpstan-return array<int, array>

@@ -9,7 +9,7 @@ use app\modules\admin\models\Video;
 /**
  * VideoSearch represents the model behind the search form of `app\modules\admin\models\Video`.
  */
-class VideoSearch extends Video
+final class VideoSearch extends Video
 {
     /**
      * @phpstan-return array<int, array>
