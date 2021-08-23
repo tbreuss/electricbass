@@ -7,7 +7,7 @@ use yii\web\Request;
 use yii\web\UrlManager;
 use yii\web\UrlRuleInterface;
 
-class LessonUrlRule extends BaseObject implements UrlRuleInterface
+final class LessonUrlRule extends BaseObject implements UrlRuleInterface
 {
 
     /**

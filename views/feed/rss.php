@@ -24,7 +24,8 @@ use yii\helpers\Url;
             <description><![CDATA[<?= htmlspecialchars($model->abstract, ENT_XML1) ?>]]></description>
             <link><?= Url::to($model->url, true) ?></link>
             <guid isPermaLink="true"><?= Url::to($model->url, true) ?></guid>
-            <pubDate><?= date(DATE_RSS, strtotime($model->modified)) ?></pubDate>
+            <?php $timestamp = strtotime($model->modified) ?>
+            <pubDate><?= ($timestamp === false) ? '' : date(DATE_RSS, $timestamp) ?></pubDate>
         </item>
         <?php endforeach; ?>
     </channel>

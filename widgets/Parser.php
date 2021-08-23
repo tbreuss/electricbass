@@ -296,7 +296,14 @@ final class Parser extends Widget
 
         $pdfPath = Yii::getAlias('@app/web/' . $relPdfPath);
         $pdfUrl = Yii::getAlias('@web/' . $relPdfPath);
-        $pdfSize = is_file($pdfPath) ? filesize($pdfPath) : 0;
+
+        $pdfSize = 0;
+        if (is_file($pdfPath)) {
+            $fileSize = filesize($pdfPath);
+            if (is_int($fileSize)) {
+                $pdfSize = $fileSize;
+            }
+        }
         $pdfSize = ($pdfSize > 0) ? Yii::$app->formatter->asShortSize($pdfSize, 1) : '';
 
         $imageUrl = sprintf(
@@ -341,17 +348,30 @@ final class Parser extends Widget
                     continue;
                 }
                 $path = Yii::getAlias('@app/web/' . $cells[0]);
+                if ($path === false) {
+                    continue;
+                }
 
                 if (!is_file($path)) {
                     continue;
                 }
 
                 $type = strtoupper(pathinfo($path, PATHINFO_EXTENSION));
+
                 $sizeInt = filesize($path);
+                if ($sizeInt === false) {
+                    continue;
+                }
+
                 $sizeHuman = ($sizeInt > 0) ? Yii::$app->formatter->asShortSize($sizeInt, 1) : '';
 
+                $url = Yii::getAlias('@web/' . $cells[0]);
+                if ($url === false) {
+                    continue;
+                }
+
                 $options['items'][] = [
-                    'url' => Yii::getAlias('@web/' . $cells[0]),
+                    'url' => $url,
                     'label' => $cells[1] ?? $cells[0],
                     'size' => strtoupper($sizeHuman),
                     'type' => $type
@@ -428,9 +448,16 @@ final class Parser extends Widget
         $data = Yii::$app->cache->get($cacheKey);
         if ($data === false) {
             $headers = get_headers('http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=' . $id);
+            if ($headers === false) {
+                return;
+            }
             if (!strpos($headers[0], '200')) {
                 $message = sprintf("%s: missing video \"%s\" on page \"%s\"\n", date('Y-m-d H:i:s'), $id, Yii::$app->request->getUrl());
-                file_put_contents(Yii::getAlias('@app/runtime/youtube.txt'), $message, FILE_APPEND);
+                $alias = Yii::getAlias('@app/runtime/youtube.txt');
+                if ($alias === false) {
+                    return;
+                }
+                file_put_contents($alias, $message, FILE_APPEND);
             }
             Yii::$app->cache->set($cacheKey, $headers, 24*60);
         }

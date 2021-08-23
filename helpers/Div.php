@@ -6,7 +6,6 @@ use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Yii;
-use yii\db\ActiveRecord;
 
 final class Div
 {
@@ -130,8 +129,9 @@ final class Div
      */
     public static function extractTags(array $models): array
     {
-        $tags = array();
+        $tags = [];
         foreach($models AS $model) {
+            /* @phpstan-ignore-next-line */
             $tags = array_merge($tags, explode(',', $model->tags));
         }
         return array_unique($tags);
@@ -167,25 +167,6 @@ final class Div
 
         // Return the string
         return $string;
-    }
-
-    function uniqueFilename(string $path, string $suffix, int $length=8): string
-    {
-        do {
-            $file = $path."/".self::randStr($length).'.'.$suffix;
-            $fp = fopen($file, 'x');
-        }
-        while(!$fp);
-        fclose($fp);
-        return $file;
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function string2array(string $tags): array
-    {
-        return preg_split('/\s*,\s*/',trim($tags),-1,PREG_SPLIT_NO_EMPTY);
     }
 
     /**
@@ -224,8 +205,11 @@ final class Div
     {
         $info = pathinfo($filename);
         $i=1;
-        while(is_file($pathname.$filename)) {
-            $filename = $info['filename'].'-'.$i.'.'.$info['extension'];
+        while(is_file($pathname . $filename)) {
+            $filename = $info['filename'] . '-' . $i;
+            if (!empty($info['extension'])) {
+                $filename .= '.' . $info['extension'];
+            }
             $i++;
             if($i>1000) throw new \Exception('Irgendwas ist beim Upload schiefgelaufen');
         }

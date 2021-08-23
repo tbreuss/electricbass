@@ -262,8 +262,16 @@ final class Advertisement extends ActiveRecord
     public function getPhoto(): string
     {
         $webRoot = Yii::getAlias('@webroot/');
+        if ($webRoot === false) {
+            return '';
+        }
+
         $pattern = sprintf('%smedia/kleinanzeigen/%d-*.*', $webRoot, $this->id);
         $result = glob($pattern, GLOB_NOSORT);
+        if ($result === false) {
+            return '';
+        }
+
         if (isset($result[0])) {
             return str_replace($webRoot, '', $result[0]);
         }
@@ -495,12 +503,18 @@ final class Advertisement extends ActiveRecord
 
     public function unlinkCachedImages(): bool
     {
-        $cachePath = sprintf('cache/kleinanzeigen-%d-*', (int)$this->id);
-        foreach(glob($cachePath) AS $file) {
+        $cachePath = sprintf('cache/kleinanzeigen-%d-*', $this->id);
+        $files = glob($cachePath);
+        if ($files === false) {
+            return false;
+        }
+
+        foreach($files AS $file) {
             if(is_file($file)) {
                 unlink($file);
             }
         }
+
         return true;
     }
 
@@ -510,9 +524,12 @@ final class Advertisement extends ActiveRecord
     protected function getAllFotos(): array
     {
         $webRoot = Yii::getAlias('@webroot/');
+        if ($webRoot === false) {
+            return [];
+        }
+
         $pattern = sprintf('%smedia/kleinanzeigen/%d-*.*', $webRoot, $this->id);
         $results = glob($pattern, GLOB_NOSORT);
-
         if ($results === false) {
             return [];
         }
@@ -520,6 +537,7 @@ final class Advertisement extends ActiveRecord
         foreach ($results as $i => $result) {
             $results[$i] = str_replace($webRoot, '', $result);
         }
+
         return $results;
     }
 

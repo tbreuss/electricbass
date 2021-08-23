@@ -2,7 +2,7 @@
 
 namespace app\entities;
 
-class AtoZGroupedEntries
+final class AtoZGroupedEntries
 {
     private string $initial;
 

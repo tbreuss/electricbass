@@ -2,7 +2,7 @@
 
 namespace app\components;
 
-class Fingerboard {
+final class Fingerboard {
 
     // Leersaiten
     var $openStrings;
