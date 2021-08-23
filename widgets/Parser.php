@@ -159,7 +159,9 @@ final class Parser extends Widget
         }
 
         if ($table == 'search') {
-            $table = self::$MODEL->tableName;
+            if (isset(self::$MODEL->tableName)) {
+                $table = self::$MODEL->tableName;
+            }
         }
 
         if ($table == 'blog') {
@@ -198,7 +200,7 @@ final class Parser extends Widget
     }
 
     /**
-     * @phpstan-param array{"title": string, "gallery", array} $options
+     * @phpstan-param array<string, mixed> $options
      */
     public static function jsongallery(array $options, string $content): string
     {
@@ -462,34 +464,5 @@ final class Parser extends Widget
             Yii::$app->cache->set($cacheKey, $headers, 24*60);
         }
     }
-
-    /*protected static function getYouTubeFoto($key)
-    {
-        $blog = self::$MODEL;
-        $dir = Yii::getAlias(sprintf('@webroot/media/blog/%d', $blog->id));
-
-        if (!is_dir($dir)) {
-            mkdir($dir);
-        }
-
-        $file = Yii::getAlias(sprintf('@webroot/media/blog/%d/%s.jpg', $blog->id, $key));
-
-        if (!is_file($file)) {
-
-            $content = @file_get_contents("http://img.youtube.com/vi/$key/0.jpg");
-            if (!empty($content)) {
-                file_put_contents($file, $content);
-            }
-
-        }
-
-        if (is_file($file)) {
-
-            $blog->fotos = $key . '.jpg';
-            $blog->save(false, ['fotos']);
-
-        }
-
-    }*/
 
 }
