@@ -36,7 +36,7 @@ final class SchemaBreadcrumbs extends Breadcrumbs
     /** @var array<string, mixed> */
     public array $defaultOptions = [];
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 

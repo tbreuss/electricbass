@@ -29,6 +29,10 @@
     <file>./web/index-test.php</file>
     <file>./widgets</file>
 
+    <exclude-pattern>commands/WebsiteController.php</exclude-pattern>
+    <exclude-pattern>components/Fingerboard.php</exclude-pattern>
+    <exclude-pattern>components/Template.php</exclude-pattern>
+
     <rule  ref="PSR12"/>
 
     <rule ref="Squiz.ControlStructures.ControlSignature">

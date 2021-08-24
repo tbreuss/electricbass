@@ -151,7 +151,7 @@ final class Div
         return uniqid('', true);
     }
 
-    function randStr(int $length = 16, string $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'): string
+    public function randStr(int $length = 16, string $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'): string
     {
         // Length of character list
         $chars_length = (mb_strlen($chars) - 1);

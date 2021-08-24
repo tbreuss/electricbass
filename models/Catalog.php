@@ -23,11 +23,11 @@ use yii\helpers\Url;
  */
 final class Catalog extends ActiveRecord
 {
+    use SimilarModelsByTags;
+
     const TYPE_TEXTBOOK = 1;
     const TYPE_READINGBOOK = 2;
     const TYPE_DVD = 3;
-
-    use SimilarModelsByTags;
 
     /**
      * @phpstan-param array<string, string> $filter
