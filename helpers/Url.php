@@ -30,7 +30,7 @@ final class Url extends \yii\helpers\Url
         return sprintf(
             'https://www.amazon.de/dp/%s?tag=%s&linkCode=ogi&th=1&psc=1',
             $asin,
-            $_ENV['AMAZON_PAAPI5_PARTNER_TAG']
+            ($_ENV['AMAZON_PAAPI5_PARTNER_TAG'] ?? '')
         );
     }
 

@@ -58,10 +58,10 @@ final class AmazonProductDetail
     public static function createByAsin(string $asin): self
     {
         $config = new Configuration();
-        $config->setAccessKey($_ENV['AMAZON_PAAPI5_ACCESS_KEY']);
-        $config->setSecretKey($_ENV['AMAZON_PAAPI5_SECRET_KEY']);
-        $config->setHost($_ENV['AMAZON_PAAPI5_HOST']);
-        $config->setRegion($_ENV['AMAZON_PAAPI5_REGION']);
+        $config->setAccessKey(($_ENV['AMAZON_PAAPI5_ACCESS_KEY'] ?? ''));
+        $config->setSecretKey(($_ENV['AMAZON_PAAPI5_SECRET_KEY'] ?? ''));
+        $config->setHost(($_ENV['AMAZON_PAAPI5_HOST'] ?? ''));
+        $config->setRegion(($_ENV['AMAZON_PAAPI5_REGION'] ?? ''));
 
         $apiInstance = new DefaultApi(new Client(), $config);
 
@@ -86,7 +86,7 @@ final class AmazonProductDetail
 
         $getItemsRequest = new GetItemsRequest();
         $getItemsRequest->setItemIds([$asin]);
-        $getItemsRequest->setPartnerTag($_ENV['AMAZON_PAAPI5_PARTNER_TAG']);
+        $getItemsRequest->setPartnerTag(($_ENV['AMAZON_PAAPI5_PARTNER_TAG'] ?? ''));
         $getItemsRequest->setPartnerType(PartnerType::ASSOCIATES);
         $getItemsRequest->setResources($resources);
         $getItemsRequest->setCondition(Condition::_NEW);

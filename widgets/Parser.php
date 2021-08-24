@@ -286,8 +286,14 @@ final class Parser extends Widget
 
         $midiPath = Yii::getAlias('@app/web/' . $relMidiPath);
         $midiUrl = Yii::getAlias('@web/' . $relMidiPath);
-        $midiSize = is_file($midiPath) ? filesize($midiPath) : 0;
-        $midiSize = ($midiSize > 0) ? Yii::$app->formatter->asShortSize($midiSize, 1) : '';
+        if (is_string($midiPath) && is_string($midiUrl) && is_file($midiPath)) {
+            $fileSize = filesize($midiPath);
+            $midiSizeAsInt = is_int($fileSize) ? $fileSize : 0;
+            $midiSize = ($midiSizeAsInt > 0) ? Yii::$app->formatter->asShortSize($midiSizeAsInt, 1) : '';
+        } else {
+            $midiUrl = '';
+            $midiSize = '';
+        }
 
         // PDF
         $relPdfPath = sprintf(
@@ -298,15 +304,14 @@ final class Parser extends Widget
 
         $pdfPath = Yii::getAlias('@app/web/' . $relPdfPath);
         $pdfUrl = Yii::getAlias('@web/' . $relPdfPath);
-
-        $pdfSize = 0;
-        if (is_file($pdfPath)) {
+        if (is_string($pdfPath) && is_string($pdfUrl) && is_file($pdfPath)) {
             $fileSize = filesize($pdfPath);
-            if (is_int($fileSize)) {
-                $pdfSize = $fileSize;
-            }
+            $pdfSizeAsInt = is_int($fileSize) ? $fileSize : 0;
+            $pdfSize = ($pdfSizeAsInt > 0) ? Yii::$app->formatter->asShortSize($pdfSizeAsInt, 1) : '';
+        } else {
+            $pdfUrl = '';
+            $pdfSize = '';
         }
-        $pdfSize = ($pdfSize > 0) ? Yii::$app->formatter->asShortSize($pdfSize, 1) : '';
 
         $imageUrl = sprintf(
             '/%s/%s.cropped.png',

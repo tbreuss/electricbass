@@ -34,7 +34,7 @@ return [
             ],
             'message' => [
                 'from' => ['noreply@electricbass.ch'],
-                'to' => [$_ENV['LOG_EMAIL_TARGET_TO']],
+                'to' => [($_ENV['LOG_EMAIL_TARGET_TO'] ?? '')],
                 'subject' => 'Log message | electricbass.ch',
             ],
         ],
