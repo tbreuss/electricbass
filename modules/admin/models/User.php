@@ -23,8 +23,8 @@ final class User extends \yii\base\BaseObject implements \yii\web\IdentityInterf
         return [
             '100' => [
                 'id' => '100',
-                'username' => $_ENV['ADMIN_USER'],
-                'password' => $_ENV['ADMIN_PASS'],
+                'username' => ($_ENV['ADMIN_USER'] ?? ''),
+                'password' => ($_ENV['ADMIN_PASS'] ?? ''),
                 'authKey' => 'test100key',
                 'accessToken' => '100-token',
             ]

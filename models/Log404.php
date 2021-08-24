@@ -39,7 +39,7 @@ final class Log404 extends ActiveRecord
         if (strlen($model->referrer) > 0) {
             $referrers = explode(';', $model->referrer);
         }
-        if (strlen($referrer) > 0) {
+        if (isset($referrer) && strlen($referrer) > 0) {
             $referrers[] = $referrer;
         }
 

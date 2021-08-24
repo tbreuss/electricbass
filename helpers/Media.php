@@ -38,6 +38,10 @@ final class Media
     public static function getBlogImages(int $id): array
     {
         $webroot = Yii::getAlias('@webroot/');
+        if ($webroot === false) {
+            return [];
+        }
+
         $allowed = ['jpeg', 'jpg', 'png', 'gif'];
         $pattern = "{$webroot}media/blog/{$id}/*.*";
         return self::globFiles($pattern, $allowed, $webroot);
@@ -84,6 +88,10 @@ final class Media
     public static function getLessonImages(int $id): array
     {
         $webroot = Yii::getAlias('@webroot/');
+        if ($webroot === false) {
+            return [];
+        }
+
         $allowed = ['jpeg', 'jpg', 'png', 'gif'];
         $pattern = "{$webroot}media/blog/{$id}/*.*";
         return self::globFiles($pattern, $allowed, $webroot);
@@ -92,12 +100,16 @@ final class Media
     public static function getWebsiteImage(string $url): string
     {
         $url = str_replace(['http://', 'https://'], '', $url);
-        if (strpos($url, 'www.') === 0) {
+        if (str_starts_with($url, 'www.')) {
             $url = substr($url, 4);
         }
         $initial = substr($url, 0, 1);
 
         $webroot = Yii::getAlias('@webroot/');
+        if ($webroot === false) {
+            return '';
+        }
+
         $allowed = ['jpeg', 'jpg', 'png', 'gif'];
         $pattern = "{$webroot}media/website/{$initial}/{$url}.*";
         $images = self::globFiles($pattern, $allowed, $webroot);
@@ -112,27 +124,6 @@ final class Media
     {
         $relpath = self::getImage($context, $id);
         return Html::img('@web/' . $relpath, $options);
-    }
-
-    public static function xxx(int $id, string $context): string
-    {
-
-        $relPaths = [
-            sprintf('media/blog/%s/%s', $id, $id),
-            sprintf('media/a/%s/%s', $id, $id)
-        ];
-
-        foreach ($relPaths as $relPath) {
-            $absPath = Yii::getAlias('@webroot/' . $relPath);
-            if (is_file($absPath)) {
-                $url = Yii::getAlias('@web/' . $relPath);
-                if ($url !== false) {
-                    return $url;
-                }
-            }
-        }
-
-        return '';
     }
 
     public static function hasImage(string $context, int $id): bool
@@ -159,6 +150,10 @@ final class Media
         $context = self::$CONTEXT_MAPPING[$context];
 
         $webroot = Yii::getAlias('@webroot/');
+        if ($webroot === false) {
+            return [];
+        }
+
         $allowed = ['jpeg', 'jpg', 'png', 'gif'];
         $pattern = "{$webroot}{$type}/{$context}/{$id}-*.*";
 

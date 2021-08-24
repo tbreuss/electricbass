@@ -2,7 +2,7 @@
 
 namespace app\entities;
 
-class AtoZEntry
+final class AtoZEntry
 {
     private string $title;
     private string $url;

@@ -4,7 +4,6 @@ namespace app\widgets;
 
 use app\models\Lesson;
 use app\models\Website;
-use ParseError;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Markdown;
@@ -95,7 +94,7 @@ final class Parser extends Widget
     }
 
     /**
-     * @phpstan-param array<string, int|string> $options
+     * @phpstan-param array<string, mixed> $options
      */
     public static function image(array $options, string $content): string
     {
@@ -129,23 +128,26 @@ final class Parser extends Widget
 
     /**
      * @phpstan-return array{int, int}|null
+     * @todo Log error
      */
     private static function getImageSize(string $url): ?array
     {
-        $path = Yii::getAlias('@app/web/' . $url);
         try {
+            $path = Yii::getAlias('@app/web/' . $url);
+            if (is_bool($path)) {
+                return null;
+            }
             $size = getimagesize($path);
-        } catch(\Exception $e) {
-            // TODO Fehler protokollieren
+            if ($size === false) {
+                return null;
+            }
+            if (!isset($size[0]) || !isset($size[1])) {
+                return null;
+            }
+            return [$size[0], $size[1]];
+        } catch(\Throwable) {
             return null;
         }
-        if ($size === false) {
-            return null;
-        }
-        if (!isset($size[0]) || !isset($size[1])) {
-            return null;
-        }
-        return [$size[0], $size[1]];
     }
 
     protected static function resolveImage(string $src): string
@@ -157,7 +159,9 @@ final class Parser extends Widget
         }
 
         if ($table == 'search') {
-            $table = self::$MODEL->tableName;
+            if (isset(self::$MODEL->tableName)) {
+                $table = self::$MODEL->tableName;
+            }
         }
 
         if ($table == 'blog') {
@@ -196,7 +200,7 @@ final class Parser extends Widget
     }
 
     /**
-     * @phpstan-param array{"title": string, "gallery", array} $options
+     * @phpstan-param array<string, mixed> $options
      */
     public static function jsongallery(array $options, string $content): string
     {
@@ -252,7 +256,7 @@ final class Parser extends Widget
             return self::renderPartial('htmlphp', [
                 'content' => $content
             ]);
-        } catch (ParseError $e) {
+        } catch (\Throwable) {
             // TODO Fehler protokollieren
             return $content;
         }
@@ -282,8 +286,14 @@ final class Parser extends Widget
 
         $midiPath = Yii::getAlias('@app/web/' . $relMidiPath);
         $midiUrl = Yii::getAlias('@web/' . $relMidiPath);
-        $midiSize = is_file($midiPath) ? filesize($midiPath) : 0;
-        $midiSize = ($midiSize > 0) ? Yii::$app->formatter->asShortSize($midiSize, 1) : '';
+        if (is_string($midiPath) && is_string($midiUrl) && is_file($midiPath)) {
+            $fileSize = filesize($midiPath);
+            $midiSizeAsInt = is_int($fileSize) ? $fileSize : 0;
+            $midiSize = ($midiSizeAsInt > 0) ? Yii::$app->formatter->asShortSize($midiSizeAsInt, 1) : '';
+        } else {
+            $midiUrl = '';
+            $midiSize = '';
+        }
 
         // PDF
         $relPdfPath = sprintf(
@@ -294,8 +304,14 @@ final class Parser extends Widget
 
         $pdfPath = Yii::getAlias('@app/web/' . $relPdfPath);
         $pdfUrl = Yii::getAlias('@web/' . $relPdfPath);
-        $pdfSize = is_file($pdfPath) ? filesize($pdfPath) : 0;
-        $pdfSize = ($pdfSize > 0) ? Yii::$app->formatter->asShortSize($pdfSize, 1) : '';
+        if (is_string($pdfPath) && is_string($pdfUrl) && is_file($pdfPath)) {
+            $fileSize = filesize($pdfPath);
+            $pdfSizeAsInt = is_int($fileSize) ? $fileSize : 0;
+            $pdfSize = ($pdfSizeAsInt > 0) ? Yii::$app->formatter->asShortSize($pdfSizeAsInt, 1) : '';
+        } else {
+            $pdfUrl = '';
+            $pdfSize = '';
+        }
 
         $imageUrl = sprintf(
             '/%s/%s.cropped.png',
@@ -339,17 +355,30 @@ final class Parser extends Widget
                     continue;
                 }
                 $path = Yii::getAlias('@app/web/' . $cells[0]);
+                if ($path === false) {
+                    continue;
+                }
 
                 if (!is_file($path)) {
                     continue;
                 }
 
                 $type = strtoupper(pathinfo($path, PATHINFO_EXTENSION));
+
                 $sizeInt = filesize($path);
+                if ($sizeInt === false) {
+                    continue;
+                }
+
                 $sizeHuman = ($sizeInt > 0) ? Yii::$app->formatter->asShortSize($sizeInt, 1) : '';
 
+                $url = Yii::getAlias('@web/' . $cells[0]);
+                if ($url === false) {
+                    continue;
+                }
+
                 $options['items'][] = [
-                    'url' => Yii::getAlias('@web/' . $cells[0]),
+                    'url' => $url,
                     'label' => $cells[1] ?? $cells[0],
                     'size' => strtoupper($sizeHuman),
                     'type' => $type
@@ -426,41 +455,19 @@ final class Parser extends Widget
         $data = Yii::$app->cache->get($cacheKey);
         if ($data === false) {
             $headers = get_headers('http://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=' . $id);
+            if ($headers === false) {
+                return;
+            }
             if (!strpos($headers[0], '200')) {
                 $message = sprintf("%s: missing video \"%s\" on page \"%s\"\n", date('Y-m-d H:i:s'), $id, Yii::$app->request->getUrl());
-                file_put_contents(Yii::getAlias('@app/runtime/youtube.txt'), $message, FILE_APPEND);
+                $alias = Yii::getAlias('@app/runtime/youtube.txt');
+                if ($alias === false) {
+                    return;
+                }
+                file_put_contents($alias, $message, FILE_APPEND);
             }
             Yii::$app->cache->set($cacheKey, $headers, 24*60);
         }
     }
-
-    /*protected static function getYouTubeFoto($key)
-    {
-        $blog = self::$MODEL;
-        $dir = Yii::getAlias(sprintf('@webroot/media/blog/%d', $blog->id));
-
-        if (!is_dir($dir)) {
-            mkdir($dir);
-        }
-
-        $file = Yii::getAlias(sprintf('@webroot/media/blog/%d/%s.jpg', $blog->id, $key));
-
-        if (!is_file($file)) {
-
-            $content = @file_get_contents("http://img.youtube.com/vi/$key/0.jpg");
-            if (!empty($content)) {
-                file_put_contents($file, $content);
-            }
-
-        }
-
-        if (is_file($file)) {
-
-            $blog->fotos = $key . '.jpg';
-            $blog->save(false, ['fotos']);
-
-        }
-
-    }*/
 
 }

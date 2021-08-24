@@ -31,7 +31,7 @@ BootstrapPluginAsset::register($this);
         }
     </style>
 </head>
-<body class="<?= Yii::$app->controller->id ?> <?= Yii::$app->controller->id ?>-<?= Yii::$app->controller->action->id ?>" itemscope itemtype="http://schema.org/WebPage">
+<body class="<?= Yii::$app->controller->id ?> <?= Yii::$app->controller->id ?>-<?= isset(Yii::$app->controller->action) ? Yii::$app->controller->action->id : 'nil' ?>" itemscope itemtype="http://schema.org/WebPage">
 <?php $this->beginBody() ?>
 
 <?php

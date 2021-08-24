@@ -4,7 +4,7 @@ namespace app\components;
 
 use yii\base\Component;
 
-class Shortcode extends Component
+final class Shortcode extends Component
 {
     /**
      * @var array

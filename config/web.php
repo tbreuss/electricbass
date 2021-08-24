@@ -8,7 +8,7 @@ $config = [
         'log',
         [
             'class' => 'app\filters\Redirect',
-            'enable' => ($_ENV['ENABLE_REDIRECTS'] === 'true'),
+            'enable' => (($_ENV['ENABLE_REDIRECTS'] ?? '') === 'true'),
             'filters' => [
                 'DotBot',
                 'AhrefsBot',
@@ -25,7 +25,7 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => $_ENV['COOKIE_VALIDATION_KEY'],
+            'cookieValidationKey' => ($_ENV['COOKIE_VALIDATION_KEY'] ?? ''),
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',

@@ -4,7 +4,7 @@ namespace app\assets;
 
 use yii\web\AssetBundle;
 
-class AppAsset extends AssetBundle
+final class AppAsset extends AssetBundle
 {
     /** @var string */
     public $sourcePath = '@app/assets/app/dist';

@@ -29,7 +29,10 @@ function highlightWords(string $text, string $words): string
     $words = array_map('trim', $words);
     foreach ($words as $word) {
         if (empty($word)) continue;
-        $text = preg_replace('/\b(' . $word . ')\b/iu', '<span class="search-results__highlight">$1</span>', $text);
+        $highlightedText = preg_replace('/\b(' . $word . ')\b/iu', '<span class="search-results__highlight">$1</span>', $text);
+        if (is_string($highlightedText)) {
+            $text = $highlightedText;
+        }
     }
     return $text;
 }

@@ -8,7 +8,7 @@ use Imagine\Image\ImageInterface;
 use yii\helpers\FileHelper;
 use yii\web\View;
 
-class Html extends \yii\helpers\Html
+final class Html extends \yii\helpers\Html
 {
     public static function hasMetaDescription(View $view): bool
     {
@@ -66,21 +66,28 @@ class Html extends \yii\helpers\Html
         // Macht aus der absoluten eine relative Url
         // Diese Url kann als Pfad benutzt werden
         $relUrl = $absUrl;
+
         $webRoot = \Yii::getAlias('@web');
-        if (!empty($webRoot)) {
-            if (strpos($absUrl, $webRoot) === 0) {
+        if ($webRoot === false) {
+            return ''; // TODO return not found image
+        }
+
+        if (strlen($webRoot) > 0) {
+            if (str_starts_with($absUrl, $webRoot)) {
                 $relUrl = substr($absUrl, strlen($webRoot));
             }
         }
+
         $relUrl = ltrim($relUrl, '/');
 
         // Bild mit originaler Breite und Höhe
         if (empty($width) && empty($height)) {
             $size = getimagesize($relUrl);
+            if ($size === false) {
+                return ''; // TODO return not found image
+            }
             $htmlOptions['width'] = $size[0];
             $htmlOptions['height'] = $size[1];
-            if ($returnAbsoluteUrl) {
-            }
             return Html::img($absUrl, $htmlOptions);
         }
 
@@ -104,10 +111,11 @@ class Html extends \yii\helpers\Html
 
         if (is_file($cachedUrl)) {
             $size = getimagesize($cachedUrl);
+            if ($size === false) {
+                return ''; // TODO return not found image
+            }
             $htmlOptions['width'] = $size[0];
             $htmlOptions['height'] = $size[1];
-            if ($returnAbsoluteUrl) {
-            }
             return Html::img('@web/' . $cachedUrl, $htmlOptions);
         }
 
@@ -130,9 +138,6 @@ class Html extends \yii\helpers\Html
                 ->interlace(ImageInterface::INTERLACE_PLANE)
                 ->save($cachedUrl, array('jpeg_quality' => 80, 'png_compression_level' => 8));
 
-        }
-
-        if ($returnAbsoluteUrl) {
         }
 
         return Html::img('@web/' . $cachedUrl, $htmlOptions);

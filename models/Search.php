@@ -59,8 +59,14 @@ final class Search extends ActiveRecord
         switch ($this->tableName) {
             case 'advertisement':
                 $webRoot = Yii::getAlias('@webroot/');
+                if ($webRoot === false) {
+                    return '';
+                }
                 $pattern = sprintf('%smedia/kleinanzeigen/%d-*.*', $webRoot, $this->id);
                 $result = glob($pattern, GLOB_NOSORT);
+                if ($result === false) {
+                    return '';
+                }
                 if (isset($result[0])) {
                     return str_replace($webRoot, '', $result[0]);
                 }
@@ -70,7 +76,8 @@ final class Search extends ActiveRecord
                 $image = Media::getImage($this->tableName, $this->id);
                 if (strlen($alias) > 0) {
                     $alias = rtrim($alias, '/') . '/';
-                    return Yii::getAlias($alias . $image);
+                    $aliasedImage = Yii::getAlias($alias . $image);
+                    return $aliasedImage === false ? '' : $aliasedImage;
                 }
                 return $image;
             case 'blog':
@@ -185,6 +192,10 @@ final class Search extends ActiveRecord
     public function getLastModAsAtom(): string
     {
         $date = empty($this->modified) ? date('Y-m-d H:i:s') : $this->modified;
-        return date(\DateTime::ATOM, strtotime($date));
+        $timestamp = strtotime($date);
+        if ($timestamp === false) {
+            return '';
+        }
+        return date(\DateTime::ATOM, $timestamp);
     }
 }

@@ -3,7 +3,6 @@
 namespace app\widgets;
 
 use app\models\Comment;
-use JetBrains\PhpStorm\NoReturn;
 use Yii;
 use yii\base\Widget;
 
@@ -85,8 +84,8 @@ final class Comments extends Widget
      */
     protected function refresh(string $anchor = ''): void
     {
-        $url = Yii::$app->getRequest()->getUrl() . $anchor;
-        Yii::$app->getResponse()->redirect($url)->send();
+        $url = Yii::$app->request->getUrl() . $anchor;
+        Yii::$app->response->redirect($url)->send();
         exit;
     }
 

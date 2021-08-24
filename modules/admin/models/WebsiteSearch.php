@@ -9,7 +9,7 @@ use app\modules\admin\models\Website;
 /**
  * WebsiteSearch represents the model behind the search form of `app\modules\admin\models\Website`.
  */
-class WebsiteSearch extends Website
+final class WebsiteSearch extends Website
 {
     /**
      * @phpstan-return array<int, array>

@@ -9,7 +9,7 @@ use app\modules\admin\models\Blog;
 /**
  * BlogSearch represents the model behind the search form of `app\modules\admin\models\Blog`.
  */
-class BlogSearch extends Blog
+final class BlogSearch extends Blog
 {
     /**
      * @phpstan-return array<int, array>

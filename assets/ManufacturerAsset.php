@@ -4,7 +4,7 @@ namespace app\assets;
 
 use yii\web\AssetBundle;
 
-class ManufacturerAsset extends AssetBundle
+final class ManufacturerAsset extends AssetBundle
 {
     /** @var string */
     public $sourcePath = '@app/views/manufacturer';

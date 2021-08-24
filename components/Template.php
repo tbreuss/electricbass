@@ -39,7 +39,7 @@ namespace app\components;
  *
  */
 
-class Template {
+final class Template {
   var $classname = "Template";
 
   /* if set, echo assignments */

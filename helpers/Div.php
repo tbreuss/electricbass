@@ -6,9 +6,8 @@ use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Yii;
-use yii\db\ActiveRecord;
 
-class Div
+final class Div
 {
 
     /**
@@ -16,11 +15,21 @@ class Div
      */
 	public static function getGoogleMapCoords(string $address): array
     {
+        $default = array(
+            'latitude' => 0,
+            'longitude' => 0
+        );
+
         $query = urlencode($address);
         $request = sprintf('http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false', $query);
 		$response = file_get_contents($request);
+
+		if (is_bool($response)) {
+		    return $default;
+        }
+
         $responseArr = json_decode($response, true);
-        if($responseArr['status']=='OK') {
+        if(is_array($responseArr) && ($responseArr['status'] == 'OK')) {
             if(isset($responseArr['results'][0]['geometry']['location'])) {
                 $location = $responseArr['results'][0]['geometry']['location'];
                 return array(
@@ -29,10 +38,8 @@ class Div
                 );
             }
         }
-        return array(
-            'latitude' => 0,
-            'longitude' => 0
-        );
+
+        return $default;
     }
 
     public static function createAccessCode(int $id): string
@@ -84,30 +91,6 @@ class Div
         return strtoupper(mb_substr($str, 0, 1, 'utf-8'));
     }
 
-    public static function createTempMidiFileName(): string
-    {
-        $save_dir = 'tmp';
-
-        $d = dir($save_dir);
-        while (false !== ($entry = $d->read())) {
-            if(!empty($entry) && ($entry != '.') && ($entry != '..')) {
-                $filepath = $save_dir.'/'.$entry;
-                $filemtime = filemtime($filepath);
-                if(empty($filemtime)) {
-                    touch($filepath, time());
-                }
-                $filemtime = filemtime($filepath);
-                if((time() - $filemtime) > 3660) {
-                    unlink($filepath);
-                }
-            }
-        }
-        $d->close();
-
-        srand((int)microtime() * 1000000);
-        return $save_dir.'/'.rand().'.mid';
-    }
-
     /**
      * @return array<int, int>
      */
@@ -137,7 +120,11 @@ class Div
     public static function normalizeUrlSegment(string $urlSegment): string
     {
         // @see: http://ch2.php.net/manual/de/function.preg-replace.php
-        return strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), self::removeAccent($urlSegment)));
+        $normalizedSegment = preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), self::removeAccent($urlSegment));
+        if (!is_string($normalizedSegment)) {
+            return $urlSegment;
+        }
+        return strtolower($normalizedSegment);
     }
 
     /**
@@ -146,8 +133,9 @@ class Div
      */
     public static function extractTags(array $models): array
     {
-        $tags = array();
+        $tags = [];
         foreach($models AS $model) {
+            /* @phpstan-ignore-next-line */
             $tags = array_merge($tags, explode(',', $model->tags));
         }
         return array_unique($tags);
@@ -185,25 +173,6 @@ class Div
         return $string;
     }
 
-    function uniqueFilename(string $path, string $suffix, int $length=8): string
-    {
-        do {
-            $file = $path."/".self::randStr($length).'.'.$suffix;
-            $fp = fopen($file, 'x');
-        }
-        while(!$fp);
-        fclose($fp);
-        return $file;
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function string2array(string $tags): array
-    {
-        return preg_split('/\s*,\s*/',trim($tags),-1,PREG_SPLIT_NO_EMPTY);
-    }
-
     /**
      * @param string[] $tags
      */
@@ -228,8 +197,18 @@ class Div
     public static function filterFilename(string $filename, string $pathname): string
     {
         $tmp = preg_replace('/^\W+|\W+$/', '', $filename); // remove all non-alphanumeric chars at begin & end of string
+        if (!is_string($tmp)) {
+            return $filename;
+        }
         $tmp = preg_replace('/\s+/', '_', $tmp); // compress internal whitespace and replace with _
-        $tmp = strtolower(preg_replace('/\W-/', '', $tmp)); // remove all non-alphanumeric chars except _ and -
+        if (!is_string($tmp)) {
+            return $filename;
+        }
+        $tmp = preg_replace('/\W-/', '', $tmp);
+        if (!is_string($tmp)) {
+            return $filename;
+        }
+        $tmp = strtolower($tmp); // remove all non-alphanumeric chars except _ and -
         return Div::getUniqueFilename($tmp, $pathname);
     }
 
@@ -240,8 +219,11 @@ class Div
     {
         $info = pathinfo($filename);
         $i=1;
-        while(is_file($pathname.$filename)) {
-            $filename = $info['filename'].'-'.$i.'.'.$info['extension'];
+        while(is_file($pathname . $filename)) {
+            $filename = $info['filename'] . '-' . $i;
+            if (!empty($info['extension'])) {
+                $filename .= '.' . $info['extension'];
+            }
             $i++;
             if($i>1000) throw new \Exception('Irgendwas ist beim Upload schiefgelaufen');
         }
