@@ -9,13 +9,9 @@
     <h2 class="socialbar__title">Share</h2>
 
     <?php
-
-    /**
-     * Erstellt mit
-     * - https://sharingbuttons.io
-     * - https://github.com/mxstbr/sharingbuttons.io
-    */
-
+    // Erstellt mit
+    // - https://sharingbuttons.io
+    // - https://github.com/mxstbr/sharingbuttons.io
     ?>
 
     <!-- Sharingbutton Facebook -->

@@ -4,11 +4,11 @@
     <arg name="colors"/>
     <arg value="sp"/>
     <arg name="extensions" value="php"/>
-
     <!-- ignore warnings and display ERRORS only -->
     <arg  value="np"/>
 
     <config name="ignore_warnings_on_exit" value="1"/>
+    <config name="php_version" value="80000"/>
 
     <file>./assets</file>
     <file>./commands</file>
@@ -20,7 +20,7 @@
     <file>./helpers</file>
     <file>./mail</file>
     <file>./messages</file>
-    <file>./migrations</file>
+    <!-- <file>./migrations</file> -->
     <file>./models</file>
     <file>./modules</file>
     <file>./traits</file>
@@ -34,6 +34,18 @@
     <rule ref="Squiz.ControlStructures.ControlSignature">
         <properties>
             <property name="requiredSpacesBeforeColon" value="0" />
+        </properties>
+    </rule>
+    <rule ref="Generic.Metrics.CyclomaticComplexity">
+        <properties>
+            <property name="complexity" value="10" />
+            <property name="absoluteComplexity" value="50"/>
+        </properties>
+    </rule>
+    <rule ref="Generic.Metrics.NestingLevel">
+        <properties>
+            <property name="nestingLevel" value="2"/>
+            <property name="absoluteNestingLevel" value="4"/>
         </properties>
     </rule>
 </ruleset>
