@@ -9,7 +9,7 @@
 <div class="shortcode shortcode--downloads downloads">
     <h3 class="downloads__title"><?= $title ?></h3>
     <div class="downloads__name">Dateien zum Herunterladen</div>
-    <?php foreach ($items as $item): ?>
+    <?php foreach ($items as $item) : ?>
         <div class="downloads__item">
             <div class="downloads__linkSize">
                 <a class="downloads__link downloads__link--<?= strtolower($item['type']) ?>" href="<?= $item['url'] ?>"><?= $item['label'] ?></a>

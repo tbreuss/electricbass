@@ -106,7 +106,7 @@ final class CatalogController extends Controller
             'title' => $this->getListTitle($category),
             'sidebarTitle' => $this->getSidebarTitle($category),
             'pageTitle' => $this->getPageTitle($category, $provider),
-            'metaDescription' => $this->getMetaDescription($category,$provider),
+            'metaDescription' => $this->getMetaDescription($category, $provider),
             'filter' => $filter,
             'category' => $category,
             'context' => $this->getContext($category),
@@ -228,9 +228,9 @@ final class CatalogController extends Controller
         }
 
         $categories = [
-            'lehrbuecher' => sprintf('Du willst E-Bass spielen lernen? Hier findest du Lehrbücher mit CDs zum selber lernen. Mit Noten, TABs und Playalongs - Seite %d von %d', $pagination->page+1, $pagination->pageCount),
-            'buecher' => sprintf('Allgemeine Bücher zum Thema Bass für Bassisten, E-Bassisten und Musikinteressierte - Seite %d von %d', $pagination->page+1, $pagination->pageCount),
-            'dvds' => sprintf('Du willst E-Bass spielen lernen? Hier findest du Lehrbücher/-videos mit DVDs zum selber lernen. Mit Videos, Noten, TABs und Playalongs - Seite %d von %d', $pagination->page+1, $pagination->pageCount)
+            'lehrbuecher' => sprintf('Du willst E-Bass spielen lernen? Hier findest du Lehrbücher mit CDs zum selber lernen. Mit Noten, TABs und Playalongs - Seite %d von %d', $pagination->page + 1, $pagination->pageCount),
+            'buecher' => sprintf('Allgemeine Bücher zum Thema Bass für Bassisten, E-Bassisten und Musikinteressierte - Seite %d von %d', $pagination->page + 1, $pagination->pageCount),
+            'dvds' => sprintf('Du willst E-Bass spielen lernen? Hier findest du Lehrbücher/-videos mit DVDs zum selber lernen. Mit Videos, Noten, TABs und Playalongs - Seite %d von %d', $pagination->page + 1, $pagination->pageCount)
         ];
         return $categories[$category] ?? '';
     }
@@ -247,7 +247,7 @@ final class CatalogController extends Controller
 
     public function getContext(string $category): string
     {
-        switch($category) {
+        switch ($category) {
             case 'buecher':
                 return 'buch';
             case 'lehrbuecher':
@@ -257,5 +257,4 @@ final class CatalogController extends Controller
         }
         return '';
     }
-
 }

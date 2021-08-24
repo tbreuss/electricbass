@@ -67,5 +67,4 @@ final class FingeringController extends Controller
             'similars' => $similars
         ]);
     }
-
 }

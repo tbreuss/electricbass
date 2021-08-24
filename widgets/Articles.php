@@ -46,5 +46,4 @@ final class Articles extends Widget
             'models' => $models
         ));
     }
-
 }

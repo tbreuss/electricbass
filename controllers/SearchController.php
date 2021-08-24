@@ -29,7 +29,7 @@ final class SearchController extends Controller
 
     public function actionIndex(?string $term = null): string
     {
-        $searched = $term !== NULL;
+        $searched = $term !== null;
         $term = isset($term) ? trim($term) : '';
 
         $term = $this->filterTerm($term);
@@ -37,18 +37,16 @@ final class SearchController extends Controller
         $provider = null;
 
         if (!empty($term) && (mb_strlen($term) >= SearchController::MIN_QUERY_LENGTH)) {
-
             $condition = '';
             $fields = array('title', 'subtitle', 'abstract', 'content'/*, 'tags'*/);
             $queryParts = explode(' ', $term);
             $queryParts = array_filter($queryParts, array($this, 'filterQueryParts'));
 
             if (count($queryParts) > 0) {
-
                 $conditions = array();
-                foreach ($fields AS $field) {
+                foreach ($fields as $field) {
                     $subConditions = array();
-                    foreach ($queryParts AS $queryPart) {
+                    foreach ($queryParts as $queryPart) {
                         //$subConditions[] = "$field LIKE '%$queryPart%'";
                         $queryPart = addslashes($queryPart);
                         $subConditions[] = "$field REGEXP '[[:<:]]{$queryPart}[[:>:]]'";
@@ -102,7 +100,6 @@ final class SearchController extends Controller
                 ],
                 'sort' => $sort,
             ]);
-
         }
 
         if (!empty($term) && empty($_GET['page']) && isset($provider) && ($provider->getTotalCount() > 0)) {
@@ -135,5 +132,4 @@ final class SearchController extends Controller
         }
         return $filteredTerm2;
     }
-
 }

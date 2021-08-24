@@ -81,7 +81,7 @@ final class Lesson extends ActiveRecord
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_LESSON_IDS', []);
-        if(!in_array($this->id, $ids)) {
+        if (!in_array($this->id, $ids)) {
             $this->updateCounters(['hits' => 1]);
             $ids[] = $this->id;
             Yii::$app->session->set('HITS_LESSON_IDS', $ids);
@@ -92,5 +92,4 @@ final class Lesson extends ActiveRecord
     {
         return empty($this->navtitle) ? $this->title : $this->navtitle;
     }
-
 }

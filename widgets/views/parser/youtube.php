@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var string $title
  * @var string $key
@@ -6,6 +7,7 @@
  */
 use yii\helpers\Markdown;
 use yii\widgets\Spaceless;
+
 ?>
 
 <?php #$this->registerCssFile("@web/css/video.css") ?>
@@ -13,7 +15,7 @@ use yii\widgets\Spaceless;
 <?php Spaceless::begin() ?>
 <div class="shortcode shortcode--video">
 
-    <?php if (!empty($title)): ?>
+    <?php if (!empty($title)) : ?>
         <h3><?php echo $title ?></h3>
     <?php endif; ?>
 
@@ -22,7 +24,7 @@ use yii\widgets\Spaceless;
         <iframe src="https://www.youtube.com/embed/<?php echo $key ?>?rel=0" frameborder="0" allowfullscreen></iframe>
     </div>
 
-    <?php if (empty($text)): ?>
+    <?php if (empty($text)) : ?>
         <div style="margin-top:0.7em">
             <?php echo Markdown::process($text) ?>
         </div>

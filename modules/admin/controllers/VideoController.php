@@ -154,7 +154,7 @@ final class VideoController extends Controller
     private function generateRandomString(int $length): string
     {
         $security = new Security();
-        while(true) {
+        while (true) {
             $string = $security->generateRandomString($length);
             if (strpos($string, '-') === false) {
                 if (strpos($string, '_') === false) {

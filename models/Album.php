@@ -276,7 +276,7 @@ final class Album extends ActiveRecord
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_ALBUM_IDS', []);
-        if(!in_array($this->id, $ids)) {
+        if (!in_array($this->id, $ids)) {
             $this->updateCounters(['hits' => 1]);
             $ids[] = $this->id;
             Yii::$app->session->set('HITS_ALBUM_IDS', $ids);
@@ -294,7 +294,6 @@ final class Album extends ActiveRecord
         $tracklist = [];
         $lines = explode("\n", $this->tracklist);
         foreach ($lines as $line) {
-
             $line = trim($line);
 
             $match = preg_match("/^([0-9]+)\.\s(.*)\s(\(?[0-9]+\:?[0-9]+\)?)$/", $line, $matches);

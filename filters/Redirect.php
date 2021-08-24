@@ -90,5 +90,4 @@ final class Redirect extends BaseObject implements BootstrapInterface
         }
         return false;
     }
-
 }

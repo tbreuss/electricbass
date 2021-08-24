@@ -91,7 +91,7 @@ final class Manufacturer extends ActiveRecord
                 'strings',
                 'amps',
                 'gear',
-                'assortment' => function($m) {
+                'assortment' => function ($m) {
                     return $m->getSortiment();
                 },
                 'visits',
@@ -99,7 +99,7 @@ final class Manufacturer extends ActiveRecord
                 'visitUrl' => function ($m) {
                     return strlen($m->website) === 0 ? '' : Url::to(['visit', 'id' => $m->id]);
                 },
-                'text' => function($m) {
+                'text' => function ($m) {
                     $text = '';
                     if ($m->country) {
                         $text .= sprintf('Das Unternehmen %s ist ein Hersteller aus %s. ', $m->name, $m->country->name);

@@ -63,7 +63,7 @@ final class Video extends ActiveRecord
 
         $query = self::find()
             ->select('id, title, platform, key, abstract, url, created, modified')
-            ->where(['deleted' => NULL])
+            ->where(['deleted' => null])
             ->orderBy($sort->orders);
 
         return new ActiveDataProvider([
@@ -77,11 +77,11 @@ final class Video extends ActiveRecord
 
     public static function findOneOrNull(string $eid): ?Video
     {
-        $video = self::find()->where(['deleted' => NULL, 'url' => $eid])->one();
+        $video = self::find()->where(['deleted' => null, 'url' => $eid])->one();
         if ($video) {
             return $video;
         }
-        $video = self::find()->where(['deleted' => NULL, 'eid' => $eid])->one();
+        $video = self::find()->where(['deleted' => null, 'eid' => $eid])->one();
         if ($video) {
             return $video;
         }
@@ -95,7 +95,7 @@ final class Video extends ActiveRecord
     {
         return self::find()
             ->select('url, platform, key, title, abstract, tags, modified')
-            ->where(['deleted' => NULL])
+            ->where(['deleted' => null])
             ->andWhere(['<>', 'id', $id])
             ->orderBy('modified DESC')
             ->limit(9)
@@ -131,11 +131,10 @@ final class Video extends ActiveRecord
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_BLOG_IDS', []);
-        if(!in_array($this->id, $ids)) {
+        if (!in_array($this->id, $ids)) {
             $this->updateCounters(['hits' => 1]);
             $ids[] = $this->id;
             Yii::$app->session->set('HITS_BLOG_IDS', $ids);
         }
     }
-
 }

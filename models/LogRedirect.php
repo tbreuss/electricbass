@@ -50,7 +50,8 @@ final class LogRedirect extends ActiveRecord
         $model->code = $code;
         $model->referrer = strlen($referrer) > 0 ? $referrer : null;
         $model->redirect = $redirect;
-        $model->userAgent = (isset($userAgent) && strlen($userAgent)) > 0 ? $userAgent : null;;
+        $model->userAgent = (isset($userAgent) && strlen($userAgent)) > 0 ? $userAgent : null;
+        ;
         $model->counter += 1;
         $model->modified = $now;
 

@@ -194,5 +194,4 @@ final class Comment extends ActiveRecord
 
         return $count;
     }
-
 }

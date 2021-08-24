@@ -33,5 +33,4 @@ final class Url extends \yii\helpers\Url
             ($_ENV['AMAZON_PAAPI5_PARTNER_TAG'] ?? '')
         );
     }
-
 }

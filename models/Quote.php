@@ -76,5 +76,4 @@ final class Quote extends ActiveRecord
         }
         return $this->text_en;
     }
-
 }

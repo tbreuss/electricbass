@@ -29,7 +29,7 @@ final class Module extends \yii\base\Module
                 'errorAction' => '/admin/default/error'
             ],
             'user' => [
-                'class'=>'yii\web\User',
+                'class' => 'yii\web\User',
                 'identityClass' => 'app\modules\admin\models\User',
                 'enableAutoLogin' => true,
                 'loginUrl' => Url::to(['/admin/default/login'])

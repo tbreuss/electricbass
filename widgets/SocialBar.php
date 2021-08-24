@@ -25,5 +25,4 @@ final class SocialBar extends Widget
     {
         return 'https://www.electricbass.ch/' . Yii::$app->request->pathInfo;
     }
-
 }

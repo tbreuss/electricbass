@@ -42,7 +42,7 @@ final class Hits extends Widget
     {
         $sessionKey = $this->getSessionKey();
         $ids = Yii::$app->session->get($sessionKey, []);
-        if(in_array($this->tableId, $ids)) {
+        if (in_array($this->tableId, $ids)) {
             return true;
         }
         return false;
@@ -52,7 +52,7 @@ final class Hits extends Widget
     {
         $sessionKey = $this->getSessionKey();
         $ids = Yii::$app->session->get($sessionKey, []);
-        if(!in_array($this->tableId, $ids)) {
+        if (!in_array($this->tableId, $ids)) {
             $ids[] = $this->tableId;
             Yii::$app->session->set($sessionKey, $ids);
         }
@@ -88,5 +88,4 @@ final class Hits extends Widget
 
         return ($updated > 0);
     }
-
 }

@@ -119,5 +119,4 @@ final class Comments extends Widget
             ->bindValue(':id', $id)
             ->execute();
     }
-
 }

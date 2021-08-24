@@ -61,11 +61,10 @@ final class Fingering extends ActiveRecord
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_FINGERING_IDS', []);
-        if(!in_array($this->id, $ids)) {
+        if (!in_array($this->id, $ids)) {
             $this->updateCounters(['hits' => 1]);
             $ids[] = $this->id;
             Yii::$app->session->set('HITS_FINGERING_IDS', $ids);
         }
     }
-
 }

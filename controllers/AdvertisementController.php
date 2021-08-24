@@ -32,12 +32,11 @@ final class AdvertisementController extends Controller
     public function actionContact(string $id): Response|string
     {
         $advertisement = Advertisement::findById($id, true);
-        $model = new AdvertisementContactForm;
+        $model = new AdvertisementContactForm();
 
         if (isset($_POST['AdvertisementContactForm'])) {
             $model->attributes = $_POST['AdvertisementContactForm'];
             if ($model->validate()) {
-
                 if (empty($model->nspm)) {
                     $this->sendContactMail($model, $advertisement);
                     $advertisement->updateCounters(array('requests' => 1));
@@ -54,7 +53,6 @@ final class AdvertisementController extends Controller
             'model' => $model,
             'advertisement' => $advertisement
         ));
-
     }
 
     public function actionView(string $id): Response|string

@@ -115,7 +115,9 @@ function grap_favicon(array $options = []): string
     }
 
     // FOR DEBUG ONLY
-    if ($DEBUG == 'debug') print('<b style="color:red;">Domain</b> #' . @$domain . '#<br>');
+    if ($DEBUG == 'debug') {
+        print('<b style="color:red;">Domain</b> #' . @$domain . '#<br>');
+    }
 
     // Make Path & Filename
     $filePath = preg_replace('#\/\/#', '/', $directory . '/' . $domain . '.png');
@@ -123,10 +125,8 @@ function grap_favicon(array $options = []): string
 
     // If Favicon not already exists local
     if (!file_exists($filePath) or @filesize($filePath) == 0) {
-
         // If $trySelf == TRUE ONLY USE APIs
-        if (isset($trySelf) and $trySelf == TRUE) {
-
+        if (isset($trySelf) and $trySelf == true) {
             // Load Page
             $html = load($url, $DEBUG);
 
@@ -136,13 +136,13 @@ function grap_favicon(array $options = []): string
                 $regExPattern = '/href=(\'|\")(.*?)\1/i';
                 if (isset($matchTag[1]) and @preg_match($regExPattern, $matchTag[1], $matchUrl)) {
                     if (isset($matchUrl[2])) {
-
                         // Build Favicon Link
                         $favicon = rel2abs(trim($matchUrl[2]), 'http://' . $domain . '/');
 
                         // FOR DEBUG ONLY
-                        if ($DEBUG == 'debug') print('<b style="color:red;">Match</b> #' . @$favicon . '#<br>');
-
+                        if ($DEBUG == 'debug') {
+                            print('<b style="color:red;">Match</b> #' . @$favicon . '#<br>');
+                        }
                     }
                 }
             }
@@ -156,12 +156,10 @@ function grap_favicon(array $options = []): string
                     unset($favicon);
                 }
             }
-
         } // END If $trySelf == TRUE ONLY USE APIs
 
         // If nothink works: Get the Favicon from API
         if (!isset($favicon) or empty($favicon)) {
-
             // Select API by Random
             $random = rand(1, 3);
 
@@ -172,11 +170,10 @@ function grap_favicon(array $options = []): string
 
             // Favicongrabber API
             if ($random == 2 or empty($favicon)) {
-                $echo = json_decode(load('http://favicongrabber.com/api/grab/' . $domain, ''), TRUE);
+                $echo = json_decode(load('http://favicongrabber.com/api/grab/' . $domain, ''), true);
 
                 // Get Favicon URL from Array out of json data (@ if something went wrong)
                 $favicon = @$echo['icons']['0']['src'];
-
             }
 
             // Google API (check also md5() later)
@@ -185,27 +182,30 @@ function grap_favicon(array $options = []): string
             }
 
             // FOR DEBUG ONLY
-            if ($DEBUG == 'debug') print('<b style="color:red;">' . $random . '. API</b> #' . @$favicon . '#<br>');
-
+            if ($DEBUG == 'debug') {
+                print('<b style="color:red;">' . $random . '. API</b> #' . @$favicon . '#<br>');
+            }
         } // END If nothink works: Get the Favicon from API
 
         // Write Favicon local
         $filePath = preg_replace('#\/\/#', '/', $directory . '/' . $domain . '.png');
 
         // If Favicon should be saved
-        if (isset($save) and $save == TRUE) {
-
+        if (isset($save) and $save == true) {
             //  Load Favicon
             $content = load($favicon, $DEBUG);
 
             // If Google API don't know and deliver a default Favicon (World)
-            if (isset($random) and $random == 3 and
-                md5($content) == '3ca64f83fdcf25135d87e08af65e68c9') {
+            if (
+                isset($random) and $random == 3 and
+                md5($content) == '3ca64f83fdcf25135d87e08af65e68c9'
+            ) {
                 $domain = 'default'; // so we don't save a default icon for every domain again
 
                 // FOR DEBUG ONLY
-                if ($DEBUG == 'debug') print('<b style="color:red;">Google</b> #use default icon#<br>');
-
+                if ($DEBUG == 'debug') {
+                    print('<b style="color:red;">Google</b> #use default icon#<br>');
+                }
             }
 
             // Write
@@ -214,14 +214,13 @@ function grap_favicon(array $options = []): string
             fclose($fh);
 
             // FOR DEBUG ONLY
-            if ($DEBUG == 'debug') print('<b style="color:red;">Write-File</b> #' . @$filePath . '#<br>');
-
+            if ($DEBUG == 'debug') {
+                print('<b style="color:red;">Write-File</b> #' . @$filePath . '#<br>');
+            }
         } else {
-
             // Don't save Favicon local, only return Favicon URL
             $filePath = $favicon;
         }
-
     } // END If Favicon not already exists local
 
     // FOR DEBUG ONLY
@@ -246,7 +245,6 @@ function grap_favicon(array $options = []): string
 
     // Return Favicon Url
     return $filePath;
-
 } // END MAIN Function
 
 /* HELPER load use curl or file_get_contents (both with user_agent) and fopen/fread as fallback */
@@ -271,7 +269,7 @@ function load(string $url, string $DEBUG): string
         );
         $context = stream_context_create($context);
         if (!function_exists('file_get_contents')) {
-            $fh = fopen($url, 'r', FALSE, $context);
+            $fh = fopen($url, 'r', false, $context);
             $content = '';
             while (!feof($fh)) {
                 $content .= fread($fh, 128); // Because filesize() will not work on URLS?
@@ -294,11 +292,19 @@ function rel2abs(string $rel, string $base): string
     /** @var string $host */
     /** @var string $path */
 
-    if (strpos($rel, "//") === 0) return $scheme . ':' . $rel;
-    if (parse_url($rel, PHP_URL_SCHEME) != '') return $rel;
-    if ($rel[0] == '#' or $rel[0] == '?') return $base . $rel;
+    if (strpos($rel, "//") === 0) {
+        return $scheme . ':' . $rel;
+    }
+    if (parse_url($rel, PHP_URL_SCHEME) != '') {
+        return $rel;
+    }
+    if ($rel[0] == '#' or $rel[0] == '?') {
+        return $base . $rel;
+    }
     $path = preg_replace('#/[^/]*$#', '', $path);
-    if ($rel[0] == '/') $path = '';
+    if ($rel[0] == '/') {
+        $path = '';
+    }
     $abs = $host . $path . "/" . $rel;
     $abs = preg_replace("/(\/\.?\/)/", "/", $abs);
     $abs = preg_replace("/\/(?!\.\.)[^\/]+\/\.\.\//", "/", $abs);

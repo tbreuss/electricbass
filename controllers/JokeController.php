@@ -20,5 +20,4 @@ final class JokeController extends Controller
             'sort' => $provider->getSort()
         ]);
     }
-
 }

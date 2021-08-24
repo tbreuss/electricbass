@@ -20,5 +20,4 @@ final class QuoteController extends Controller
             'sort' => $provider->getSort()
         ]);
     }
-
 }

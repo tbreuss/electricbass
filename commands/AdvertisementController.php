@@ -7,7 +7,6 @@ use Yii;
 use yii\console\Controller;
 use yii\db\Expression;
 
-
 final class AdvertisementController extends Controller
 {
 
@@ -19,7 +18,7 @@ final class AdvertisementController extends Controller
         $message = '';
 
         $models = Advertisement::findAllForReminders();
-        foreach ($models AS $model) {
+        foreach ($models as $model) {
             $this->sendReminderMail($model);
             $model->reminded = new Expression('NOW()');
             $model->save(false, ['reminded']);
@@ -65,5 +64,4 @@ final class AdvertisementController extends Controller
 
         return $message->send();
     }
-
 }

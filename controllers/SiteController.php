@@ -146,7 +146,6 @@ final class SiteController extends Controller
 
         $exception = Yii::$app->errorHandler->exception;
         if ($exception instanceof \yii\web\NotFoundHttpException) {
-
             // - www.electricbass.ch/12994
             // - www.electricbass.ch/links/le-fay-1525
 
@@ -159,7 +158,6 @@ final class SiteController extends Controller
                 if ($model) {
                     return $this->redirect($model->url, 301)->send();
                 }
-
             }
 
             // basierend auf context und id
@@ -189,5 +187,4 @@ final class SiteController extends Controller
         }
         return $this->render('error', ['exception' => $exception]);
     }
-
 }

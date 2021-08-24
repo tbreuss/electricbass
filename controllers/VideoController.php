@@ -81,7 +81,7 @@ final class VideoController extends Controller
         }
 
         $tags = array_unique($tags);
-        $tags = array_map(function($t) {
+        $tags = array_map(function ($t) {
             return ['name' => trim($t)];
         }, $tags);
 
@@ -161,9 +161,7 @@ final class VideoController extends Controller
             \Yii::$app->db->createCommand()
                 ->insert('redirect', $columns)
                 ->execute();
-
         }
         die('Migration finished');
     }
-
 }

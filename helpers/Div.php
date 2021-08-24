@@ -13,7 +13,7 @@ final class Div
     /**
      * @phpstan-return array{"latitude": float, "longitude": float}
      */
-	public static function getGoogleMapCoords(string $address): array
+    public static function getGoogleMapCoords(string $address): array
     {
         $default = array(
             'latitude' => 0,
@@ -22,15 +22,15 @@ final class Div
 
         $query = urlencode($address);
         $request = sprintf('http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false', $query);
-		$response = file_get_contents($request);
+        $response = file_get_contents($request);
 
-		if (is_bool($response)) {
-		    return $default;
+        if (is_bool($response)) {
+            return $default;
         }
 
         $responseArr = json_decode($response, true);
-        if(is_array($responseArr) && ($responseArr['status'] == 'OK')) {
-            if(isset($responseArr['results'][0]['geometry']['location'])) {
+        if (is_array($responseArr) && ($responseArr['status'] == 'OK')) {
+            if (isset($responseArr['results'][0]['geometry']['location'])) {
                 $location = $responseArr['results'][0]['geometry']['location'];
                 return array(
                     'latitude' => $location['lat'],
@@ -48,7 +48,7 @@ final class Div
         return md5($string);
     }
 
-    public static function getJsonValue(string $json, string $key, ?string $default=null): string
+    public static function getJsonValue(string $json, string $key, ?string $default = null): string
     {
         $values = json_decode($json, true);
         return $values[$key] ?? $default;
@@ -60,25 +60,25 @@ final class Div
      */
     public static function articleImage(array $row): string
     {
-        if(!isset($row['aId'])) {
+        if (!isset($row['aId'])) {
             throw new \Exception('Fehler in Div::articleImage(). Key aId fehlt in Array $row.');
         }
-        if(!empty($row['aFotos'])) {
-            if(mb_substr($row['aFotos'],0,7,'utf-8') == 'http://') {
+        if (!empty($row['aFotos'])) {
+            if (mb_substr($row['aFotos'], 0, 7, 'utf-8') == 'http://') {
                 return $row['aFotos'];
             }
-            $filepath = 'media/a/'.$row['aId'].'/'.$row['aFotos'];
-            if(is_file($filepath)) {
+            $filepath = 'media/a/' . $row['aId'] . '/' . $row['aFotos'];
+            if (is_file($filepath)) {
                 return $filepath;
             }
         }
         /*if(!isset($row['cId'], $row['aContent'])) {
             throw new Exception('Key categoryId oder content fehlen in Array $row');
         }*/
-        if($row['cId']==7) {
+        if ($row['cId'] == 7) {
             /** @var array<string, string> $data */
             $data = json_decode($row['aContent'], true);
-            if(isset($data['key']) && ($data['service']=='YT') && !empty($data['key'])) {
+            if (isset($data['key']) && ($data['service'] == 'YT') && !empty($data['key'])) {
                 $url = sprintf('http://img.youtube.com/vi/%s/0.jpg', $data['key']);
                 return $url;
             }
@@ -94,11 +94,11 @@ final class Div
     /**
      * @return array<int, int>
      */
-    public static function range(int $low, int $hight, int $step=1): array
+    public static function range(int $low, int $hight, int $step = 1): array
     {
         $rArray = array();
         $tmpRange = range($low, $hight, $step);
-        foreach($tmpRange AS $val) {
+        foreach ($tmpRange as $val) {
             $rArray[$val] = $val;
         }
         return $rArray;
@@ -134,7 +134,7 @@ final class Div
     public static function extractTags(array $models): array
     {
         $tags = [];
-        foreach($models AS $model) {
+        foreach ($models as $model) {
             /* @phpstan-ignore-next-line */
             $tags = array_merge($tags, explode(',', $model->tags));
         }
@@ -143,15 +143,15 @@ final class Div
 
     public static function hashPassword(string $password, string $salt): string
     {
-        return md5($salt.$password);
+        return md5($salt . $password);
     }
 
     public static function generateSalt(): string
     {
-        return uniqid('',true);
+        return uniqid('', true);
     }
 
-    function randStr(int $length=16, string $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'): string
+    function randStr(int $length = 16, string $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'): string
     {
         // Length of character list
         $chars_length = (mb_strlen($chars) - 1);
@@ -160,13 +160,14 @@ final class Div
         $string = $chars[rand(0, $chars_length)];
 
         // Generate random string
-        for ($i = 1; $i < $length; $i = mb_strlen($string))
-        {
+        for ($i = 1; $i < $length; $i = mb_strlen($string)) {
             // Grab a random character from our list
             $r = $chars[rand(0, $chars_length)];
 
             // Make sure the same two characters don't appear next to each other
-            if ($r != $string[$i - 1]) $string .=  $r;
+            if ($r != $string[$i - 1]) {
+                $string .=  $r;
+            }
         }
 
         // Return the string
@@ -178,10 +179,10 @@ final class Div
      */
     public static function array2string(array $tags): string
     {
-        return implode(',',$tags);
+        return implode(',', $tags);
     }
 
-    public static function resizeImage(string $openPath, string $savePath, int $width, int $height, int $jpgQuality=100): void
+    public static function resizeImage(string $openPath, string $savePath, int $width, int $height, int $jpgQuality = 100): void
     {
         // resize image
         $imagine = new Imagine();
@@ -218,19 +219,21 @@ final class Div
     private static function getUniqueFilename(string $filename, string $pathname): string
     {
         $info = pathinfo($filename);
-        $i=1;
-        while(is_file($pathname . $filename)) {
+        $i = 1;
+        while (is_file($pathname . $filename)) {
             $filename = $info['filename'] . '-' . $i;
             if (!empty($info['extension'])) {
                 $filename .= '.' . $info['extension'];
             }
             $i++;
-            if($i>1000) throw new \Exception('Irgendwas ist beim Upload schiefgelaufen');
+            if ($i > 1000) {
+                throw new \Exception('Irgendwas ist beim Upload schiefgelaufen');
+            }
         }
         return $filename;
     }
 
-    public static function calculateWidth(int $frequency, int $maxFrequency, int $maxWidth=600): int
+    public static function calculateWidth(int $frequency, int $maxFrequency, int $maxWidth = 600): int
     {
         $maxWidth -= 100;
         $width = $maxWidth / $maxFrequency * $frequency;
@@ -242,5 +245,4 @@ final class Div
         $width += 100;
         return intval($width);
     }
-
 }

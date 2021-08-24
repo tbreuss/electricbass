@@ -50,7 +50,7 @@ final class Rating extends Widget
      * @throws \yii\db\Exception
      * @throws \yii\db\StaleObjectException
      */
-    public function saveRating():array
+    public function saveRating(): array
     {
         Yii::$app->session->open();
 
@@ -154,5 +154,4 @@ final class Rating extends Widget
 
         return $data;
     }
-
 }

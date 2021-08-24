@@ -95,5 +95,4 @@ final class Rating extends ActiveRecord
 
         return $count;
     }
-
 }

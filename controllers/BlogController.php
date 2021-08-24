@@ -69,5 +69,4 @@ final class BlogController extends Controller
             'similars' => $similars
         ]);
     }
-
 }

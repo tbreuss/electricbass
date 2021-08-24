@@ -14,12 +14,13 @@ use yii\helpers\Markdown;
 
 <?php /* Siehe http://www.bootply.com/KYX5whhXoh */ ?>
 <div class="widget widget-listview">
-    <?php foreach ($models as $i => $model): ?>
-
-        <?php if ($i > 0) echo "<hr>"; ?>
+    <?php foreach ($models as $i => $model) : ?>
+        <?php if ($i > 0) {
+            echo "<hr>";
+        } ?>
 
         <div class="row">
-            <?php if ($model->hasDefaultImage()): ?>
+            <?php if ($model->hasDefaultImage()) : ?>
                 <div class="col-sm-3">
                     <a href="<?= $model->url ?>">
                         <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid", "alt" => $model->title]) ?>
@@ -36,7 +37,7 @@ use yii\helpers\Markdown;
                     <p><?= strip_tags(Markdown::process($model->abstract)) ?></p>
                     <?php /*<p class="text-muted">Presented by <a href="#">Ellen Richey</a></p>*/ ?>
                 </div>
-            <?php else: ?>
+            <?php else : ?>
                 <div class="col-sm-12">
                     <h3 class="title"><a href="<?= $model->url ?>"><?= $model->title ?></a></h3>
                     <?= RatingReadOnly::widget(["style" => $ratingStyle, "tableName" => $ratingContext, "tableId" => $model->id]) ?>

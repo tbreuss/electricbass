@@ -8,15 +8,14 @@
  * @var float $longitude
  */
 ?>
-<?php if (!empty($latitude) && !empty($longitude)): ?>
-
+<?php if (!empty($latitude) && !empty($longitude)) : ?>
     <div class="widget widget-googlemaps">
 
-        <?php if (!empty($title)): ?>
+        <?php if (!empty($title)) : ?>
             <h2><?= $title ?></h2>
         <?php endif; ?>
 
-        <?php if (!empty($text)): ?>
+        <?php if (!empty($text)) : ?>
             <p><?php echo $text ?></p>
         <?php endif; ?>
 

@@ -65,7 +65,7 @@ final class Website extends ActiveRecord
 
         $query = self::find()
             ->select('id, title, abstract, website, url')
-            ->where(['deleted' => NULL])
+            ->where(['deleted' => null])
             ->orderBy($sort->orders);
 
         $provider = new ActiveDataProvider([
@@ -84,11 +84,11 @@ final class Website extends ActiveRecord
      */
     public static function findOneOrNull($id): ?Website
     {
-        $website = self::find()->where(['deleted' => NULL, 'url' => $id])->one();
+        $website = self::find()->where(['deleted' => null, 'url' => $id])->one();
         if ($website) {
             return $website;
         }
-        $website = self::find()->where(['deleted' => NULL, 'id' => $id])->one();
+        $website = self::find()->where(['deleted' => null, 'id' => $id])->one();
         if ($website) {
             return $website;
         }
@@ -159,7 +159,7 @@ final class Website extends ActiveRecord
     /**
      * @phpstan-return array<int, array{"key": string, "label": string, "value": string}>
      */
-    public function getProductInfos():array
+    public function getProductInfos(): array
     {
         $infos = [];
         if (!empty($this->publisher)) {
@@ -260,7 +260,7 @@ final class Website extends ActiveRecord
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_WEBSITE_IDS', []);
-        if(!in_array($this->id, $ids)) {
+        if (!in_array($this->id, $ids)) {
             $this->updateCounters(['hits' => 1]);
             $ids[] = $this->id;
             Yii::$app->session->set('HITS_WEBSITE_IDS', $ids);

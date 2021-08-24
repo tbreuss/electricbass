@@ -168,7 +168,7 @@ final class Advertisement extends ActiveRecord
     protected function updateUrlSegment(): void
     {
         $urlSegment = $this->createUrlSegment();
-        if(!empty($urlSegment)) {
+        if (!empty($urlSegment)) {
             $attributes = [
                 'url' => $urlSegment
             ];
@@ -178,9 +178,9 @@ final class Advertisement extends ActiveRecord
 
     protected function updateGeoAddress(): void
     {
-        if(!empty($this->geocodingAddress)) {
+        if (!empty($this->geocodingAddress)) {
             $coords = Div::getGoogleMapCoords($this->geocodingAddress);
-            if(!empty($coords) && (count($coords)==2) && (array_sum($coords)<>0)) {
+            if (!empty($coords) && (count($coords) == 2) && (array_sum($coords) <> 0)) {
                 self::updateAll($coords, 'id=:id', ['id' => $this->id]);
             }
         }
@@ -210,14 +210,26 @@ final class Advertisement extends ActiveRecord
         #$flag = Html::flagImage($this->country);
 
         $infos = array();
-        if (!empty($this->new_price)) $infos['Neupreis'] = $this->new_price . ' ' . $this->currency;
-        if (!empty($this->sell_price)) $infos['Verkaufspreis'] = $this->sell_price . ' ' . $this->currency;
-        if (!empty($this->name)) $infos['Name'] = $this->name;
-        if (!empty($this->region)) $infos['Region'] = $this->region . ' / ' . $this->countryTranslated;
-        if (!empty($this->phone)) $infos['Telefon'] = $this->phone;
+        if (!empty($this->new_price)) {
+            $infos['Neupreis'] = $this->new_price . ' ' . $this->currency;
+        }
+        if (!empty($this->sell_price)) {
+            $infos['Verkaufspreis'] = $this->sell_price . ' ' . $this->currency;
+        }
+        if (!empty($this->name)) {
+            $infos['Name'] = $this->name;
+        }
+        if (!empty($this->region)) {
+            $infos['Region'] = $this->region . ' / ' . $this->countryTranslated;
+        }
+        if (!empty($this->phone)) {
+            $infos['Telefon'] = $this->phone;
+        }
         #if(!empty($this->email)) $infos['E-Mail'] = Html::fancyboxIframeLink('Anbieter kontaktieren', array('advertisement/contact', 'id' => $this->id), array('class' => 'fancybox-iframe', 'target'=>'_blank'));
         #if(!empty($this->email)) $infos['E-Mail'] = Html::a('Anbieter kontaktieren', array('advertisement/contact', 'id' => $this->id), array('class' => 'button button--danger'));
-        if (!empty($this->homepage)) $infos['Website'] = Html::a(mb_strimwidth($this->homepage, 0, 50, '...', 'UTF-8'), $this->homepage, array('rel' => 'nofollow', 'target' => '_blank'));
+        if (!empty($this->homepage)) {
+            $infos['Website'] = Html::a(mb_strimwidth($this->homepage, 0, 50, '...', 'UTF-8'), $this->homepage, array('rel' => 'nofollow', 'target' => '_blank'));
+        }
         return array_map('stripslashes', $infos);
     }
 
@@ -409,7 +421,9 @@ final class Advertisement extends ActiveRecord
     public function createDeleteUrl(int $confirmed = 0): string
     {
         $url = array('advertisement/delete', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
-        if ($confirmed) $url['confirmed'] = 1;
+        if ($confirmed) {
+            $url['confirmed'] = 1;
+        }
         return Url::toRoute($url, true);
     }
 
@@ -453,7 +467,7 @@ final class Advertisement extends ActiveRecord
 
     public function getCountryTranslated(): string
     {
-        $countries = ['DE'=>'Deutschland','CH'=>'Schweiz','AT'=>'Österreich'];
+        $countries = ['DE' => 'Deutschland','CH' => 'Schweiz','AT' => 'Österreich'];
         return $countries[$this->country] ?? '';
     }
 
@@ -461,7 +475,7 @@ final class Advertisement extends ActiveRecord
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_ADVERTISEMENT_IDS', []);
-        if(!in_array($this->id, $ids)) {
+        if (!in_array($this->id, $ids)) {
             $this->updateCounters(['hits' => 1]);
             $ids[] = $this->id;
             Yii::$app->session->set('HITS_ADVERTISEMENT_IDS', $ids);
@@ -472,7 +486,7 @@ final class Advertisement extends ActiveRecord
      * @phpstan-return array<int, array<string, string>>
      * @throws \yii\db\Exception
      */
-    public static function findLatestAsArray(int $limit=5): array
+    public static function findLatestAsArray(int $limit = 5): array
     {
         $sql = "
             SELECT id,title,date,url,country,region
@@ -487,7 +501,7 @@ final class Advertisement extends ActiveRecord
 
     public function createUrlSegment(): string
     {
-        $segment = $this->title.'-'.$this->id;
+        $segment = $this->title . '-' . $this->id;
         $segment = str_replace('/', '-', $segment);
         return '/kleinanzeigen/' . Div::normalizeUrlSegment($segment);
     }
@@ -498,7 +512,7 @@ final class Advertisement extends ActiveRecord
 
         $deleted = 0;
         foreach ($fotos as $foto) {
-            if(unlink($foto)) {
+            if (unlink($foto)) {
                 $deleted++;
             }
         }
@@ -518,8 +532,8 @@ final class Advertisement extends ActiveRecord
             return false;
         }
 
-        foreach($files AS $file) {
-            if(is_file($file)) {
+        foreach ($files as $file) {
+            if (is_file($file)) {
                 unlink($file);
             }
         }
@@ -549,5 +563,4 @@ final class Advertisement extends ActiveRecord
 
         return $results;
     }
-
 }
