@@ -21,6 +21,9 @@ final class ListSummary extends Widget
 
     protected function getSummary(): string
     {
+        if ($this->pagination === null) {
+            return '';
+        }
         return sprintf(
             '%d-%s von %s<span> Ergebnissen</span>',
             $this->pagination->offset + 1,

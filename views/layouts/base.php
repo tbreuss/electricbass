@@ -48,7 +48,7 @@ if (!empty($this->params['metaDescription'])) {
         <script data-ad-client="ca-pub-6295275013493411" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <?php endif; ?>
 </head>
-<body class="controller-<?= Yii::$app->controller->id ?> action-<?= Yii::$app->controller->id ?>-<?= Yii::$app->controller->action->id ?>" itemscope itemtype="http://schema.org/WebPage">
+<body class="controller-<?= Yii::$app->controller->id ?> action-<?= Yii::$app->controller->id ?>-<?= isset(Yii::$app->controller->action) ? Yii::$app->controller->action->id : 'nil' ?>" itemscope itemtype="http://schema.org/WebPage">
 <?php $this->beginBody() ?>
 <main role="main">
     <?php if (YII_ENV_DEV): /* @phpstan-ignore-line */ ?>

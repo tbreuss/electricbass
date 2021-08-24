@@ -120,7 +120,11 @@ final class Div
     public static function normalizeUrlSegment(string $urlSegment): string
     {
         // @see: http://ch2.php.net/manual/de/function.preg-replace.php
-        return strtolower(preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), self::removeAccent($urlSegment)));
+        $normalizedSegment = preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '-', ''), self::removeAccent($urlSegment));
+        if (!is_string($normalizedSegment)) {
+            return $urlSegment;
+        }
+        return strtolower($normalizedSegment);
     }
 
     /**
@@ -193,8 +197,18 @@ final class Div
     public static function filterFilename(string $filename, string $pathname): string
     {
         $tmp = preg_replace('/^\W+|\W+$/', '', $filename); // remove all non-alphanumeric chars at begin & end of string
+        if (!is_string($tmp)) {
+            return $filename;
+        }
         $tmp = preg_replace('/\s+/', '_', $tmp); // compress internal whitespace and replace with _
-        $tmp = strtolower(preg_replace('/\W-/', '', $tmp)); // remove all non-alphanumeric chars except _ and -
+        if (!is_string($tmp)) {
+            return $filename;
+        }
+        $tmp = preg_replace('/\W-/', '', $tmp);
+        if (!is_string($tmp)) {
+            return $filename;
+        }
+        $tmp = strtolower($tmp); // remove all non-alphanumeric chars except _ and -
         return Div::getUniqueFilename($tmp, $pathname);
     }
 

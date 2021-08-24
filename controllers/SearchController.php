@@ -30,11 +30,9 @@ final class SearchController extends Controller
     public function actionIndex(?string $term = null): string
     {
         $searched = $term !== NULL;
-        $term = trim($term);
+        $term = isset($term) ? trim($term) : '';
 
-        // @see http://de.wikipedia.org/wiki/Regulärer_Ausdruck
-        $term = preg_replace('/[[:cntrl:]]/', '', $term);
-        $term = preg_replace('/([ ]{2,})/', ' ', $term);
+        $term = $this->filterTerm($term);
 
         $provider = null;
 
@@ -122,6 +120,20 @@ final class SearchController extends Controller
     private function filterQueryParts(string $queryPart): bool
     {
         return !empty($queryPart);
+    }
+
+    private function filterTerm(string $term): string
+    {
+        // @see http://de.wikipedia.org/wiki/Regulärer_Ausdruck
+        $filteredTerm1 = preg_replace('/[[:cntrl:]]/', '', $term);
+        if (!is_string($filteredTerm1)) {
+            return $term;
+        }
+        $filteredTerm2 = preg_replace('/([ ]{2,})/', ' ', $filteredTerm1);
+        if (!is_string($filteredTerm2)) {
+            return $filteredTerm1;
+        }
+        return $filteredTerm2;
     }
 
 }

@@ -6,12 +6,12 @@ use yii\db\ActiveRecord;
 
 /**
  * @property string $request
- * @property string $referrer
+ * @property ?string $referrer
  * @property string $redirect
  * @property string $created
  * @property string $signal
  * @property int $code
- * @property string $userAgent
+ * @property ?string $userAgent
  * @property int $counter
  * @property string $modified
  */
@@ -32,16 +32,16 @@ final class LogRedirect extends ActiveRecord
             ->one();
 
         if ($model === null) {
-            $model = new static();
+            $model = new self();
             $model->request = $request;
             $model->created = $now;
         }
 
         $referrers = [];
-        if (strlen($model->referrer) > 0) {
+        if (isset($model->referrer) && strlen($model->referrer) > 0) {
             $referrers = explode(';', $model->referrer);
         }
-        if (strlen($referrer) > 0) {
+        if (isset($referrer) && strlen($referrer) > 0) {
             $referrers[] = $referrer;
         }
         $referrer = join(';', array_unique(array_filter($referrers)));
@@ -50,7 +50,7 @@ final class LogRedirect extends ActiveRecord
         $model->code = $code;
         $model->referrer = strlen($referrer) > 0 ? $referrer : null;
         $model->redirect = $redirect;
-        $model->userAgent = strlen($userAgent) > 0 ? $userAgent : null;;
+        $model->userAgent = (isset($userAgent) && strlen($userAgent)) > 0 ? $userAgent : null;;
         $model->counter += 1;
         $model->modified = $now;
 

@@ -125,6 +125,7 @@ final class VideoController extends Controller
             $urlSegment = Div::normalizeUrlSegment($blog->title) . '-' . $eid;
 
             $x = new SimpleXMLElement("<element {$matches[1]} />");
+            $attributes = $x->attributes();
 
             $column = [
                 'eid' => $eid,
@@ -132,9 +133,9 @@ final class VideoController extends Controller
                 'countryCode' => $blog->countryCode,
                 'language' => $blog->language,
                 'platform' => 'youtube',
-                'key' => $x->attributes()->key,
-                'width' => (int)$x->attributes()->width,
-                'height' => (int)$x->attributes()->height,
+                'key' => $attributes->key ?? '',
+                'width' => (int)($attributes->width ?? 0),
+                'height' => (int)($attributes->height ?? 0),
                 'title' => $blog->title,
                 'urlSegment' => $urlSegment,
                 'abstract' => $blog->abstract,

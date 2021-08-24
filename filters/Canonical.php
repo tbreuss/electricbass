@@ -19,6 +19,7 @@ final class Canonical extends ActionFilter
             return parent::beforeAction($action);
         }
 
+        /* @phpstan-ignore-next-line */
         $url = [$this->owner->getRoute()];
 
         foreach ($this->params as $key) {

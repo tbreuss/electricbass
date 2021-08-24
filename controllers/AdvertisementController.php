@@ -100,7 +100,7 @@ final class AdvertisementController extends Controller
     public function actionActivate(string $id, string $accessCode): string
     {
         $model = Advertisement::findById($id, false);
-        if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
+        if (empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
             throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         $model->activate();
@@ -110,7 +110,7 @@ final class AdvertisementController extends Controller
     public function actionRenew(string $id, string $accessCode): string
     {
         $model = Advertisement::findById($id, false);
-        if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
+        if (empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
             throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         $model->renew();
@@ -121,7 +121,7 @@ final class AdvertisementController extends Controller
     public function actionDelete(string $id, string $accessCode, int $confirmed = 0): Response|string
     {
         $model = Advertisement::findById($id, true);
-        if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
+        if (empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
             throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         if (!empty($confirmed)) {
@@ -135,7 +135,7 @@ final class AdvertisementController extends Controller
     public function actionUpdate(string $id, string $accessCode): Response|string
     {
         $model = Advertisement::findById($id, false);
-        if (is_null($model) || empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
+        if (empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
             throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         if (isset($_POST['Advertisement'])) {

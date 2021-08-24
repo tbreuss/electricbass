@@ -11,7 +11,7 @@ final class Url extends \yii\helpers\Url
      */
     public static function rememberReferrer(array $route, string $name): void
     {
-        $referrer = Yii::$app->request->referrer;
+        $referrer = Yii::$app->request->referrer ?? '';
         [$referrerPath] = explode('?', $referrer);
         $url = Url::to($route, true);
         if ($url === $referrerPath) {
