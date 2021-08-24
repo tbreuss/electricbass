@@ -7,7 +7,7 @@
 ?>
 <?php echo nl2br($model->message) ?>
 <br>
-<?php if (!empty($model->phone)) :
+<?php if (!empty($model->phone)):
     ?><br>Telefon: <?php echo $model->phone ?><br><?php
 endif; ?>
 <br>

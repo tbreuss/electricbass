@@ -22,7 +22,7 @@ $this->params['metaDescription'] = 'Die Sammlung mit den besten Zitaten berühmt
     <?php // ListSummary::widget(['pagination' => $pagination, 'sort' => $sort]) ?>
 
     <div class="widget widget-listview">
-        <?php foreach ($models as $i => $model) : ?>
+        <?php foreach ($models as $i => $model): ?>
             <div class="row">
                 <div class="col-sm-12">
                     <figure>

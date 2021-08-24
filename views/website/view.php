@@ -23,28 +23,28 @@ $this->params['breadcrumbs'][] = $website->title;
 
     <h1><?= $website->title ?></h1>
 
-    <?php if ($website->hasDefaultImage()) : ?>
+    <?php if ($website->hasDefaultImage()): ?>
         <p><?= Html::img($website->getDefaultImage('@web'), ["class" => "img-fluid", "alt" => $website->title]) ?></p>
     <?php endif; ?>
 
-    <?php if (!empty($website->website)) : ?>
+    <?php if (!empty($website->website)): ?>
         <h2><?= Html::a($website->website, $website->website, ["target" => "_blank", "rel" => "nofollow"]) ?></h2>
     <?php endif; ?>
 
-    <?php if (!empty($website->abstract)) : ?>
+    <?php if (!empty($website->abstract)): ?>
         <div class="widget widget-parser">
             <?= Parser::widget(["model" => $website, "attribute" => "abstract"]) ?>
-            <?php if (!empty($website->content)) : ?>
+            <?php if (!empty($website->content)): ?>
                 <?= Parser::widget(["model" => $website, "attribute" => "content"]) ?>
             <?php endif; ?>
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($website->latitude) && !empty($website->longitude)) : ?>
+    <?php if (!empty($website->latitude) && !empty($website->longitude)): ?>
         <div class="map" style="clear:both">
 
             <h3>Standort</h3>
-            <?php if (!empty($website->title) && !empty($website->subtitle)) : ?>
+            <?php if (!empty($website->title) && !empty($website->subtitle)): ?>
                 <p><?php echo $website->title ?>, <?= $website->subtitle ?></p>
             <?php endif; ?>
 
@@ -96,12 +96,12 @@ $this->params['breadcrumbs'][] = $website->title;
 
 <?= Hits::widget(["tableName" => "website", "tableId" => $website->id]) ?>
 
-<?php if (!empty($similars)) : ?>
+<?php if (!empty($similars)): ?>
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title">Ähnliche Websites</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach ($similars as $model) : ?>
+            <?php foreach ($similars as $model): ?>
             <li class="sidebarWidget__item">
                 <a class="sidebarWidget__link" href="<?= $model->url ?>">
                     <strong><?= $model->title ?></strong><br>

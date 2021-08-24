@@ -21,11 +21,11 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
 
     <h1><?= $this->title ?></h1>
 
-    <?php if (Yii::$app->session->hasFlash('addFormSubmitted')) : ?>
+    <?php if (Yii::$app->session->hasFlash('addFormSubmitted')): ?>
         <div class="flash flash--success">Vielen Dank! Dein Inserat ist freigeschaltet. Wir behalten uns vor, unpassende oder missbräuchliche Inserate zu löschen.</div>
     <?php endif; ?>
 
-    <?php if (Yii::$app->session->hasFlash('deleteConfirmed')) : ?>
+    <?php if (Yii::$app->session->hasFlash('deleteConfirmed')): ?>
         <div class="flash flash--success">Dein Inserat wurde gelöscht.</div>
     <?php endif; ?>
 
@@ -42,8 +42,8 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
 
     <?php /* Zähler */ ?>
     <?php $categories = array(); ?>
-    <?php foreach ($models as $model) : ?>
-        <?php if (!array_key_exists($model->category_id, $categories)) : ?>
+    <?php foreach ($models as $model): ?>
+        <?php if (!array_key_exists($model->category_id, $categories)): ?>
             <?php $categories[$model->category_id] = array('title' => app\models\Advertisement::$categories[$model->category_id]); ?>
             <?php $categories[$model->category_id]['counter'] = 0; ?>
         <?php endif ?>
@@ -53,12 +53,12 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
     <hr>
 
     <div class="widget widget-listview">
-        <?php foreach ($models as $i => $model) : ?>
+        <?php foreach ($models as $i => $model): ?>
             <?php if ($i > 0) {
                 echo "<hr>";
             } ?>
             <div class="row">
-                <?php if (($photo = $model->getPhoto()) != '') : ?>
+                <?php if (($photo = $model->getPhoto()) != ''): ?>
                     <div class="col-sm-3">
                         <a href="<?= $model->url ?>"><?= Html::img('@web/' . $photo, ["width" => 280, "class" => "img-fluid", "alt" => $model->title]) ?></a>
                     </div>
@@ -74,7 +74,7 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
                         <p><?= mb_strimwidth(stripslashes(strip_tags(Markdown::process($model->longtext), '<italic>')), 0, 240, '...', 'UTF-8') ?></p>
                         <?php /*<p class="text-muted">Presented by <a href="#">Ellen Richey</a></p>*/ ?>
                     </div>
-                <?php else : ?>
+                <?php else: ?>
                     <div class="col-sm-12">
                         <h3 class="title"><a href="<?= $model->url ?>"><?= $model->title ?></a></h3>
                         <p class="text-muted">
@@ -96,7 +96,7 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
 <div class="sidebarWidget">
     <h3 class="sidebarWidget__title">Kategorien</h3>
     <ul class="sidebarWidget__list">
-        <?php foreach ($categories as $id => $category) : ?>
+        <?php foreach ($categories as $id => $category): ?>
             <li class="sidebarWidget__item">
                 <?= $category['title'] ?>
                 <span><?= $category['counter'] ?></span>

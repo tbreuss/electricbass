@@ -18,8 +18,8 @@ $this->params['breadcrumbs'][] = 'Fingersätze';
 
     <h1>Fingersätze</h1>
 
-    <?php foreach ($models as $model) : ?>
-        <?php if ($category != $model->category) : ?>
+    <?php foreach ($models as $model): ?>
+        <?php if ($category != $model->category): ?>
             <?php if (!empty($category)) {
                 echo "</ul>";
             } ?>

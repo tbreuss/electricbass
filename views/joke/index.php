@@ -26,7 +26,7 @@ $this->params['metaDescription'] = 'Die Sammlung mit den besten Bassistenwitzen 
     <?= ListSummary::widget(['pagination' => $pagination, 'sort' => $sort]) ?>
 
     <div class="widget widget-listview">
-        <?php foreach ($models as $i => $model) : ?>
+        <?php foreach ($models as $i => $model): ?>
             <?php if ($i > 0) {
                 echo "<hr>";
             } ?>

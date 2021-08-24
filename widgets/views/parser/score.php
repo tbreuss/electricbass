@@ -15,13 +15,13 @@
     <div class="score__downloads">
         <h3 class="score__title">Downloads</h3>
         <div class="score__name">Dateien zum Herunterladen</div>
-        <?php if ($pdfSize !== '') : ?>
+        <?php if ($pdfSize !== ''): ?>
         <div class="score__pdf">
             <a class="score__link score__link--pdf" href="<?= $pdfUrl ?>"><?= $scoreName ?></a>
             <span class="score__size">PDF, <?= strtoupper($pdfSize) ?></span>
         </div>
         <?php endif; ?>
-        <?php if ($midiSize !== '') : ?>
+        <?php if ($midiSize !== ''): ?>
         <div class="score__mid">
             <a class="score__link score__link--midi" href="<?= $midiUrl ?>"><?= $scoreName ?></a>
             <span class="score__size">MIDI, <?= strtoupper($midiSize) ?></span>

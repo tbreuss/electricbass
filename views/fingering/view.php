@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $model->title;
 
     ?>
 
-    <?php if (isset($_GET['root'], $_GET['position'], $_GET['strings'])) : ?>
+    <?php if (isset($_GET['root'], $_GET['position'], $_GET['strings'])): ?>
         <?php #$this->metaNoIndex = true ?>
     <?php endif; ?>
 
@@ -123,12 +123,12 @@ $this->params['breadcrumbs'][] = $model->title;
 
 <?= Hits::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
-<?php if (!empty($similars)) : ?>
+<?php if (!empty($similars)): ?>
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title">Ähnliche Fingersätze</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach ($similars as $model) : ?>
+            <?php foreach ($similars as $model): ?>
             <li class="sidebarWidget__item">
                 <a class="sidebarWidget__link" href="<?= $model->url ?>">
                     <strong><?= $model->title ?></strong><br>

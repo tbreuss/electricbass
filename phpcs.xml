@@ -30,4 +30,10 @@
     <file>./widgets</file>
 
     <rule  ref="PSR12"/>
+
+    <rule ref="Squiz.ControlStructures.ControlSignature">
+        <properties>
+            <property name="requiredSpacesBeforeColon" value="0" />
+        </properties>
+    </rule>
 </ruleset>

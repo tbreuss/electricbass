@@ -9,7 +9,7 @@
     </h3>
     <ul class="sidebarWidget__list">
         <li class="sidebarWidget__item">
-            <?php foreach ($models as $m) : ?>
+            <?php foreach ($models as $m): ?>
                 <?php echo $m->name ?> (<?php echo $m->birth_year ?>)<br>
             <?php endforeach; ?>
         </li>

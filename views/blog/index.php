@@ -34,11 +34,11 @@ $this->params['metaDescription'] = sprintf('Blog zum Thema E-Bass und Musik, mit
 
 <?php $this->beginBlock('sidebar') ?>
 
-    <?php if (!empty($latest)) : ?>
+    <?php if (!empty($latest)): ?>
         <div class="sidebarWidget">
             <h3 class="sidebarWidget__title">Aktuelle Blogposts</h3>
             <ul class="sidebarWidget__list">
-            <?php foreach ($latest as $model) : ?>
+            <?php foreach ($latest as $model): ?>
                 <li class="sidebarWidget__item">
                     <a class="sidebarWidget__link" href="<?= $model->url ?>">
                         <strong><?= $model->title ?></strong><br>
@@ -50,11 +50,11 @@ $this->params['metaDescription'] = sprintf('Blog zum Thema E-Bass und Musik, mit
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($popular)) : ?>
+    <?php if (!empty($popular)): ?>
         <div class="sidebarWidget">
             <h3 class="sidebarWidget__title">Beliebte Blogposts</h3>
             <ul class="sidebarWidget__list">
-            <?php foreach ($popular as $model) : ?>
+            <?php foreach ($popular as $model): ?>
                 <li class="sidebarWidget__item">
                     <a class="sidebarWidget__link" href="<?= $model->url ?>">
                         <strong><?= $model->title ?></strong><br>

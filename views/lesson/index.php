@@ -25,7 +25,7 @@ $this->title = $model->title . ' | Lektionen'
 
     <h1><?= $model->title ?></h1>
 
-    <?php if (!empty($model->text)) : ?>
+    <?php if (!empty($model->text)): ?>
         <div class="widget widget-parser">
             <?= Parser::widget(["model" => $model, "attribute" => "text"]) ?>
         </div>
@@ -36,7 +36,7 @@ $this->title = $model->title . ' | Lektionen'
         ]); ?>
 
         <?= Rating::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
-    <?php else : ?>
+    <?php else: ?>
         <?= RatingReadOnly::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
     <?php endif; ?>
 
@@ -50,10 +50,10 @@ $this->title = $model->title . ' | Lektionen'
 
 <?php $this->beginBlock('sidebar') ?>
 <div class="sidebarWidget">
-    <?php if (!empty($similars)) : ?>
+    <?php if (!empty($similars)): ?>
         <h3 class="sidebarWidget__title">Ähnliche Lektionen</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach ($similars as $model) : ?>
+            <?php foreach ($similars as $model): ?>
                 <li class="sidebarWidget__item">
                     <a class="sidebarWidget__link" href="<?= $model->url ?>">
                         <strong><?= $model->title ?></strong><br>
@@ -62,10 +62,10 @@ $this->title = $model->title . ' | Lektionen'
                 </li>
             <?php endforeach; ?>
         </ul>
-    <?php else : ?>
+    <?php else: ?>
         <h3 class="sidebarWidget__title">Die neuesten Lektionen</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach ($latest as $model) : ?>
+            <?php foreach ($latest as $model): ?>
                 <li class="sidebarWidget__item">
                     <a class="sidebarWidget__link" href="<?= $model->url ?>">
                         <strong><?= $model->title ?></strong><br>

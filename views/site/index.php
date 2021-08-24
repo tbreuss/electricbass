@@ -26,10 +26,10 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
 
     <h1>Die neuesten Einträge</h1>
 
-    <?php if (!empty($latestVideos)) : ?>
+    <?php if (!empty($latestVideos)): ?>
         <div class="row videoList">
             <div class="col-12"><h2><?= $latestVideos[0]->getContextTextPlural() ?></h2></div>
-            <?php foreach ($latestVideos as $latest) : ?>
+            <?php foreach ($latestVideos as $latest): ?>
             <div class="col-6 col-xl-4 videoList__cell">
                 <a href="<?= $latest->url ?>" class="videoList__link">
                     <?= Html::img($latest->getDefaultImage(), ["class" => "img-fluid videoList__cover", "alt" => $latest->title]) ?>
@@ -40,10 +40,10 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($latestBlogs)) : ?>
+    <?php if (!empty($latestBlogs)): ?>
         <div class="row">
             <div class="col-12"><h2><?= $latestBlogs[0]->getContextTextPlural() ?></h2></div>
-            <?php foreach ($latestBlogs as $latest) : ?>
+            <?php foreach ($latestBlogs as $latest): ?>
                 <div class="col-12">
                     <h3><a href="<?= $latest->url ?>"><?= $latest->title ?></a></h3>
                     <?= RatingReadOnly::widget(["style" => "none", "tableName" => $latest->tableName, "tableId" => $latest->tableId, "ratingCount" => $latest->ratings, "ratingAverage" => $latest->ratingAvg]) ?>
@@ -53,15 +53,15 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($latestAlbums)) : ?>
+    <?php if (!empty($latestAlbums)): ?>
         <div class="row albumlist">
             <div class="col-12"><h2><?= $latestAlbums[0]->getContextTextPlural() ?></h2></div>
-            <?php foreach ($latestAlbums as $latest) : ?>
+            <?php foreach ($latestAlbums as $latest): ?>
                 <div class="col-6 col-xl-4 albumlist__cell">
                     <a href="<?= $latest->url ?>" class="albumlist__link">
-                        <?php if ($latest->getDefaultImage()) : ?>
+                        <?php if ($latest->getDefaultImage()): ?>
                             <?= Html::img($latest->getDefaultImage('@web'), ["class" => "img-fluid albumlist__cover", "alt" => $latest->title]) ?>
-                        <?php else : ?>
+                        <?php else: ?>
                             <?= Html::img('/img/bg.png', ["width" => 290, "height" => 290, "class" => "img-fluid albumlist__cover", "alt" => ""]) ?>
                         <?php endif; ?>
                         <div class="albumlist__title"><?= $latest->title ?></div>
@@ -71,10 +71,10 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($latestLessons)) : ?>
+    <?php if (!empty($latestLessons)): ?>
         <div class="row">
             <div class="col-12"><h2><?= $latestLessons[0]->getContextTextPlural() ?></h2></div>
-            <?php foreach ($latestLessons as $latest) : ?>
+            <?php foreach ($latestLessons as $latest): ?>
                 <div class="col-12">
                     <h3><a href="<?= $latest->url ?>"><?= $latest->title ?></a></h3>
                     <?= RatingReadOnly::widget(["style" => "none", "tableName" => $latest->tableName, "tableId" => $latest->tableId, "ratingCount" => $latest->ratings, "ratingAverage" => $latest->ratingAvg]) ?>
@@ -86,17 +86,17 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
 
     <?php $even = date('z') % 2 === 0; ?>
 
-    <?php if (!$even && !empty($latestLehrbuecher)) : ?>
+    <?php if (!$even && !empty($latestLehrbuecher)): ?>
         <div class="row cataloglist">
             <div class="col-12"><h2><?= $latestLehrbuecher[0]->getContextTextPlural() ?></h2></div>
-            <?php foreach ($latestLehrbuecher as $model) : ?>
+            <?php foreach ($latestLehrbuecher as $model): ?>
                 <?php $relImage = $model->getDefaultImage() ?>
                 <?php $emptyClass = !empty($relImage) ? '' : 'cataloglist__link--empty' ?>
             <div class="col-6 col-sm-3 col-md-6 col-lg-3 cataloglist__cell">
                 <a href="<?= $model->url ?>" class="cataloglist__link <?= $emptyClass ?>">
-                    <?php if (!empty($relImage)) : ?>
+                    <?php if (!empty($relImage)): ?>
                         <?= Html::resizeImage($relImage, 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title]) ?>
-                    <?php else : ?>
+                    <?php else: ?>
                         <span class="img-fluid cataloglist__cover"></span>
                     <?php endif; ?>
                     <div class="cataloglist__title"><?= $model->title ?></div>
@@ -107,17 +107,17 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
     <?php endif; ?>
 
 
-    <?php if ($even && !empty($latestBuecher)) : ?>
+    <?php if ($even && !empty($latestBuecher)): ?>
         <div class="row cataloglist">
             <div class="col-12"><h2><?= $latestBuecher[0]->getContextTextPlural() ?></h2></div>
-            <?php foreach ($latestBuecher as $model) : ?>
+            <?php foreach ($latestBuecher as $model): ?>
                 <?php $relImage = $model->getDefaultImage() ?>
                 <?php $emptyClass = !empty($relImage) ? '' : 'cataloglist__link--empty' ?>
                 <div class="col-6 col-sm-3 col-md-6 col-lg-3 cataloglist__cell">
                     <a href="<?= $model->url ?>" class="cataloglist__link <?= $emptyClass ?>">
-                        <?php if (!empty($relImage)) : ?>
+                        <?php if (!empty($relImage)): ?>
                             <?= Html::resizeImage($relImage, 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title]) ?>
-                        <?php else : ?>
+                        <?php else: ?>
                             <span class="img-fluid cataloglist__cover"></span>
                         <?php endif; ?>
                         <div class="cataloglist__title"><?= $model->title ?></div>
@@ -127,15 +127,15 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($latestWebsites)) : ?>
+    <?php if (!empty($latestWebsites)): ?>
         <div class="row websites">
             <div class="col-12"><h2>Websites zum Thema E-Bass</h2></div>
-            <?php foreach ($latestWebsites as $website) : ?>
+            <?php foreach ($latestWebsites as $website): ?>
                 <div class="col-6 col-sm-4 col-md-6 col-lg-4 websites__cell">
                     <a href="<?= $website->url ?>" class="websites__link">
-                        <?php if ($website->getDefaultImage()) : ?>
+                        <?php if ($website->getDefaultImage()): ?>
                             <?= Html::cachedCropedImage($website->getDefaultImage(), 400, 300, ["class" => "img-fluid websites__cover", "alt" => $website->title]) ?>
-                        <?php else : ?>
+                        <?php else: ?>
                             <?= Html::cachedCropedImage('/img/bg.png', 400, 300, ["class" => "img-fluid websites__cover", "alt" => $website->title]) ?>
                         <?php endif; ?>
                         <div class="websites__title"><?= $website->title ?></div>
@@ -150,7 +150,7 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
 
             <div class="last">
                 <h2 class="last__title">Zuletzt kommentiert</h2>
-                <?php foreach ($latestComments as $latestComment) : ?>
+                <?php foreach ($latestComments as $latestComment): ?>
                     <?php $search = $latestComment->search ?>
                     <p class="last__item">
                         <a class="last__link" href="<?= $search->url ?>"><b><?= $search->title ?></b></a>
@@ -161,9 +161,9 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
             <hr>
             <div class="last">
             <h2 class="last__title">Zuletzt bewertet</h2>
-            <?php foreach ($latestRatings as $latestRating) : ?>
+            <?php foreach ($latestRatings as $latestRating): ?>
                 <?php $search = $latestRating->search ?>
-                <?php if ($search) : ?>
+                <?php if ($search): ?>
                 <p class="last__item">
                     <a class="last__link" href="<?= $search->url ?>"><b><?= $search->title ?></b></a>
                     <span class="last__text">Wert <?= number_format($latestRating->value, 1) ?> am <?= Yii::$app->formatter->asDate($latestRating->modified, 'long') ?></span>

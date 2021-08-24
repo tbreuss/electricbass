@@ -16,7 +16,7 @@ use yii\widgets\Spaceless;
 
     <div class="shortcode shortcode--image">
 
-        <?php if (!empty($title)) : ?>
+        <?php if (!empty($title)): ?>
             <h2><?php echo $title ?></h2>
         <?php endif; ?>
 
@@ -36,17 +36,17 @@ use yii\widgets\Spaceless;
             ?>
         </div>
 
-        <?php if (!empty($copyrightLabel)) : ?>
+        <?php if (!empty($copyrightLabel)): ?>
             <div class="copyright">Copyright:
-                <?php if (empty($copyrightUrl)) : ?>
+                <?php if (empty($copyrightUrl)): ?>
                     <?php echo $copyrightLabel ?>
-                <?php else : ?>
+                <?php else: ?>
                     <a target="_blank" href="<?php echo $copyrightUrl ?>"><?php echo $copyrightLabel ?></a>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($caption)) : ?>
+        <?php if (!empty($caption)): ?>
             <div class="caption"><?php echo $caption ?></div>
         <?php endif; ?>
 

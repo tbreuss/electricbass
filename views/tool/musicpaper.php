@@ -127,10 +127,10 @@ $this->params['breadcrumbs'][] = 'Leeres Notenpapier als PDF';
     ?>
 
     <div class="widget widget-listview">
-    <?php foreach ($papers as $paper) : ?>
-        <?php if (is_string($paper)) : ?>
+    <?php foreach ($papers as $paper): ?>
+        <?php if (is_string($paper)): ?>
             <h2><?= $paper ?></h2>
-        <?php else : ?>
+        <?php else: ?>
             <?php
                 $urlPdf = Yii::getAlias('@web/media/tools/notenpapier/' . $paper[0]);
             if ($urlPdf === false) {

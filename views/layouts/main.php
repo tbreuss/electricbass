@@ -16,7 +16,7 @@ use yii\helpers\ArrayHelper;
         </div>
         <div class="col-md-4 sidebar">
             <div class="sidebar__inner">
-            <?php if (!empty($this->blocks['sidebar'])) : ?>
+            <?php if (!empty($this->blocks['sidebar'])): ?>
                 <?= ArrayHelper::getValue($this->blocks, 'sidebar') ?>
             <?php endif; ?>
             </div>

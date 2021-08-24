@@ -23,35 +23,35 @@ $this->params['breadcrumbs'][] = $model->title;
 
     <h1 style="margin-bottom: 0.5rem"><?= $model->title ?></h1>
 
-    <?php if (!empty($model->artist)) : ?>
+    <?php if (!empty($model->artist)): ?>
         <p style="margin-bottom: 1.5rem">von <?= Html::a($model->artist, ['album/index', 'artist' => $model->artist]) ?></p>
     <?php endif; ?>
 
-    <?php if (!empty($model->subtitle)) : ?>
+    <?php if (!empty($model->subtitle)): ?>
         <p><?= $model->subtitle ?></p>
     <?php endif; ?>
 
-    <?php if ($model->hasDefaultImage()) : ?>
+    <?php if ($model->hasDefaultImage()): ?>
         <p><?= Html::img($model->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $model->fullTitle]) ?></p>
     <?php endif; ?>
 
     <div class="markdown"><?= Markdown::process($model->text) ?></div>
 
-    <?php if (!empty($model->contents)) : ?>
+    <?php if (!empty($model->contents)): ?>
         <h2>Inhalt</h2>
         <div class="markdown"><?= Markdown::process($model->contents) ?></div>
     <?php endif; ?>
 
-    <?php if (!empty($model->blurb)) : ?>
+    <?php if (!empty($model->blurb)): ?>
         <h2>Klappentext</h2>
         <div class="markdown"><?= Markdown::process($model->blurb) ?></div>
     <?php endif; ?>
 
-    <?php if (!empty($model->asin)) : ?>
+    <?php if (!empty($model->asin)): ?>
         <p class="text-center"><a class="button button--big button--warning" href="<?= Url::toAmazonProduct($model->asin) ?>" target="_blank">Jetzt kaufen</a></p>
     <?php endif; ?>
 
-    <?php if (!empty($tracklist = $model->getTracklistArray())) : ?>
+    <?php if (!empty($tracklist = $model->getTracklistArray())): ?>
         <h2>Tracklist</h2>
         <table class="table table--small">
             <tr>
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $model->title;
                 <th>Titel</th>
                 <th class="text-end">Länge</th>
             </tr>
-        <?php foreach ($tracklist as $track) : ?>
+        <?php foreach ($tracklist as $track): ?>
             <tr>
                 <td class="text-end"><?= $track['number'] ?>.</td>
                 <td><?= $track['title'] ?></td>
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $model->title;
             </tr>
         <?php endforeach; ?>
         </table>
-    <?php elseif (!empty($model->tracklist)) : ?>
+    <?php elseif (!empty($model->tracklist)): ?>
         <h2>Tracklist</h2>
         <div class="markdown"><?= Markdown::process($model->tracklist) ?></div>
     <?php endif; ?>
@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $model->title;
         </div>
     */ ?>
 
-    <?php if (!empty($model->bandcamp)) : ?>
+    <?php if (!empty($model->bandcamp)): ?>
         <h2>Anspielen und downloaden</h2>
         <div class="bandcamp-widget">
             <iframe width="300" height="100" style="background-color:#F3F4F3;position: relative; display: block; width: 300px; height: 100px;" src="https://bandcamp.com/EmbeddedPlayer/v=2/album=<?php echo $model->bandcamp ?>/size=grande/bgcol=F3F4F3/linkcol=4073A9/" allowtransparency="true" frameborder="0"></iframe>
@@ -99,10 +99,10 @@ $this->params['breadcrumbs'][] = $model->title;
 
     <?php endif; ?>
 
-    <?php if (!empty($model->productInfos)) : ?>
+    <?php if (!empty($model->productInfos)): ?>
         <h2>Produktinformation</h2>
         <table class="table table--small">
-            <?php foreach ($model->productInfos as $info) : ?>
+            <?php foreach ($model->productInfos as $info): ?>
                 <tr>
                     <td class="col-md-4"><?= $info["label"] ?></td>
                     <td class="col-md-8"><?= $info["value"] ?></td>
@@ -129,12 +129,12 @@ $this->params['breadcrumbs'][] = $model->title;
 
 <?= Hits::widget(["tableName" => "album", "tableId" => $model->id]) ?>
 
-<?php if (!empty($similars)) : ?>
+<?php if (!empty($similars)): ?>
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title">Ähnliche Musikalben</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach ($similars as $model) : ?>
+            <?php foreach ($similars as $model): ?>
             <li class="sidebarWidget__item">
                 <a class="sidebarWidget__link" href="<?= $model->url ?>">
                     <strong><?= $model->title ?></strong><br>

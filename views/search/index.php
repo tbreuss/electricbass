@@ -50,8 +50,8 @@ function highlightWords(string $text, string $words): string
         <input class="search__submit" type="submit" value="Suchen">
     </form>
 
-    <?php if (mb_strlen($term) === 0) : ?>
-        <?php if ($searched === true) : ?>
+    <?php if (mb_strlen($term) === 0): ?>
+        <?php if ($searched === true): ?>
             <p>Gib ein Suchwort ein.</p>
 
         <?php endif; ?>
@@ -62,10 +62,10 @@ function highlightWords(string $text, string $words): string
             Beispiele: "Jaco Pastorius", "Rock Bass", "Tonleiter", "Lehrbuch", "Album"
         </p>
 
-    <?php elseif (mb_strlen($term) < SearchController::MIN_QUERY_LENGTH) : ?>
+    <?php elseif (mb_strlen($term) < SearchController::MIN_QUERY_LENGTH): ?>
         <p>Die Suchanfrage muss mindestens drei Zeichen lang sein.</p>
 
-    <?php elseif ($dataProvider->getTotalCount() === 0) : ?>
+    <?php elseif ($dataProvider->getTotalCount() === 0): ?>
         <p>Es wurden keine mit deiner Suchanfrage - <?= Html::encode($term) ?> - übereinstimmenden Dokumente
             gefunden.<br>
             <br>
@@ -76,7 +76,7 @@ function highlightWords(string $text, string $words): string
             <li>Probiere allgemeinere Suchbegriffe</li>
         </ul>
 
-    <?php else : ?>
+    <?php else: ?>
         <?php
         /** @var app\models\Search[] $models */
         $models = $dataProvider->getModels();
@@ -86,7 +86,7 @@ function highlightWords(string $text, string $words): string
         <?= ListSummary::widget(['pagination' => $dataProvider->getPagination(), 'sort' => $dataProvider->getSort()]) ?>
 
         <div class="search-results row">
-            <?php foreach ($models as $i => $model) : ?>
+            <?php foreach ($models as $i => $model): ?>
                 <?php $isFirst = ($i === 0) ? 'isFirst' : ''; ?>
                 <?php $isLast = (count($models) - 1 === $i) ? 'isLast' : ''; ?>
                 <div class="search-results__item <?= $isFirst ?> <?= $isLast ?> col-sm-12">
@@ -94,7 +94,7 @@ function highlightWords(string $text, string $words): string
                     <?php echo RatingReadOnly::widget(["tableName" => $model->tableName, "tableId" => $model->tableId]) ?>
                     <div class="search-results__text">
                         <span class="text-muted"><?= highlightWords($model->contextText, $term) ?></span>
-                        <?php if (!empty($model->abstract)) : ?>
+                        <?php if (!empty($model->abstract)): ?>
                             - <?= highlightWords(strip_tags(Markdown::process($model->abstract)), $term) ?>
                         <?php endif; ?>
                     </div>

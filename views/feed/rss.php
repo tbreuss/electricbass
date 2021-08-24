@@ -17,7 +17,7 @@ use yii\helpers\Url;
         <description>Umfangreiche Informationen zum Thema E-Bass mit Artikeln, Lektionen, Bassriffs, einem Glossar, Lernvideos und vielem mehr.</description>
         <language>de</language>
         <pubDate><?= date(DATE_RSS, time()) ?></pubDate>
-        <?php foreach ($query->each() as $row) : ?>
+        <?php foreach ($query->each() as $row): ?>
             <?php $model = new Search($row); ?>
         <item>
             <title><![CDATA[<?= htmlspecialchars($model->title, ENT_XML1) ?>]]></title>

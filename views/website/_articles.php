@@ -5,11 +5,11 @@
  * @var app\models\Website[] $models
  */
 ?>
-<?php if (!empty($models)) : ?>
+<?php if (!empty($models)): ?>
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title"><?= $title ?></h3>
         <ul class="sidebarWidget__list">
-            <?php foreach ($models as $model) : ?>
+            <?php foreach ($models as $model): ?>
                 <li class="sidebarWidget__item">
                     <a class="sidebarWidget__link" href="<?= $model->url ?>">
                         <strong><?= $model->title ?></strong><br>

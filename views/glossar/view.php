@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
 
     <p>In <?php echo Html::a('Glossar', array('/glossar')) ?> / <?php echo Html::a($glossar->category, array('/glossar/index', 'category' => $selectedCategory)) ?></p>
 
-    <?php if ($glossar->hasDefaultImage()) : ?>
+    <?php if ($glossar->hasDefaultImage()): ?>
         <p><?= Html::img($glossar->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title]) ?></p>
     <?php endif; ?>
 
@@ -38,12 +38,12 @@ $this->params['breadcrumbs'][] = $glossar->title;
     ?>
 
     <ul class="pager">
-        <?php if ($next != null) : ?>
+        <?php if ($next != null): ?>
             <li class="next">
                 <?php echo Html::a($next->title, $next->url, array('class' => 'button button--small')) ?>
             </li>
         <?php endif; ?>
-        <?php if ($previous !== null) : ?>
+        <?php if ($previous !== null): ?>
             <li class="previous">
                 <?php echo Html::a($previous->title, $previous->url, array('class' => 'button button--small')) ?>
             </li>

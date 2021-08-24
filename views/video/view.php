@@ -34,17 +34,17 @@ $moreVideos = array_slice($similarVideos, 3);
                     <h1><?= $video->title ?></h1>
                 </div>
                 <div class="col-md-8">
-                    <?php if ($video->platform === 'youtube') : ?>
+                    <?php if ($video->platform === 'youtube'): ?>
                         <div class="ratio ratio--16x9">
                             <iframe src="https://www.youtube.com/embed/<?php echo $video->key ?>?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
-                    <?php elseif ($video->platform === 'vimeo') : ?>
+                    <?php elseif ($video->platform === 'vimeo'): ?>
                         <div class="ratio ratio--16x9">
                             <iframe src="https://player.vimeo.com/video/<?php echo $key ?>?color=ffffff" width="<?php echo $width ?>" height="<?php echo $height ?>" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
                         </div>
                     <?php endif; ?>
 
-                    <?php if (!empty($video->text)) : ?>
+                    <?php if (!empty($video->text)): ?>
                     <div class="widget widget-parser" style="margin-top: 1rem">
                         <?= Parser::widget(["model" => $video, "attribute" => "text"]) ?>
                     </div>
@@ -65,11 +65,11 @@ $moreVideos = array_slice($similarVideos, 3);
                     <div class="moreVideos">
                         <h2>Diese Videos könnten dir auch gefallen</h2>
                         <div class="row">
-                            <?php foreach ($moreVideos as $i => $moreVideo) : ?>
+                            <?php foreach ($moreVideos as $i => $moreVideo): ?>
                             <div class="col-6 col-xl-4 moreVideos__row">
                                 <div class="moreVideos__video">
                                     <a href="<?= $moreVideo->url ?>">
-                                        <?php if ($moreVideo->platform === 'youtube') : ?>
+                                        <?php if ($moreVideo->platform === 'youtube'): ?>
                                             <img class="img-fluid" src="https://img.youtube.com/vi/<?php echo $moreVideo->key ?>/mqdefault.jpg" alt="<?php echo $moreVideo->title ?>">
                                         <?php endif; ?>
                                     </a>
@@ -86,9 +86,9 @@ $moreVideos = array_slice($similarVideos, 3);
                 <div class="d-none d-md-block col-4">
                     <div class="topVideos">
                     <h2 class="topVideos__heading">Ähnliche Videos</h2>
-                        <?php foreach ($topVideos as $topVideo) : ?>
+                        <?php foreach ($topVideos as $topVideo): ?>
                             <a class="topVideos__item" href="<?= $topVideo->url ?>">
-                                <?php if ($topVideo->platform === 'youtube') : ?>
+                                <?php if ($topVideo->platform === 'youtube'): ?>
                                     <img class="topVideos__image" src="https://img.youtube.com/vi/<?php echo $topVideo->key ?>/mqdefault.jpg" alt="<?php echo $topVideo->title ?>">
                                     <span class="topVideos__label"><?= $topVideo->title ?></span>
                                 <?php endif; ?>

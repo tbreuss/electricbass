@@ -10,7 +10,7 @@ Vielen Dank für das Aufschalten Deines Inserats <b>&laquo;<?php echo $model->ti
 <br>
 Dein(e) aktiven Inserat(e):<br>
 <hr>
-<?php foreach ($models as $model) : ?>
+<?php foreach ($models as $model): ?>
 <b><?php echo $model->title ?></b><br>
     <?php echo $model->getShortenedText(100) ?><br>
     <?php echo ($model->date) ?><br>

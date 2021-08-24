@@ -9,21 +9,21 @@ use app\helpers\Html;
 ?>
 <div class="comments__form">
 
-    <?php if (Yii::$app->session->hasFlash('comment/error')) : ?>
+    <?php if (Yii::$app->session->hasFlash('comment/error')): ?>
         <div class="flash flash--danger">
             <?= Yii::$app->session->getFlash('comment/error') ?>
         </div>
     <?php endif; ?>
 
-    <?php if (Yii::$app->session->hasFlash('comment/success')) : ?>
+    <?php if (Yii::$app->session->hasFlash('comment/success')): ?>
         <div class="flash flash--success">
             <?= Yii::$app->session->getFlash('comment/success') ?>
         </div>
     <?php endif; ?>
 
-    <?php if (empty($count)) : ?>
+    <?php if (empty($count)): ?>
         <h2 class="comments__formTitle">Schreib den ersten Kommentar.</h2>
-    <?php else : ?>
+    <?php else: ?>
         <h2 class="comments__formTitle">Diskutiere mit.</h2>
     <?php endif; ?>
 
