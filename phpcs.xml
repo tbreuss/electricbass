@@ -24,7 +24,7 @@
     <file>./models</file>
     <file>./modules</file>
     <file>./traits</file>
-    <!-- <file>./views</file> -->
+    <file>./views</file>
     <file>./web/index.php</file>
     <file>./web/index-test.php</file>
     <file>./widgets</file>

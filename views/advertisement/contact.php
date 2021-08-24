@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var app\models\Advertisement $advertisement
  * @var app\models\AdvertisementContactForm $model

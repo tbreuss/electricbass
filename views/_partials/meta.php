@@ -1,5 +1,5 @@
 <div class="meta">
-    <?php if (!empty($categories)): ?>
+    <?php if (!empty($categories)) : ?>
     <div class="meta_category">Gepostet in:
         <?php
         $delim = '';
@@ -11,7 +11,7 @@
         ?>
     </div>
     <?php endif; ?>
-    <?php if (!empty($tags)): ?>
+    <?php if (!empty($tags)) : ?>
     <div class="meta_tags">Tagged:
         <?php
         if (is_string($tags)) {

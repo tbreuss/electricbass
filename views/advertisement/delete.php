@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var app\models\Advertisement $model
  * @var yii\web\View $this

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var yii\data\Pagination $pagination
  * @var yii\web\View $this
@@ -14,8 +15,8 @@ use app\widgets\LinkPager;
 
 $this->title = 'Blog';
 $this->params['breadcrumbs'][] = 'Blog';
-$this->params['pageTitle'] = sprintf('Blog für Bassist*innen zum Thema E-Bass und Musik (%d/%d)', $pagination->page+1, $pagination->pageCount);
-$this->params['metaDescription'] = sprintf('Blog zum Thema E-Bass und Musik, mit inspirierenden und lesenswerten Artikeln aus der Welt der tiefen Töne (Seite %d von %d)', $pagination->page+1, $pagination->pageCount);
+$this->params['pageTitle'] = sprintf('Blog für Bassist*innen zum Thema E-Bass und Musik (%d/%d)', $pagination->page + 1, $pagination->pageCount);
+$this->params['metaDescription'] = sprintf('Blog zum Thema E-Bass und Musik, mit inspirierenden und lesenswerten Artikeln aus der Welt der tiefen Töne (Seite %d von %d)', $pagination->page + 1, $pagination->pageCount);
 
 ?>
 
@@ -33,11 +34,11 @@ $this->params['metaDescription'] = sprintf('Blog zum Thema E-Bass und Musik, mit
 
 <?php $this->beginBlock('sidebar') ?>
 
-    <?php if (!empty($latest)): ?>
+    <?php if (!empty($latest)) : ?>
         <div class="sidebarWidget">
             <h3 class="sidebarWidget__title">Aktuelle Blogposts</h3>
             <ul class="sidebarWidget__list">
-            <?php foreach($latest AS $model): ?>
+            <?php foreach ($latest as $model) : ?>
                 <li class="sidebarWidget__item">
                     <a class="sidebarWidget__link" href="<?= $model->url ?>">
                         <strong><?= $model->title ?></strong><br>
@@ -49,11 +50,11 @@ $this->params['metaDescription'] = sprintf('Blog zum Thema E-Bass und Musik, mit
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($popular)): ?>
+    <?php if (!empty($popular)) : ?>
         <div class="sidebarWidget">
             <h3 class="sidebarWidget__title">Beliebte Blogposts</h3>
             <ul class="sidebarWidget__list">
-            <?php foreach($popular AS $model): ?>
+            <?php foreach ($popular as $model) : ?>
                 <li class="sidebarWidget__item">
                     <a class="sidebarWidget__link" href="<?= $model->url ?>">
                         <strong><?= $model->title ?></strong><br>

@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $model->title;
 
     ?>
 
-    <?php if(isset($_GET['root'], $_GET['position'], $_GET['strings'])): ?>
+    <?php if (isset($_GET['root'], $_GET['position'], $_GET['strings'])) : ?>
         <?php #$this->metaNoIndex = true ?>
     <?php endif; ?>
 
@@ -39,20 +39,20 @@ $this->params['breadcrumbs'][] = $model->title;
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormRoot">Grundton</label>
             <?php $roots = array_reverse(Fingerboard::getRoots()) ?>
-            <?php echo Html::dropDownList('root',$root,array_combine($roots,$roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown']) ?>
+            <?php echo Html::dropDownList('root', $root, array_combine($roots, $roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown']) ?>
         </div>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormPosition">Position</label>
         <?php $positions = Fingerboard::getPositions() ?>
-        <?php echo Html::dropDownList('position',$position,array_combine($positions,$positions), ['id' => 'fretboardFormPosition', 'class' => 'fretboardForm__dropdown']) ?>
+        <?php echo Html::dropDownList('position', $position, array_combine($positions, $positions), ['id' => 'fretboardFormPosition', 'class' => 'fretboardForm__dropdown']) ?>
         </div>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormStrings">Saiten</label>
-            <?php echo Html::dropDownList('strings',$strings,array('4'=>'4','5'=>'5','6'=>'6'), ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown']) ?>
+            <?php echo Html::dropDownList('strings', $strings, array('4' => '4','5' => '5','6' => '6'), ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown']) ?>
         </div>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label">&nbsp;</label>
-            <?php echo Html::submitButton('Anzeigen',array('name'=>null,'class'=>'fretboardForm__submit')) ?>
+            <?php echo Html::submitButton('Anzeigen', array('name' => null,'class' => 'fretboardForm__submit')) ?>
         </div>
     </form>
     <style>
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $model->title;
 
     <div style="margin-top: 2rem; margin-bottom:2rem;overflow:auto">
         <?php $fb = new Fingerboard($strings, $root, $model->notes, $position); ?>
-        <?php echo $fb->getFingerboard(Yii::getAlias('@web').'/img/fingerboard/') ?>
+        <?php echo $fb->getFingerboard(Yii::getAlias('@web') . '/img/fingerboard/') ?>
     </div>
 
     <div class="markdown"><?= Markdown::process($model->abstract) ?></div>
@@ -123,12 +123,12 @@ $this->params['breadcrumbs'][] = $model->title;
 
 <?= Hits::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
-<?php if (!empty($similars)): ?>
+<?php if (!empty($similars)) : ?>
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title">Ähnliche Fingersätze</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach($similars AS $model): ?>
+            <?php foreach ($similars as $model) : ?>
             <li class="sidebarWidget__item">
                 <a class="sidebarWidget__link" href="<?= $model->url ?>">
                     <strong><?= $model->title ?></strong><br>

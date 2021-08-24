@@ -34,20 +34,20 @@ $this->params['metaDescription'] = $metaDescription;
 
     <h1><?= $title ?></h1>
 
-    <?php foreach ($filter as $key => $value): ?>
+    <?php foreach ($filter as $key => $value) : ?>
         <p>Gefiltert nach <?= Yii::t('app', $key) ?>: <?= $value ?> <?= Html::a('[x]', ['catalog/index', 'category' => $category]) ?></p>
     <?php endforeach; ?>
 
     <?= ListSummary::widget(['pagination' => $pagination, 'sort' => $sort]) ?>
 
     <div class="row cataloglist">
-        <?php foreach ($models as $i => $model): ?>
+        <?php foreach ($models as $i => $model) : ?>
             <?php $emptyClass = $model->hasDefaultImage() ? '' : 'cataloglist__link--empty' ?>
             <div class="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 cataloglist__cell">
                 <a href="<?= $model->url ?>" class="cataloglist__link <?= $emptyClass ?>">
-                    <?php if ($model->hasDefaultImage()): ?>
+                    <?php if ($model->hasDefaultImage()) : ?>
                         <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title]) ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <span class="img-fluid cataloglist__cover cataloglist__cover"></span>
                     <?php endif; ?>
                     <div class="cataloglist__title"><?= $model->title ?></div>

@@ -13,12 +13,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="content">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php if (Yii::$app->session->hasFlash('contact/error')): ?>
+    <?php if (Yii::$app->session->hasFlash('contact/error')) : ?>
         <div class="flash flash--danger">
             <?= Yii::$app->session->getFlash('contact/error') ?>
         </div>
     <?php endif; ?>
-    <?php if (Yii::$app->session->hasFlash('contact/success')): ?>
+    <?php if (Yii::$app->session->hasFlash('contact/success')) : ?>
         <div class="flash flash--success">
             <?= Yii::$app->session->getFlash('contact/success') ?>
         </div>

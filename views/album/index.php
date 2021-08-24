@@ -23,8 +23,8 @@ $this->title = 'Bass-Alben | Katalog';
 $this->params['breadcrumbs'][] = ['label' => 'Katalog', 'url' => Url::to(['catalog/overview'])];
 $this->params['breadcrumbs'][] = 'Bass-Alben';
 
-$this->params['pageTitle'] = sprintf('Inspirierende Musikalben von E-Bassist*innen (%d/%d)', $pagination->page+1, $pagination->pageCount);
-$this->params['metaDescription'] = sprintf('Inspirierende und hörenswerte Musikalben berühmter E-Bassisten. Unentdeckte Alben und Songs von Bassisten wie du und ich (Seite %d von %d)', $pagination->page+1, $pagination->pageCount);
+$this->params['pageTitle'] = sprintf('Inspirierende Musikalben von E-Bassist*innen (%d/%d)', $pagination->page + 1, $pagination->pageCount);
+$this->params['metaDescription'] = sprintf('Inspirierende und hörenswerte Musikalben berühmter E-Bassisten. Unentdeckte Alben und Songs von Bassisten wie du und ich (Seite %d von %d)', $pagination->page + 1, $pagination->pageCount);
 
 ?>
 
@@ -32,7 +32,7 @@ $this->params['metaDescription'] = sprintf('Inspirierende und hörenswerte Musik
 
     <h1>Musikalben von E-Bassisten</h1>
 
-    <?php foreach ($filter as $key => $value): ?>
+    <?php foreach ($filter as $key => $value) : ?>
         <p>Gefiltert nach <?= Yii::t('app', $key) ?>:
             <?= $value ?> <?= Html::a('[x]', ['album/index']) ?>
         </p>
@@ -41,12 +41,12 @@ $this->params['metaDescription'] = sprintf('Inspirierende und hörenswerte Musik
     <?= ListSummary::widget(['pagination' => $pagination, 'sort' => $sort]) ?>
 
     <div class="row albumlist">
-        <?php foreach ($models as $i => $model): ?>
+        <?php foreach ($models as $i => $model) : ?>
             <div class="col-6 col-sm-4 col-md-6 col-lg-4 albumlist__cell">
                 <a href="<?= $model->url ?>" class="albumlist__link">
-                    <?php if ($model->hasDefaultImage()): ?>
+                    <?php if ($model->hasDefaultImage()) : ?>
                         <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid albumlist__cover", "alt" => $model->fullTitle]) ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <?= Html::img('/img/bg.png', ["width" => 290, "height" => 290, "class" => "img-fluid albumlist__cover", "alt" => $model->fullTitle]) ?>
                     <?php endif; ?>
                     <?= RatingReadOnly::widget(["style" => "none", "tableName" => "album", "tableId" => $model->id]) ?>

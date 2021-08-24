@@ -37,14 +37,14 @@ $metaDescription = [];
 $metaDescription[] = 'Bass lernen mit ';
 $metaDescription[] = '"';
 $metaDescription[] = $model->title;
-if(!empty($model->subtitle)) {
+if (!empty($model->subtitle)) {
     $metaDescription[] = ' ';
     $metaDescription[] = $model->subtitle;
     $metaDescription[] = '"';
 } else {
     $metaDescription[] = '"';
 }
-if(!empty($model->autor)) {
+if (!empty($model->autor)) {
     $metaDescription[] = ' von ';
     $metaDescription[] = $model->autor;
 }
@@ -59,40 +59,40 @@ $this->params['metaDescription'] = join($metaDescription);
 <div class="content">
 
     <h1><?= $model->title ?></h1>
-    <?php if(!empty($model->artist)): ?>
+    <?php if (!empty($model->artist)) : ?>
         <p>von <?= $model->artist ?></p>
     <?php endif; ?>
-    <?php if(!empty($model->subtitle)): ?>
+    <?php if (!empty($model->subtitle)) : ?>
         <p><?= $model->subtitle ?></p>
     <?php endif; ?>
 
-    <?php if ($model->hasDefaultImage()): ?>
+    <?php if ($model->hasDefaultImage()) : ?>
         <p><?= Html::img($model->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $model->title . ' ' . join(' · ', $model->getProductNumbers())]) ?></p>
     <?php endif; ?>
 
     <div class="markdown"><?= Markdown::process($model->text) ?></div>
 
-    <?php if (!empty($model->contents)): ?>
+    <?php if (!empty($model->contents)) : ?>
         <h3>Inhalt</h3>
         <div class="markdown"><?= Markdown::process($model->contents) ?></div>
     <?php endif; ?>
 
-    <?php if (!empty($model->blurb)): ?>
+    <?php if (!empty($model->blurb)) : ?>
         <h3>Klappentext</h3>
         <div class="markdown"><?= Markdown::process($model->blurb) ?></div>
     <?php endif; ?>
 
-    <?php if ($amazonProductDetail !== null): ?>
+    <?php if ($amazonProductDetail !== null) : ?>
         <?php $detailPageUrl = $amazonProductDetail->getDetailPageUrl(); ?>
         <p class="text-center"><a class="button button--big button--warning" href="<?= $detailPageUrl ?>" target="_blank">Jetzt kaufen</a></p>
-    <?php elseif(!empty($model->asin)): ?>
+    <?php elseif (!empty($model->asin)) : ?>
         <p class="text-center"><a class="button button--big button--warning" href="<?= Url::toAmazonProduct($model->asin) ?>" target="_blank">Jetzt kaufen</a></p>
     <?php endif; ?>
 
-    <?php if (!empty($model->productInfos)): ?>
+    <?php if (!empty($model->productInfos)) : ?>
         <h3>Produktinformation</h3>
         <table class="table table--small">
-            <?php foreach ($model->productInfos as $info): ?>
+            <?php foreach ($model->productInfos as $info) : ?>
                 <tr>
                     <td class="col-md-4"><?= $info["label"] ?></td>
                     <td class="col-md-8"><?= $info["value"] ?></td>
@@ -119,12 +119,12 @@ $this->params['metaDescription'] = join($metaDescription);
 
 <?= Hits::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
 
-<?php if (!empty($similars)): ?>
+<?php if (!empty($similars)) : ?>
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title">Ähnliche Artikel</h3>
         <ul class="sidebarWidget__list">
-        <?php foreach($similars AS $model): ?>
+        <?php foreach ($similars as $model) : ?>
         <li class="sidebarWidget__item">
             <a class="sidebarWidget__link" href="<?= $model->url ?>">
                 <strong><?= $model->title ?></strong><br>

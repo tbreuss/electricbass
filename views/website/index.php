@@ -15,8 +15,8 @@ use app\widgets\LinkPager;
 
 $this->title = 'Websites';
 $this->params['breadcrumbs'][] = 'Websites';
-$this->params['pageTitle'] = sprintf('Websites zum Thema E-Bass (%d/%d)', $pagination->page+1, $pagination->pageCount);
-$this->params['metaDescription'] = sprintf('Umfangreicher Katalog mit Marken und Herstellern von E-Bässen und Zubehör, Blogs von Bassist*innen und Websites zum Thema E-Bass. (Seite %d von %d)', $pagination->page+1, $pagination->pageCount);
+$this->params['pageTitle'] = sprintf('Websites zum Thema E-Bass (%d/%d)', $pagination->page + 1, $pagination->pageCount);
+$this->params['metaDescription'] = sprintf('Umfangreicher Katalog mit Marken und Herstellern von E-Bässen und Zubehör, Blogs von Bassist*innen und Websites zum Thema E-Bass. (Seite %d von %d)', $pagination->page + 1, $pagination->pageCount);
 
 ?>
 
@@ -25,12 +25,12 @@ $this->params['metaDescription'] = sprintf('Umfangreicher Katalog mit Marken und
     <?= ListSummary::widget(['pagination' => $pagination, 'sort' => $sort]) ?>
 
     <div class="row websites">
-    <?php foreach ($websites as $model): ?>
+    <?php foreach ($websites as $model) : ?>
         <div class="col-6 col-sm-4 col-md-6 col-lg-4 websites__cell">
             <a href="<?= $model->url ?>" class="websites__link">
-                <?php if ($model->hasDefaultImage()): ?>
+                <?php if ($model->hasDefaultImage()) : ?>
                     <?= Html::cachedCropedImage($model->getDefaultImage(), 400, 300, ["class" => "img-fluid websites__cover", "alt" => $model->title]) ?>
-                <?php else: ?>
+                <?php else : ?>
                     <?= Html::cachedCropedImage('/img/bg.png', 400, 300, ["class" => "img-fluid websites__cover", "alt" => $model->title]) ?>
                 <?php endif; ?>
                 <div class="websites__title"><?= $model->title ?></div>

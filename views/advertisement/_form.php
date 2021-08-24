@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var app\models\Advertisement $model
  */
@@ -7,7 +8,7 @@ use app\helpers\Html;
 
 ?>
 
-<?php if(Yii::$app->session->hasFlash('updateFormSubmitted')): ?>
+<?php if (Yii::$app->session->hasFlash('updateFormSubmitted')) : ?>
     <div class="flash flash--success">
         Dein Eintrag wurde aktualisiert.
         <?= Html::a("Inserat anschauen", $model->url, ['target' => '_blank']) ?>
@@ -21,7 +22,7 @@ use app\helpers\Html;
 <div class="col-12 form__row">
     <?php $errorClass = $model->hasErrors('category_id') ? 'is-invalid' : ''; ?>
     <?= Html::label($model->getAttributeLabel('category_id'), 'category_id', ['class' => 'form__label is-required']); ?>
-    <?= Html::dropDownList('Advertisement[category_id]', (string)$model->category_id, [''=>''] +$model::$categories, ['class' => 'form__dropdown ' . $errorClass, 'autofocus' => true]); ?>
+    <?= Html::dropDownList('Advertisement[category_id]', (string)$model->category_id, ['' => ''] + $model::$categories, ['class' => 'form__dropdown ' . $errorClass, 'autofocus' => true]); ?>
     <?= Html::error($model, 'category_id', ['class' => 'invalid-feedback']); ?>
 </div>
 
@@ -56,7 +57,7 @@ use app\helpers\Html;
 <div class="col-12 col-sm-4 form__row">
     <?php $errorClass = $model->hasErrors('currency') ? 'is-invalid' : ''; ?>
     <?= Html::label($model->getAttributeLabel('currency'), 'currency', ['class' => 'form__label']); ?>
-    <?= Html::dropDownList('Advertisement[currency]', $model->currency, [''=>'','CHF'=>'CHF','EURO'=>'EURO'], ['class' => 'form__dropdown ' . $errorClass]); ?>
+    <?= Html::dropDownList('Advertisement[currency]', $model->currency, ['' => '','CHF' => 'CHF','EURO' => 'EURO'], ['class' => 'form__dropdown ' . $errorClass]); ?>
     <?= Html::error($model, 'currency', ['class' => 'invalid-feedback']); ?>
 </div>
 
@@ -91,13 +92,13 @@ use app\helpers\Html;
 </div>
 
 <div id="del" class="col-12 form__row">
-    <?php if(($photo = $model->getPhoto()) != ''): ?>
+    <?php if (($photo = $model->getPhoto()) != '') : ?>
         <div class="form-group field-advertisement-homepage">
-            <?php echo Html::img('@web/'.$photo, ['height'=>200]) ?>
+            <?php echo Html::img('@web/' . $photo, ['height' => 200]) ?>
             <?php echo Html::submitButton('Foto löschen', array('name' => 'delete', 'class' => 'button button--primary button--small')); ?>
         </div>
-    <?php else: ?>
-        <?php if (Yii::$app->session->hasFlash('fotoDeleted')): ?>
+    <?php else : ?>
+        <?php if (Yii::$app->session->hasFlash('fotoDeleted')) : ?>
             <div class="flash flash--success">Das Foto wurde gelöscht.</div>
         <?php endif; ?>
         <?= Html::label($model->getAttributeLabel('upload'), 'upload', ['class' => 'form__label']); ?>
@@ -123,7 +124,7 @@ use app\helpers\Html;
 <div class="col-12 col-md-6 form__row">
     <?php $errorClass = $model->hasErrors('country') ? 'is-invalid' : ''; ?>
     <?= Html::label($model->getAttributeLabel('country'), 'country', ['class' => 'form__label is-required']); ?>
-    <?= Html::dropDownList('Advertisement[country]', $model->country, [''=>'', 'DE'=>'Deutschland','CH'=>'Schweiz','AT'=>'Österreich'], ['class' => 'form__dropdown ' . $errorClass]); ?>
+    <?= Html::dropDownList('Advertisement[country]', $model->country, ['' => '', 'DE' => 'Deutschland','CH' => 'Schweiz','AT' => 'Österreich'], ['class' => 'form__dropdown ' . $errorClass]); ?>
     <?= Html::error($model, 'country', ['class' => 'invalid-feedback']); ?>
 </div>
 
