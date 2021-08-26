@@ -20,11 +20,11 @@ final class Searchlog extends ActiveRecord
      */
     public function attributeLabels(): array
     {
-        return array(
+        return [
             'id' => 'Id',
             'term' => 'Suchbegriff',
             'frequency' => 'Häufigkeit',
-        );
+        ];
     }
 
     /**

@@ -43,7 +43,7 @@ use yii\web\UploadedFile;
 final class Advertisement extends ActiveRecord
 {
     /** @var string[] */
-    public static array $categories = array(
+    public static array $categories = [
         1 => 'Effektgeräte',
         2 => 'Bassgitarren',
         3 => 'Lautsprecher',
@@ -55,12 +55,12 @@ final class Advertisement extends ActiveRecord
         9 => 'Bassist sucht Band',
         10 => 'Sonstiges',
         11 => 'Bandgründung'
-    );
+    ];
 
     /** @var string[] */
-    public static $blacklist = array(
+    public static $blacklist = [
         'gabriel.buehler@gmx.ch'
-    );
+    ];
 
     /** @var string */
     public $nspm;
@@ -87,7 +87,7 @@ final class Advertisement extends ActiveRecord
      */
     public function attributeLabels(): array
     {
-        return array(
+        return [
             'category_id' => 'Kategorie',
             'title' => 'Titel',
             'longtext' => 'Anzeigentext',
@@ -102,7 +102,7 @@ final class Advertisement extends ActiveRecord
             'homepage' => 'Website',
             'nspm' => 'NSPM',
             'geocodingAddress' => 'Standort'
-        );
+        ];
     }
 
     /**
@@ -110,48 +110,48 @@ final class Advertisement extends ActiveRecord
      */
     public function rules(): array
     {
-        return array(
+        return [
             // category_id
-            array('category_id', 'required'),
+            ['category_id', 'required'],
             // title
-            array('title', 'required'),
-            array('title', 'filter', 'filter' => 'strip_tags'),
-            array('title', 'string', 'max' => 60, 'encoding' => 'utf-8'),
+            ['title', 'required'],
+            ['title', 'filter', 'filter' => 'strip_tags'],
+            ['title', 'string', 'max' => 60, 'encoding' => 'utf-8'],
             // longtext
-            array('longtext', 'required'),
-            array('longtext', 'filter', 'filter' => 'strip_tags'),
+            ['longtext', 'required'],
+            ['longtext', 'filter', 'filter' => 'strip_tags'],
             // new_price
-            array('new_price', 'double'),
+            ['new_price', 'double'],
             // sell_price
-            array('sell_price', 'double'),
+            ['sell_price', 'double'],
             // currency
-            array('currency', 'validateCurrency'),
-            array('currency', 'filter', 'filter' => 'strip_tags'),
+            ['currency', 'validateCurrency'],
+            ['currency', 'filter', 'filter' => 'strip_tags'],
             // name
-            array('name', 'required'),
-            array('name', 'filter', 'filter' => 'strip_tags'),
+            ['name', 'required'],
+            ['name', 'filter', 'filter' => 'strip_tags'],
             // phone
-            array('phone', 'filter', 'filter' => 'strip_tags'),
+            ['phone', 'filter', 'filter' => 'strip_tags'],
             // region
-            array('region', 'required'),
-            array('region', 'filter', 'filter' => 'strip_tags'),
+            ['region', 'required'],
+            ['region', 'filter', 'filter' => 'strip_tags'],
             // country
-            array('country', 'required'),
-            array('country', 'filter', 'filter' => 'strip_tags'),
+            ['country', 'required'],
+            ['country', 'filter', 'filter' => 'strip_tags'],
             // email
-            array('email', 'required'),
-            array('email', 'validateBlacklist'),
-            array('email', 'email'),
-            array('email', 'filter', 'filter' => 'strip_tags'),
+            ['email', 'required'],
+            ['email', 'validateBlacklist'],
+            ['email', 'email'],
+            ['email', 'filter', 'filter' => 'strip_tags'],
             // homepage
-            array('homepage', 'url'),
+            ['homepage', 'url'],
             // geocodingAddress
-            array('geocodingAddress', 'string', 'max' => 128, 'encoding' => 'utf-8'),
+            ['geocodingAddress', 'string', 'max' => 128, 'encoding' => 'utf-8'],
             // nspm
-            array('nspm', 'safe'),
+            ['nspm', 'safe'],
             // upload
             [['upload'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, gif, jpeg', 'maxSize' => 1024 * 1024 * 1],
-        );
+        ];
     }
 
     public function onAfterInsert(): void
@@ -209,7 +209,7 @@ final class Advertisement extends ActiveRecord
     {
         #$flag = Html::flagImage($this->country);
 
-        $infos = array();
+        $infos = [];
         if (!empty($this->new_price)) {
             $infos['Neupreis'] = $this->new_price . ' ' . $this->currency;
         }
@@ -228,7 +228,7 @@ final class Advertisement extends ActiveRecord
         #if(!empty($this->email)) $infos['E-Mail'] = Html::fancyboxIframeLink('Anbieter kontaktieren', array('advertisement/contact', 'id' => $this->id), array('class' => 'fancybox-iframe', 'target'=>'_blank'));
         #if(!empty($this->email)) $infos['E-Mail'] = Html::a('Anbieter kontaktieren', array('advertisement/contact', 'id' => $this->id), array('class' => 'button button--danger'));
         if (!empty($this->homepage)) {
-            $infos['Website'] = Html::a(mb_strimwidth($this->homepage, 0, 50, '...', 'UTF-8'), $this->homepage, array('rel' => 'nofollow', 'target' => '_blank'));
+            $infos['Website'] = Html::a(mb_strimwidth($this->homepage, 0, 50, '...', 'UTF-8'), $this->homepage, ['rel' => 'nofollow', 'target' => '_blank']);
         }
         return array_map('stripslashes', $infos);
     }
@@ -272,7 +272,7 @@ final class Advertisement extends ActiveRecord
         $imagine->open($filename)
             ->thumbnail(new Box(1024, 1024))
             ->interlace(ImageInterface::INTERLACE_PLANE)
-            ->save($filename, array('jpeg_quality' => 90, 'png_compression_level' => 8));
+            ->save($filename, ['jpeg_quality' => 90, 'png_compression_level' => 8]);
 
         return true;
     }
@@ -345,7 +345,7 @@ final class Advertisement extends ActiveRecord
     {
         return self::find()
             ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
-            ->where('email=:email AND hidden=0 AND deleted=0', array(':email' => $email))
+            ->where('email=:email AND hidden=0 AND deleted=0', [':email' => $email])
             ->orderBy('id DESC')
             ->all();
     }
@@ -357,14 +357,14 @@ final class Advertisement extends ActiveRecord
     {
         $coords = explode(',', $position);
         if (!empty($coords) && count($coords) == 2) {
-            $criteria = array(
+            $criteria = [
                 'select' => '*, UNIX_TIMESTAMP(date) AS date, (DATEDIFF(NOW(), date)>60) AS expired',
                 'condition' => 'latitude LIKE :latitude AND longitude LIKE :longitude AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60',
-                'params' => array(':latitude' => $coords[0] . '%', ':longitude' => $coords[1] . '%')
-            );
+                'params' => [':latitude' => $coords[0] . '%', ':longitude' => $coords[1] . '%']
+            ];
             #return self::model()->findAll($criteria);
         }
-        return array();
+        return [];
     }
 
     /**
@@ -378,7 +378,7 @@ final class Advertisement extends ActiveRecord
 
         $advertisement = self::find()
             ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
-            ->where($condition, array(':id' => $id))
+            ->where($condition, [':id' => $id])
             ->one();
 
         if (is_null($advertisement)) {
@@ -408,19 +408,19 @@ final class Advertisement extends ActiveRecord
 
     public function createActivationUrl(): string
     {
-        $url = array('advertisement/activate', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
+        $url = ['advertisement/activate', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id)];
         return Url::toRoute($url, true);
     }
 
     public function createRenewUrl(): string
     {
-        $url = array('advertisement/renew', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
+        $url = ['advertisement/renew', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id)];
         return Url::toRoute($url, true);
     }
 
     public function createDeleteUrl(int $confirmed = 0): string
     {
-        $url = array('advertisement/delete', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
+        $url = ['advertisement/delete', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id)];
         if ($confirmed) {
             $url['confirmed'] = 1;
         }
@@ -429,7 +429,7 @@ final class Advertisement extends ActiveRecord
 
     public function createUpdateUrl(): string
     {
-        $url = array('advertisement/update', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id));
+        $url = ['advertisement/update', 'id' => $this->id, 'accessCode' => Div::createAccessCode($this->id)];
         return Url::toRoute($url, true);
     }
 

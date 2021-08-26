@@ -23,10 +23,10 @@ final class AdvertisementController extends Controller
     public function actionIndex(int $page = 0): string
     {
         $models = Advertisement::findAllForAdvertisementIndexController();
-        return $this->render('index', array(
+        return $this->render('index', [
             'models' => $models,
             'page' => $page
-        ));
+        ]);
     }
 
     public function actionContact(string $id): Response|string
@@ -39,7 +39,7 @@ final class AdvertisementController extends Controller
             if ($model->validate()) {
                 if (empty($model->nspm)) {
                     $this->sendContactMail($model, $advertisement);
-                    $advertisement->updateCounters(array('requests' => 1));
+                    $advertisement->updateCounters(['requests' => 1]);
                 } else {
                     $this->sendAdminMail('Spamversuch Kleinanzeigen Kontakt', print_r($_POST, true));
                 }
@@ -49,10 +49,10 @@ final class AdvertisementController extends Controller
             }
         }
 
-        return $this->render('contact', array(
+        return $this->render('contact', [
             'model' => $model,
             'advertisement' => $advertisement
-        ));
+        ]);
     }
 
     public function actionView(string $id): Response|string
@@ -66,9 +66,9 @@ final class AdvertisementController extends Controller
 
         #$model->increaseHits();
 
-        return $this->render('view', array(
+        return $this->render('view', [
             'model' => $model
-        ));
+        ]);
     }
 
     public function actionAdd(): Response|string
@@ -89,10 +89,10 @@ final class AdvertisementController extends Controller
                     $this->sendConfirmationMail($model);
                 }
                 Yii::$app->session->setFlash('addFormSubmitted');
-                return $this->redirect(array('index'));
+                return $this->redirect(['index']);
             }
         }
-        return $this->render('add', array('model' => $model));
+        return $this->render('add', ['model' => $model]);
     }
 
     public function actionActivate(string $id, string $accessCode): string
@@ -102,7 +102,7 @@ final class AdvertisementController extends Controller
             throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         $model->activate();
-        return $this->render('renew', array('model' => $model));
+        return $this->render('renew', ['model' => $model]);
     }
 
     public function actionRenew(string $id, string $accessCode): string
@@ -112,8 +112,8 @@ final class AdvertisementController extends Controller
             throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         $model->renew();
-        $model->updateCounters(array('renewals' => 1));
-        return $this->render('renew', array('model' => $model));
+        $model->updateCounters(['renewals' => 1]);
+        return $this->render('renew', ['model' => $model]);
     }
 
     public function actionDelete(string $id, string $accessCode, int $confirmed = 0): Response|string
@@ -125,9 +125,9 @@ final class AdvertisementController extends Controller
         if (!empty($confirmed)) {
             $model->softDelete();
             Yii::$app->session->setFlash('deleteConfirmed');
-            return $this->redirect(array('index'));
+            return $this->redirect(['index']);
         }
-        return $this->render('delete', array('model' => $model, 'confirmed' => $confirmed));
+        return $this->render('delete', ['model' => $model, 'confirmed' => $confirmed]);
     }
 
     public function actionUpdate(string $id, string $accessCode): Response|string
@@ -152,7 +152,7 @@ final class AdvertisementController extends Controller
                 return $this->refresh();
             }
         }
-        return $this->render('update', array('model' => $model));
+        return $this->render('update', ['model' => $model]);
     }
 
     public function actionManage(): Response|string

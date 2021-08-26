@@ -14,13 +14,13 @@ final class GoogleMaps extends Widget
 
     public function run(): string
     {
-        return $this->render('googlemaps', array(
+        return $this->render('googlemaps', [
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'text' => $this->text,
             'title' => $this->title,
             'uniqid' => 'map' . uniqid(),
             'zoom' => $this->zoom,
-        ));
+        ]);
     }
 }

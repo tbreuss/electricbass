@@ -41,9 +41,9 @@ final class Articles extends Widget
             return '';
         }
 
-        return $this->render('articles', array(
+        return $this->render('articles', [
             'title' => $this->title,
             'models' => $models
-        ));
+        ]);
     }
 }

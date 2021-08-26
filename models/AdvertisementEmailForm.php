@@ -28,11 +28,11 @@ final class AdvertisementEmailForm extends Model
      */
     public function attributeLabels(): array
     {
-        return array(
+        return [
             'name' => 'Dein Name',
             'email' => 'Deine E-Mail',
             'verifyCode' => ' Prüfcode'
-        );
+        ];
     }
 
     /**
@@ -40,15 +40,15 @@ final class AdvertisementEmailForm extends Model
      */
     public function rules(): array
     {
-        return array(
+        return [
             // name
-            array('name', 'safe'),
+            ['name', 'safe'],
             // email
-            array('email', 'required'),
-            array('email', 'string', 'max' => 100, 'encoding' => 'utf-8'),
-            array('email', 'email'),
+            ['email', 'required'],
+            ['email', 'string', 'max' => 100, 'encoding' => 'utf-8'],
+            ['email', 'email'],
             // verifyCode
             ['verifyCode', 'captcha'],
-        );
+        ];
     }
 }

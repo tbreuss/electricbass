@@ -47,14 +47,14 @@ final class Template
     var $debug     = false;
 
   /* $file[varname] = "filename"; */
-    var $file  = array();
+    var $file  = [];
 
   /* relative filenames are relative to this pathname */
     var $root   = "";
 
   /* $varkeys[key] = "key"; $varvals[key] = "value"; */
-    var $varkeys = array();
-    var $varvals = array();
+    var $varkeys = [];
+    var $varvals = [];
 
   /* "remove"  => remove undefined variables
    * "comment" => replace undefined variables with comments
@@ -198,7 +198,7 @@ final class Template
                 if ($this->debug) {
                     print "scalar: set *$varname* to *$value*<br>\n";
                 }
-                $value = preg_replace(array('/\$([0-9])/', '/\\\\([0-9])/'), array('&#36;\1', '&#92;\1'), $value);
+                $value = preg_replace(['/\$([0-9])/', '/\\\\([0-9])/'], ['&#36;\1', '&#92;\1'], $value);
                 $this->varkeys[$varname] = "/" . $this->varname($varname) . "/";
                 $this->varvals[$varname] = $value;
             }
@@ -209,7 +209,7 @@ final class Template
                     if ($this->debug) {
                         print "array: set *$k* to *$v*<br>\n";
                     }
-                    $v = preg_replace(array('/\$([0-9])/', '/\\\\([0-9])/'), array('&#36;\1', '&#92;\1'), $v);
+                    $v = preg_replace(['/\$([0-9])/', '/\\\\([0-9])/'], ['&#36;\1', '&#92;\1'], $v);
                     $this->varkeys[$k] = "/" . $this->varname($k) . "/";
                     $this->varvals[$k] = $v;
                 }
@@ -383,7 +383,7 @@ final class Template
                 break;
         }
 
-        $str = preg_replace(array('/&#36;([0-9])/', '/&#92;([0-9])/'), array('$\1', '\\\1'), $str);
+        $str = preg_replace(['/&#36;([0-9])/', '/&#92;([0-9])/'], ['$\1', '\\\1'], $str);
         return $str;
     }
 

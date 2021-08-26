@@ -21,10 +21,10 @@ use yii\widgets\Spaceless;
         $clearer = '';
         $class = "";
     ?>
-    <?php if (in_array($position, array('top','bottom'))): ?>
+    <?php if (in_array($position, ['top','bottom'])): ?>
         <?php $divWidth = '100%';
         $class = "img-fluid"; ?>
-    <?php elseif (in_array($position, array('left','right'))): ?>
+    <?php elseif (in_array($position, ['left','right'])): ?>
         <?php $width = 300 ?>
         <?php $float = ($position == 'left') ? 'float:left;margin:0 20px 1em 0' : 'float:right;margin:0 0 1em 20px' ?>
         <?php $clearer = '<div class="clear"></div>' ?>
@@ -56,7 +56,7 @@ use yii\widgets\Spaceless;
             <?php endif; ?>
         </div>
 
-        <?php if (in_array($position, array('left','right'))): ?>
+        <?php if (in_array($position, ['left','right'])): ?>
             <div class="text"><?= Markdown::process($text) ?></div>
         <?php endif; ?>
 

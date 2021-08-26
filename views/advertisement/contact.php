@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = 'Anbieter kontaktieren';
     </div>
 
     <div class="col-5 form__row form__row--buttons">
-        <?php echo Html::a('Zurück zum Inserat', $advertisement->url, array('class' => 'form__cancel')) ?>
+        <?php echo Html::a('Zurück zum Inserat', $advertisement->url, ['class' => 'form__cancel']) ?>
     </div>
 
     </div>

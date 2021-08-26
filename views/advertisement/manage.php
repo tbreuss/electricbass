@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = 'Inserate verwalten';
     <?php if (Yii::$app->session->hasFlash('manageFormSubmitted')): ?>
         <p>Wir haben an die angegebene E-Mail-Adresse eine E-Mail mit den aktiven Inseraten gesendet.</p>
         <p>Hinweis: Die E-Mail kann im Spam-Ordner deines Mailprogramms gelandet sein. Falls du keine E-Mail bekommen hast, melde dich bei uns über das Kontaktformular.</p>
-        <p><?php echo Html::a('Zurück zu den Inseraten', array('advertisement/index')) ?>
+        <p><?php echo Html::a('Zurück zu den Inseraten', ['advertisement/index']) ?>
 
     <?php else: ?>
         <p>Wir schicken dir einen Link, mit dem du deine Inserate verwalten kannst. Gib dafür deine E-Mail-Adresse ein.</p>
@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = 'Inserate verwalten';
                 </div>
 
                 <div class="col-sm-5 form__row form__row--buttons">
-                <?php echo Html::a('Abbrechen', array('advertisement/index'), array('class' => 'form__cancel')) ?>
+                <?php echo Html::a('Abbrechen', ['advertisement/index'], ['class' => 'form__cancel']) ?>
                 </div>
 
         </div>

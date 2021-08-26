@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
     <h1><?php echo $glossar->title ?></h1>
     <?php #$this->metaDescription = strip_tags(Markdown::process($glossar->abstract)) ?>
 
-    <p>In <?php echo Html::a('Glossar', array('/glossar')) ?> / <?php echo Html::a($glossar->category, array('/glossar/index', 'category' => $selectedCategory)) ?></p>
+    <p>In <?php echo Html::a('Glossar', ['/glossar']) ?> / <?php echo Html::a($glossar->category, ['/glossar/index', 'category' => $selectedCategory]) ?></p>
 
     <?php if ($glossar->hasDefaultImage()): ?>
         <p><?= Html::img($glossar->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title]) ?></p>
@@ -40,17 +40,17 @@ $this->params['breadcrumbs'][] = $glossar->title;
     <ul class="pager">
         <?php if ($next != null): ?>
             <li class="next">
-                <?php echo Html::a($next->title, $next->url, array('class' => 'button button--small')) ?>
+                <?php echo Html::a($next->title, $next->url, ['class' => 'button button--small']) ?>
             </li>
         <?php endif; ?>
         <?php if ($previous !== null): ?>
             <li class="previous">
-                <?php echo Html::a($previous->title, $previous->url, array('class' => 'button button--small')) ?>
+                <?php echo Html::a($previous->title, $previous->url, ['class' => 'button button--small']) ?>
             </li>
         <?php endif; ?>
     </ul>
 
-    <?php echo $this->render('_sidebar', array('glossar' => $glossar, 'selectedCategory' => $selectedCategory)) ?>
+    <?php echo $this->render('_sidebar', ['glossar' => $glossar, 'selectedCategory' => $selectedCategory]) ?>
 
     <?= Rating::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
 

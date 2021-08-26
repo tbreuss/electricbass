@@ -95,7 +95,7 @@ use app\helpers\Html;
     <?php if (($photo = $model->getPhoto()) != ''): ?>
         <div class="form-group field-advertisement-homepage">
             <?php echo Html::img('@web/' . $photo, ['height' => 200]) ?>
-            <?php echo Html::submitButton('Foto löschen', array('name' => 'delete', 'class' => 'button button--primary button--small')); ?>
+            <?php echo Html::submitButton('Foto löschen', ['name' => 'delete', 'class' => 'button button--primary button--small']); ?>
         </div>
     <?php else: ?>
         <?php if (Yii::$app->session->hasFlash('fotoDeleted')): ?>

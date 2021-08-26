@@ -93,7 +93,7 @@ final class Html extends \yii\helpers\Html
 
         // Zwischengespeichertes Bild
         $cachedUrl = str_replace('media/', '', $relUrl);
-        $parts = pathinfo(str_replace(array(':', '/'), '-', $cachedUrl));
+        $parts = pathinfo(str_replace([':', '/'], '-', $cachedUrl));
         $cachedUrl = sprintf(
             'cache/%s-%dx%d%s%s',
             $parts['filename'],
@@ -130,12 +130,12 @@ final class Html extends \yii\helpers\Html
             $imagine->open($relUrl)
                 ->resize(new Box($width, $height))
                 ->interlace(ImageInterface::INTERLACE_PLANE)
-                ->save($cachedUrl, array('jpeg_quality' => 80, 'png_compression_level' => 8));
+                ->save($cachedUrl, ['jpeg_quality' => 80, 'png_compression_level' => 8]);
         } else {
             $imagine->open($relUrl)
                 ->thumbnail(new Box($width, $height))
                 ->interlace(ImageInterface::INTERLACE_PLANE)
-                ->save($cachedUrl, array('jpeg_quality' => 80, 'png_compression_level' => 8));
+                ->save($cachedUrl, ['jpeg_quality' => 80, 'png_compression_level' => 8]);
         }
 
         return Html::img('@web/' . $cachedUrl, $htmlOptions);

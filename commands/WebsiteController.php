@@ -15,13 +15,13 @@ final class WebsiteController extends Controller
         $urls = Website::findUrls();
 
         foreach ($urls as $url) {
-            $options = array(
+            $options = [
                 'URL' => $url,   // URL of the Page we like to get the Favicon from
                 'SAVE' => true,   // Save Favicon copy local (true) or return only favicon url (false)
                 'DIR' => dirname(__DIR__) . '/web/media/favicon/',   // Local Dir the copy of the Favicon should be saved
                 'TRY' => true,   // Try to get the Favicon frome the page (true) or only use the APIs (false)
                 'DEV' => null,   // Give all Debug-Messages ('debug') or only make the work (null)
-            );
+            ];
             grap_favicon($options);
             echo "grabbed favicon for " . $url . PHP_EOL;
         }
@@ -264,9 +264,9 @@ function load(string $url, string $DEBUG): string
         curl_close($ch);
         unset($ch);
     } else {
-        $context = array('http' => array(
-            'user_agent' => 'FaviconBot/1.0 (+http://' . $_SERVER['SERVER_NAME'] . '/)'),
-        );
+        $context = ['http' => [
+            'user_agent' => 'FaviconBot/1.0 (+http://' . $_SERVER['SERVER_NAME'] . '/)'],
+        ];
         $context = stream_context_create($context);
         if (!function_exists('file_get_contents')) {
             $fh = fopen($url, 'r', false, $context);

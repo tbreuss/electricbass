@@ -38,14 +38,14 @@ final class SearchController extends Controller
 
         if (!empty($term) && (mb_strlen($term) >= SearchController::MIN_QUERY_LENGTH)) {
             $condition = '';
-            $fields = array('title', 'subtitle', 'abstract', 'content'/*, 'tags'*/);
+            $fields = ['title', 'subtitle', 'abstract', 'content'/*, 'tags'*/];
             $queryParts = explode(' ', $term);
-            $queryParts = array_filter($queryParts, array($this, 'filterQueryParts'));
+            $queryParts = array_filter($queryParts, [$this, 'filterQueryParts']);
 
             if (count($queryParts) > 0) {
-                $conditions = array();
+                $conditions = [];
                 foreach ($fields as $field) {
-                    $subConditions = array();
+                    $subConditions = [];
                     foreach ($queryParts as $queryPart) {
                         //$subConditions[] = "$field LIKE '%$queryPart%'";
                         $queryPart = addslashes($queryPart);
@@ -107,11 +107,11 @@ final class SearchController extends Controller
         }
 
         $this->layout = 'onecol_empty';
-        return $this->render('index', array(
+        return $this->render('index', [
             'dataProvider' => $provider,
             'term' => $term,
             'searched' => $searched
-        ));
+        ]);
     }
 
     private function filterQueryParts(string $queryPart): bool

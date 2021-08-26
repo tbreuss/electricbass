@@ -48,11 +48,11 @@ $this->params['breadcrumbs'][] = $model->title;
         </div>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormStrings">Saiten</label>
-            <?php echo Html::dropDownList('strings', $strings, array('4' => '4','5' => '5','6' => '6'), ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown']) ?>
+            <?php echo Html::dropDownList('strings', $strings, ['4' => '4','5' => '5','6' => '6'], ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown']) ?>
         </div>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label">&nbsp;</label>
-            <?php echo Html::submitButton('Anzeigen', array('name' => null,'class' => 'fretboardForm__submit')) ?>
+            <?php echo Html::submitButton('Anzeigen', ['name' => null,'class' => 'fretboardForm__submit']) ?>
         </div>
     </form>
     <style>

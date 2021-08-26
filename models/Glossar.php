@@ -22,7 +22,7 @@ final class Glossar extends ActiveRecord
      */
     public function attributeLabels(): array
     {
-        return array(
+        return [
             'id' => 'Id',
             'category' => 'Kategorie',
             'title' => 'Titel',
@@ -30,7 +30,7 @@ final class Glossar extends ActiveRecord
             'abstract' => 'Kurztext',
             'content' => 'Langtext',
             'frequency' => 'Häufigkeit',
-        );
+        ];
     }
 
     /**
@@ -38,13 +38,13 @@ final class Glossar extends ActiveRecord
      */
     public function rules(): array
     {
-        return array(
-            array('category', 'filter', 'filter' => 'trim'),
-            array('title', 'required'),
-            array('url', 'required'),
-            array('abstract', 'required'),
-            array('content', 'required'),
-        );
+        return [
+            ['category', 'filter', 'filter' => 'trim'],
+            ['title', 'required'],
+            ['url', 'required'],
+            ['abstract', 'required'],
+            ['content', 'required'],
+        ];
     }
 
     /**
@@ -53,18 +53,18 @@ final class Glossar extends ActiveRecord
     public function findAllByCategory(string $category): array
     {
         $condition = '';
-        $params = array();
+        $params = [];
         if (!empty($category)) {
             $condition = ' AND category=:category';
-            $params = array(
+            $params = [
                 ':category' => strtolower($category)
-            );
+            ];
         }
-        $criteria = array(
+        $criteria = [
             'condition' => 'deleted=0 AND hidden=0' . $condition,
             'order' => 'autosort',
             'params' => $params
-        );
+        ];
         return $this->findAll($criteria);
     }
 

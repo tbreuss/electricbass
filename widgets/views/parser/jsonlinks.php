@@ -10,9 +10,9 @@ use yii\widgets\Spaceless;
 } ?>
 
 <?php Spaceless::begin(); ?>
-<?php $urls = empty($urls) ? array() : explode("\n", $urls) ?>
-<?php $labels = empty($labels) ? array() : explode("\n", $labels) ?>
-<?php $descriptions = empty($descriptions) ? array() : explode("\n", $descriptions) ?>
+<?php $urls = empty($urls) ? [] : explode("\n", $urls) ?>
+<?php $labels = empty($labels) ? [] : explode("\n", $labels) ?>
+<?php $descriptions = empty($descriptions) ? [] : explode("\n", $descriptions) ?>
 
 <div class="shortcode shortcode--links">
 

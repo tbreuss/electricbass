@@ -13,5 +13,5 @@ $this->params['breadcrumbs'][] = 'Inserat aktualisieren';
 <div class="content">
     <h1>Inserat aktualisieren</h1>
 
-    <?= $this->render('_form', array('model' => $model)) ?>
+    <?= $this->render('_form', ['model' => $model]) ?>
 </div>

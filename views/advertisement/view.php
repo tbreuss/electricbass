@@ -29,7 +29,7 @@ $this->title = $model->getPageTitle();
 
         <div class="flash flash--danger">Dieses Inserat ist abgelaufen oder wurde gelöscht.</div>
 
-        <p><?= Html::a('Aktuelle Inserate anzeigen', array('advertisement/index')) ?></p>
+        <p><?= Html::a('Aktuelle Inserate anzeigen', ['advertisement/index']) ?></p>
     </div>
 
 <?php else: ?>
@@ -50,7 +50,7 @@ $this->title = $model->getPageTitle();
         <div class="markdown"><?= strip_tags(Markdown::process($model->longtext), '<p><strong><b><ul><li><br>') ?></div>
 
         <?php if (!empty($model->email)): ?>
-            <p class="text-center"><?= Html::a('Anbieter kontaktieren', array('advertisement/contact', 'id' => $model->id), array('class' => 'button button--danger button--big')); ?></p>
+            <p class="text-center"><?= Html::a('Anbieter kontaktieren', ['advertisement/contact', 'id' => $model->id], ['class' => 'button button--danger button--big']); ?></p>
         <?php endif; ?>
 
         <h2>Infos</h2>

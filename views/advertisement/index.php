@@ -41,10 +41,10 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
     </div>
 
     <?php /* Zähler */ ?>
-    <?php $categories = array(); ?>
+    <?php $categories = []; ?>
     <?php foreach ($models as $model): ?>
         <?php if (!array_key_exists($model->category_id, $categories)): ?>
-            <?php $categories[$model->category_id] = array('title' => app\models\Advertisement::$categories[$model->category_id]); ?>
+            <?php $categories[$model->category_id] = ['title' => app\models\Advertisement::$categories[$model->category_id]]; ?>
             <?php $categories[$model->category_id]['counter'] = 0; ?>
         <?php endif ?>
         <?php $categories[$model->category_id]['counter']++ ?>

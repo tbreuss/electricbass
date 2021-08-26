@@ -24,14 +24,14 @@ final class AdvertisementContactForm extends Model
      */
     public function attributeLabels(): array
     {
-        return array(
+        return [
             'name' => 'Dein Name',
             'email' => 'Deine E-Mail-Adresse',
             'phone' => 'Deine Telefonnummer',
             'message' => 'Mitteilung an Anbieter',
             'nspm' => 'NSPM',
             'verifyCode' => ' Prüfcode'
-        );
+        ];
     }
 
     /**
@@ -39,23 +39,23 @@ final class AdvertisementContactForm extends Model
      */
     public function rules(): array
     {
-        return array(
+        return [
             // name
-            array('name', 'required'),
-            array('name', 'filter', 'filter' => 'strip_tags'),
+            ['name', 'required'],
+            ['name', 'filter', 'filter' => 'strip_tags'],
             // email
-            array('email', 'required'),
-            array('email', 'filter', 'filter' => 'strip_tags'),
-            array('email', 'email'),
+            ['email', 'required'],
+            ['email', 'filter', 'filter' => 'strip_tags'],
+            ['email', 'email'],
             // phone
-            array('phone', 'filter', 'filter' => 'strip_tags'),
+            ['phone', 'filter', 'filter' => 'strip_tags'],
             // message
-            array('message', 'required'),
-            array('message', 'filter', 'filter' => 'strip_tags'),
+            ['message', 'required'],
+            ['message', 'filter', 'filter' => 'strip_tags'],
             // nspm
-            array('nspm', 'safe'),
+            ['nspm', 'safe'],
             // verifyCode
             ['verifyCode', 'captcha'],
-        );
+        ];
     }
 }

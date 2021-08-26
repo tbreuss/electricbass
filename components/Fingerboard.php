@@ -116,7 +116,7 @@ final class Fingerboard
         // Abbrechen, falls eine Note fehlt
         foreach ($data as $d) {
             if (empty($d)) {
-                return array();
+                return [];
             }
         }
 
@@ -125,7 +125,7 @@ final class Fingerboard
 
     public static function getRoots()
     {
-        return array('C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','B');
+        return ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','B'];
     }
 
     public static function getPositions()
@@ -141,7 +141,7 @@ final class Fingerboard
         }
         if ($filtered) {
             $root = strtolower($root);
-            $root = str_replace(array('#'), array('is'), $root);
+            $root = str_replace(['#'], ['is'], $root);
         }
         return $root;
     }
@@ -152,7 +152,7 @@ final class Fingerboard
 
     function toRTTTL()
     {
-        $enharmonics = array(
+        $enharmonics = [
             'Db' => 'C#',
             'Eb' => 'D#',
             'Fb' => 'E',
@@ -160,9 +160,9 @@ final class Fingerboard
             'Ab' => 'G#',
             'Bb' => 'A#',
             'Cb' => 'B'
-        );
+        ];
         if (!empty($this->results[0])) {
-            $notes = array();
+            $notes = [];
             foreach ($this->results[0] as $tone) {
                 $tmpNote = str_replace(array_keys($enharmonics), array_values($enharmonics), $tone['absolut']);
                 $octave = (int)preg_replace('/[A-Za-z#]/', '', $tmpNote);
@@ -174,7 +174,7 @@ final class Fingerboard
             $notes = array_merge($notes, $reverse);
             $notes[] = 'p';
             $notes[] = 'p';
-            $rtttl = array();
+            $rtttl = [];
             $rtttl[] = 'fingerboard';
             $rtttl[] = 'd=4,o=4,b=100';
             $rtttl[] = implode(',', $notes);
@@ -233,12 +233,12 @@ final class Fingerboard
                     }
 
                     if ($showNote) {
-                        $tpl->set_var(array('CLASS_TONES' => 'leersaite' ));
+                        $tpl->set_var(['CLASS_TONES' => 'leersaite' ]);
                     } else {
-                        $tpl->set_var(array('CLASS_TONES' => 'fingerboard' ));
+                        $tpl->set_var(['CLASS_TONES' => 'fingerboard' ]);
                     }
                 }
-                  $tpl->set_var(array('STRING_NAME' => $stringName ));
+                  $tpl->set_var(['STRING_NAME' => $stringName ]);
                   $tpl->parse('ROW2_BLOCK', 'STRING_START2', true);
 
                   // Saiten darstellen (abh�ngig von der Saitenanzahl)
@@ -247,26 +247,26 @@ final class Fingerboard
                     if ($this->position != '') {
                       /* @phpstan-ignore-next-line */
                         if (($fretIndex >= $this->position) && ($fretIndex < ($this->position + $this->posWidth))) {
-                            $tpl->set_var(array('CLASS_POSITION' => 'bgPosition' ));
+                            $tpl->set_var(['CLASS_POSITION' => 'bgPosition' ]);
                         } else {
-                            $tpl->set_var(array('CLASS_POSITION' => '' ));
+                            $tpl->set_var(['CLASS_POSITION' => '' ]);
                         }
                     }
                     switch ($index) {
                         case $firstString:
                             $height = 16;
                             if ($fretIndex == 1) {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'NODES' => $imagePath . 'sca_xd_null.gif',
                                 'NODES_WIDTH' => 9,
                                 'NODES_HEIGHT' => $height
-                                ));
+                                ]);
                             } else {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'NODES' => $imagePath . 'sca_xd.gif',
                                 'NODES_WIDTH' => 12,
                                 'NODES_HEIGHT' => $height
-                                ));
+                                ]);
                             }
 
                           // T�ne darstellen
@@ -283,17 +283,17 @@ final class Fingerboard
 
                           // Ton oder kein Ton?
                             if ($showNote) {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'PICTURE' => $imagePath . 'sca_tonexd.gif',
                                 'PICTURE_WIDTH' => 33,
                                 'PICTURE_HEIGHT' => $height
-                                ));
+                                ]);
                             } else {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'PICTURE' => $imagePath . 'sca_lined.gif',
                                 'PICTURE_WIDTH' => 33,
                                 'PICTURE_HEIGHT' => $height
-                                ));
+                                ]);
                             }
 
                             break;
@@ -301,17 +301,17 @@ final class Fingerboard
                         case $lastString:
                             $height = 16;
                             if ($fretIndex == 1) {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'NODES' => $imagePath . 'sca_xu_null.gif',
                                 'NODES_WIDTH' => 9,
                                 'NODES_HEIGHT' => $height
-                                ));
+                                ]);
                             } else {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'NODES' => $imagePath . 'sca_xu.gif',
                                 'NODES_WIDTH' => 12,
                                 'NODES_HEIGHT' => $height
-                                ));
+                                ]);
                             }
 
                           // T�ne darstellen
@@ -328,17 +328,17 @@ final class Fingerboard
 
                           // Ton oder kein Ton?
                             if ($showNote) {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'PICTURE' => $imagePath . 'sca_tonexu.gif',
                                 'PICTURE_WIDTH' => 33,
                                 'PICTURE_HEIGHT' => $height
-                                ));
+                                ]);
                             } else {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'PICTURE' => $imagePath . 'sca_lineu.gif',
                                 'PICTURE_WIDTH' => 33,
                                 'PICTURE_HEIGHT' => $height
-                                ));
+                                ]);
                             }
 
                             break;
@@ -346,17 +346,17 @@ final class Fingerboard
                         default:
                             $height = 19;
                             if ($fretIndex == 1) {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'NODES' => $imagePath . 'sca_x_null.gif',
                                 'NODES_WIDTH' => 9,
                                 'NODES_HEIGHT' => $height
-                                ));
+                                ]);
                             } else {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'NODES' => $imagePath . 'sca_x.gif',
                                 'NODES_WIDTH' => 12,
                                 'NODES_HEIGHT' => $height
-                                ));
+                                ]);
                             }
 
                           // T�ne darstellen
@@ -373,17 +373,17 @@ final class Fingerboard
 
                           // Ton oder kein Ton?
                             if ($showNote) {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'PICTURE' => $imagePath . 'sca_tonex.gif',
                                 'PICTURE_WIDTH' => 33,
                                 'PICTURE_HEIGHT' => $height
-                                ));
+                                ]);
                             } else {
-                                $tpl->set_var(array(
+                                $tpl->set_var([
                                 'PICTURE' => $imagePath . 'sca_line.gif',
                                 'PICTURE_WIDTH' => 33,
                                 'PICTURE_HEIGHT' => $height
-                                ));
+                                ]);
                             }
 
                             break;
@@ -401,17 +401,17 @@ final class Fingerboard
             foreach ($this->strings['G'] as $fretNumber => $fret) {
                 $fretNumber = $fretNumber - 1;
                 if ($fretNumber == 3) {
-                    $tpl->set_var(array('LAGE_NAME' => 'III' ));
+                    $tpl->set_var(['LAGE_NAME' => 'III' ]);
                 } elseif ($fretNumber == 5) {
-                    $tpl->set_var(array('LAGE_NAME' => 'V' ));
+                    $tpl->set_var(['LAGE_NAME' => 'V' ]);
                 } elseif ($fretNumber == 7) {
-                    $tpl->set_var(array('LAGE_NAME' => 'VII' ));
+                    $tpl->set_var(['LAGE_NAME' => 'VII' ]);
                 } elseif ($fretNumber == 9) {
-                    $tpl->set_var(array('LAGE_NAME' => 'IX' ));
+                    $tpl->set_var(['LAGE_NAME' => 'IX' ]);
                 } elseif ($fretNumber == 12) {
-                    $tpl->set_var(array('LAGE_NAME' => 'XII' ));
+                    $tpl->set_var(['LAGE_NAME' => 'XII' ]);
                 } else {
-                    $tpl->set_var(array('LAGE_NAME' => '' ));
+                    $tpl->set_var(['LAGE_NAME' => '' ]);
                 }
                 $tpl->parse('LAGEN2_BLOCK', 'LAGEN2', true);
             }
@@ -439,7 +439,7 @@ final class Fingerboard
 
             //if((count($this->results)>1) && ($this->resNbr == 0)) {
             if ($this->showMainTitle && ($this->toneNames != '') && ($this->resNbr == 0)) {
-                $tpl->set_var(array('TXT_MESSAGE_INTERVAL' => implode(' - ', $this->toneNames) ));
+                $tpl->set_var(['TXT_MESSAGE_INTERVAL' => implode(' - ', $this->toneNames) ]);
                 $tpl->parse('MAIN_TITLE_BLOCK', 'MAIN_TITLE', true);
             }
             //}
@@ -467,7 +467,7 @@ final class Fingerboard
 
 
       // f�r Berechnungen der Tonabst�nde
-        $intervalTable = array('C' => 0,
+        $intervalTable = ['C' => 0,
                              'C#' => 1,
                              'Db' => 1,
                              'D' => 2,
@@ -487,13 +487,13 @@ final class Fingerboard
                              'Bb' => 10,
                              'B' => 11,
                              'Cb' => 11
-                             );
+                             ];
 
       // Definition der b-Tonarten
-        $flatKeys = array('C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb');
+        $flatKeys = ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb'];
 
       // Definition der #-Tonarten
-        $sharpKeys = array('C', 'G', 'D', 'A', 'E', 'B', 'F#');
+        $sharpKeys = ['C', 'G', 'D', 'A', 'E', 'B', 'F#'];
 
         $intervalSteps = $intervals[$interval];
 
@@ -587,7 +587,7 @@ final class Fingerboard
         foreach ($strings as $stringName => $string) {
             foreach ($notes as $key => $note) {
                 if ($note == $stringName) {
-                    $results[$key][] = array('string' => $stringName, 'fret' => 0, 'absolut' => $openStrings[$stringName]['N'], 'numbered' => $numberedNotes[$openStrings[$stringName]['N']] );
+                    $results[$key][] = ['string' => $stringName, 'fret' => 0, 'absolut' => $openStrings[$stringName]['N'], 'numbered' => $numberedNotes[$openStrings[$stringName]['N']] ];
                 }
             }
 
@@ -602,11 +602,11 @@ final class Fingerboard
                   /* @phpstan-ignore-next-line */
                     if (($fretIndex >= $position) && ($fretIndex < ($position + $this->posWidth))) {
                         if ($note == $flatTone) {
-                            $results[$key][] = array('string' => $stringName, 'fret' => $fretIndex, 'absolut' => $fret['F'], 'numbered' => $numberedNotes[$fret['F']] );
+                            $results[$key][] = ['string' => $stringName, 'fret' => $fretIndex, 'absolut' => $fret['F'], 'numbered' => $numberedNotes[$fret['F']] ];
                         } elseif ($note == $normalTone) {
-                            $results[$key][] = array('string' => $stringName, 'fret' => $fretIndex, 'absolut' => $fret['N'], 'numbered' => $numberedNotes[$fret['N']] );
+                            $results[$key][] = ['string' => $stringName, 'fret' => $fretIndex, 'absolut' => $fret['N'], 'numbered' => $numberedNotes[$fret['N']] ];
                         } elseif ($note == $sharpTone) {
-                            $results[$key][] = array('string' => $stringName, 'fret' => $fretIndex, 'absolut' => $fret['S'], 'numbered' => $numberedNotes[$fret['S']] );
+                            $results[$key][] = ['string' => $stringName, 'fret' => $fretIndex, 'absolut' => $fret['S'], 'numbered' => $numberedNotes[$fret['S']] ];
                         }
                     }
                 }
@@ -633,7 +633,7 @@ final class Fingerboard
         }
       // <--
 
-        $test = array();
+        $test = [];
         foreach ($results as $rootIndex => $result) {
             if ($rootIndex == 0) {
                 foreach ($result as $key => $note) {
@@ -664,7 +664,7 @@ final class Fingerboard
         }
 
       // Defaultwert muss genau so aussehen!!
-        $retArr = array();
+        $retArr = [];
         foreach ($test as $key => $val) {
             $lowest = $val[0]['numbered'];
             $highest = 0;
@@ -693,7 +693,7 @@ final class Fingerboard
         }
       // -----------------------------------------------------------
         if (count($retArr) == 0) {
-            $retArr = array('0' => array());
+            $retArr = ['0' => []];
         }
       // -----------------------------------------------------------
         return $retArr;
@@ -704,12 +704,12 @@ final class Fingerboard
     {
 
       // Definition der Leersaiten
-        $openStrings['C'] = array('F' => '', 'N' => 'C3', 'S' => '');
-        $openStrings['G'] = array('F' => '', 'N' => 'G2', 'S' => '');
-        $openStrings['D'] = array('F' => '', 'N' => 'D2', 'S' => '');
-        $openStrings['A'] = array('F' => '', 'N' => 'A1', 'S' => '');
-        $openStrings['E'] = array('F' => '', 'N' => 'E1', 'S' => '');
-        $openStrings['B'] = array('F' => '', 'N' => 'B0', 'S' => '');
+        $openStrings['C'] = ['F' => '', 'N' => 'C3', 'S' => ''];
+        $openStrings['G'] = ['F' => '', 'N' => 'G2', 'S' => ''];
+        $openStrings['D'] = ['F' => '', 'N' => 'D2', 'S' => ''];
+        $openStrings['A'] = ['F' => '', 'N' => 'A1', 'S' => ''];
+        $openStrings['E'] = ['F' => '', 'N' => 'E1', 'S' => ''];
+        $openStrings['B'] = ['F' => '', 'N' => 'B0', 'S' => ''];
 
         return $openStrings;
     }
@@ -719,83 +719,83 @@ final class Fingerboard
     {
 
     // Definition der T�ne auf den Saiten
-        $strings['C'][1] = array('F' => 'Db3', 'N' => '', 'S' => 'C#3');
-        $strings['C'][2] = array('F' => '', 'N' => 'D3', 'S' => '');
-        $strings['C'][3] = array('F' => 'Eb3', 'N' => '', 'S' => 'D#3');
-        $strings['C'][4] = array('F' => 'Fb3', 'N' => 'E3', 'S' => '');
-        $strings['C'][5] = array('F' => '', 'N' => 'F3', 'S' => 'E#3');
-        $strings['C'][6] = array('F' => 'Gb3', 'N' => '', 'S' => 'F#3');
-        $strings['C'][7] = array('F' => '', 'N' => 'G3', 'S' => '');
-        $strings['C'][8] = array('F' => 'Ab3', 'N' => '', 'S' => 'G#3');
-        $strings['C'][9] = array('F' => '', 'N' => 'A3', 'S' => '');
-        $strings['C'][10] = array('F' => 'Bb3', 'N' => '', 'S' => 'A#3');
-        $strings['C'][11] = array('F' => 'Cb3', 'N' => 'B3', 'S' => '');
-        $strings['C'][12] = array('F' => '', 'N' => 'C4', 'S' => '');
+        $strings['C'][1] = ['F' => 'Db3', 'N' => '', 'S' => 'C#3'];
+        $strings['C'][2] = ['F' => '', 'N' => 'D3', 'S' => ''];
+        $strings['C'][3] = ['F' => 'Eb3', 'N' => '', 'S' => 'D#3'];
+        $strings['C'][4] = ['F' => 'Fb3', 'N' => 'E3', 'S' => ''];
+        $strings['C'][5] = ['F' => '', 'N' => 'F3', 'S' => 'E#3'];
+        $strings['C'][6] = ['F' => 'Gb3', 'N' => '', 'S' => 'F#3'];
+        $strings['C'][7] = ['F' => '', 'N' => 'G3', 'S' => ''];
+        $strings['C'][8] = ['F' => 'Ab3', 'N' => '', 'S' => 'G#3'];
+        $strings['C'][9] = ['F' => '', 'N' => 'A3', 'S' => ''];
+        $strings['C'][10] = ['F' => 'Bb3', 'N' => '', 'S' => 'A#3'];
+        $strings['C'][11] = ['F' => 'Cb3', 'N' => 'B3', 'S' => ''];
+        $strings['C'][12] = ['F' => '', 'N' => 'C4', 'S' => ''];
 
-        $strings['G'][1] = array('F' => 'Ab2', 'N' => '', 'S' => 'G#2');
-        $strings['G'][2] = array('F' => '', 'N' => 'A2', 'S' => '');
-        $strings['G'][3] = array('F' => 'Bb2', 'N' => '', 'S' => 'A#2');
-        $strings['G'][4] = array('F' => 'Cb2', 'N' => 'B2', 'S' => '');
-        $strings['G'][5] = array('F' => '', 'N' => 'C3', 'S' => '');
-        $strings['G'][6] = array('F' => 'Db3', 'N' => '', 'S' => 'C#3');
-        $strings['G'][7] = array('F' => '', 'N' => 'D3', 'S' => '');
-        $strings['G'][8] = array('F' => 'Eb3', 'N' => '', 'S' => 'D#3');
-        $strings['G'][9] = array('F' => 'Fb3', 'N' => 'E3', 'S' => '');
-        $strings['G'][10] = array('F' => '', 'N' => 'F3', 'S' => 'E#3');
-        $strings['G'][11] = array('F' => 'Gb3', 'N' => '', 'S' => 'F#3');
-        $strings['G'][12] = array('F' => '', 'N' => 'G3', 'S' => '');
+        $strings['G'][1] = ['F' => 'Ab2', 'N' => '', 'S' => 'G#2'];
+        $strings['G'][2] = ['F' => '', 'N' => 'A2', 'S' => ''];
+        $strings['G'][3] = ['F' => 'Bb2', 'N' => '', 'S' => 'A#2'];
+        $strings['G'][4] = ['F' => 'Cb2', 'N' => 'B2', 'S' => ''];
+        $strings['G'][5] = ['F' => '', 'N' => 'C3', 'S' => ''];
+        $strings['G'][6] = ['F' => 'Db3', 'N' => '', 'S' => 'C#3'];
+        $strings['G'][7] = ['F' => '', 'N' => 'D3', 'S' => ''];
+        $strings['G'][8] = ['F' => 'Eb3', 'N' => '', 'S' => 'D#3'];
+        $strings['G'][9] = ['F' => 'Fb3', 'N' => 'E3', 'S' => ''];
+        $strings['G'][10] = ['F' => '', 'N' => 'F3', 'S' => 'E#3'];
+        $strings['G'][11] = ['F' => 'Gb3', 'N' => '', 'S' => 'F#3'];
+        $strings['G'][12] = ['F' => '', 'N' => 'G3', 'S' => ''];
 
-        $strings['D'][1] = array('F' => 'Eb2', 'N' => '', 'S' => 'D#2');
-        $strings['D'][2] = array('F' => 'Fb2', 'N' => 'E2', 'S' => '');
-        $strings['D'][3] = array('F' => '', 'N' => 'F2', 'S' => 'E#2');
-        $strings['D'][4] = array('F' => 'Gb2', 'N' => '', 'S' => 'F#2');
-        $strings['D'][5] = array('F' => '', 'N' => 'G2', 'S' => '');
-        $strings['D'][6] = array('F' => 'Ab2', 'N' => '', 'S' => 'G#2');
-        $strings['D'][7] = array('F' => '', 'N' => 'A2', 'S' => '');
-        $strings['D'][8] = array('F' => 'Bb2', 'N' => '', 'S' => 'A#2');
-        $strings['D'][9] = array('F' => 'Cb2', 'N' => 'B2', 'S' => '');
-        $strings['D'][10] = array('F' => '', 'N' => 'C3', 'S' => '');
-        $strings['D'][11] = array('F' => 'Db3', 'N' => '', 'S' => 'C#3');
-        $strings['D'][12] = array('F' => '', 'N' => 'D3', 'S' => '');
+        $strings['D'][1] = ['F' => 'Eb2', 'N' => '', 'S' => 'D#2'];
+        $strings['D'][2] = ['F' => 'Fb2', 'N' => 'E2', 'S' => ''];
+        $strings['D'][3] = ['F' => '', 'N' => 'F2', 'S' => 'E#2'];
+        $strings['D'][4] = ['F' => 'Gb2', 'N' => '', 'S' => 'F#2'];
+        $strings['D'][5] = ['F' => '', 'N' => 'G2', 'S' => ''];
+        $strings['D'][6] = ['F' => 'Ab2', 'N' => '', 'S' => 'G#2'];
+        $strings['D'][7] = ['F' => '', 'N' => 'A2', 'S' => ''];
+        $strings['D'][8] = ['F' => 'Bb2', 'N' => '', 'S' => 'A#2'];
+        $strings['D'][9] = ['F' => 'Cb2', 'N' => 'B2', 'S' => ''];
+        $strings['D'][10] = ['F' => '', 'N' => 'C3', 'S' => ''];
+        $strings['D'][11] = ['F' => 'Db3', 'N' => '', 'S' => 'C#3'];
+        $strings['D'][12] = ['F' => '', 'N' => 'D3', 'S' => ''];
 
-        $strings['A'][1] = array('F' => 'Bb1', 'N' => '', 'S' => 'A#1');
-        $strings['A'][2] = array('F' => 'Cb1', 'N' => 'B1', 'S' => '');
-        $strings['A'][3] = array('F' => '', 'N' => 'C2', 'S' => '');
-        $strings['A'][4] = array('F' => 'Db2', 'N' => '', 'S' => 'C#2');
-        $strings['A'][5] = array('F' => '', 'N' => 'D2', 'S' => '');
-        $strings['A'][6] = array('F' => 'Eb2', 'N' => '', 'S' => 'D#2');
-        $strings['A'][7] = array('F' => 'Fb2', 'N' => 'E2', 'S' => '');
-        $strings['A'][8] = array('F' => '', 'N' => 'F2', 'S' => 'E#2');
-        $strings['A'][9] = array('F' => 'Gb2', 'N' => '', 'S' => 'F#2');
-        $strings['A'][10] = array('F' => '', 'N' => 'G2', 'S' => '');
-        $strings['A'][11] = array('F' => 'Ab2', 'N' => '', 'S' => 'G#2');
-        $strings['A'][12] = array('F' => '', 'N' => 'A2', 'S' => '');
+        $strings['A'][1] = ['F' => 'Bb1', 'N' => '', 'S' => 'A#1'];
+        $strings['A'][2] = ['F' => 'Cb1', 'N' => 'B1', 'S' => ''];
+        $strings['A'][3] = ['F' => '', 'N' => 'C2', 'S' => ''];
+        $strings['A'][4] = ['F' => 'Db2', 'N' => '', 'S' => 'C#2'];
+        $strings['A'][5] = ['F' => '', 'N' => 'D2', 'S' => ''];
+        $strings['A'][6] = ['F' => 'Eb2', 'N' => '', 'S' => 'D#2'];
+        $strings['A'][7] = ['F' => 'Fb2', 'N' => 'E2', 'S' => ''];
+        $strings['A'][8] = ['F' => '', 'N' => 'F2', 'S' => 'E#2'];
+        $strings['A'][9] = ['F' => 'Gb2', 'N' => '', 'S' => 'F#2'];
+        $strings['A'][10] = ['F' => '', 'N' => 'G2', 'S' => ''];
+        $strings['A'][11] = ['F' => 'Ab2', 'N' => '', 'S' => 'G#2'];
+        $strings['A'][12] = ['F' => '', 'N' => 'A2', 'S' => ''];
 
-        $strings['E'][1] = array('F' => '', 'N' => 'F1', 'S' => 'E#1');
-        $strings['E'][2] = array('F' => 'Gb1', 'N' => '', 'S' => 'F#1');
-        $strings['E'][3] = array('F' => '', 'N' => 'G1', 'S' => '');
-        $strings['E'][4] = array('F' => 'Ab1', 'N' => '', 'S' => 'G#1');
-        $strings['E'][5] = array('F' => '', 'N' => 'A1', 'S' => '');
-        $strings['E'][6] = array('F' => 'Bb1', 'N' => '', 'S' => 'A#1');
-        $strings['E'][7] = array('F' => 'Cb1', 'N' => 'B1', 'S' => '');
-        $strings['E'][8] = array('F' => '', 'N' => 'C2', 'S' => '');
-        $strings['E'][9] = array('F' => 'Db2', 'N' => '', 'S' => 'C#2');
-        $strings['E'][10] = array('F' => '', 'N' => 'D2', 'S' => '');
-        $strings['E'][11] = array('F' => 'Eb2', 'N' => '', 'S' => 'D#2');
-        $strings['E'][12] = array('F' => 'Fb2', 'N' => 'E2', 'S' => '');
+        $strings['E'][1] = ['F' => '', 'N' => 'F1', 'S' => 'E#1'];
+        $strings['E'][2] = ['F' => 'Gb1', 'N' => '', 'S' => 'F#1'];
+        $strings['E'][3] = ['F' => '', 'N' => 'G1', 'S' => ''];
+        $strings['E'][4] = ['F' => 'Ab1', 'N' => '', 'S' => 'G#1'];
+        $strings['E'][5] = ['F' => '', 'N' => 'A1', 'S' => ''];
+        $strings['E'][6] = ['F' => 'Bb1', 'N' => '', 'S' => 'A#1'];
+        $strings['E'][7] = ['F' => 'Cb1', 'N' => 'B1', 'S' => ''];
+        $strings['E'][8] = ['F' => '', 'N' => 'C2', 'S' => ''];
+        $strings['E'][9] = ['F' => 'Db2', 'N' => '', 'S' => 'C#2'];
+        $strings['E'][10] = ['F' => '', 'N' => 'D2', 'S' => ''];
+        $strings['E'][11] = ['F' => 'Eb2', 'N' => '', 'S' => 'D#2'];
+        $strings['E'][12] = ['F' => 'Fb2', 'N' => 'E2', 'S' => ''];
 
-        $strings['B'][1] = array('F' => '', 'N' => 'C1', 'S' => '');
-        $strings['B'][2] = array('F' => 'Db1', 'N' => '', 'S' => 'C#1');
-        $strings['B'][3] = array('F' => '', 'N' => 'D1', 'S' => '');
-        $strings['B'][4] = array('F' => 'Eb1', 'N' => '', 'S' => 'D#1');
-        $strings['B'][5] = array('F' => 'Fb1', 'N' => 'E1', 'S' => '');
-        $strings['B'][6] = array('F' => '', 'N' => 'F1', 'S' => 'E#1');
-        $strings['B'][7] = array('F' => 'Gb1', 'N' => '', 'S' => 'F#1');
-        $strings['B'][8] = array('F' => '', 'N' => 'G1', 'S' => '');
-        $strings['B'][9] = array('F' => 'Ab1', 'N' => '', 'S' => 'G#1');
-        $strings['B'][10] = array('F' => '', 'N' => 'A1', 'S' => '');
-        $strings['B'][11] = array('F' => 'Bb1', 'N' => '', 'S' => 'A#1');
-        $strings['B'][12] = array('F' => 'Cb1', 'N' => 'B1', 'S' => '');
+        $strings['B'][1] = ['F' => '', 'N' => 'C1', 'S' => ''];
+        $strings['B'][2] = ['F' => 'Db1', 'N' => '', 'S' => 'C#1'];
+        $strings['B'][3] = ['F' => '', 'N' => 'D1', 'S' => ''];
+        $strings['B'][4] = ['F' => 'Eb1', 'N' => '', 'S' => 'D#1'];
+        $strings['B'][5] = ['F' => 'Fb1', 'N' => 'E1', 'S' => ''];
+        $strings['B'][6] = ['F' => '', 'N' => 'F1', 'S' => 'E#1'];
+        $strings['B'][7] = ['F' => 'Gb1', 'N' => '', 'S' => 'F#1'];
+        $strings['B'][8] = ['F' => '', 'N' => 'G1', 'S' => ''];
+        $strings['B'][9] = ['F' => 'Ab1', 'N' => '', 'S' => 'G#1'];
+        $strings['B'][10] = ['F' => '', 'N' => 'A1', 'S' => ''];
+        $strings['B'][11] = ['F' => 'Bb1', 'N' => '', 'S' => 'A#1'];
+        $strings['B'][12] = ['F' => 'Cb1', 'N' => 'B1', 'S' => ''];
 
         return $strings;
     }
@@ -805,7 +805,7 @@ final class Fingerboard
     {
 
       // numerierte Noten (�hnlich wie Midinummern)
-        $numberedNotes = array(
+        $numberedNotes = [
         'B0' => -1,
         'C1' => 0,
         'C#1' => 1,
@@ -868,7 +868,7 @@ final class Fingerboard
         'B3' => 35,
         'Cb3' => 35,
         'C4' => 24
-        );
+        ];
 
         return $numberedNotes;
     }

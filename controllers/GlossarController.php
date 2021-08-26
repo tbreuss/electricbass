@@ -17,10 +17,10 @@ final class GlossarController extends Controller
             $condition['category'] = $category;
         }
         $glossars = Glossar::find()->where($condition)->orderBy('autosort')->all();
-        return $this->render('index', array(
+        return $this->render('index', [
             'glossars' => $glossars,
             'selectedCategory' => $category
-        ));
+        ]);
     }
 
     public function actionView(string $id, string $category): string
@@ -29,23 +29,23 @@ final class GlossarController extends Controller
 
         #$glossar->increaseHits();
 
-        return $this->render('view', array(
+        return $this->render('view', [
             'glossar' => $glossar,
             'previous' => $glossar->findPreviousOneOrNull(),
             'next' => $glossar->findNextOneOrNull(),
             'selectedCategory' => $category
-        ));
+        ]);
     }
 
     public function actionReorder(): Response
     {
-        $glossars = Glossar::findAll(array('order' => 'category, title'));
+        $glossars = Glossar::findAll(['order' => 'category, title']);
         $i = 0;
         foreach ($glossars as $glossar) {
             $glossar->autosort = $i;
-            $glossar->save(false, array('autosort'));
+            $glossar->save(false, ['autosort']);
             $i++;
         }
-        return $this->redirect(array('/glossar/index'));
+        return $this->redirect(['/glossar/index']);
     }
 }

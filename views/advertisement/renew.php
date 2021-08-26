@@ -20,5 +20,5 @@ $this->params['breadcrumbs'][] = 'Inserat verlängert';
     <p>Nach 60 Tagen wird es automatisch gelöscht.<br />
     Antworten auf dein Inserat erhälst du direkt per E-Mail.</p>
 
-    <p><?php echo Html::a('Alle Inserate', array('advertisement/index')) ?></p>
+    <p><?php echo Html::a('Alle Inserate', ['advertisement/index']) ?></p>
 </div>

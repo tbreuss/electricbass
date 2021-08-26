@@ -13,9 +13,9 @@ final class Advertisement extends Widget
     public function run(): string
     {
         $rows = \app\models\Advertisement::findLatestAsArray($this->limit);
-        return $this->render('advertisement', array(
+        return $this->render('advertisement', [
             'title' => $this->title,
             'rows' => $rows
-        ));
+        ]);
     }
 }
