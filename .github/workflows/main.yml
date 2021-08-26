@@ -17,7 +17,16 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install composer dependencies
-        run: composer install --no-dev --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: PHPStan - Static code analysis
+        run: vendor/bin/phpstan analyse --memory-limit=256M
+
+      - name: PHP CodeSniffer
+        run: vendor/bin/phpcs
+
+      - name: Remove dev composer dependencies
+        run: composer install --no-dev
 
       - name: Cleanup directory
         run: |
