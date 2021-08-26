@@ -128,19 +128,16 @@ final class Html extends \yii\helpers\Html
 
         if ($type == 'adaptive') {
             $imagine->open($relUrl)
-                ->resize(new Box($width, $height ))
+                ->resize(new Box($width, $height))
                 ->interlace(ImageInterface::INTERLACE_PLANE)
                 ->save($cachedUrl, array('jpeg_quality' => 80, 'png_compression_level' => 8));
-
         } else {
             $imagine->open($relUrl)
-                ->thumbnail(new Box($width, $height ))
+                ->thumbnail(new Box($width, $height))
                 ->interlace(ImageInterface::INTERLACE_PLANE)
                 ->save($cachedUrl, array('jpeg_quality' => 80, 'png_compression_level' => 8));
-
         }
 
         return Html::img('@web/' . $cachedUrl, $htmlOptions);
     }
-
 }

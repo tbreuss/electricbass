@@ -23,11 +23,11 @@ $this->params['breadcrumbs'][] = $model->title;
 
     <h1 style="margin-bottom: 0.5rem"><?= $model->title ?></h1>
 
-    <?php if(!empty($model->artist)): ?>
+    <?php if (!empty($model->artist)): ?>
         <p style="margin-bottom: 1.5rem">von <?= Html::a($model->artist, ['album/index', 'artist' => $model->artist]) ?></p>
     <?php endif; ?>
 
-    <?php if(!empty($model->subtitle)): ?>
+    <?php if (!empty($model->subtitle)): ?>
         <p><?= $model->subtitle ?></p>
     <?php endif; ?>
 
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $model->title;
         <div class="markdown"><?= Markdown::process($model->blurb) ?></div>
     <?php endif; ?>
 
-    <?php if(!empty($model->asin)): ?>
+    <?php if (!empty($model->asin)): ?>
         <p class="text-center"><a class="button button--big button--warning" href="<?= Url::toAmazonProduct($model->asin) ?>" target="_blank">Jetzt kaufen</a></p>
     <?php endif; ?>
 
@@ -91,8 +91,7 @@ $this->params['breadcrumbs'][] = $model->title;
         </div>
     */ ?>
 
-    <?php if(!empty($model->bandcamp)): ?>
-
+    <?php if (!empty($model->bandcamp)): ?>
         <h2>Anspielen und downloaden</h2>
         <div class="bandcamp-widget">
             <iframe width="300" height="100" style="background-color:#F3F4F3;position: relative; display: block; width: 300px; height: 100px;" src="https://bandcamp.com/EmbeddedPlayer/v=2/album=<?php echo $model->bandcamp ?>/size=grande/bgcol=F3F4F3/linkcol=4073A9/" allowtransparency="true" frameborder="0"></iframe>
@@ -135,7 +134,7 @@ $this->params['breadcrumbs'][] = $model->title;
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title">Ähnliche Musikalben</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach($similars AS $model): ?>
+            <?php foreach ($similars as $model): ?>
             <li class="sidebarWidget__item">
                 <a class="sidebarWidget__link" href="<?= $model->url ?>">
                     <strong><?= $model->title ?></strong><br>

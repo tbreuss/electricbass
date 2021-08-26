@@ -95,5 +95,4 @@ trait SimilarModelsByTags
             return !in_array($value, $filters);
         });
     }
-
 }

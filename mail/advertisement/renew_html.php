@@ -11,7 +11,9 @@ Antworten auf Dein Inserat erhälst Du direkt per E-Mail.
 
 Dein Inserat:
 --------------------------------------------------------------------------------
-<?php use app\helpers\Url;
+<?php
+
+use app\helpers\Url;
 
 echo $model->title ?><?php echo PHP_EOL ?>
 <?php echo $model->getShortenedText() ?><?php echo PHP_EOL ?>

@@ -82,7 +82,7 @@ final class Blog extends ActiveRecord
 
         $query = Blog::find()
             ->select('id, title, abstract, url, created, modified')
-            ->where(['deleted' => NULL, 'movedTo' => null])
+            ->where(['deleted' => null, 'movedTo' => null])
             ->orderBy($sort->orders);
 
         return new ActiveDataProvider([
@@ -99,11 +99,11 @@ final class Blog extends ActiveRecord
      */
     public static function findOneOrNull($id): ?Blog
     {
-        $blog = Blog::find()->where(['deleted' => NULL, 'url' => $id])->one();
+        $blog = Blog::find()->where(['deleted' => null, 'url' => $id])->one();
         if ($blog) {
             return $blog;
         }
-        $blog = Blog::find()->where(['deleted' => NULL, 'id' => $id])->one();
+        $blog = Blog::find()->where(['deleted' => null, 'id' => $id])->one();
         if ($blog) {
             return $blog;
         }
@@ -117,8 +117,8 @@ final class Blog extends ActiveRecord
     {
         return self::find()
             ->where([
-                'deleted' => NULL,
-                'movedTo' => NULL
+                'deleted' => null,
+                'movedTo' => null
             ])
             ->andWhere(['<>', 'id', $id])
             ->orderBy('modified DESC')
@@ -133,8 +133,8 @@ final class Blog extends ActiveRecord
     {
         return self::find()
             ->where([
-                'deleted' => NULL,
-                'movedTo' => NULL
+                'deleted' => null,
+                'movedTo' => null
             ])
             ->andWhere(['>', 'ratingAvg', 0])
             ->andWhere(['<>', 'id', $id])
@@ -168,11 +168,10 @@ final class Blog extends ActiveRecord
     {
         // IDs in Session speichern
         $ids = Yii::$app->session->get('HITS_BLOG_IDS', []);
-        if(!in_array($this->id, $ids)) {
+        if (!in_array($this->id, $ids)) {
             $this->updateCounters(['hits' => 1]);
             $ids[] = $this->id;
             Yii::$app->session->set('HITS_BLOG_IDS', $ids);
         }
     }
-
 }

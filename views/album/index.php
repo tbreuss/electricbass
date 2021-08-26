@@ -23,8 +23,8 @@ $this->title = 'Bass-Alben | Katalog';
 $this->params['breadcrumbs'][] = ['label' => 'Katalog', 'url' => Url::to(['catalog/overview'])];
 $this->params['breadcrumbs'][] = 'Bass-Alben';
 
-$this->params['pageTitle'] = sprintf('Inspirierende Musikalben von E-Bassist*innen (%d/%d)', $pagination->page+1, $pagination->pageCount);
-$this->params['metaDescription'] = sprintf('Inspirierende und hörenswerte Musikalben berühmter E-Bassisten. Unentdeckte Alben und Songs von Bassisten wie du und ich (Seite %d von %d)', $pagination->page+1, $pagination->pageCount);
+$this->params['pageTitle'] = sprintf('Inspirierende Musikalben von E-Bassist*innen (%d/%d)', $pagination->page + 1, $pagination->pageCount);
+$this->params['metaDescription'] = sprintf('Inspirierende und hörenswerte Musikalben berühmter E-Bassisten. Unentdeckte Alben und Songs von Bassisten wie du und ich (Seite %d von %d)', $pagination->page + 1, $pagination->pageCount);
 
 ?>
 

@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use Yii;
 use yii\base\Widget;
 
-final class  RatingReadOnly extends Widget
+final class RatingReadOnly extends Widget
 {
     public string $style = 'none';
     public string $tableName = '';
@@ -70,5 +70,4 @@ final class  RatingReadOnly extends Widget
         }
         return $data;
     }
-
 }

@@ -33,5 +33,4 @@ final class AtoZGroupedEntries
     {
         return $this->entries;
     }
-
 }

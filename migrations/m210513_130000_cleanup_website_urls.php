@@ -13,7 +13,7 @@ final class m210513_130000_cleanup_website_urls extends Migration
      */
     public function up()
     {
-        foreach((new Query)->from('website')->each() as $row) {
+        foreach ((new Query())->from('website')->each() as $row) {
             $url = preg_replace('/(.*)(-[0-9]+)/', '${1}', $row['url']);
             if ($url === null) {
                 continue;
@@ -40,5 +40,4 @@ final class m210513_130000_cleanup_website_urls extends Migration
 
         return false;
     }
-
 }

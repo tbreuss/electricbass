@@ -17,7 +17,8 @@ use yii\helpers\Markdown;
 
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
 $this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];
-$this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['glossar/index', 'category' => strtolower($glossar->category)]];;
+$this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['glossar/index', 'category' => strtolower($glossar->category)]];
+;
 $this->params['breadcrumbs'][] = $glossar->title;
 ?>
 

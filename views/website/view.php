@@ -41,7 +41,6 @@ $this->params['breadcrumbs'][] = $website->title;
     <?php endif; ?>
 
     <?php if (!empty($website->latitude) && !empty($website->longitude)): ?>
-
         <div class="map" style="clear:both">
 
             <h3>Standort</h3>
@@ -102,7 +101,7 @@ $this->params['breadcrumbs'][] = $website->title;
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title">Ähnliche Websites</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach($similars AS $model): ?>
+            <?php foreach ($similars as $model): ?>
             <li class="sidebarWidget__item">
                 <a class="sidebarWidget__link" href="<?= $model->url ?>">
                     <strong><?= $model->title ?></strong><br>

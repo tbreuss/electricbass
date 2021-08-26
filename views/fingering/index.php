@@ -19,9 +19,10 @@ $this->params['breadcrumbs'][] = 'Fingersätze';
     <h1>Fingersätze</h1>
 
     <?php foreach ($models as $model): ?>
-
         <?php if ($category != $model->category): ?>
-            <?php if(!empty($category)) echo "</ul>"; ?>
+            <?php if (!empty($category)) {
+                echo "</ul>";
+            } ?>
             <?php $category = $model->category ?>
             <h2><?= Yii::t('app', $category) ?></h2>
             <ul>

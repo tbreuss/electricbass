@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: thomas
@@ -159,5 +160,4 @@ final class Media
 
         return self::globFiles($pattern, $allowed, $webroot);
     }
-
 }

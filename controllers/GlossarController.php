@@ -41,12 +41,11 @@ final class GlossarController extends Controller
     {
         $glossars = Glossar::findAll(array('order' => 'category, title'));
         $i = 0;
-        foreach ($glossars AS $glossar) {
+        foreach ($glossars as $glossar) {
             $glossar->autosort = $i;
             $glossar->save(false, array('autosort'));
             $i++;
         }
         return $this->redirect(array('/glossar/index'));
     }
-
 }

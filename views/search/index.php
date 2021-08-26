@@ -28,7 +28,9 @@ function highlightWords(string $text, string $words): string
     $words = explode(' ', $words);
     $words = array_map('trim', $words);
     foreach ($words as $word) {
-        if (empty($word)) continue;
+        if (empty($word)) {
+            continue;
+        }
         $highlightedText = preg_replace('/\b(' . $word . ')\b/iu', '<span class="search-results__highlight">$1</span>', $text);
         if (is_string($highlightedText)) {
             $text = $highlightedText;
@@ -49,9 +51,7 @@ function highlightWords(string $text, string $words): string
     </form>
 
     <?php if (mb_strlen($term) === 0): ?>
-
         <?php if ($searched === true): ?>
-
             <p>Gib ein Suchwort ein.</p>
 
         <?php endif; ?>
@@ -63,11 +63,9 @@ function highlightWords(string $text, string $words): string
         </p>
 
     <?php elseif (mb_strlen($term) < SearchController::MIN_QUERY_LENGTH): ?>
-
         <p>Die Suchanfrage muss mindestens drei Zeichen lang sein.</p>
 
     <?php elseif ($dataProvider->getTotalCount() === 0): ?>
-
         <p>Es wurden keine mit deiner Suchanfrage - <?= Html::encode($term) ?> - übereinstimmenden Dokumente
             gefunden.<br>
             <br>
@@ -79,7 +77,6 @@ function highlightWords(string $text, string $words): string
         </ul>
 
     <?php else: ?>
-
         <?php
         /** @var app\models\Search[] $models */
         $models = $dataProvider->getModels();

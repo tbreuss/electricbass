@@ -7,7 +7,9 @@
 use app\helpers\Html;
 
 $count = count($models);
-if ($count == 0) return;
+if ($count == 0) {
+    return;
+}
 ?>
 
 <div class="comments__list">
@@ -16,7 +18,7 @@ if ($count == 0) return;
 
     <?php foreach ($models as $i => $model): ?>
         <?php if (!empty($i)): ?>
-            <hr><?php endif; ?>
+        <?php endif; ?>
         <div class="comments__item">
             <p class="comments__itemDetails">von <?= empty($model->website) ? Html::encode($model->name) : Html::a(Html::encode($model->name), Html::encode($model->website), ["target" => "_blank", "rel" => "nofollow"]) ?>
                 am <?= Yii::$app->formatter->asDate(Html::encode($model->created), "long") ?>

@@ -9,7 +9,6 @@
  */
 ?>
 <?php if (!empty($latitude) && !empty($longitude)): ?>
-
     <div class="widget widget-googlemaps">
 
         <?php if (!empty($title)): ?>

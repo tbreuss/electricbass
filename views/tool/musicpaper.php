@@ -133,7 +133,9 @@ $this->params['breadcrumbs'][] = 'Leeres Notenpapier als PDF';
         <?php else: ?>
             <?php
                 $urlPdf = Yii::getAlias('@web/media/tools/notenpapier/' . $paper[0]);
-                if ($urlPdf === false) continue;
+            if ($urlPdf === false) {
+                continue;
+            }
                 $urlImg = str_replace('.pdf', '.png', $urlPdf);
             ?>
             <div class="row" style="margin-bottom:20px">

@@ -18,5 +18,4 @@ final class Advertisement extends Widget
             'rows' => $rows
         ));
     }
-
 }

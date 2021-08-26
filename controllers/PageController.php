@@ -14,7 +14,7 @@ final class PageController extends Controller
     {
         return [
             'index' => [
-                'class'=>'yii\web\ViewAction',
+                'class' => 'yii\web\ViewAction',
                 'viewPrefix' => false
             ]
         ];

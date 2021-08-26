@@ -15,8 +15,9 @@ use yii\helpers\Markdown;
 <?php /* Siehe http://www.bootply.com/KYX5whhXoh */ ?>
 <div class="widget widget-listview">
     <?php foreach ($models as $i => $model): ?>
-
-        <?php if ($i > 0) echo "<hr>"; ?>
+        <?php if ($i > 0) {
+            echo "<hr>";
+        } ?>
 
         <div class="row">
             <?php if ($model->hasDefaultImage()): ?>

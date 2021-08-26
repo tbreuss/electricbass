@@ -1,10 +1,14 @@
 <?php
+
 use app\helpers\Html;
 use yii\helpers\Markdown;
 use yii\widgets\Spaceless;
+
 ?>
 
-<?php if (empty($models)) return; ?>
+<?php if (empty($models)) {
+    return;
+} ?>
 
 <?php Spaceless::begin() ?>
 <div class="shortcode shortcode--websites">

@@ -44,7 +44,7 @@ $moreVideos = array_slice($similarVideos, 3);
                         </div>
                     <?php endif; ?>
 
-                    <?php if(!empty($video->text)): ?>
+                    <?php if (!empty($video->text)): ?>
                     <div class="widget widget-parser" style="margin-top: 1rem">
                         <?= Parser::widget(["model" => $video, "attribute" => "text"]) ?>
                     </div>

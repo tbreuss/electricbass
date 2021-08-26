@@ -1,4 +1,8 @@
-<?php if (empty($model)) return; ?>
+<?php
+
+if (empty($model)) {
+    return;
+} ?>
 
 <div class="sidebarWidget sidebarWidget--quote">
     <figure>

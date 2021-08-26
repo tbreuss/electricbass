@@ -36,7 +36,6 @@ final class Searchlog extends ActiveRecord
             ->orderBy('modified DESC')
             ->limit($limit)
             ->all();
-
     }
 
     /**
@@ -55,7 +54,6 @@ final class Searchlog extends ActiveRecord
         $cookieSearches = Yii::$app->session->get('SEARCHLOG_TERMS', []);
 
         if (!in_array($term, $cookieSearches)) {
-
             $model = self::find()
                 ->where('term=:term', [':term' => $term])
                 ->one();
@@ -71,9 +69,7 @@ final class Searchlog extends ActiveRecord
 
             $cookieSearches[] = $term;
             Yii::$app->session->set('SEARCHLOG_TERMS', $cookieSearches);
-
         }
-
     }
 
     /**
@@ -92,5 +88,4 @@ final class Searchlog extends ActiveRecord
         }
         return false;
     }
-
 }

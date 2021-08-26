@@ -1,6 +1,7 @@
 <?php
+
 /**
  * @var string $content
  */
 ?>
-<?= $content ?>
+<?= $content;

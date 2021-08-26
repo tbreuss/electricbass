@@ -15,8 +15,8 @@ use app\widgets\LinkPager;
 
 $this->title = 'Websites';
 $this->params['breadcrumbs'][] = 'Websites';
-$this->params['pageTitle'] = sprintf('Websites zum Thema E-Bass (%d/%d)', $pagination->page+1, $pagination->pageCount);
-$this->params['metaDescription'] = sprintf('Umfangreicher Katalog mit Marken und Herstellern von E-Bässen und Zubehör, Blogs von Bassist*innen und Websites zum Thema E-Bass. (Seite %d von %d)', $pagination->page+1, $pagination->pageCount);
+$this->params['pageTitle'] = sprintf('Websites zum Thema E-Bass (%d/%d)', $pagination->page + 1, $pagination->pageCount);
+$this->params['metaDescription'] = sprintf('Umfangreicher Katalog mit Marken und Herstellern von E-Bässen und Zubehör, Blogs von Bassist*innen und Websites zum Thema E-Bass. (Seite %d von %d)', $pagination->page + 1, $pagination->pageCount);
 
 ?>
 

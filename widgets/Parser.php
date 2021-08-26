@@ -22,7 +22,7 @@ final class Parser extends Widget
         // for shortcodes
         self::$MODEL = $this->model;
 
-        $parsed = str_replace('@web/', Yii::getAlias('@web'). '/', $this->model->{$this->attribute});
+        $parsed = str_replace('@web/', Yii::getAlias('@web') . '/', $this->model->{$this->attribute});
         $parsed = Yii::$app->shortcode->parse($parsed);
 
         // remove self-closing br tags
@@ -145,7 +145,7 @@ final class Parser extends Widget
                 return null;
             }
             return [$size[0], $size[1]];
-        } catch(\Throwable) {
+        } catch (\Throwable) {
             return null;
         }
     }
@@ -466,8 +466,7 @@ final class Parser extends Widget
                 }
                 file_put_contents($alias, $message, FILE_APPEND);
             }
-            Yii::$app->cache->set($cacheKey, $headers, 24*60);
+            Yii::$app->cache->set($cacheKey, $headers, 24 * 60);
         }
     }
-
 }

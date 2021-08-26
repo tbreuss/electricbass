@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var app\models\AdvertisementEmailForm $model
  * @var yii\web\View $this
@@ -18,13 +19,11 @@ $this->params['breadcrumbs'][] = 'Inserate verwalten';
     <h1>Inserate verwalten</h1>
 
     <?php if (Yii::$app->session->hasFlash('manageFormSubmitted')): ?>
-
         <p>Wir haben an die angegebene E-Mail-Adresse eine E-Mail mit den aktiven Inseraten gesendet.</p>
         <p>Hinweis: Die E-Mail kann im Spam-Ordner deines Mailprogramms gelandet sein. Falls du keine E-Mail bekommen hast, melde dich bei uns über das Kontaktformular.</p>
         <p><?php echo Html::a('Zurück zu den Inseraten', array('advertisement/index')) ?>
 
     <?php else: ?>
-
         <p>Wir schicken dir einen Link, mit dem du deine Inserate verwalten kannst. Gib dafür deine E-Mail-Adresse ein.</p>
 
         <?= Html::beginForm('#form', 'post', ['id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>

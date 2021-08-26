@@ -10,7 +10,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 
-
 /**
  * Class SchemaBreadcrumbs
  * @package app\components
@@ -37,7 +36,7 @@ final class SchemaBreadcrumbs extends Breadcrumbs
     /** @var array<string, mixed> */
     public array $defaultOptions = [];
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -60,7 +59,6 @@ final class SchemaBreadcrumbs extends Breadcrumbs
                 'label' => Yii::t('yii', 'Home'),
                 'url' => Yii::$app->homeUrl,
             ], $this->itemTemplate);
-
         } elseif ($this->homeLink !== false) {
             $links[] = $this->renderItem($this->homeLink, $this->itemTemplate);
         }
@@ -101,7 +99,6 @@ final class SchemaBreadcrumbs extends Breadcrumbs
 
             $span = Html::tag('span', $label, ['itemprop' => 'name']);
             $link = Html::a($span, $link['url'], array_merge(['itemprop' => 'item'], $options));
-
         } else {
             $link = Html::tag('span', $label, ['itemprop' => 'name']);
         }
@@ -113,5 +110,4 @@ final class SchemaBreadcrumbs extends Breadcrumbs
 
         return strtr($template, ['{link}' => $link]);
     }
-
 }

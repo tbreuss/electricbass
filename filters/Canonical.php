@@ -57,5 +57,4 @@ final class Canonical extends ActionFilter
         }
         return false;
     }
-
 }

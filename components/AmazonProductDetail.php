@@ -112,11 +112,13 @@ final class AmazonProductDetail
 
     public function getPrice(): ?array
     {
-        if ($this->item->getOffers() !== null
+        if (
+            $this->item->getOffers() !== null
             && $this->item->getOffers() !== null
             && $this->item->getOffers()->getListings() !== null
             && $this->item->getOffers()->getListings()[0]->getPrice() !== null
-            && $this->item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null) {
+            && $this->item->getOffers()->getListings()[0]->getPrice()->getDisplayAmount() !== null
+        ) {
             return [
                 $this->item->getOffers()->getListings()[0]->getPrice()->getCurrency(),
                 $this->item->getOffers()->getListings()[0]->getPrice()->getAmount()
@@ -152,9 +154,11 @@ final class AmazonProductDetail
      */
     public function getEANs(): array
     {
-        if ($this->item->getItemInfo() === null
+        if (
+            $this->item->getItemInfo() === null
             || $this->item->getItemInfo()->getExternalIds() === null
-            || $this->item->getItemInfo()->getExternalIds()->getEANs() === null) {
+            || $this->item->getItemInfo()->getExternalIds()->getEANs() === null
+        ) {
             return [];
         }
         return $this->item->getItemInfo()->getExternalIds()->getEANs()->getDisplayValues();
@@ -165,9 +169,11 @@ final class AmazonProductDetail
      */
     public function getISBNs(): array
     {
-        if ($this->item->getItemInfo() === null
+        if (
+            $this->item->getItemInfo() === null
             || $this->item->getItemInfo()->getExternalIds() === null
-            || $this->item->getItemInfo()->getExternalIds()->getISBNs() === null) {
+            || $this->item->getItemInfo()->getExternalIds()->getISBNs() === null
+        ) {
             return [];
         }
         return $this->item->getItemInfo()->getExternalIds()->getISBNs()->getDisplayValues();
@@ -178,9 +184,11 @@ final class AmazonProductDetail
      */
     public function getUPCs(): array
     {
-        if ($this->item->getItemInfo() === null
+        if (
+            $this->item->getItemInfo() === null
             || $this->item->getItemInfo()->getExternalIds() === null
-            || $this->item->getItemInfo()->getExternalIds()->getUPCs() === null) {
+            || $this->item->getItemInfo()->getExternalIds()->getUPCs() === null
+        ) {
             return [];
         }
         return $this->item->getItemInfo()->getExternalIds()->getUPCs()->getDisplayValues();
@@ -284,9 +292,11 @@ final class AmazonProductDetail
 
     public function getProductGroup(): ?string
     {
-        if (($this->item->getItemInfo() === null) ||
+        if (
+            ($this->item->getItemInfo() === null) ||
             ($this->item->getItemInfo()->getClassifications() === null) ||
-            ($this->item->getItemInfo()->getClassifications()->getProductGroup() === null)) {
+            ($this->item->getItemInfo()->getClassifications()->getProductGroup() === null)
+        ) {
             return null;
         }
         return $this->item->getItemInfo()->getClassifications()->getProductGroup()->getDisplayValue();
@@ -294,9 +304,11 @@ final class AmazonProductDetail
 
     public function getBinding(): ?string
     {
-        if (($this->item->getItemInfo() === null) ||
+        if (
+            ($this->item->getItemInfo() === null) ||
             ($this->item->getItemInfo()->getClassifications() === null) ||
-            ($this->item->getItemInfo()->getClassifications()->getBinding() === null)) {
+            ($this->item->getItemInfo()->getClassifications()->getBinding() === null)
+        ) {
             return null;
         }
         return $this->item->getItemInfo()->getClassifications()->getBinding()->getDisplayValue();
@@ -304,9 +316,11 @@ final class AmazonProductDetail
 
     public function getFeatures(): ?array
     {
-        if (($this->item->getItemInfo() === null) ||
+        if (
+            ($this->item->getItemInfo() === null) ||
             ($this->item->getItemInfo()->getFeatures() === null) ||
-            ($this->item->getItemInfo()->getFeatures()->getDisplayValues() === null)) {
+            ($this->item->getItemInfo()->getFeatures()->getDisplayValues() === null)
+        ) {
             return null;
         }
         return $this->item->getItemInfo()->getFeatures()->getDisplayValues();
@@ -314,9 +328,11 @@ final class AmazonProductDetail
 
     public function getItemPartNumber(): ?string
     {
-        if (($this->item->getItemInfo() === null) ||
+        if (
+            ($this->item->getItemInfo() === null) ||
             ($this->item->getItemInfo()->getManufactureInfo() === null) ||
-            ($this->item->getItemInfo()->getManufactureInfo()->getItemPartNumber() === null)) {
+            ($this->item->getItemInfo()->getManufactureInfo()->getItemPartNumber() === null)
+        ) {
             return null;
         }
         return $this->item->getItemInfo()->getManufactureInfo()->getItemPartNumber()->getDisplayValue();
@@ -324,9 +340,11 @@ final class AmazonProductDetail
 
     public function getModelNumber(): ?string
     {
-        if (($this->item->getItemInfo() === null) ||
+        if (
+            ($this->item->getItemInfo() === null) ||
             ($this->item->getItemInfo()->getManufactureInfo() === null) ||
-            ($this->item->getItemInfo()->getManufactureInfo()->getModel() === null)) {
+            ($this->item->getItemInfo()->getManufactureInfo()->getModel() === null)
+        ) {
             return null;
         }
         return $this->item->getItemInfo()->getManufactureInfo()->getModel()->getDisplayValue();

@@ -51,5 +51,4 @@ final class AdvertisementEmailForm extends Model
             ['verifyCode', 'captcha'],
         );
     }
-
 }

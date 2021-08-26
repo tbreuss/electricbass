@@ -71,5 +71,4 @@ final class LessonController extends Controller
         }
         return $breadcrumbs;
     }
-
 }

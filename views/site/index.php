@@ -59,7 +59,7 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
             <?php foreach ($latestAlbums as $latest): ?>
                 <div class="col-6 col-xl-4 albumlist__cell">
                     <a href="<?= $latest->url ?>" class="albumlist__link">
-                        <?php if($latest->getDefaultImage()): ?>
+                        <?php if ($latest->getDefaultImage()): ?>
                             <?= Html::img($latest->getDefaultImage('@web'), ["class" => "img-fluid albumlist__cover", "alt" => $latest->title]) ?>
                         <?php else: ?>
                             <?= Html::img('/img/bg.png', ["width" => 290, "height" => 290, "class" => "img-fluid albumlist__cover", "alt" => ""]) ?>
@@ -90,8 +90,8 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
         <div class="row cataloglist">
             <div class="col-12"><h2><?= $latestLehrbuecher[0]->getContextTextPlural() ?></h2></div>
             <?php foreach ($latestLehrbuecher as $model): ?>
-            <?php $relImage = $model->getDefaultImage() ?>
-            <?php $emptyClass = !empty($relImage) ? '' : 'cataloglist__link--empty' ?>
+                <?php $relImage = $model->getDefaultImage() ?>
+                <?php $emptyClass = !empty($relImage) ? '' : 'cataloglist__link--empty' ?>
             <div class="col-6 col-sm-3 col-md-6 col-lg-3 cataloglist__cell">
                 <a href="<?= $model->url ?>" class="cataloglist__link <?= $emptyClass ?>">
                     <?php if (!empty($relImage)): ?>

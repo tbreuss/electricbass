@@ -23,5 +23,4 @@ final class GoogleMaps extends Widget
             'zoom' => $this->zoom,
         ));
     }
-
 }

@@ -26,5 +26,4 @@ final class ToolController extends Controller
     {
         return $this->render('drumgroove');
     }
-
 }

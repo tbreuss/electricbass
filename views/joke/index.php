@@ -27,8 +27,9 @@ $this->params['metaDescription'] = 'Die Sammlung mit den besten Bassistenwitzen 
 
     <div class="widget widget-listview">
         <?php foreach ($models as $i => $model): ?>
-
-            <?php if ($i > 0) echo "<hr>"; ?>
+            <?php if ($i > 0) {
+                echo "<hr>";
+            } ?>
 
             <div class="row">
                 <div class="col-sm-12">

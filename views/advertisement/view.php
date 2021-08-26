@@ -20,8 +20,7 @@ $this->params['breadcrumbs'][] = $model->title;
 $this->title = $model->getPageTitle();
 ?>
 
-<?php if($model->expired || $model->deleted || $model->hidden): ?>
-
+<?php if ($model->expired || $model->deleted || $model->hidden): ?>
     <div class="content">
 
         <h1><?= stripslashes($model->title) ?></h1>
@@ -34,16 +33,15 @@ $this->title = $model->getPageTitle();
     </div>
 
 <?php else: ?>
-
     <div class="content">
 
         <h1><?= stripslashes($model->title) ?></h1>
 
-        <?php if(Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
+        <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
             <div class="flash flash--success">Vielen Dank! Wir haben deine Nachricht an <?= $model->name ?> weitergeleitet.</div>
         <?php endif; ?>
 
-        <?php if(($photo=$model->getPhoto())!=''): ?>
+        <?php if (($photo = $model->getPhoto()) != ''): ?>
             <div class="image">
                 <?= Html::img('@web/' . $photo, ["width" => 450, "alt" => $model->title, "class" => "img-fluid"]) ?>
             </div>
@@ -51,7 +49,7 @@ $this->title = $model->getPageTitle();
 
         <div class="markdown"><?= strip_tags(Markdown::process($model->longtext), '<p><strong><b><ul><li><br>') ?></div>
 
-        <?php if(!empty($model->email)): ?>
+        <?php if (!empty($model->email)): ?>
             <p class="text-center"><?= Html::a('Anbieter kontaktieren', array('advertisement/contact', 'id' => $model->id), array('class' => 'button button--danger button--big')); ?></p>
         <?php endif; ?>
 
@@ -66,7 +64,7 @@ $this->title = $model->getPageTitle();
                 <td>Erstellt</td>
                 <td><?= Yii::$app->formatter->asDate($model->date, 'long') ?></td>
             </tr>
-        <?php foreach($infos AS $label=>$value): ?>
+        <?php foreach ($infos as $label => $value): ?>
             <tr>
                 <td><?= $label ?></td>
                 <td><?= $value ?></td>

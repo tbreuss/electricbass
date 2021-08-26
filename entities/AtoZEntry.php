@@ -29,5 +29,4 @@ final class AtoZEntry
     {
         return $this->isNew;
     }
-
 }

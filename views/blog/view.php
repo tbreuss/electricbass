@@ -46,8 +46,8 @@ $this->params['breadcrumbs'][] = $blog->title;
         <p><?= Html::img($blog->fotoUrl, ["width" => 350, "class" => "img-fluid", "alt" => $blog->title]) ?></p>
     <?php endif; ?>
 
-    <?php if(!empty($blog->text)): ?>
-        <?php if(!empty($blog->subtitle)): ?>
+    <?php if (!empty($blog->text)): ?>
+        <?php if (!empty($blog->subtitle)): ?>
             <?php $blog->text = $blog->subtitle . ' ' . $blog->text; ?>
         <?php endif; ?>
         <div class="widget widget-parser">
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $blog->title;
     <div class="sidebarWidget">
         <h3 class="sidebarWidget__title">Ähnliche Blogposts</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach($similars AS $model): ?>
+            <?php foreach ($similars as $model): ?>
             <li class="sidebarWidget__item">
                 <a class="sidebarWidget__link" href="<?= $model->url ?>">
                     <strong><?= $model->title ?></strong><br>

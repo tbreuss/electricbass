@@ -36,7 +36,7 @@ final class Joke extends ActiveRecord
 
         $query = Joke::find()
             ->select('id, joke, created')
-            ->where(['deleted' => NULL])
+            ->where(['deleted' => null])
             ->orderBy($sort->orders);
 
         return new ActiveDataProvider([
@@ -57,5 +57,4 @@ final class Joke extends ActiveRecord
             ->limit(1)
             ->one();
     }
-
 }
