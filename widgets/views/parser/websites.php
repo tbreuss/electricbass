@@ -10,6 +10,9 @@ use yii\widgets\Spaceless;
 <div class="shortcode shortcode--websites">
 <?php foreach ($models as $model): ?>
     <h4><?= Html::a($model->title, $model->url) ?></h4>
+    <?php if (!empty($model->subtitle)): ?>
+        <p class="mb-0"><i><?= $model->subtitle ?></i></p>
+    <?php endif; ?>
     <?php if (!empty($model->abstract)): ?>
         <p><?= strip_tags(Markdown::process($model->abstract)) ?></p>
     <?php endif; ?>
