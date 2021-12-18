@@ -11,7 +11,6 @@ namespace app\components;
 
 abstract class ActiveRecord extends \yii\db\ActiveRecord
 {
-
     abstract public function hasDefaultImage(): bool;
 
     abstract public function getDefaultImage(string $alias = ''): string;

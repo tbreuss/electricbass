@@ -9,7 +9,6 @@ use Yii;
 
 final class Div
 {
-
     /**
      * @phpstan-return array{"latitude": float, "longitude": float}
      */

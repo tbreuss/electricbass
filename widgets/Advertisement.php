@@ -6,7 +6,6 @@ use yii\base\Widget;
 
 final class Advertisement extends Widget
 {
-
     public string $title = 'Kleinanzeigen';
     public int $limit = 4;
 

@@ -7,7 +7,6 @@ use yii\base\Widget;
 
 final class Quote extends Widget
 {
-
     public function run()
     {
         $model = QuoteModel::findOneRandom();

@@ -13,7 +13,6 @@ use yii\web\ServerErrorHttpException;
 
 final class ApiController extends Controller
 {
-
     public function actionHits(): bool
     {
         if (!Yii::$app->request->isPost) {

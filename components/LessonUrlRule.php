@@ -9,7 +9,6 @@ use yii\web\UrlRuleInterface;
 
 final class LessonUrlRule extends BaseObject implements UrlRuleInterface
 {
-
     /**
      * @param UrlManager $manager
      * @param string $route

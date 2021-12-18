@@ -7,7 +7,6 @@ use yii\base\Widget;
 
 final class Joke extends Widget
 {
-
     public function run()
     {
         $model = JokeModel::findOneRandom();

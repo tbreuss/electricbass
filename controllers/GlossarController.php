@@ -9,7 +9,6 @@ use yii\web\Response;
 
 final class GlossarController extends Controller
 {
-
     public function actionIndex(?string $category = null): string
     {
         $condition = ['deleted' => 0, 'hidden' => 0];

@@ -15,7 +15,6 @@ use yii\filters\VerbFilter;
  */
 final class BlogController extends Controller
 {
-
     /**
      * @phpstan-return array<array>
      */

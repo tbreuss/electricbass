@@ -19,7 +19,6 @@ use yii\web\Response;
  */
 final class AdvertisementController extends Controller
 {
-
     public function actionIndex(int $page = 0): string
     {
         $models = Advertisement::findAllForAdvertisementIndexController();

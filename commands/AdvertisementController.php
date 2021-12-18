@@ -9,7 +9,6 @@ use yii\db\Expression;
 
 final class AdvertisementController extends Controller
 {
-
     /**
      * Reminder Action
      */
