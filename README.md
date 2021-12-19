@@ -1,6 +1,6 @@
 # Electricbass
 
-My long time hobby project about bass playing an more.
+> My long time hobby project about bass playing an more.
 
 <https://www.electricbass.ch>
 
@@ -27,3 +27,23 @@ Analyse
 Fix
 
     vendor/bin/phpcbf
+
+## Build Asset Files
+
+Build CSS
+
+    npm run build-css
+
+Build minified CSS
+
+    npm run build-min-css
+
+Build JavaScript
+
+    npm run build-js
+
+Build minified JavaScript
+
+    npm run build-min-js
+
+Generated asset files are stored in folder `/assets/app/dist`.
