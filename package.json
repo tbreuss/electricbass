@@ -3,7 +3,6 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "build": "webpack",
         "build-css": "node-sass --include-path scss assets/app/scss/main.scss assets/app/dist/main.css --output-style expanded",
         "build-min-css": "node-sass --include-path scss assets/app/scss/main.scss assets/app/dist/main.min.css --output-style compressed",
         "build-js": "terser assets/app/js/*.js --output assets/app/dist/main.js",
@@ -14,22 +13,10 @@
     "author": "",
     "license": "ISC",
     "bugs": {},
-    "dependencies": {
-        "bootstrap": "^5.1.3"
-    },
     "devDependencies": {
-        "autoprefixer": "^10.4.0",
-        "css-loader": "^6.5.1",
-        "file-loader": "^6.2.0",
+        "bootstrap": "^5.1.3",
         "node-sass": "^7.0.0",
         "nodemon": "^2.0.15",
-        "postcss": "^8.4.5",
-        "postcss-loader": "^6.2.1",
-        "sass": "^1.45.0",
-        "sass-loader": "^12.4.0",
-        "style-loader": "^3.3.1",
-        "terser": "^5.10.0",
-        "webpack": "^5.65.0",
-        "webpack-cli": "^4.9.1"
+        "terser": "^5.10.0"
     }
 }
