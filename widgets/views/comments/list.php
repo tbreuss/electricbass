@@ -14,7 +14,7 @@ if ($count == 0) {
 
 <div class="comments__list">
 
-    <h2 class="comments__listTitle"><?= $count ?> Kommentare</h2>
+    <h2 class="comments__listTitle"><?= $count ?> <?= $count == 1 ? 'Kommentar' : 'Kommentare' ?></h2>
 
     <?php foreach ($models as $i => $model): ?>
         <?php if (!empty($i)): ?>

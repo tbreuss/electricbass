@@ -6040,6 +6040,10 @@ h3 a:hover {
   line-height: 1.4;
 }
 
+.comments__list {
+  margin-bottom: 2.5rem;
+}
+
 .comments__listTitle {
   color: #423f37;
 }
@@ -6048,10 +6052,29 @@ h3 a:hover {
   color: #423f37;
 }
 
-.comments__list {
-  margin-bottom: 2.5rem;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid #ddd;
+.comments__item {
+  border-right: 1px solid #f0f0f0;
+  border-bottom: 2px solid #f0f0f0;
+  background-color: #f8f8f8;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+}
+
+.comments__item:last-of-type {
+  margin-bottom: 0.25rem;
+}
+
+.comments__itemDetails {
+  font-size: 0.85rem;
+}
+
+.comments__itemDetails a {
+  color: #5F5C52;
+  text-decoration: underline;
+}
+
+.comments__itemText {
+  margin-bottom: 0;
 }
 
 .comments__rules {
