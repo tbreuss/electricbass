@@ -136,12 +136,11 @@ if (!empty($this->params['metaDescription'])) {
 <footer class="footer">
     <div class="container">
         <div class="row links">
-            <div class="col-md-4 col-xs-10">
+            <div class="col-md-5 col-xs-10">
                 <h5 class="footer__title">Über ELECTRICBASS</h5>
-                <p class="footer__text">ELECTRICBASS ist eine private Website von Thomas Breuss und bietet umfangreiche Informationen über
-                    das bässte Instrument der Welt!</p>
+                <p class="footer__text">ELECTRICBASS ist ein Blog und eine Website für E-Bassisten und Bassistinnen und bietet umfangreiche Informationen zum Thema Bass, Kontrabass und E-Bass, dem bässten Instrument der Welt!</p>
             </div>
-            <div class="col-md-3 offset-md-2 col-xs-6">
+            <div class="col-md-3 offset-md-1 col-xs-6">
                 <h5 class="footer__title">Kontakt &amp; Info</h5>
                 <?= Menu::widget([
                     'options' => ['class' => 'footer__list'],
