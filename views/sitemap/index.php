@@ -31,8 +31,8 @@ $this->title = 'Sitemap';
     </ul>
     <h2 class="sitemap__section"><?= Html::a('Katalog', ['/catalog/overview'], ['class' => 'sitemap__link']) ?></h2>
     <ul class="sitemap__links">
-        <li><?= Html::a('Lehrbücher (mit CDs) für E-Bass', ['/catalog/index', 'category' => 'lehrbuecher'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Lehrbücher mit DVDs', ['/catalog/index', 'category' => 'dvds'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Lehrbücher mit CDs für E-Bass', ['/catalog/index', 'category' => 'lehrbuecher'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Lehrbücher mit DVDs für E-Bass', ['/catalog/index', 'category' => 'dvds'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Bücher zum Thema Bass', ['/catalog/index', 'category' => 'buecher'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Musikalben von E-Bassisten', ['/catalog/index', 'category' => 'alben'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Videos von und für E-Bassisten', ['/video/index'], ['class' => 'sitemap__link']) ?></li>
@@ -41,7 +41,7 @@ $this->title = 'Sitemap';
         <li><?= Html::a('Witze über Bassisten', ['/joke/index'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Zitate berühmter Bassisten', ['/quote/index'], ['class' => 'sitemap__link']) ?></li>
     </ul>
-    <h2 class="sitemap__section"><?= Html::a('Kleinanzeigen', ['/advertisement/index'], ['class' => 'sitemap__link']) ?></h2>
+    <h2 class="sitemap__section"><?= Html::a('Kleinanzeigen für Bassisten', ['/advertisement/index'], ['class' => 'sitemap__link']) ?></h2>
     <h2 class="sitemap__section">Diverses</h2>
     <ul class="sitemap__links">
         <li><?= Html::a('Impressum', ['/site/impressum'], ['class' => 'sitemap__link']) ?></li>
