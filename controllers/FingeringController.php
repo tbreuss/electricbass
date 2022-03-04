@@ -36,7 +36,7 @@ final class FingeringController extends Controller
     {
         $models = Fingering::find()
             ->where('deleted=0')
-            ->orderBy('category ASC, title ASC')
+            ->orderBy([new \yii\db\Expression('FIELD (category, "intervall", "akkord", "tonleiter"), title ASC')])
             ->all();
 
         $this->layout = 'onecol';
