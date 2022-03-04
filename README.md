@@ -1,6 +1,6 @@
 # Electricbass
 
-> My long time hobby project about bass playing an more.
+> My long time hobby project about bass playing and more.
 
 <https://www.electricbass.ch>
 
