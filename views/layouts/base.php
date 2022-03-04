@@ -153,17 +153,56 @@ if (!empty($this->params['metaDescription'])) {
                     ]]); ?>
             </div>
             <div class="col-md-3 col-xs-6">
-                <h5 class="footer__title">Links &amp; mehr</h5>
-                <?= Menu::widget([
-                    'options' => ['class' => 'footer__list'],
-                    'items' => [
-                        ['label' => 'Bass-Glossar', 'url' => ['/glossar/index']],
-                        ['label' => 'Bass-Websites', 'url' => ['/website/index']],
-                        ['label' => 'Bassisten-Witze', 'url' => ['/joke/index']],
-                        ['label' => 'Zitate von Bassisten', 'url' => ['/quote/index']],
-                        ['label' => 'Kleinanzeigen', 'url' => ['/advertisement/index']],
-                        ['label' => 'Suche', 'url' => ['/search/index']],
-                    ]]); ?>
+                <form class="search" action="/suche" method="get">
+                    <input class="search__input navbar-dropdown__search" type="text" name="term" placeholder="Suchen nach...">
+                    <input class="search__submit" type="submit" value="Suchen">
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr class="footer__hr">
+            </div>
+        </div>        
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <h5 class="footer__title">Lektionen, Übungen & Ideen</h5>
+                <ul class="footer__list">
+                    <li><?= Html::a('Fitnessübungen für E-Bassisten', ['/lesson/index', 'path' => 'fitness']) ?></li>
+                    <li><?= Html::a('Tonleiterübungen für den E-Bass', ['/lesson/index', 'path' => 'tonleiter']) ?></li>
+                    <li><?= Html::a('Bass-Riffs aller Stilrichtungen', ['/lesson/index', 'path' => 'bassriff']) ?></li>
+                    <li><?= Html::a('Rhythmikübungen für Bassisten', ['/lesson/index', 'path' => 'rhythmik']) ?></li>
+                    <li><?= Html::a('Arpeggios für den E-Bass', ['/lesson/index', 'path' => 'arpeggio']) ?></li>
+                    <li><?= Html::a('Blues-Übungen für Bassisten', ['/lesson/index', 'path' => 'blues']) ?></li>
+                    <li><?= Html::a('Harmonielehre und Musiktheorie für E-Bass', ['/lesson/index', 'path' => 'harmonielehre']) ?></li>
+                    <li><?= Html::a('Walking Bass Übungen für E- und Kontrabass', ['/lesson/index', 'path' => 'walking-bass']) ?></li>
+                </ul>
+            </div>
+            <div class="col-12 col-md-4">
+                <h5 class="footer__title">Kataloge & mehr</h5>
+                <ul class="footer__list">
+                    <li><?= Html::a('Lehrbücher mit CDs für E-Bass', ['/catalog/index', 'category' => 'lehrbuecher']) ?></li>
+                    <li><?= Html::a('Lehrbücher mit DVDs für E-Bass', ['/catalog/index', 'category' => 'dvds']) ?></li>
+                    <li><?= Html::a('Bücher zum Thema Bass', ['/catalog/index', 'category' => 'buecher']) ?></li>
+                    <li><?= Html::a('Musikalben von E-Bassisten', ['/catalog/index', 'category' => 'alben']) ?></li>
+                    <li><?= Html::a('Videos von und für E-Bassisten', ['/video/index']) ?></li>
+                    <li><?= Html::a('Websites zum Thema E-Bass', ['/website/index']) ?></li>
+                    <li><?= Html::a('E-Bass Hersteller und Marken', ['/manufacturer/index']) ?></li>
+                    <li><?= Html::a('Witze über Bassisten', ['/joke/index']) ?></li>
+                    <li><?= Html::a('Zitate berühmter Bassisten', ['/quote/index']) ?></li>
+                </ul>
+            </div>
+            <div class="col-12 col-md-4">
+                <h5 class="footer__title">weitere Infos</h5>
+                <div class="sitemap">
+                    <ul class="footer__list">
+                        <li><?= Html::a('Blog für E-Bass und Bassisten', ['/blog']) ?></li>
+                        <li><?= Html::a('Fingersätze für Tonleitern, Intervalle und Akkorde', ['/fingering/index']) ?></li>
+                        <li><?= Html::a('Notenpapier zum Herunterladen und Ausdrucken', ['/tool/musicpaper']) ?></li>
+                        <li><?= Html::a('Kleinanzeigen für Bassisten', ['/advertisement/index']) ?></li>
+                        <li><?= Html::a('Glossar für Bassisten', ['/glossar/index']) ?></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -176,7 +215,7 @@ if (!empty($this->params['metaDescription'])) {
                 <p class="footer__text">&copy; 1998-<?= date('Y') ?> ELECTRICBASS</p>
             </div>
             <div class="col-md-6">
-                <p class="text-end footer__text">Mit Herzblut, <a target="_blank" rel="nofollow" href="http://www.yiiframework.com">Yii2</a> und <a href="http://getbootstrap.com/" target="_blank" rel="nofollow">Bootstrap</a> gemacht.</p>
+                <p class="text-end footer__text">Ein <a target="_blank" href="https://tebe.ch">tebe.ch</a> Projekt</p>
             </div>
         </div>
     </div>
