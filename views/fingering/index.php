@@ -9,15 +9,16 @@ use app\helpers\Html;
 
 $category = '';
 
-$this->title = 'Fingersätze';
+$this->title = 'Fingersätze für E-Bass';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Fingersätze';
 ?>
 
 <div class="content">
 
-    <h1>Fingersätze</h1>
+    <h1>Fingersätze für E-Bass</h1>
 
+    <p>Hier findest du E-Bass Fingersätze für die linke Hand für Intervalle, Akkorde und Tonleitern für vier-, fünf- und sechssaitige E-Bässe.</p> 
     <?php foreach ($models as $model): ?>
         <?php if ($category != $model->category): ?>
             <?php if (!empty($category)) {
