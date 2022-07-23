@@ -1,8 +1,15 @@
 # Electricbass
 
-> My long time hobby project about bass playing an more.
+> My long time hobby project about bass playing and more.
 
 <https://www.electricbass.ch>
+
+## Note
+
+This project does not contain a database. 
+Without one, it cannot be started locally.
+However, the project can serve as an illustrative example for a Yii2 web application.
+I hope this is helpful for one or the other.
 
 ## Static Code Analysis
 
