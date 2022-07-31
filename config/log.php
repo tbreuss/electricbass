@@ -19,7 +19,6 @@ return [
         [
             'class' => 'yii\log\DbTarget',
             'levels' => ['error', 'warning'],
-            'logVars' => ['_GET', '_POST', '_FILES', '_COOKIE', '_SESSION'],
             'except' => [
                 'yii\web\HttpException:404',
             ],
@@ -28,7 +27,6 @@ return [
             'class' => 'yii\log\EmailTarget',
             'mailer' => 'mailer',
             'levels' => ['error', 'warning'],
-            'logVars' => ['_GET', '_POST', '_FILES', '_COOKIE', '_SESSION'],
             'except' => [
                 'yii\web\HttpException:404',
             ],
