@@ -42,6 +42,13 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'enableStrictParsing' => true,
+            'normalizer' => [
+                'class' => 'yii\web\UrlNormalizer',
+                'collapseSlashes' => true,
+                'normalizeTrailingSlash' => true,                
+                'action' => null,
+            ],
             'rules' => require(__DIR__ . '/rules.php'),
         ],
         'shortcode' => [

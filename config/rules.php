@@ -71,4 +71,5 @@ return [
     'admin' => 'admin',
     // Pages
     '<view:[a-z0-9-/]+>' => 'page/index',
+    '' => 'site/index',
 ];
