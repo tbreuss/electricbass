@@ -1,5 +1,12 @@
 <?php
 
+// hack for local development together with traefik and tls
+if (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'electricbass.test')) {
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+        $_SERVER['HTTPS'] = 'on';
+    }
+}
+
 require(__DIR__ . '/../vendor/autoload.php');
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
