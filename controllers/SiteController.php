@@ -24,7 +24,7 @@ final class SiteController extends Controller
         return [
             [
                 'class' => 'app\filters\RedirectFilter',
-                'except' => ['captcha'],
+                'except' => [],
             ],
             [
                 'class' => 'yii\filters\PageCache',
