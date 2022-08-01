@@ -10,6 +10,15 @@ use yii\web\Response;
 
 final class FeedController extends Controller
 {
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => 'app\filters\RedirectFilter'
+            ]
+        ];
+    }
+    
     public function actionRss(): string
     {
         Yii::$app->response->format = Response::FORMAT_RAW;

@@ -48,24 +48,6 @@ final class Redirect extends BaseObject implements BootstrapInterface
             $redirect->save(false, ['count', 'updated']);
         }
 
-        // Check for HTTPS
-        $http = 'http://';
-        if (str_starts_with($redirectUrl, $http)) {
-            $redirectUrl = 'https://' . substr($redirectUrl, strlen($http));
-            $signals[] = 'https';
-        }
-
-        // Check for WWW
-        if (!str_contains($requestUrl, '://www.')) {
-            $redirectUrl = str_replace('://', '://www.', $redirectUrl);
-            $signals[] = 'www';
-        }
-
-        // Check for trailing slash
-        #if (!in_array($redirectUrl, ['https://www.electricbass.ch', 'https://www.electricbass.ch/'])) {
-        #    $redirectUrl = rtrim($redirectUrl, '/');
-        #}
-
         if ($requestUrl === $redirectUrl) {
             return;
         }

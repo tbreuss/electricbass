@@ -22,6 +22,9 @@ final class SiteController extends Controller
     {
         return [
             [
+                'class' => 'app\filters\RedirectFilter'
+            ],            
+            [
                 'class' => 'yii\filters\PageCache',
                 'only' => ['index'],
                 'duration' => 60,
