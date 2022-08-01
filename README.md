@@ -54,3 +54,13 @@ Build minified JavaScript
     npm run build-min-js
 
 Generated asset files are stored in folder `/assets/app/dist`.
+
+## cURL Calls (for local development)
+
+Normal call
+    
+    curl https://www.electricbass.test --insecure
+
+Test redirection
+
+    curl -L --max-redirs 5 http://electricbass.test/blog/ --insecure
