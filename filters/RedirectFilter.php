@@ -16,7 +16,7 @@ class RedirectFilter extends ActionFilter
         }
 
         // if we are in the error action already, stop here
-        if (isset($action->actionMethod) && ($action->actionMethod === 'actionError')) { // @phpstan-ignore-line
+        if (isset($action->actionMethod) && ($action->actionMethod === 'actionError')) {
             return parent::afterAction($action, $result);
         }
 
