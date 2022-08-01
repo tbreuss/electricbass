@@ -9,6 +9,9 @@ use yii\web\Response;
 
 final class ManufacturerController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */
     public function behaviors(): array
     {
         return [

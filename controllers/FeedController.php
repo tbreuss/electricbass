@@ -10,6 +10,9 @@ use yii\web\Response;
 
 final class FeedController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */    
     public function behaviors(): array
     {
         return [

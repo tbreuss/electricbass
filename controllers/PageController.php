@@ -6,6 +6,9 @@ use yii\web\Controller;
 
 final class PageController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */
     public function behaviors(): array
     {
         return [

@@ -16,14 +16,14 @@ class RedirectFilter extends ActionFilter
         }
 
         // if we are in the error action already, stop here
-        if ($action->actionMethod === 'actionError') {
+        if ($action->actionMethod === 'actionError') { // @phpstan-ignore-line
             return parent::afterAction($action, $result);
         }
         
         // get request infos
         $requestUrl = $request->getAbsoluteUrl();
         $pathInfo = $request->getPathInfo();
-        $trimmedPathInfo = ltrim(preg_replace('#/{2,}#', '/', $pathInfo), '/');
+        $trimmedPathInfo = ltrim(strval(preg_replace('#/{2,}#', '/', $pathInfo)), '/');
         $queryString = $request->getQueryString();
 
         // detect strange things
@@ -35,13 +35,13 @@ class RedirectFilter extends ActionFilter
         // redirect if something strange happened
         if ($isNotSecure || $isWithoutWww || $hasConsecutiveSlashes || $hasTrailingSlash) {
             $redirectUrl = 'https://www.' 
-                . str_replace(['https://', 'http://', 'www.'], '', $request->getHostInfo()) 
+                . str_replace(['https://', 'http://', 'www.'], '', (string)$request->getHostInfo()) 
                 . '/'
                 . trim($trimmedPathInfo, '/')
                 . ($queryString ? '?' : '')
                 . $queryString
             ;
-            $this->owner->redirect($redirectUrl, 301);
+            $this->owner->redirect($redirectUrl, 301); // @phpstan-ignore-line
             return false;
         }
 

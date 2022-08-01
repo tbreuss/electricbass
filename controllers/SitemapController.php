@@ -10,6 +10,9 @@ use app\models\Search;
 
 final class SitemapController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */
     public function behaviors(): array
     {
         return [

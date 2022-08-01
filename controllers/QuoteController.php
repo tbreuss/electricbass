@@ -7,6 +7,9 @@ use yii\web\Controller;
 
 final class QuoteController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */
     public function behaviors(): array
     {
         return [

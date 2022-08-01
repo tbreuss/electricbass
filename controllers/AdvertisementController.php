@@ -19,6 +19,9 @@ use yii\web\Response;
  */
 final class AdvertisementController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */    
     public function behaviors(): array
     {
         return [

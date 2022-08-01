@@ -9,6 +9,9 @@ use yii\web\Response;
 
 final class GlossarController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */
     public function behaviors(): array
     {
         return [

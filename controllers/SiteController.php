@@ -177,7 +177,7 @@ final class SiteController extends Controller
             }
 
             // basierend auf url
-            $trimmedRequestUrl = '/' . trim(preg_replace('#/{2,}#', '/', $requestUrl), '/');
+            $trimmedRequestUrl = '/' . trim(strval(preg_replace('#/{2,}#', '/', $requestUrl)), '/');
             $redirect = Redirect::findOneByRequestUrl($trimmedRequestUrl);
             if ($redirect) {
                 $redirect->updated = date('Y-m-d H:i:s');
