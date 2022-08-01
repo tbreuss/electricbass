@@ -18,7 +18,7 @@ final class JokeController extends Controller
             ]
         ];
     }
-    
+
     /**
      * @return string
      */

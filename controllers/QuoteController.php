@@ -18,7 +18,7 @@ final class QuoteController extends Controller
             ]
         ];
     }
-    
+
     /**
      * @return string
      */

@@ -20,7 +20,7 @@ final class ManufacturerController extends Controller
             ]
         ];
     }
-    
+
     public function actionIndex(): string
     {
         $this->layout = 'empty';

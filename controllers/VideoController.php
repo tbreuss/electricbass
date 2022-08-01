@@ -20,7 +20,7 @@ final class VideoController extends Controller
         return [
             [
                 'class' => 'app\filters\RedirectFilter'
-            ],            
+            ],
             [
                 'class' => 'app\filters\Canonical',
                 'only' => ['index'],

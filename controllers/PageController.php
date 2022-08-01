@@ -17,7 +17,7 @@ final class PageController extends Controller
             ]
         ];
     }
-    
+
     /**
      * @inheritdoc
      * @phpstan-return array<string, array<string, mixed>>

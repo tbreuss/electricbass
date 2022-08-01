@@ -21,7 +21,7 @@ final class AdvertisementController extends Controller
 {
     /**
      * @phpstan-return array<array>
-     */    
+     */
     public function behaviors(): array
     {
         return [
@@ -30,7 +30,7 @@ final class AdvertisementController extends Controller
             ]
         ];
     }
-    
+
     public function actionIndex(int $page = 0): string
     {
         $models = Advertisement::findAllForAdvertisementIndexController();

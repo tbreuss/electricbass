@@ -12,7 +12,7 @@ final class FeedController extends Controller
 {
     /**
      * @phpstan-return array<array>
-     */    
+     */
     public function behaviors(): array
     {
         return [
@@ -21,7 +21,7 @@ final class FeedController extends Controller
             ]
         ];
     }
-    
+
     public function actionRss(): string
     {
         Yii::$app->response->format = Response::FORMAT_RAW;
