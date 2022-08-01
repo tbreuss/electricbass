@@ -19,6 +19,15 @@ use yii\web\Response;
  */
 final class AdvertisementController extends Controller
 {
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => 'app\filters\RedirectFilter'
+            ]
+        ];
+    }
+    
     public function actionIndex(int $page = 0): string
     {
         $models = Advertisement::findAllForAdvertisementIndexController();

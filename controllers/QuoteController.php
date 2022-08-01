@@ -7,6 +7,15 @@ use yii\web\Controller;
 
 final class QuoteController extends Controller
 {
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => 'app\filters\RedirectFilter'
+            ]
+        ];
+    }
+    
     /**
      * @return string
      */

@@ -5,5 +5,20 @@ services:
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
+    labels:
+      - "traefik.http.routers.electricbass.rule=Host(`electricbass.test`)"
+      - "traefik.http.routers.electricbass-https.rule=Host(`electricbass.test`)"
+      - "traefik.http.routers.electricbass-https.tls=true"
+      - "traefik.http.routers.wwwelectricbass.rule=Host(`www.electricbass.test`)"
+      - "traefik.http.routers.wwwelectricbass-https.rule=Host(`www.electricbass.test`)"
+      - "traefik.http.routers.wwwelectricbass-https.tls=true"
+    networks:
+      - local-dev
     ports:
       - '8000:80'
+    environment:
+      - PHP_ENABLE_XDEBUG=1
+
+networks:
+  local-dev:
+    external: true

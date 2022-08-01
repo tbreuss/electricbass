@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1>Fehler <?= $exception->statusCode ?></h1>
 
     <p>
-        <?= nl2br(Html::encode($message)) ?> Probiere folgendes:
+        <?= nl2br(Html::encode($message ?? '')) ?> Probiere folgendes:
     </p>
     <ul>
         <li>Falls Du die URL in der Adresszeile des Browsers manuell eingetippt hast, achte auf korrekte Schreibweise.</li>

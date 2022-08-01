@@ -10,6 +10,15 @@ use app\models\Search;
 
 final class SitemapController extends Controller
 {
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => 'app\filters\RedirectFilter'
+            ]
+        ];
+    }
+    
     public function actionIndex(): string
     {
         return $this->render('index');
