@@ -5,18 +5,7 @@ $config = [
     'language' => 'de',
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
-        'log',
-        [
-            'class' => 'app\filters\Redirect',
-            'enable' => (($_ENV['ENABLE_REDIRECTS'] ?? '') === 'true'),
-            'filters' => [
-                'DotBot',
-                'AhrefsBot',
-                'Googlebot',
-                'bingbot',
-                'PetalBot'
-            ]
-        ]
+        'log'
     ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',

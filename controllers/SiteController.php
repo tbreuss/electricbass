@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Comment;
 use app\models\Log404;
 use app\models\Rating;
+use app\models\Redirect;
 use app\models\Website;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -176,13 +177,14 @@ final class SiteController extends Controller
             }
 
             // basierend auf url
-            // $redirect = Redirect::findOneByRequestUrl($requestUrl);
-            // if ($redirect) {
-            //     $redirect->updated = date('Y-m-d H:i:s');
-            //     $redirect->count += 1;
-            //     $redirect->save(false, ['count', 'updated']);
-            //     return $this->redirect($redirect->to, 301)->send();
-            // }
+            $trimmedRequestUrl = '/' . trim(preg_replace('#/{2,}#', '/', $requestUrl), '/');
+            $redirect = Redirect::findOneByRequestUrl($trimmedRequestUrl);
+            if ($redirect) {
+                $redirect->updated = date('Y-m-d H:i:s');
+                $redirect->count += 1;
+                $redirect->save(false, ['count', 'updated']);
+                return $this->redirect($redirect->to, 301)->send();
+            }
 
             Log404::log404Error($requestUrl, $referrer, date('Y-m-d H:i:s'));
 
