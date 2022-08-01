@@ -24,7 +24,7 @@ use yii\helpers\ArrayHelper;
     </div>
     <div class="row">
         <div class="col-md-8 top">
-            <a href="#" class="top__link">&#x25B2; nach oben</a>
+            <a href="#top" class="top__link">&#x25B2; nach oben</a>
         </div>
     </div>
 <?php $this->endContent(); ?>

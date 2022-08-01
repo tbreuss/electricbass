@@ -14,7 +14,7 @@ use yii\helpers\ArrayHelper;
             <?= $content ?>
             <?= ArrayHelper::getValue($this->blocks, 'comments') ?>
             <div class="top">
-                <a href="#" class="top__link">&#x25B2; nach oben</a>
+                <a href="#top" class="top__link">&#x25B2; nach oben</a>
             </div>
         </div>
         <div class="col-md-4 sidebar">
