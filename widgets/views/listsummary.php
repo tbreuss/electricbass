@@ -2,19 +2,22 @@
 
 /**
  * @var string $summary
- * @var string $sort
+ * @var Sort $sort
+ * @var string $sortLabel
+ * @var string $sortDirection (up|down)
  */
 
+use yii\data\Sort;
 use yii\widgets\LinkSorter;
 
 ?>
 <div class="widgetListSummary">
     <div class="row">
-        <div class="col-7 widgetListSummary__summary"><?= $summary ?></div>
-        <div class="col-5 widgetListSummary__sorter">
+        <div class="col-6 widgetListSummary__summary"><?= $summary ?></div>
+        <div class="col-6 widgetListSummary__sorter">
             <div class="dropdown">
                 <a href="#" class="dropdown__button" type="button">
-                     Sortieren nach </span><span class="caret"></span>
+                     Sortiert nach<span class="caret"></span>: <?= $sortLabel ?><?= $sortDirection === 'asc' ? '&uarr;' : '&darr;' ?></span>
                 </a>
                 <div class="dropdown__content">
                     <?= LinkSorter::widget([
