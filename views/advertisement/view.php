@@ -42,7 +42,7 @@ $this->title = $model->getPageTitle();
         <?php endif; ?>
 
         <?php if (($photo = $model->getPhoto()) != ''): ?>
-            <div class="image">
+            <div class="image mb-4">
                 <?= Html::img('@web/' . $photo, ["width" => 450, "alt" => $model->title, "class" => "img-fluid"]) ?>
             </div>
         <?php endif; ?>
