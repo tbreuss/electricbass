@@ -8,8 +8,8 @@ use yii\data\Sort;
 
 final class ListSummary extends Widget
 {
-    public ?Pagination $pagination = null;
-    public ?Sort $sort = null;
+    public Pagination $pagination;
+    public Sort $sort;
 
     public function run(): string
     {
@@ -24,9 +24,6 @@ final class ListSummary extends Widget
 
     protected function getSummary(): string
     {
-        if ($this->pagination === null) {
-            return '';
-        }
         return sprintf(
             '%d-%s von %s<span> Ergebnissen</span>',
             $this->pagination->offset + 1,
@@ -34,7 +31,10 @@ final class ListSummary extends Widget
             $this->pagination->totalCount
         );
     }
-    
+
+    /**
+     * @return string[]
+     */
     protected function getSelectedSort(): array
     {
         $currentSort = $this->sort->getAttributeOrders();

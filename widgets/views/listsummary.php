@@ -2,12 +2,11 @@
 
 /**
  * @var string $summary
- * @var Sort $sort
+ * @var yii\data\Sort $sort
  * @var string $sortLabel
  * @var string $sortDirection (up|down)
  */
 
-use yii\data\Sort;
 use yii\widgets\LinkSorter;
 
 ?>
