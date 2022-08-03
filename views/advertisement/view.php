@@ -25,7 +25,7 @@ $this->title = $model->getPageTitle();
 
         <h1><?= stripslashes($model->title) ?></h1>
 
-        <p><?= stripslashes(nl2br(strip_tags($model->longtext, '<img>'))) ?></p>
+        <div class="markdown"><?= strip_tags(Markdown::process($model->longtext), '<p><strong><b><ul><li><br>') ?></div>
 
         <div class="flash flash--danger">Dieses Inserat ist abgelaufen oder wurde gelöscht.</div>
 
