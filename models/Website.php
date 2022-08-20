@@ -20,6 +20,18 @@ final class Website extends ActiveRecord
 {
     use SimilarModelsByTags;
 
+    public function afterFind()
+    {
+        if (!empty($this->archived)) {
+            $preText = sprintf(
+                '*Hinweis: Der Eintrag zu dieser Website wurde am %s archiviert und die Verlinkung der URL aus diesem Grund entfernt.*' . PHP_EOL . PHP_EOL,
+                Yii::$app->formatter->asDate($this->archived, 'long')
+            );
+            $this->abstract = $preText . $this->abstract;
+        }
+        parent::afterFind();
+    }
+    
     /**
      * @return ActiveDataProvider
      */

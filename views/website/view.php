@@ -28,7 +28,11 @@ $this->params['breadcrumbs'][] = $website->title;
     <?php endif; ?>
 
     <?php if (!empty($website->website)): ?>
-        <h2><?= Html::a($website->website, $website->website, ["target" => "_blank", "rel" => "nofollow"]) ?></h2>
+        <?php if (empty($website->archived)): ?>
+            <h2><?= Html::a($website->website, $website->website, ["target" => "_blank", "rel" => "nofollow"]) ?></h2>
+        <?php else: ?>
+            <h2><?= $website->website ?></h2>
+        <?php endif; ?>
     <?php endif; ?>
 
     <?php if (!empty($website->abstract)): ?>
