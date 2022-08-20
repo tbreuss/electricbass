@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $website->title;
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($website->latitude) && !empty($website->longitude)): ?>
+    <?php if (empty($website->archived) && !empty($website->latitude) && !empty($website->longitude)): ?>
         <div class="map" style="clear:both">
 
             <h3>Standort</h3>
