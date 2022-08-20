@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var app\models\Website[] $models
+ */
+
 use app\helpers\Html;
 use yii\helpers\Markdown;
 use yii\widgets\Spaceless;

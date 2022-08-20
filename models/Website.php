@@ -20,7 +20,7 @@ final class Website extends ActiveRecord
 {
     use SimilarModelsByTags;
 
-    public function afterFind()
+    public function afterFind(): void
     {
         if (!empty($this->archived)) {
             $preText = sprintf(
@@ -31,7 +31,7 @@ final class Website extends ActiveRecord
         }
         parent::afterFind();
     }
-    
+
     /**
      * @return ActiveDataProvider
      */
