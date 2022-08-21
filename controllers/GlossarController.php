@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Glossar;
 use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 final class GlossarController extends Controller
@@ -23,11 +24,12 @@ final class GlossarController extends Controller
 
     public function actionIndex(?string $category = null): string
     {
-        $condition = ['deleted' => 0, 'hidden' => 0];
-        if (!empty($category)) {
-            $condition['category'] = $category;
+        $glossars = Glossar::findAllByCategory($category);
+        
+        if (count($glossars) === 0) {
+            throw new NotFoundHttpException();
         }
-        $glossars = Glossar::find()->where($condition)->orderBy('autosort')->all();
+        
         return $this->render('index', [
             'glossars' => $glossars,
             'selectedCategory' => $category

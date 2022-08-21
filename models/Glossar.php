@@ -50,22 +50,17 @@ final class Glossar extends ActiveRecord
     /**
      * @return Glossar[]
      */
-    public function findAllByCategory(string $category): array
+    public static function findAllByCategory(?string $category = null): array
     {
-        $condition = '';
-        $params = [];
+        $query = self::find()
+            ->where(['deleted' => 0, 'hidden' => 0])
+            ->orderBy('autosort');
+
         if (!empty($category)) {
-            $condition = ' AND category=:category';
-            $params = [
-                ':category' => strtolower($category)
-            ];
+            $query->andWhere(['like', 'url', '/glossar/' . $category]);
         }
-        $criteria = [
-            'condition' => 'deleted=0 AND hidden=0' . $condition,
-            'order' => 'autosort',
-            'params' => $params
-        ];
-        return $this->findAll($criteria);
+
+        return $query->all();
     }
 
     /**
@@ -118,7 +113,12 @@ final class Glossar extends ActiveRecord
     public static function queryAllCategories(): array
     {
         $command = Yii::$app->db->createCommand('SELECT DISTINCT category FROM glossar WHERE deleted=0 AND hidden=0 ORDER BY category');
-        return $command->queryAll();
+        $categories = $command->queryAll();
+        array_walk($categories, function(&$item) {
+            $category = strtolower($item['category']);
+            $item['urlSegment'] = str_replace(['ä', 'ö', 'ü'], ['ae', 'oe', 'ue'], $category); // yes, this is hacky
+        });
+        return $categories;
     }
 
     public function getDefaultImage(string $alias = ''): string

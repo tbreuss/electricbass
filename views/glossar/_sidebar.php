@@ -19,10 +19,11 @@ use app\models\Glossar;
         <?php $class = empty($selectedCategory) ? 'sidebarWidget__link--active' : 'sidebarWidget__link' ?>
         <?php echo Html::a('Alle Einträge', ['/glossar/index'], ['class' => $class]) ?>
     </li>
-    <?php foreach (Glossar::queryAllCategories() as $category): ?>
+    <?php $categories = Glossar::queryAllCategories() ?>    
+    <?php foreach ($categories as $category): ?>
     <li class="sidebarWidget__item">
-        <?php $class = (strtolower($category['category']) == $selectedCategory) ? 'sidebarWidget__link--active' : 'sidebarWidget__link' ?>
-        <?php echo Html::a($category['category'], ['/glossar/index', 'category' => strtolower($category['category'])], ['class' => $class]); ?>
+        <?php $class = ($category['urlSegment'] == $selectedCategory) ? 'sidebarWidget__link--active' : 'sidebarWidget__link' ?>
+        <?php echo Html::a($category['category'], ['/glossar/index', 'category' => $category['urlSegment']], ['class' => $class]); ?>
     </li>
     <?php endforeach; ?>
     </ul>
