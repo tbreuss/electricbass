@@ -226,7 +226,7 @@ final class Div
             }
             $i++;
             if ($i > 1000) {
-                throw new \Exception('Irgendwas ist beim Upload schiefgelaufen');
+                throw new \Exception('Irgendwas ist beim Upload schiefgelaufen.');
             }
         }
         return $filename;

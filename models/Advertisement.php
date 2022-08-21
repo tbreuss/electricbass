@@ -382,7 +382,7 @@ final class Advertisement extends ActiveRecord
             ->one();
 
         if (is_null($advertisement)) {
-            throw new NotFoundHttpException(sprintf('Die Kleinanzeige (ID=%s) konnte nicht gefunden werden.', $id));
+            throw new NotFoundHttpException();
         }
         return $advertisement;
     }

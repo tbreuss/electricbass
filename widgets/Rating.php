@@ -55,20 +55,20 @@ final class Rating extends Widget
         Yii::$app->session->open();
 
         if (empty($this->tableName)) {
-            throw new InvalidConfigException('Missing configuration "tableName"');
+            throw new InvalidConfigException('Missing configuration "tableName".');
         }
         if (empty($this->tableId)) {
-            #throw new InvalidConfigException('Missing configuration "tableId"');
+            #throw new InvalidConfigException('Missing configuration "tableId".');
         }
         if (!isset($this->ratingValue)) {
-            throw new InvalidConfigException('Missing configuration "ratingValue"');
+            throw new InvalidConfigException('Missing configuration "ratingValue".');
         }
         if (empty(Yii::$app->session->id)) {
-            throw new InvalidConfigException('Missing configuration "sessionId"');
+            throw new InvalidConfigException('Missing configuration "sessionId".');
         }
 
         if ($this->isNotAllowed()) {
-            throw new InvalidConfigException('Context is not allowed');
+            throw new InvalidConfigException('Context is not allowed.');
         }
 
         $params = [
