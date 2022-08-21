@@ -114,7 +114,7 @@ final class Glossar extends ActiveRecord
     {
         $command = Yii::$app->db->createCommand('SELECT DISTINCT category FROM glossar WHERE deleted=0 AND hidden=0 ORDER BY category');
         $categories = $command->queryAll();
-        array_walk($categories, function(&$item) {
+        array_walk($categories, function (&$item) {
             $category = strtolower($item['category']);
             $item['urlSegment'] = str_replace(['ä', 'ö', 'ü'], ['ae', 'oe', 'ue'], $category); // yes, this is hacky
         });

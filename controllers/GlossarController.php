@@ -25,11 +25,11 @@ final class GlossarController extends Controller
     public function actionIndex(?string $category = null): string
     {
         $glossars = Glossar::findAllByCategory($category);
-        
+
         if (count($glossars) === 0) {
             throw new NotFoundHttpException();
         }
-        
+
         return $this->render('index', [
             'glossars' => $glossars,
             'selectedCategory' => $category
