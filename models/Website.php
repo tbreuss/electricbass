@@ -77,18 +77,16 @@ final class Website extends ActiveRecord
 
         $query = self::find()
             ->select('id, title, abstract, website, url')
-            ->where(['deleted' => null])
+            ->where(['archived' => null, 'deleted' => null])
             ->orderBy($sort->orders);
 
-        $provider = new ActiveDataProvider([
+        return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'defaultPageSize' => 24,
             ],
             'sort' => $sort,
         ]);
-
-        return $provider;
     }
 
     /**
@@ -115,7 +113,7 @@ final class Website extends ActiveRecord
     public static function findLatest(int $limit, int $id = 0): array
     {
         return self::find()
-            ->where(['deleted' => null])
+            ->where(['archived' => null, 'deleted' => null])
             ->andWhere(['<>', 'id', $id])
             ->orderBy('modified DESC')
             ->limit($limit)
@@ -130,7 +128,7 @@ final class Website extends ActiveRecord
     public static function findPopular(int $limit, int $id = 0): array
     {
         return self::find()
-            ->where(['deleted' => null])
+            ->where(['archived' => null, 'deleted' => null])
             ->andWhere(['>', 'ratingAvg', 0])
             ->andWhere(['<>', 'id', $id])
             ->orderBy('ratingAvg DESC, ratings DESC, modified DESC')
@@ -146,6 +144,7 @@ final class Website extends ActiveRecord
         return self::find()
             ->select('id, title, website, url, modified')
             ->where([
+                'archived' => null,
                 'deleted' => null
             ])
             ->orderBy(

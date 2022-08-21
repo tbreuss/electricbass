@@ -37,26 +37,6 @@ final class Fingering extends ActiveRecord
         return null;
     }
 
-    /**
-     * @param int $id
-     * @param string[] $tags
-     * @param int $limit
-     * @return Fingering[]
-     * @throws \yii\db\Exception
-     */
-    public static function findSimilars(int $id, array $tags, int $limit = 10): array
-    {
-        $ids = self::findSimilarsIds($id, $tags);
-        if (empty($ids)) {
-            return [];
-        }
-        return self::find()
-            ->where('deleted = 0')
-            ->andWhere(['id' => $ids])
-            ->limit($limit)
-            ->all();
-    }
-
     public function increaseHits(): void
     {
         // IDs in Session speichern

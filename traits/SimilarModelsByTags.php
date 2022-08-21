@@ -21,11 +21,17 @@ trait SimilarModelsByTags
         if (empty($ids)) {
             return [];
         }
-        return self::find()
-            ->where('deleted=0 OR deleted IS NULL')
+
+        $query = self::find()
+            ->andWhere('deleted=0 OR deleted IS NULL')
             ->andWhere(['id' => $ids])
-            ->limit($limit)
-            ->all();
+            ->limit($limit);
+
+        if (self::hasArchivedColumn()) {
+            $query->andWhere('archived=0 OR archived IS NULL');
+        }
+
+        return $query->all();
     }
 
     /**
@@ -45,6 +51,8 @@ trait SimilarModelsByTags
 
         $tableName = trim(self::tableName(), '{%}');
 
+        $archivedConstraint = self::hasArchivedColumn() ? 'AND (archived = 0 OR archived IS NULL)' : '';
+
         // See:
         // https://stackoverflow.com/questions/17942508/sql-split-values-to-multiple-rows
         // http://www.petefreitag.com/item/315.cfm
@@ -63,7 +71,9 @@ trait SimilarModelsByTags
                   ON CHAR_LENGTH({$tableName}.tags)
                      -CHAR_LENGTH(REPLACE({$tableName}.tags, ',', ''))>=numbers.n-1
                 ) AS {$tableName}_tag
-            WHERE (deleted = 0 OR deleted IS NULL)
+            WHERE 1
+            {$archivedConstraint}  
+            AND (deleted = 0 OR deleted IS NULL)
             AND FIND_IN_SET({$tableName}_tag.name, {$tableName}.tags) > 0
             AND {$tableName}_tag.name IN ({$tags})
             AND {$tableName}.id <> :id
@@ -94,5 +104,10 @@ trait SimilarModelsByTags
         return array_filter($tags, function ($value) use ($filters) {
             return !in_array($value, $filters);
         });
+    }
+
+    protected static function hasArchivedColumn(): bool
+    {
+        return self::getTableSchema()->getColumn('archived') !== null;
     }
 }

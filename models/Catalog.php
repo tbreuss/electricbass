@@ -111,24 +111,6 @@ final class Catalog extends ActiveRecord
     }
 
     /**
-     * @param string[] $tags
-     * @return Catalog[]
-     * @throws \yii\db\Exception
-     */
-    public static function findSimilars(int $id, array $tags, int $limit = 10): array
-    {
-        $ids = self::findSimilarsIds($id, $tags);
-        if (empty($ids)) {
-            return [];
-        }
-        return self::find()
-            ->where('deleted = 0')
-            ->andWhere(['id' => $ids])
-            ->limit($limit)
-            ->all();
-    }
-
-    /**
      * @return Catalog[]
      */
     public static function findLatest(string $category, int $limit, int $id = 0): array
