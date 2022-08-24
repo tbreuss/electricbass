@@ -70,6 +70,6 @@ return [
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
     // Pages
-    '<view:[a-z0-9-/]+>' => 'page/index',
+    // '<view:[a-z0-9-/]+>' => 'page/index',
     '' => 'site/index',
 ];
