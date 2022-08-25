@@ -45,9 +45,6 @@ if (!empty($this->params['metaDescription'])) {
         <title><?= Html::encode($this->title) ?> | Electricbass.ch</title>
     <?php endif; ?>
     <?php $this->head() ?>
-    <?php if (!YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
-        <script data-ad-client="ca-pub-6295275013493411" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <?php endif; ?>
 </head>
 <body class="controller-<?= Yii::$app->controller->id ?> action-<?= Yii::$app->controller->id ?>-<?= isset(Yii::$app->controller->action) ? Yii::$app->controller->action->id : 'nil' ?>" itemscope itemtype="http://schema.org/WebPage">
 <?php $this->beginBody() ?>
