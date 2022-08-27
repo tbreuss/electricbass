@@ -11,4 +11,4 @@ $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Metronom';
 ?>
 
-<?= Metronome::widget(); ?>
+<?= Metronome::widget();

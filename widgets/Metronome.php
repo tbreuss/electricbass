@@ -12,11 +12,11 @@ use yii\base\Widget;
  */
 class Metronome extends Widget
 {
-    public function init()
+    public function init(): void
     {
         MetronomeAsset::register($this->getView());
     }
-    
+
     public function run(): string
     {
         return $this->render('metronome');
