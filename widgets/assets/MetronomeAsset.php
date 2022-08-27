@@ -12,10 +12,11 @@ final class MetronomeAsset extends AssetBundle
     /** @var string */
     public $baseUrl = '@web';
 
+    /** @var string[] */
     public $css = [
-        'styles.css'    
+        'styles.css'
     ];
-    
+
     /** @var string[] */
     public $js = [
         'metronome.js',
