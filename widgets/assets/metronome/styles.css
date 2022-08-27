@@ -1,0 +1,190 @@
+/*
+* {
+    margin: 0; padding: 0;
+}
+
+html {
+    height: 100%;
+}
+*/
+
+.metronome {
+    position: relative;
+    background-color: #1e2227;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    color: #e9e9e9;
+    padding: 3rem 0;
+}
+
+.metronome__button {
+    padding: 6px;
+    border: none;
+    border-radius: 100% !important;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    background-color: #2a4949;
+    color: #e9e9e9;
+    cursor: pointer;
+}
+
+.metronome__button:focus {
+    outline: none;
+}
+
+.metronome__button--play {
+    width: 150px;
+    height: 150px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+
+.metronome__title {
+    margin-bottom: 2rem;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.metronome__tempo {
+    font-size: 60px;
+}
+
+.metronome__accent {
+    font-size: 60px;
+    text-align: center;
+}
+
+.metronome__swing {
+    font-size: 60px;
+    text-align: center;
+}
+
+.metronome__bar {
+    font-size: 60px;
+    text-align: center;
+}
+
+
+.metronome__bpm {
+    font-size: 30px;
+    text-align: center;
+}
+
+.metronome__tempoControls {
+    margin-top: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row;
+}
+
+.metronome__accentControls {
+    margin-top: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row;
+}
+
+.metronome__swingControls {
+    margin-top: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row;
+}
+
+.metronome__barControls {
+    margin-top: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row;
+}
+
+
+.metronome__tempoContainer {
+    margin: 0 15px;
+}
+
+.metronome__playPauseIcon,
+.metronome__playPauseIcon--pausing {
+    width: 0;
+    height: 0;
+    border-top: 30px solid transparent;
+    border-bottom: 30px solid transparent;
+    border-left: 50px solid #e9e9e9;
+    margin-left: 15px;
+}
+
+.metronome__playPauseIcon--playing {
+    width: 45px;
+    height: 60px;
+    border: none;
+    border-left: 15px solid #e9e9e9;
+    border-right: 15px solid #e9e9e9;
+    margin-right: 12px;
+}
+
+.metronome__volumeControls {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row;
+}
+
+.metronome__volume {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 11px;
+    border-radius: 5px;
+    background: #2a4949;
+    outline: none;
+    opacity: 0.8;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    margin-left: 0.1rem;
+}
+
+/* Mouse-over effects */
+.metronome__volume:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+.metronome__volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e9e9e9;
+    cursor: pointer;
+}
+
+.metronome__volume::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e9e9e9;
+    cursor: pointer;
+}
+
+.metronome__volumeIcon--hidden {
+    display: none;
+}

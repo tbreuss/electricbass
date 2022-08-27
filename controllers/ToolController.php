@@ -31,6 +31,7 @@ final class ToolController extends Controller
 
     public function actionMetronome(): string
     {
+        $this->layout = 'empty';
         return $this->render('metronome');
     }
 

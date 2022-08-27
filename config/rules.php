@@ -13,6 +13,7 @@ return [
     // Fingersätze
     'tools/fingersaetze' => 'fingering/index',
     'tools/fingersaetze/<id:[A-Za-z0-9-]+>' => 'fingering/view',
+    'tools/metronom' => 'tool/metronome',
     // Glossar
     'glossar/reorder' => 'glossar/reorder',
     'glossar/<category>/<id>' => 'glossar/view',
