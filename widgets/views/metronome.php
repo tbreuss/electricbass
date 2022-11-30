@@ -41,15 +41,38 @@
     </div>
 
     <!--TIME SIG-->
-    <div class="metronome__accentControls">
-        <button class="metronome__button metronome__accentChange" data-change="-1">-</button>
-        <div class="metronome__barContainer">
-            <div class="metronome__accent" id="metronomeAccent">4</div>
-            <div class="metronome__bpm">Akzent</div>
+    <div class="metronome__barControls">
+        <div class="metronome__tempoContainer">
+            <select>
+                <option>1/8</option>
+                <option>2/8</option>
+                <option>3/8</option>
+                <option>4/8</option>
+                <option>5/8</option>
+                <option>6/8</option>
+                <option>7/8</option>
+                <option>8/8</option>
+                <option>9/8</option>
+                <option>10/8</option>
+                <option>11/8</option>
+                <option>12/8</option>
+                <option>13/8</option>
+                <option>14/8</option>
+                <option>15/8</option>
+                <option>16/8</option>
+                <option>1/4</option>
+                <option>2/4</option>
+                <option>3/4</option>
+                <option>4/4</option>
+                <option>5/4</option>
+                <option>6/4</option>
+                <option>7/4</option>
+                <option>8/4</option>
+            </select>
+            <div class="metronome__bpm">Taktart</div>
         </div>
-        <button class="metronome__button metronome__accentChange" data-change="+1">+</button>
     </div>
-
+    
     <!--TIME SIG-->
     <div class="metronome__barControls">
         <button class="metronome__button metronome__barChange" data-change="-1">-</button>
@@ -58,6 +81,16 @@
             <div class="metronome__bpm">Taktart</div>
         </div>
         <button class="metronome__button metronome__barChange" data-change="+1">+</button>
+    </div>
+    
+    <!--TIME SIG-->
+    <div class="metronome__accentControls">
+        <button class="metronome__button metronome__accentChange" data-change="-1">-</button>
+        <div class="metronome__barContainer">
+            <div class="metronome__accent" id="metronomeAccent">4</div>
+            <div class="metronome__bpm">Akzent</div>
+        </div>
+        <button class="metronome__button metronome__accentChange" data-change="+1">+</button>
     </div>
 
     <!--SWING-->
