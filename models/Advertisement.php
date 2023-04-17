@@ -57,11 +57,6 @@ final class Advertisement extends ActiveRecord
         11 => 'Bandgründung'
     ];
 
-    /** @var string[] */
-    public static $blacklist = [
-        'gabriel.buehler@gmx.ch'
-    ];
-
     /** @var string */
     public $nspm;
 
@@ -197,7 +192,9 @@ final class Advertisement extends ActiveRecord
 
     public function validateBlacklist(string $attribute): void
     {
-        if (in_array($this->email, self::$blacklist)) {
+        $blacklistCsv = trim($_ENV['ADVERTISEMENT_BLACKLIST'] ?? '');
+        $blacklist = !empty($blacklistCsv) ? array_map('trim', explode(',', $blacklistCsv)) : [];
+        if (in_array($this->email, $blacklist)) {
             $this->addError($attribute, 'E-Mail steht in unserer Blacklist.');
         }
     }
