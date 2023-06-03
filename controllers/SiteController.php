@@ -58,14 +58,6 @@ final class SiteController extends Controller
         return $this->render('test');
     }
 
-    public function actionMustache(): string
-    {
-        return $this->render('mustache.mustache', [
-            'comments' => Comment::findLatestComments(5),
-            'ratings' => Rating::findLatestRatings(5),
-        ]);
-    }
-
     public function actionIndex(): string
     {
         $count = Search::find()->where([])->count();

@@ -26,7 +26,6 @@
     "thewirecutter/paapi5-php-sdk": "^1.0",
     "vlucas/phpdotenv": "^5.2",
     "mobiledetect/mobiledetectlib": "^2.8",
-    "cedx/yii2-mustache": "^9.0",
     "yiisoft/yii2-bootstrap": "^2.0"
   },
   "require-dev": {

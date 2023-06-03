@@ -78,12 +78,6 @@ $config = [
             'class' => 'yii\web\AssetManager',
             'appendTimestamp' => true
         ],
-        'view' => [
-            'class' => 'yii\\web\\View',
-            'renderers' => [
-                'mustache' => 'yii\\mustache\\ViewRenderer'
-            ]
-        ],
         'formatter' => [
             'sizeFormatBase' => 1000,
             'thousandSeparator' => "'",
