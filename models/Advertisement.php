@@ -112,6 +112,7 @@ final class Advertisement extends ActiveRecord
             ['title', 'required'],
             ['title', 'filter', 'filter' => 'strip_tags'],
             ['title', 'string', 'max' => 60, 'encoding' => 'utf-8'],
+            ['title', 'badWord'],
             // longtext
             ['longtext', 'required'],
             ['longtext', 'filter', 'filter' => 'strip_tags'],
@@ -196,6 +197,20 @@ final class Advertisement extends ActiveRecord
         $blacklist = !empty($blacklistCsv) ? array_map('trim', explode(',', $blacklistCsv)) : [];
         if (in_array($this->email, $blacklist)) {
             $this->addError($attribute, 'E-Mail steht in unserer Blacklist.');
+        }
+    }
+
+    public function badWord(string $attribute): void
+    {
+        if (mb_strlen($this->$attribute) === 0) {
+            return;
+        }
+        $badWords = AdvertisementBadWord::findBadWords();
+        $words = preg_split("/\W+/u", $this->$attribute);
+        foreach ($words as $word) {
+            if (array_search($word, $badWords) !== false) {
+                $this->addError($attribute, 'Unser Spamfilter hat ein ungültiges Wort entdeckt.');
+            }
         }
     }
 
