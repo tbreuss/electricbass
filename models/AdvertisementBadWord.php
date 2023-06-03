@@ -11,6 +11,9 @@ final class AdvertisementBadWord extends ActiveRecord
         return '{{advertisement_bad_word}}';
     }
 
+    /**
+     * @return string[]
+     */
     public static function findBadWords(): array
     {
         $rows = self::find()
@@ -20,6 +23,12 @@ final class AdvertisementBadWord extends ActiveRecord
             ->asArray()
             ->all();
 
-        return array_column($rows, 'word');
+        return array_map(
+            function (string $value): string {
+                $value = mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
+                return mb_strtolower($value, 'UTF-8');
+            },
+            array_column($rows, 'word')
+        );
     }
 }

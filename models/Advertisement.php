@@ -205,11 +205,19 @@ final class Advertisement extends ActiveRecord
         if (mb_strlen($this->$attribute) === 0) {
             return;
         }
-        $badWords = AdvertisementBadWord::findBadWords();
+
         $words = preg_split("/\W+/u", $this->$attribute);
+        if ($words === false) {
+            return;
+        }
+
+        $badWords = AdvertisementBadWord::findBadWords();
+
         foreach ($words as $word) {
+            $word = mb_convert_encoding($word, 'UTF-8');
+            $word = mb_strtolower($word, 'UTF-8');
             if (array_search($word, $badWords) !== false) {
-                $this->addError($attribute, 'Unser Spamfilter hat ein ungültiges Wort entdeckt.');
+                $this->addError($attribute, 'Unser Spamfilter hat mindestens ein ungültiges Wort entdeckt.');
             }
         }
     }
