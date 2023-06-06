@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\helpers\Html;
+use app\helpers\Url;
 use app\models\Glossar;
 use Yii;
 use yii\web\Controller;
@@ -41,12 +43,13 @@ final class GlossarController extends Controller
         $glossar = Glossar::findOneOrThrowException('/glossar/' . $category . '/' . $id);
 
         #$glossar->increaseHits();
+        $glossar->content = $this->linkifyEntries($glossar->content);
 
         return $this->render('view', [
             'glossar' => $glossar,
             'previous' => $glossar->findPreviousOneOrNull(),
             'next' => $glossar->findNextOneOrNull(),
-            'selectedCategory' => $category
+            'selectedCategory' => $category,
         ]);
     }
 
@@ -60,5 +63,32 @@ final class GlossarController extends Controller
             $i++;
         }
         return $this->redirect(['/glossar/index']);
+    }
+
+    private function linkifyEntries(string $content): string
+    {
+        $currentUrl = Url::to();
+        $replacements = [];
+        foreach (Glossar::queryTest() as $entry) {
+            if ($currentUrl === $entry['url']) {
+                continue;
+            }
+            $replacements[$entry['title']] = Html::a($entry['title'], $entry['url']);
+        }
+
+        $tokens = preg_split("/([\.\?\!\:\s\W])/u", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        foreach ($tokens as $i => $token) {
+            foreach ($replacements as $from => $to) {
+                if ($token === $from) {
+                    $tokens[$i] = $to;
+                    break;
+                }
+            }
+        }
+
+        return join('', $tokens);
+
+        return strtr($content, $replacements);
     }
 }

@@ -141,4 +141,19 @@ final class Glossar extends ActiveRecord
             Yii::$app->session->set('HITS_GLOSSAR_IDS', $ids);
         }
     }
+
+    public static function queryTest(): array
+    {
+        $sql = <<<SQL
+            SELECT
+                title,
+                url
+            FROM glossar
+            WHERE deleted = 0
+            AND hidden = 0
+            ORDER BY CHAR_LENGTH(title) DESC;
+        SQL;
+
+        return Yii::$app->db->createCommand($sql)->queryAll();
+    }
 }

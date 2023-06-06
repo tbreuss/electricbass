@@ -18,8 +18,8 @@ use yii\helpers\Markdown;
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
 $this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];
 $this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['glossar/index', 'category' => strtolower($glossar->category)]];
-;
 $this->params['breadcrumbs'][] = $glossar->title;
+
 ?>
 
 <div class="content">
@@ -33,9 +33,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
         <p><?= Html::img($glossar->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title]) ?></p>
     <?php endif; ?>
 
-    <?php
-    echo Markdown::process($glossar->content);
-    ?>
+    <?php echo Markdown::process($glossar->content); ?>
 
     <ul class="pager">
         <?php if ($next != null): ?>
