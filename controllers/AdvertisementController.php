@@ -10,6 +10,7 @@ use Yii;
 use yii\base\BaseObject;
 use yii\db\Expression;
 use yii\web\Controller;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -69,6 +70,11 @@ final class AdvertisementController extends Controller
     public function actionView(string $id): Response|string
     {
         $model = Advertisement::findById('/kleinanzeigen/' . $id, false);
+
+        if (!empty($model->spam)) {
+            // if the ad was spam show the default not found error
+            throw new NotFoundHttpException();
+        }
 
         // Umleitung bei Aufruf über ID, falls URL-Segment definiert ist
         if (is_numeric($id) && !empty($model->url)) {
