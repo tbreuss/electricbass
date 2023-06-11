@@ -10,10 +10,10 @@
 
 use app\helpers\Html;
 use app\widgets\Comments;
+use app\widgets\Parser;
 use app\widgets\Rating;
 use app\widgets\SocialBar;
 use app\widgets\Hits;
-use yii\helpers\Markdown;
 
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
 $this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];
@@ -33,9 +33,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
         <p><?= Html::img($glossar->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title]) ?></p>
     <?php endif; ?>
 
-    <?php
-    echo Markdown::process($glossar->content);
-    ?>
+    <?= Parser::widget(["model" => $glossar, "attribute" => "content"]) ?>
 
     <ul class="pager">
         <?php if ($next != null): ?>
