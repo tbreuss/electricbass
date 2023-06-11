@@ -6,7 +6,7 @@
 
 use app\widgets\Metronome;
 
-$this->title = 'Tools';
+$this->title = 'Online Metronom | Tools';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Metronom';
 ?>
