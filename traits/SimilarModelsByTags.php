@@ -25,6 +25,7 @@ trait SimilarModelsByTags
         $query = self::find()
             ->andWhere('deleted=0 OR deleted IS NULL')
             ->andWhere(['id' => $ids])
+            ->orderBy([new \yii\db\Expression('FIELD (id, ' . implode(',', $ids) . ')')])
             ->limit($limit);
 
         if (self::hasArchivedColumn()) {
