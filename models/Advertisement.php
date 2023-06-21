@@ -193,10 +193,12 @@ final class Advertisement extends ActiveRecord
 
     public function validateBlacklist(string $attribute): void
     {
-        $blacklistCsv = trim($_ENV['ADVERTISEMENT_BLACKLIST'] ?? '');
-        $blacklist = !empty($blacklistCsv) ? array_map('trim', explode(',', $blacklistCsv)) : [];
-        if (in_array($this->email, $blacklist)) {
-            $this->addError($attribute, 'E-Mail steht in unserer Blacklist.');
+        foreach (AdvertisementBadEmail::findRegexPatterns() as $regexPattern) {
+            $pattern = '/^' . $regexPattern . '$/i';
+            if (preg_match($pattern, $this->email)) {
+                $this->addError($attribute, 'E-Mail steht in unserer Blacklist.');
+                break;
+            }
         }
     }
 
