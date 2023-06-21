@@ -129,10 +129,10 @@ final class SiteController extends Controller
         return $this->redirect(['feed/rss'], 301);
     }
 
-    public function actionPage()
+    public function actionPage(string $url): string
     {
-        $page = Page::findByUrl(Yii::$app->request->pathInfo);
-       
+        $page = Page::findByUrl($url);
+
         if ($page === null) {
             throw new NotFoundHttpException();
         }

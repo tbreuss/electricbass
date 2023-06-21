@@ -20,7 +20,7 @@ final class PageUrlRule extends BaseObject implements UrlRuleInterface
     {
         $pathInfo = $request->getPathInfo();
         if ($pathInfo !== '') {
-            return ['site/page', ['url' => $pathInfo]];
+            return ['site/page', ['url' => '/' . $pathInfo]];
         }
         return false;  // this rule does not apply
     }
@@ -35,9 +35,9 @@ final class PageUrlRule extends BaseObject implements UrlRuleInterface
     {
         if ($route === 'site/page') {
             if (!empty($params['url'])) {
-                return $params['url'];
+                return ltrim($params['url'], '/');
             }
         }
         return false;  // this rule does not apply
-    }    
+    }
 }
