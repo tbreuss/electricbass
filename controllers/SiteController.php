@@ -133,7 +133,7 @@ final class SiteController extends Controller
     {
         $page = Page::findByUrl($url);
 
-        if ($page->deleted && empty($preview)) {
+        if (!empty($page->deleted) && empty($preview)) {
             throw new NotFoundHttpException();
         }
 
