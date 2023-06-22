@@ -16,7 +16,7 @@ final class Page extends ActiveRecord
     public static function findByUrl(string $url): ?self
     {
         return self::find()
-            ->where(['url' => $url, 'deleted' => null])
+            ->where(['url' => $url])
             ->one();
     }
 }
