@@ -40,9 +40,8 @@ final class LoginForm extends Model
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
-     * @phpstan-param array<string, string> $params
      */
-    public function validatePassword(string $attribute, array $params): void
+    public function validatePassword(string $attribute): void
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();

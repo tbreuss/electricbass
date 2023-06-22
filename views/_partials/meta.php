@@ -6,7 +6,7 @@
         foreach ($categories as $category) {
             echo $delim;
             echo app\helpers\Html::a($category['label'], $category['url'], ['class' => 'meta__link']);
-            $delim = ', ';
+            $delim = ' &gt; ';
         }
         ?>
     </div>

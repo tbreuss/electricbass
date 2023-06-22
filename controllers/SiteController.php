@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Comment;
 use app\models\Log404;
+use app\models\Page;
 use app\models\Rating;
 use app\models\Redirect;
 use app\models\Website;
@@ -12,6 +13,7 @@ use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use app\models\ContactForm;
 use app\models\Search;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 final class SiteController extends Controller
@@ -125,6 +127,19 @@ final class SiteController extends Controller
     public function actionFeed(): Response
     {
         return $this->redirect(['feed/rss'], 301);
+    }
+
+    public function actionPage(string $url, int $preview = 0): string
+    {
+        $page = Page::findByUrl($url);
+
+        if ($page->deleted && empty($preview)) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('page', [
+            'page' => $page,
+        ]);
     }
 
     public function actionError(): Response|string

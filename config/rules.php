@@ -71,6 +71,8 @@ return [
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
     // Pages
-    // '<view:[a-z0-9-/]+>' => 'page/index',
+    [
+        'class' => 'app\components\PageUrlRule',
+    ],
     '' => 'site/index',
 ];

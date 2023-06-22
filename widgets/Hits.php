@@ -9,7 +9,7 @@ use yii\helpers\Url;
 final class Hits extends Widget
 {
     /** @var string[] */
-    protected static array $ALLOWED = ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'lesson', 'website', 'video'];
+    protected static array $ALLOWED = ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'lesson', 'page', 'website', 'video'];
     public string $tableName = '';
     public int $tableId = 0;
 
