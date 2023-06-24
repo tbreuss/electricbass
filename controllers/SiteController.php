@@ -134,7 +134,7 @@ final class SiteController extends Controller
         return $this->render('page', [
             'page' => $page,
         ]);
-    }    
+    }
 
     public function actionError(): Response|string
     {
