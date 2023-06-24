@@ -2,6 +2,7 @@
 
 namespace app\components;
 
+use app\models\Page;
 use yii\base\BaseObject;
 use yii\web\Request;
 use yii\web\UrlManager;
@@ -13,16 +14,30 @@ final class PageUrlRule extends BaseObject implements UrlRuleInterface
      * @param UrlManager $manager
      * @param Request $request
      * @return array|bool
-     * @phpstan-return array<int, array<string, string>|string>|bool
+     * @phpstan-return array<int, array<string, Page>|string>|bool
      * @throws \yii\base\InvalidConfigException
      */
     public function parseRequest($manager, $request)
     {
         $pathInfo = $request->getPathInfo();
-        if ($pathInfo !== '') {
-            return ['site/page', ['url' => '/' . $pathInfo]];
+
+        if ($pathInfo === '') {
+            return false;
         }
-        return false;  // this rule does not apply
+
+        $page = Page::findByUrl('/' . $pathInfo);
+
+        if (is_null($page)) {
+            return false;
+        }
+
+        $preview = $request->getQueryParam('preview');
+
+        if (empty($page->deleted) || !empty($preview)) {
+            return ['site/page', ['page' => $page]];
+        }
+
+        return false;
     }
 
     /**
@@ -38,6 +53,7 @@ final class PageUrlRule extends BaseObject implements UrlRuleInterface
                 return ltrim($params['url'], '/');
             }
         }
-        return false;  // this rule does not apply
+
+        return false;
     }
 }

@@ -129,18 +129,12 @@ final class SiteController extends Controller
         return $this->redirect(['feed/rss'], 301);
     }
 
-    public function actionPage(string $url, int $preview = 0): string
+    public function actionPage(Page $page): string
     {
-        $page = Page::findByUrl($url);
-
-        if (!empty($page->deleted) && empty($preview)) {
-            throw new NotFoundHttpException();
-        }
-
         return $this->render('page', [
             'page' => $page,
         ]);
-    }
+    }    
 
     public function actionError(): Response|string
     {
