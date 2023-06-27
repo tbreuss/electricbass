@@ -34,6 +34,11 @@
   margin-top: 2.5rem;
 }
 
+up-modal-content .container--content {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 .bg-light {
   background-color: #fff !important;
 }
@@ -111,6 +116,10 @@
 .top {
   margin: 2rem 0;
   text-align: right;
+}
+
+up-modal-content .top {
+  display: none;
 }
 
 .top__link {

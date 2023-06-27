@@ -39,3 +39,7 @@ $this->params['metaDescription'] = sprintf('Videos von und für E-Bassisten und 
 </div>
 
 <?= LinkPager::widget(['pagination' => $pagination]) ?>
+
+<?php $this->beginBlock('sidebar') ?>
+    <?= $this->render('/_partials/menu_videos.php') ?>
+<?php $this->endBlock() ?>

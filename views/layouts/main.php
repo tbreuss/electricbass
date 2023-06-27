@@ -25,10 +25,10 @@ $ads300x250 = [
         </div>
         <div class="col-md-4 sidebar">
             <div class="sidebar__inner">
-                <div style="margin-bottom:1rem"><?= $ads300x250[rand(0, count($ads300x250) - 1)] ?></div>
                 <?php if (!empty($this->blocks['sidebar'])): ?>
                     <?= ArrayHelper::getValue($this->blocks, 'sidebar') ?>
                 <?php endif; ?>
+                <div style="margin-bottom:1rem"><?= $ads300x250[rand(0, count($ads300x250) - 1)] ?></div>
             </div>
         </div>
     </div>

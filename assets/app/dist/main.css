@@ -4663,6 +4663,11 @@ progress {
   margin-top: 2.5rem;
 }
 
+up-modal-content .container--content {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
 .bg-light {
   background-color: #fff !important;
 }
@@ -4739,6 +4744,10 @@ progress {
 .top {
   margin: 2rem 0;
   text-align: right;
+}
+
+up-modal-content .top {
+  display: none;
 }
 
 .top__link {
@@ -5062,6 +5071,10 @@ h1 {
   font-size: 2rem;
   font-weight: 500;
   margin-bottom: 1.5rem;
+}
+
+up-modal-content h1 {
+  font-size: 1.5rem;
 }
 
 h2 {

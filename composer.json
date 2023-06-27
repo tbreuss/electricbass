@@ -26,7 +26,8 @@
     "thewirecutter/paapi5-php-sdk": "^1.0",
     "vlucas/phpdotenv": "^5.2",
     "mobiledetect/mobiledetectlib": "^2.8",
-    "yiisoft/yii2-bootstrap": "^2.0"
+    "yiisoft/yii2-bootstrap": "^2.0",
+    "mtdowling/jmespath.php": "^2.6"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "^2.1",

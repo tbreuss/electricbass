@@ -51,6 +51,10 @@ return [
     'websites/<id:[A-Za-z0-9-]+>' => 'website/view',
     'websites' => 'website/index',
     // Videos
+    'videos/<segment:isolierter-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
+    'videos/<segment:isolierter-bass>' => 'youtube-playlist/index',
+    'videos/<segment:solo-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
+    'videos/<segment:solo-bass>' => 'youtube-playlist/index',
     'videos' => 'video/index',
     'videos/<eid:[A-Za-z0-9-]+>' => 'video/view',
     // Sitemap
