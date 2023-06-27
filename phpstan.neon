@@ -42,6 +42,8 @@ parameters:
 	    - '#Call to an undefined method yii\\base\\View::registerLinkTag#'
 	    - '#Access to an undefined property yii\\base\\Application::\$shortcode#'
 	    - '#PHPDoc tag @var for variable .+ has no value type specified in iterable type .+models.+#'
+	    - '#PHPDoc tag @var for variable .+ has no value type specified in iterable type array.#'
 	    - '#Method .+ has parameter .+ with no value type specified in iterable type .+models.+#'
 	    - '#Method .+ return type has no value type specified in iterable type .+models.+#'
+	    - '#Method .+ return type has no value type specified in iterable type array.#'
 	    - '#Property .+ type has no value type specified in iterable type .+models.+#'

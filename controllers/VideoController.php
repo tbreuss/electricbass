@@ -37,7 +37,6 @@ final class VideoController extends Controller
         //$this->migrate();
         //$this->tags();
         $provider = Video::getActiveDataProvider();
-        $this->layout = 'onecol';
         return $this->render('index', [
             'dataProvider' => $provider,
             'videos' => $provider->getModels(),

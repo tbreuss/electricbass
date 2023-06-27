@@ -64,3 +64,8 @@ Normal call
 Test redirection
 
     curl -L --max-redirs 5 http://electricbass.test/blog/ --insecure
+
+
+## Google YouTube API
+
+https://www.googleapis.com/youtube/v3/playlistItems?key=AIzaSyAPvjxAhbwVYRMrLn5zAOuoRFq6vJVHpUI&playlistId=PLsJsWn3-KmsqhFcERx2TjNH0VnUEk1lyG&part=snippet&maxResults=50
