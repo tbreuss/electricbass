@@ -68,4 +68,4 @@ Test redirection
 
 ## Google YouTube API
 
-https://www.googleapis.com/youtube/v3/playlistItems?key=AIzaSyAPvjxAhbwVYRMrLn5zAOuoRFq6vJVHpUI&playlistId=PLsJsWn3-KmsqhFcERx2TjNH0VnUEk1lyG&part=snippet&maxResults=50
+https://www.googleapis.com/youtube/v3/playlistItems?key=API_KEY&playlistId=PLsJsWn3-KmsqhFcERx2TjNH0VnUEk1lyG&part=snippet&maxResults=50
