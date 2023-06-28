@@ -1,4 +1,3 @@
-<?php yii\widgets\Spaceless::begin(); ?>
 <?php
 
 /**
@@ -21,6 +20,7 @@ if (!empty($this->params['metaDescription'])) {
 }
 
 ?>
+<?php yii\widgets\Spaceless::begin(); ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
