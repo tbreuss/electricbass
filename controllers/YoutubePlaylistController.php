@@ -38,6 +38,8 @@ final class YoutubePlaylistController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $this->layout = 'empty';
+
         [$prevId, $nextId] = YoutubePlaylist::findPrevNext($playlist['id'], $playlistItem['row']);
 
         return $this->render('view', [

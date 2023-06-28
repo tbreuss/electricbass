@@ -13,6 +13,13 @@ final class YoutubePlaylist
         return \Yii::$app->db->createCommand($sql, $params)->queryOne();
     }
 
+    public static function findPlaylists(): array
+    {
+        $sql = 'SELECT * FROM youtube_playlist ORDER BY title';
+
+        return \Yii::$app->db->createCommand($sql)->queryAll();
+    }
+
     public static function findPlaylistItems(int $playlistId): array
     {
         $sql = <<<SQL

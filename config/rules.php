@@ -53,6 +53,8 @@ return [
     // Videos
     'videos/<segment:isolierter-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
     'videos/<segment:isolierter-bass>' => 'youtube-playlist/index',
+    'videos/<segment:klassische-musik>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
+    'videos/<segment:klassische-musik>' => 'youtube-playlist/index',
     'videos/<segment:solo-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
     'videos/<segment:solo-bass>' => 'youtube-playlist/index',
     'videos' => 'video/index',

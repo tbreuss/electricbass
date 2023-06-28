@@ -65,7 +65,6 @@ final class VideoController extends Controller
 
         Url::rememberReferrer(['video/index'], 'video');
 
-        $this->layout = 'empty';
         return $this->render('view', [
             'video' => $video,
             'similarVideos' => $similarVideos

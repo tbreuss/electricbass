@@ -63,6 +63,7 @@ final class YoutubeController extends Controller
                 'title' => $title,
                 'thumbnails' => $thumbnails,
                 'published' => $published,
+                'created' => new \yii\db\Expression('NOW()'),
                 'synchronized' => new \yii\db\Expression('NOW()'),
                 'deleted' => null
             ], [

@@ -16,16 +16,23 @@
 </div>
 
 <?php $this->beginBlock('sidebar') ?>
-    <?= $this->render('/_partials/menu_videos.php') ?>
+    <?= app\widgets\YoutubePlaylistMenu::widget() ?>
 <?php $this->endBlock() ?>
 
 <div class="pager">
-    <div class="pager__prev"><?php if ($prevId):
-        ?><a up-layer="current" href="/videos/<?= $playlist['segment'] ?>/<?= $prevId ?>">Vorheriges Video</a><?php
-                             endif; ?></div>
-    <div class="pager__next"><?php if ($nextId):
-        ?><a up-layer="current" href="/videos/<?= $playlist['segment'] ?>/<?= $nextId ?>">Nächstes Video</a><?php
-                             endif; ?></div>
+    <div class="pager__prev">
+        <?php if ($prevId): ?>
+            <a up-layer="current" href="/videos/<?= $playlist['segment'] ?>/<?= $prevId ?>">Vorheriges Video</a>
+        <?php endif; ?>
+    </div>
+    <div class="pager__list">
+        <a href="/videos/<?= $playlist['segment'] ?>"><?= $playlist['title'] ?></a>
+    </div>
+    <div class="pager__next">
+        <?php if ($nextId): ?>
+            <a up-layer="current" href="/videos/<?= $playlist['segment'] ?>/<?= $nextId ?>">Nächstes Video</a>
+        <?php endif; ?>
+    </div>
 </div>
 
 <style>
@@ -34,5 +41,8 @@
         display: flex;
         justify-content: space-between;
         padding-top: 1.25rem;
+    }
+    up-modal .pager__list {
+        display: none;
     }
 </style>
