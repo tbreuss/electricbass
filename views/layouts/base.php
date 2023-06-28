@@ -1,3 +1,4 @@
+<?php yii\widgets\Spaceless::begin(); ?>
 <?php
 
 /**
@@ -241,3 +242,4 @@ if (!empty($this->params['metaDescription'])) {
 </body>
 </html>
 <?php $this->endPage() ?>
+<?php yii\widgets\Spaceless::end() ?>

@@ -18,20 +18,13 @@
 
 <div class="row videoList">
     <?php foreach ($playlistItems as $item): ?>
-        <div class="col-6 col-xl-4 videoList__cell">            
+        <div class="col-6 col-xl-4 videoList__cell">
             <a up-layer="new" up-size="large" href="/videos/<?= $playlist['segment'] ?>/<?= $item['id'] ?>" class="videoList__link">
-                <img
-                    loading="lazy"
-                    class="img-fluid videoList__cover"
-                    width="<?= $item['thumbnail']['width'] ?>"
-                    height="<?= $item['thumbnail']['height'] ?>"
-                    src="<?= $item['thumbnail']['url'] ?>"
-                    alt="<?= $item['title'] ?>"
-                >
+                <img loading="lazy" class="img-fluid videoList__cover" width="<?= $item['thumbnail']['width'] ?>" height="<?= $item['thumbnail']['height'] ?>" src="<?= $item['thumbnail']['url'] ?>" alt="<?= $item['title'] ?>">
                 <div class="videoList__title"><?= $item['title'] ?></div>
             </a>
         </div>
-    <?php endforeach; ?>    
+    <?php endforeach; ?>
 </div>
 
 <div class="row videoListDesc">
