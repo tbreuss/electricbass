@@ -26,7 +26,7 @@
         <?php endif; ?>
     </div>
     <div class="pager__list">
-        <a href="/videos/<?= $playlist['segment'] ?>"><?= $playlist['title'] ?></a>
+        Alle Videos in <a href="/videos/<?= $playlist['segment'] ?>"><?= $playlist['title'] ?></a> anzeigen.
     </div>
     <div class="pager__next">
         <?php if ($nextId): ?>
@@ -42,7 +42,13 @@
         justify-content: space-between;
         padding-top: 1.25rem;
     }
+    .pager__prev, .pager__next {
+        display: none;
+    }
     up-modal .pager__list {
         display: none;
     }
+    up-modal .pager__prev, up-modal .pager__next {
+        display: block;
+    } 
 </style>
