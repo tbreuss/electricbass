@@ -40,24 +40,6 @@ $this->params['metaDescription'] = 'Die Sammlung mit den besten Zitaten berühmt
 
 </div>
 
-<style>
-    .blockquote {
-        margin-bottom: 1rem;
-        font-size: 1.25rem;
-        line-height: 1.3;
-        color: #222222;
-    }
-    .blockquote-footer {
-        margin-top: -1rem;
-        margin-bottom: 1rem;
-        font-size: .875em;
-        color: #6c757d;
-    }
-    .blockquote-footer::before {
-        content: "— ";
-    }
-</style>
-
 <?php // LinkPager::widget(['pagination' => $pagination]) ?>
 
 <?= $this->render('//_partials/meta', [

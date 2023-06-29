@@ -282,3 +282,21 @@ up-modal-content .top {
   margin: 1.5rem 0;
   padding: 1rem;
 }
+
+/* quotes */
+
+.blockquote {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: #222222;
+}
+.blockquote-footer {
+  margin-top: -1rem;
+  margin-bottom: 1rem;
+  font-size: .875em;
+  color: #6c757d;
+}
+.blockquote-footer::before {
+  content: "— ";
+}
