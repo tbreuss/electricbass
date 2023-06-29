@@ -35,6 +35,8 @@
     </div>
 </div>
 
+<?= app\widgets\SocialBar::widget(["text" => $playlist['title'] . ': ' . $playlistItem['title']]) ?>
+
 <style>
     .pager {
         width: 100%;
