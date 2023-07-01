@@ -6436,3 +6436,24 @@ h3 a:hover {
   line-height: 30px;
   font-size: 0.9rem;
 }
+
+up-modal .navbar {
+  display: none;
+}
+
+up-modal .navbar-border-bottom {
+  display: none;
+}
+
+up-modal .sidebar {
+  display: none;
+}
+
+up-modal .container--content {
+  max-width: 100%;
+}
+
+up-modal .content-wrap {
+  padding-right: calc(var(--bs-gutter-x) * .5);
+  width: 100%;
+}

@@ -46,24 +46,6 @@ if (!empty($this->params['metaDescription'])) {
         <title><?= Html::encode($this->title) ?> | Electricbass.ch</title>
     <?php endif; ?>
     <?php $this->head() ?>
-    <style>
-        up-modal .navbar {
-            display: none;
-        }
-        up-modal .navbar-border-bottom {
-            display: none;
-        }
-        up-modal .sidebar {
-            display: none;
-        }
-        up-modal .container--content {
-            max-width: 100%;
-        }
-        up-modal .content-wrap {
-            padding-right: calc(var(--bs-gutter-x) * .5);
-            width: 100%;
-        }
-    </style>
 </head>
 <body class="controller-<?= Yii::$app->controller->id ?> action-<?= Yii::$app->controller->id ?>-<?= isset(Yii::$app->controller->action) ? Yii::$app->controller->action->id : 'nil' ?>" itemscope itemtype="http://schema.org/WebPage">
 <?php $this->beginBody() ?>
