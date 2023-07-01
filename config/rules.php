@@ -80,5 +80,6 @@ return [
     [
         'class' => 'app\components\PageUrlRule',
     ],
+    'test' => 'site/test',
     '' => 'site/index',
 ];
