@@ -240,7 +240,7 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
 <?= Advertisement::widget() ?>
 
 <div style="margin-bottom: 1rem">
-    <iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=3&p=12&l=ur1&category=audible&banner=02CB157YAJWVRZMZQ502&f=ifr&linkID=55e4f1970560fa2335c908c6eead716d&t=electricbas03-21&tracking_id=electricbas03-21" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+    <?= app\widgets\Banner::widget() ?>
 </div>
 
 <?= Birthday::widget() ?>
