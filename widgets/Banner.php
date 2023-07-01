@@ -6,6 +6,7 @@ use yii\base\Widget;
 
 final class Banner extends Widget
 {
+    /** @var string[][] */
     public array $items = [
         [
             'url' => 'https://www.amazon.de/music/unlimited?tag=electricbas03-21&linkCode=ur1',
@@ -36,14 +37,23 @@ final class Banner extends Widget
             'url' => 'https://www.amazon.de/gp/video/offers/?tag=electricbas03-21&linkCode=ur1&benefitId=starzplay',
             'img' => '@app/widgets/images/amazon_prime_video_300x250.jpg',
             'alt' => 'Amazon prime video: Onlinevideothek und Video-on-Demand-Angebot',
-        ],                                        
+        ],
     ];
 
-    public function run()
+    public function run(): string
     {
         $item = $this->getRandomItem();
+
         $imgPath = \Yii::getAlias($item['img']);
+        if ($imgPath === false) {
+            return '';
+        }
+
         $imgContent = file_get_contents($imgPath);
+        if ($imgContent === false) {
+            return '';
+        }
+
         $imgType = pathinfo($imgPath, PATHINFO_EXTENSION);
         return $this->render('banner', [
             'url' => $item['url'],
