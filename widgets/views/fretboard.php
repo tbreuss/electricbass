@@ -97,19 +97,22 @@ if (!function_exists('totalWidth')) {
     function stringNumberFromNote(string $note, array $strings): array
     {
         $noteParts = explode('-', $note);
-        $noteName = (string)$noteParts[0];
-        $fretNumber = (int)$noteParts[1];
-        $noteFunction = (string)$noteParts[2];
+        $noteName = (string)preg_replace('/[0-9]/', '', $noteParts[0]);
+        $fretNumber = (int)preg_replace('/[^0-9]/', '', $noteParts[0]);
+        $noteFunction = (string)$noteParts[1];
         $noteLabel = $noteFunction;
+        $noteSign = '';
 
         $flatOrShartSign = substr($noteLabel, 0, 1);
 
         if (in_array($flatOrShartSign, ['d', 'b'])) {
-            $noteLabel = '&#9837;' . substr($noteLabel, 1);
+            $noteSign = '&#9837;';
+            $noteLabel = substr($noteLabel, 1);
         }
 
         if ($flatOrShartSign === 'a') {
-            $noteLabel = '&#9839;' . substr($noteLabel, 1);
+            $noteSign = '&#9839;';
+            $noteLabel = substr($noteLabel, 1);
         }
 
         if ($flatOrShartSign === 'm') {
@@ -118,7 +121,7 @@ if (!function_exists('totalWidth')) {
 
         foreach ($strings as $string) {
             if ($string['note'] === $noteName) {
-                return [$string['stringNumber'], $fretNumber, $noteFunction, $noteLabel];
+                return [$string['stringNumber'], $fretNumber, $noteFunction, $noteSign, $noteLabel];
             }
         }
 
@@ -169,7 +172,6 @@ $dots = [3, 5, 7, 9, 15, 17, 19, 21];
 $doubleDots = [12, 24];
 $fretBoardFill = '#eeeeee';
 $fretFill = '#888888';
-$fretNumberColor = '#cccccc';
 $fretNumberSize = 13;
 $fretSpacing = 60;
 $fretThickness = 5;
@@ -263,101 +265,24 @@ $viewBoxBackgroundColor = '#f9f9f9';
 
     <!-- notes -->
     <?php foreach ($notes as $note): ?>
-        <?php [$stringNumber, $fretNumber, $noteFunction, $noteLabel] = stringNumberFromNote($note, $strings) ?>
+        <?php [$stringNumber, $fretNumber, $noteFunction, $noteSign, $noteLabel] = stringNumberFromNote($note, $strings) ?>
         <?php $noteXPosition = noteXPosition($fretNumber, $fretThickness, $fretSpacing, $paddingLeft) ?>
         <?php $noteYPosition = noteYPosition($stringNumber, $stringThickness, $stringSpacing, $paddingTop) ?>
         <?php $noteLabelXPosition = noteLabelXPosition($noteXPosition, $noteFunction) ?>
         <?php $noteLabelYPosition = noteLabelYPosition($noteYPosition, $noteFunction) ?>
-        <rect class="fretboard__note fretboard__note--<?= $noteFunction ?>" x="<?= $noteXPosition ?>" y="<?= $noteYPosition ?>" width="<?= $noteWidth ?>" height="<?= $noteHeight ?>" rx="<?= $noteRadius ?>" fill="<?= $noteFill ?>" />
-        <text class="fretboard__noteText fretboard__noteText--<?= $noteFunction ?>" x="<?= $noteLabelXPosition ?>" y="<?= $noteLabelYPosition ?>" font-size="<?= $noteLabelSize ?>"><?= $noteLabel ?></text>
+        <g class="fretboard__note">
+            <rect class="fretboard__noteSymbol fretboard__noteSymbol--<?= $noteFunction ?>" x="<?= $noteXPosition ?>" y="<?= $noteYPosition ?>" width="<?= $noteWidth ?>" height="<?= $noteHeight ?>" rx="<?= $noteRadius ?>" fill="<?= $noteFill ?>" />
+            <text class="fretboard__noteText fretboard__noteText--<?= $noteFunction ?>" x="<?= $noteLabelXPosition ?>" y="<?= $noteLabelYPosition ?>" font-size="<?= $noteLabelSize ?>">
+                <tspan class="fretboard__noteTextSign" font-size="<?= $noteLabelSize * 0.9 ?>"><?= $noteSign ?></tspan>
+                <tspan class="fretboard__noteTextLabel"><?= $noteLabel ?></tspan>
+            </text>
+        </g>
     <?php endforeach; ?>
 
 </svg>
 
 <style>
-    .fretboard__note--R {
-        fill: #ff0000;
-    }
-    .fretboard__note--d2 {
-        fill: #ff6600;
-    }    
-    .fretboard__note--2 {
-        fill: #ff9900;
-    }
-    .fretboard__note--m3 {
-        fill: #FFCC00;
-    }
-    .fretboard__note--3 {
-        fill: #ffff00;
-    }
-    .fretboard__note--4 {
-        fill: #00aa00;
-    }
-    .fretboard__note--d5 {
-        fill: #007777;
-    }
-    .fretboard__note--5 {
-        fill: #0099ff;
-    }
-    .fretboard__note--a5 {
-        fill: #6600cc;
-    }    
-    .fretboard__note--6 {
-        fill: #660099;
-    }
-    .fretboard__note--b7 {
-        fill: #990088;
-    }
-    .fretboard__note--7 {
-        fill: #CC00AA;
-    }
-    .fretboard__noteText {
-        font-weight: 600;
-    }
-    .fretboard__noteText--R {
-        fill: #222222;
-    }
-    .fretboard__noteText--d2 {
-        fill: #333333;
-        letter-spacing: -0.25em;
-    }
-    .fretboard__noteText--2 {
-        fill: #333333;
-    }
-    .fretboard__noteText--m3 {
-        fill: #555555;
-        letter-spacing: -0.25em;
-    }    
-    .fretboard__noteText--3 {
-        fill: #333333;
-    }
-    .fretboard__noteText--4 {
-        fill: #ffffff;
-    }
-    .fretboard__noteText--d5 {
-        fill: #ffffff;
-        letter-spacing: -0.25em;
-    }    
-    .fretboard__noteText--5 {
-        fill: #ffffff;
-    }
-    .fretboard__noteText--a5 {
-        fill: #ffffff;
-        letter-spacing: -0.25em;
-    }
-    .fretboard__noteText--6 {
-        fill: #ffffff;
-    }
-    .fretboard__noteText--b7 {
-        fill: #ffffff;
-        letter-spacing: -0.25em;
-    }    
-    .fretboard__noteText--7 {
-        fill: #ffffff;
-    }
-    .fretboard__fretNumber {
-        fill: <?= $fretNumberColor ?>;
-    }
+
 </style>
 
 <?php if (!empty($_GET['debug'])): ?>

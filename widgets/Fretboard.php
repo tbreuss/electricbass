@@ -2,6 +2,7 @@
 
 namespace app\widgets;
 
+use app\widgets\assets\FretboardAsset;
 use yii\base\Widget;
 
 final class Fretboard extends Widget
@@ -10,6 +11,11 @@ final class Fretboard extends Widget
     public $showFretNumbers = true;
     public $showStringNames = true;
     public $notes = [];
+
+    public function init(): void
+    {
+        FretboardAsset::register($this->getView());
+    }
 
     public function run(): string
     {
