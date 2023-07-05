@@ -100,6 +100,7 @@ if (!function_exists('totalWidth')) {
         $noteName = (string)preg_replace('/[0-9]/', '', $noteParts[0]);
         $fretNumber = (int)preg_replace('/[^0-9]/', '', $noteParts[0]);
         $noteFunction = (string)$noteParts[1];
+        $fingering = (string)($noteParts[2] ?? '');
         $noteLabel = $noteFunction;
         $noteSign = '';
 
@@ -121,7 +122,7 @@ if (!function_exists('totalWidth')) {
 
         foreach ($strings as $string) {
             if ($string['note'] === $noteName) {
-                return [$string['stringNumber'], $fretNumber, $noteFunction, $noteSign, $noteLabel];
+                return [$string['stringNumber'], $fretNumber, $noteFunction, $noteSign, $noteLabel, $fingering];
             }
         }
 
@@ -175,7 +176,7 @@ $fretFill = '#888888';
 $fretNumberSize = 13;
 $fretSpacing = 60;
 $fretThickness = 5;
-$noteFill = '#bb0000';
+$noteFill = '#0066ff';
 $noteLabelOffsets = [];
 $noteLabelSize = 18;
 $noteHeight = 24;
@@ -265,7 +266,7 @@ $viewBoxBackgroundColor = '#f9f9f9';
 
     <!-- notes -->
     <?php foreach ($notes as $note): ?>
-        <?php [$stringNumber, $fretNumber, $noteFunction, $noteSign, $noteLabel] = stringNumberFromNote($note, $strings) ?>
+        <?php [$stringNumber, $fretNumber, $noteFunction, $noteSign, $noteLabel, $fingering] = stringNumberFromNote($note, $strings) ?>
         <?php $noteXPosition = noteXPosition($fretNumber, $fretThickness, $fretSpacing, $paddingLeft) ?>
         <?php $noteYPosition = noteYPosition($stringNumber, $stringThickness, $stringSpacing, $paddingTop) ?>
         <?php $noteLabelXPosition = noteLabelXPosition($noteXPosition, $noteFunction) ?>
