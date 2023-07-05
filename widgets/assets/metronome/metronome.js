@@ -2,7 +2,6 @@ class Metronome {
   constructor(volume = 0.8, tempo = 120, accent = 4, barLength = 8, swing = 50) {
     this.volume = volume;
     this.audioContext = null;
-    this.notesInQueue = [];       // notes that have been put into the web audio and may or may not have been played yet {note, time}
     this.currentQuarterNote = 0;
     this.tempo = tempo;
     this.lookahead = 25;          // How frequently to call scheduling function (in milliseconds)
@@ -31,7 +30,7 @@ class Metronome {
     }
     // this.nextNoteTime += secondsPerBeat; // Add beat length to last beat time
     this.currentQuarterNote++;    // Advance the beat number, wrap to zero
-    if (this.currentQuarterNote == (this.barLength)) {
+    if (this.currentQuarterNote >= this.barLength) {
       this.currentQuarterNote = 0;
       //console.log("here")
     }
@@ -46,9 +45,6 @@ class Metronome {
   }
 
   scheduleNote(beatNumber, time) {
-
-    // push the note on the queue, even if we are not playing
-    this.notesInQueue.push({note: beatNumber, time: time});
     
     let volume = 1 * this.volume;
     if ((this.currentQuarterNote + 1) % 2 == 0) {
