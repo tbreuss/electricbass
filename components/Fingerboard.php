@@ -450,6 +450,10 @@ final class Fingerboard
         return $out;
     }
 
+    function getResults(): array
+    {
+        return $this->results;
+    }
 
     function calculateIntervals($root, $notes)
     {

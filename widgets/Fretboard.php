@@ -7,6 +7,7 @@ use yii\base\Widget;
 
 final class Fretboard extends Widget
 {
+    public $colors = 'default'; // default|intervals
     public $showDots = true;
     public $showFretNumbers = true;
     public $showStringNames = true;
@@ -21,6 +22,7 @@ final class Fretboard extends Widget
     {
         return $this->render('fretboard', [
             'config' => [
+                'colors' => $this->colors,
                 'showDots' => $this->showDots,
                 'showFretNumbers' => $this->showFretNumbers,
                 'showStringNames' => $this->showStringNames,

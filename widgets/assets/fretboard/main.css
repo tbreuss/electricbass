@@ -1,3 +1,6 @@
+.fretboard {
+    margin-bottom: 1rem;
+}
 .fretboard__noteSymbol--R {
     fill: #ff0000;
 }

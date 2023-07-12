@@ -99,7 +99,7 @@ if (!function_exists('totalWidth')) {
         $noteParts = explode('-', $note);
         $noteName = (string)preg_replace('/[0-9]/', '', $noteParts[0]);
         $fretNumber = (int)preg_replace('/[^0-9]/', '', $noteParts[0]);
-        $noteFunction = (string)$noteParts[1];
+        $noteFunction = (string)($noteParts[1] ?? '');
         $fingering = (string)($noteParts[2] ?? '');
         $noteLabel = $noteFunction;
         $noteSign = '';
@@ -127,6 +127,16 @@ if (!function_exists('totalWidth')) {
         }
 
         throw new \RuntimeException('Could not determine string number from note');
+    }
+    
+    function noteFingerXPosition(int $fretNumber, int $fretThickness, int $fretSpacing, int $paddingLeft, int $noteWidth, int $noteFingerSize): int
+    {
+        return noteXPosition($fretNumber, $fretThickness, $fretSpacing, $paddingLeft) + $noteWidth + ($noteFingerSize / 5);
+    }
+
+    function noteFingerYPosition(int $stringNumber, int $stringThickness, int $stringSpacing, int $paddingTop, int $noteHeight, int $noteFingerSize): int
+    {
+        return noteYPosition($stringNumber, $stringThickness, $stringSpacing, $paddingTop) + $noteHeight + ($noteFingerSize / 5);
     }
 
     function noteLabelXPosition(int $noteXPosition, string $noteFunction): int
@@ -176,7 +186,9 @@ $fretFill = '#888888';
 $fretNumberSize = 13;
 $fretSpacing = 60;
 $fretThickness = 5;
-$noteFill = '#0066ff';
+$noteFill = '#222222';
+$noteFingerColor = '#999999';
+$noteFingerSize = 13;
 $noteLabelOffsets = [];
 $noteLabelSize = 18;
 $noteHeight = 24;
@@ -269,22 +281,19 @@ $viewBoxBackgroundColor = '#f9f9f9';
         <?php [$stringNumber, $fretNumber, $noteFunction, $noteSign, $noteLabel, $fingering] = stringNumberFromNote($note, $strings) ?>
         <?php $noteXPosition = noteXPosition($fretNumber, $fretThickness, $fretSpacing, $paddingLeft) ?>
         <?php $noteYPosition = noteYPosition($stringNumber, $stringThickness, $stringSpacing, $paddingTop) ?>
-        <?php $noteLabelXPosition = noteLabelXPosition($noteXPosition, $noteFunction) ?>
-        <?php $noteLabelYPosition = noteLabelYPosition($noteYPosition, $noteFunction) ?>
+        <?php $noteFingerXPosition = noteFingerXPosition($fretNumber, $fretThickness, $fretSpacing, $paddingLeft, $noteWidth, $noteFingerSize) ?>
+        <?php $noteFingerYPosition = noteFingerYPosition($stringNumber, $stringThickness, $stringSpacing, $paddingTop, $noteHeight, $noteFingerSize) ?>
         <g class="fretboard__note">
-            <rect class="fretboard__noteSymbol fretboard__noteSymbol--<?= $noteFunction ?>" x="<?= $noteXPosition ?>" y="<?= $noteYPosition ?>" width="<?= $noteWidth ?>" height="<?= $noteHeight ?>" rx="<?= $noteRadius ?>" fill="<?= $noteFill ?>" />
-            <text class="fretboard__noteText fretboard__noteText--<?= $noteFunction ?>" x="<?= $noteLabelXPosition ?>" y="<?= $noteLabelYPosition ?>" font-size="<?= $noteLabelSize ?>">
+            <rect class="fretboard__noteSymbol <?php if ($config['colors'] === 'intervals'): ?>fretboard__noteSymbol--<?= $noteFunction ?><?php endif; ?>" x="<?= $noteXPosition ?>" y="<?= $noteYPosition ?>" width="<?= $noteWidth ?>" height="<?= $noteHeight ?>" rx="<?= $noteRadius ?>" fill="<?= $noteFill ?>" />
+            <text class="fretboard__noteText <?php if ($config['colors'] === 'intervals'): ?>fretboard__noteText--<?= $noteFunction ?><?php endif; ?>" x="<?= $noteXPosition + ($noteWidth / 2) ?>" y="<?= $noteYPosition + ($noteHeight / 2) ?>" font-size="<?= $noteLabelSize ?>" dominant-baseline="central" text-anchor="middle" fill="#ffffff">
                 <tspan class="fretboard__noteTextSign" font-size="<?= $noteLabelSize * 0.9 ?>"><?= $noteSign ?></tspan>
                 <tspan class="fretboard__noteTextLabel"><?= $noteLabel ?></tspan>
             </text>
+            <text class="fretboard__noteFinger" x="<?= $noteFingerXPosition ?>" y="<?= $noteFingerYPosition ?>" fill="<?= $noteFingerColor ?>" font-size="<?= $noteFingerSize ?>"><?= $fingering ?></text>
         </g>
     <?php endforeach; ?>
 
 </svg>
-
-<style>
-
-</style>
 
 <?php if (!empty($_GET['debug'])): ?>
     <ul style="margin-top:2rem">
