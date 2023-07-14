@@ -13,35 +13,38 @@ $strings = [
     ['note' => 'G', 'stringNumber' => 1],
 ];
 $numberOfStrings = count($strings);
-$frets = range(0, 24);
+$frets = range(0, 12);
 $numberOfFrets = count($frets);
 
 // Layout
-$paddingTop = 25;
-$paddingRight = 20;
-$paddingBottom = 25;
-$paddingLeft = 30;
 $fretThickness = 5;
 $fretSpacing = 60;
 $fretTotalWidth = $fretThickness + $fretSpacing;
 $stringSpacing = 25;
 $stringThickness = 2;
 $stringTotalHeight = $stringThickness + $stringSpacing;
+$dotRadius = $stringSpacing * 0.3;
+$dots = [3, 5, 7, 9, 15, 17, 19, 21];
+$doubleDots = [12, 24];
+$noteHeight = $stringSpacing * 1;
+$noteRadius = $noteHeight / 4;
+$noteWidth = $noteHeight * 1.12;
+$noteFingerXOffset = $noteWidth + ($stringSpacing / 10);
+$noteFingerYOffset = $noteHeight + ($stringSpacing / 10);
+$paddingTop = $noteHeight;
+$paddingRight = $noteWidth;
+$paddingBottom = $noteHeight * 1.2;
+$paddingLeft = $noteWidth * 1.2;
 $fretboardWidth = ($numberOfFrets * $fretThickness) + (($numberOfFrets - 1) * $fretSpacing);
 $fretboardHeight = ($numberOfStrings * $stringThickness) + (($numberOfStrings -1) * $stringSpacing);
 $totalWidth = $paddingLeft + $fretboardWidth + $paddingRight;
 $totalHeight = $paddingTop + $fretboardHeight + $paddingBottom;
-$dotRadius = 5;
-$dots = [3, 5, 7, 9, 15, 17, 19, 21];
-$doubleDots = [12, 24];
-$noteHeight = 24;
-$noteRadius = $noteHeight / 4;
-$noteWidth = 28;
 
 // Fonts
-$noteLabelSize = 18;
+$noteLabelSize = $noteHeight * 0.72;
 $fretNumberSize = 13;
-$noteFingerSize = 13;
+$noteFingerSize = $stringSpacing / 2;
+$stringFontSize = 20;
 
 // Colors
 $dotColor = '#bbbbbb';
@@ -100,9 +103,9 @@ $viewBoxBackgroundColor = '#f9f9f9';
     <!-- string names -->
     <?php if (!empty($config['showStringNames'])): ?>
         <?php foreach ($strings as $string): ?>
-            <?php $x = $paddingLeft / 4 * 0.125; ?>
+            <?php $x = 4; ?>
             <?php $y = $paddingTop + (($string['stringNumber'] - 1) * $stringTotalHeight) + ($stringThickness / 2) ?>
-            <text class="fretboard__stringName" x="<?= $x ?>" y="<?= $y ?>" dominant-baseline="middle"><?= $string['note'] ?></text>
+            <text class="fretboard__stringName" x="<?= $x ?>" y="<?= $y ?>" dominant-baseline="middle" font-size="<?= $stringFontSize ?>"><?= $string['note'] ?></text>
         <?php endforeach; ?>
     <?php endif; ?>
 
@@ -112,8 +115,8 @@ $viewBoxBackgroundColor = '#f9f9f9';
         <?php if (($fretIndex = array_search($fretNumber, $frets)) !== false): ?>
             <?php $xNote = $paddingLeft + ($fretIndex * $fretTotalWidth) + ($fretThickness / 2) - ($noteWidth / 2) ?>
             <?php $yNote = $paddingTop + (($stringNumber - 1) * $stringTotalHeight) + ($stringThickness / 2) - ($stringSpacing / 2) ?>
-            <?php $xNoteFinger = $xNote  + $noteWidth + ($noteFingerSize / 5) ?>
-            <?php $yNoteFinger = $yNote + $noteHeight + ($noteFingerSize / 5) ?>
+            <?php $xNoteFinger = $xNote  + $noteFingerXOffset ?>
+            <?php $yNoteFinger = $yNote + $noteFingerYOffset ?>
             <g class="fretboard__note">
                 <rect class="fretboard__noteSymbol <?php if ($config['colors'] === 'intervals'): ?>fretboard__noteSymbol--<?= $noteFunction ?><?php endif; ?>" x="<?= $xNote ?>" y="<?= $yNote ?>" width="<?= $noteWidth ?>" height="<?= $noteHeight ?>" rx="<?= $noteRadius ?>" fill="<?= $noteColor ?>" />
                 <text class="fretboard__noteText <?php if ($config['colors'] === 'intervals'): ?>fretboard__noteText--<?= $noteFunction ?><?php endif; ?>" x="<?= $xNote + ($noteWidth / 2) ?>" y="<?= $yNote + ($noteHeight / 2) ?>" font-size="<?= $noteLabelSize ?>" dominant-baseline="central" text-anchor="middle" fill="<?= $noteLabelColor ?>">
