@@ -154,6 +154,9 @@
     console.log(Tonal.Core.transpose("C4", "5P"));
 </script>
 
-<?php use function tebe\tonal\core\distance\transpose; ?>
+<?php use function tebe\tonal\core\transpose; ?>
 
-<?= join(', ', array_map(fn($interval) => transpose("B", $interval), ['P1', 'M3', 'P5', 'M7'])) ?>
+<?= join(', ', array_map(fn($interval) => transpose("C", $interval), ['P1', 'M3', 'P5', 'M7', 'M9', 'P11', 'M13'])) ?><br>
+<?= join(', ', array_map(fn($interval) => transpose("G", $interval), ['P1', 'm3', 'P5', 'm7', 'M9', 'P11', 'M13'])) ?><br>
+<?= join(', ', array_map(fn($interval) => transpose("G", $interval), ['P1', 'M3', 'P5', 'm7', 'M9', 'A11', 'M13'])) ?><br>
+<?= join(', ', array_map(fn($interval) => transpose("F#", $interval), ['P1', 'm2', 'm3', 'M3', 'P4', 'P5', 'm7', 'P8'])) ?><br>
