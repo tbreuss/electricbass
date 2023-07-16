@@ -99,7 +99,7 @@
 
 <?= app\widgets\Fretboard::widget([
     'colors' => 'intervals',
-    'notes' => ['A3-R', 'A4-d2', 'A6-m3', 'D3-4', 'D4-d5', 'D6-a5', 'G3-b7', 'G5-R']
+    'notes' => ['E0-R-4', 'E12-R-4', 'A3-R', 'A4-d2', 'A6-m3', 'D3-4', 'D4-d5', 'D6-a5', 'G3-b7', 'G5-R']
 ]) ?>
 
 <h2>Null-Bünde (Default-Farben)</h2>
@@ -107,3 +107,53 @@
 <?= app\widgets\Fretboard::widget([
     'notes' => ['E0-X', 'A0-X', 'D0-X', 'G0-X']
 ]) ?>
+
+<script src="https://cdn.jsdelivr.net/npm/tonal/browser/tonal.min.js"></script>
+<?php /*
+<script>
+    console.log(Tonal.Core.note("Abb4"));
+    console.log(Tonal.Core.note("Axx4"));
+    console.log(Tonal.Core.note("A"));
+    console.log(Tonal.Core.note("A4"));
+    console.log(Tonal.Core.note("A#4"));
+    console.log(Tonal.Core.note("Ab4"));
+</script>
+
+<pre><?php print_r(tebe\tonal\core\note("Abb4")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\note("Axx4")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\note("A")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\note("A4")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\note("A#4")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\note("Ab4")); ?></pre>
+
+<script>
+    console.log(Tonal.Core.interval("P1"));
+    console.log(Tonal.Core.interval("m3"));
+    console.log(Tonal.Core.interval("M3"));
+    console.log(Tonal.Core.interval("d5"));
+    console.log(Tonal.Core.interval("P5"));
+    console.log(Tonal.Core.interval("A5"));
+    console.log(Tonal.Core.interval("m7"));
+    console.log(Tonal.Core.interval("M7"));
+    console.log(Tonal.Core.interval("P8"));
+    console.log(Tonal.Core);
+</script>
+
+<pre><?php print_r(tebe\tonal\core\interval("P1")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\interval("m3")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\interval("M3")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\interval("d5")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\interval("P5")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\interval("A5")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\interval("m7")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\interval("M7")); ?></pre>
+<pre><?php print_r(tebe\tonal\core\interval("P8")); ?></pre>
+*/ ?>
+
+<script>
+    console.log(Tonal.Core.transpose("C4", "5P"));
+</script>
+
+<?php use function tebe\tonal\core\distance\transpose; ?>
+
+<?= join(', ', array_map(fn($interval) => transpose("B", $interval), ['P1', 'M3', 'P5', 'M7'])) ?>

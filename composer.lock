@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fb5b01c43908979b0625582a5e3f945",
+    "content-hash": "c409b9e74b9936c62c4a4165b9451c06",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -1960,6 +1960,35 @@
                 }
             ],
             "time": "2022-11-03T14:55:06+00:00"
+        },
+        {
+            "name": "tebe/tonal",
+            "version": "dev-fretboard",
+            "dist": {
+                "type": "path",
+                "url": "./packages/tebe/tonal",
+                "reference": "6d2f3a9582b4392e5ef225ae45660929c3876006"
+            },
+            "require": {
+                "php": ">=8.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "tebe\\tonal\\": "src/"
+                },
+                "files": [
+                    "src/core.php",
+                    "src/core/distance.php",
+                    "src/core/interval.php",
+                    "src/core/note.php",
+                    "src/core/pitch.php"
+                ]
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "thewirecutter/paapi5-php-sdk",
@@ -6483,7 +6512,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "tebe/tonal": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
