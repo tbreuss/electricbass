@@ -1967,7 +1967,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/tebe/tonal",
-                "reference": "6d2f3a9582b4392e5ef225ae45660929c3876006"
+                "reference": "c8b67dd965e2f4a7272cdbf0b76098f0897495d8"
             },
             "require": {
                 "php": ">=8.0.0"
@@ -1979,6 +1979,9 @@
                 },
                 "files": [
                     "src/core.php",
+                    "src/fretboard.php",
+                    "src/midi.php",
+                    "src/note.php",
                     "src/core/distance.php",
                     "src/core/interval.php",
                     "src/core/note.php",

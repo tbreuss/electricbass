@@ -29,13 +29,30 @@ final class Fretboard extends Widget
             ],
             'notes' => $this->notes,
         ]);
+
+        /*
+        $im = new \Imagick();
+        $im->readImageBlob($svg);
+
+        $im->setImageFormat("png24");
+        #$im->resizeImage(720, 445, \Imagick::FILTER_LANCZOS, 1);  // Optional, if you need to resize
+
+        #$im->setImageFormat("jpeg");
+        #$im->adaptiveResizeImage(720, 445); // Optional, if you need to resize
+
+        #$im->writeImage('us-map.png'); // (or .jpg)
+        #$im->clear();
+
+        $png = "<img src='data:image/png;base64,".base64_encode($im->getImageBlob())."' />";
+
+        return $svg . $png;
+        */
     }
 
     public static function stringNumberFromNote(string $note, array $strings): array
     {
         $noteParts = explode('-', $note);
-        $noteName = (string)preg_replace('/[0-9]/', '', $noteParts[0]);
-        $fretNumber = (int)preg_replace('/[^0-9]/', '', $noteParts[0]);
+        [$fretNumber, $stringNumber] = explode('/', $noteParts[0]);
         $noteFunction = (string)($noteParts[1] ?? '');
         $fingering = (string)($noteParts[2] ?? '');
         $noteLabel = $noteFunction;
@@ -58,7 +75,7 @@ final class Fretboard extends Widget
         }
 
         foreach ($strings as $string) {
-            if ($string['note'] === $noteName) {
+            if ($string['stringNumber'] == $stringNumber) {
                 return [$string['stringNumber'], $fretNumber, $noteFunction, $noteSign, $noteLabel, $fingering];
             }
         }

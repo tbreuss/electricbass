@@ -1,3 +1,4 @@
+<?php yii\widgets\Spaceless::begin(); ?>
 <?php
 
 /**
@@ -7,10 +8,10 @@
 
 // Setup
 $strings = [
-    ['note' => 'E', 'stringNumber' => 4],
-    ['note' => 'A', 'stringNumber' => 3],
-    ['note' => 'D', 'stringNumber' => 2],
     ['note' => 'G', 'stringNumber' => 1],
+    ['note' => 'D', 'stringNumber' => 2],
+    ['note' => 'A', 'stringNumber' => 3],
+    ['note' => 'E', 'stringNumber' => 4],
 ];
 $numberOfStrings = count($strings);
 $frets = range(0, 12);
@@ -129,3 +130,4 @@ $viewBoxBackgroundColor = '#f9f9f9';
     <?php endforeach; ?>
 
 </svg>
+<?php yii\widgets\Spaceless::end(); ?>

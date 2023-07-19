@@ -11,6 +11,9 @@
         },
         "files": [
             "src/core.php",
+            "src/fretboard.php",
+            "src/midi.php",
+            "src/note.php",
             "src/core/distance.php",
             "src/core/interval.php",
             "src/core/note.php",

@@ -107,7 +107,7 @@ function pitchName(Pitch $pitch): string
     if (!$letter) {
       return "";
     }
-  
+
     $pc = $letter . altToAcc($pitch->alt);
     return $pitch->oct || $pitch->oct === 0 ? $pc . $pitch->oct : $pc;
 }
