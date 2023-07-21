@@ -41,7 +41,11 @@ function findNotes(Tuning $tuning, array $notes, array $frets = [FRET_FROM, FRET
     [$fretFrom, $fretTo] = $frets;
     [$stringFrom, $stringTo] = $strings;
 
+    $labels = array_map(fn($note) => is_array($note) ? $note[1] : $note, $notes);
+    $notes = array_map(fn($note) => is_array($note) ? $note[0] : $note, $notes);
+
     $foundNotes = [];
+
     foreach (notes($tuning) as $fretString => $notesPerFretString) {
         [$fret, $string] = explode('/', $fretString);
         foreach ($notesPerFretString as $notePerFretString) {
@@ -54,9 +58,14 @@ function findNotes(Tuning $tuning, array $notes, array $frets = [FRET_FROM, FRET
             if (!in_array($notePerFretString, $notes)) {
                 continue;
             }
+            $foundKey = array_search($notePerFretString, $notes);
+            if ($foundKey === false) {
+                continue;
+            }
             $foundNotes[] = [
                 "fingering" => $fretString,
-                "note" => $notePerFretString
+                "note" => $notes[$foundKey],
+                "label" => $labels[$foundKey],
             ];
         }
     }
@@ -64,26 +73,77 @@ function findNotes(Tuning $tuning, array $notes, array $frets = [FRET_FROM, FRET
     return $foundNotes;
 }
 
-function notes(Tuning $tuning, int $fretTo = FRET_TO): array
+function findLowestNote(Tuning $tuning, string $note): string
+{
+    foreach (notes($tuning) as $fretString => $notesPerFretString) {
+        if (in_array($note, $notesPerFretString)) {
+            return $fretString;
+        }
+    }
+    return '';
+}
+
+function midi(Tuning $tuning, int $fretTo = FRET_TO): array
 {
     $notes = [];
-    foreach ($tuning->strings as $stringIndex => $string) {
+    foreach ($tuning->strings as $stringIndex => [$note]) {
         $stringNumber = $stringIndex + 1;
+        $midi = get($note)->midi;
+        foreach (range(0, $fretTo) as $fret) {
+            $notes[$fret . '/' . $stringNumber] = $midi + $fret;
+        }
+    }
+    return $notes;
+}
+
+function notes(Tuning $tuning, int $fretTo = FRET_TO): array
+{
+    $notes = [];    
+    $stringCount = count($tuning->strings);
+    foreach (array_reverse($tuning->strings) as $stringIndex => $string) {
+        $stringNumber = $stringCount - $stringIndex;
         [$note] = $string;
         $midi = get($note)->midi;
         foreach (range(0, $fretTo) as $fret) {
             $key = $fret . '/' . $stringNumber;
             $notes[$key] = [];
             $noteName = midiToNoteName($midi + $fret);
-            $notes[$key][] = get($noteName)->pc;
+            $noteClass = get($noteName);
+            $notes[$key][] = $noteClass->pc;
             $notes[$key][] = $noteName;
             $enharmonic = enharmonic($noteName);
             if ($enharmonic <> $noteName) {
                 $notes[$key][] = get($enharmonic)->pc;
                 $notes[$key][] = $enharmonic;
             }
+            $specials = [['B', 'Cb', 1], ['C', 'B#', -1], ['E', 'Fb', 0], ['F', 'E#', 0]];
+            foreach ($specials as [$sLetter, $sFix, $sOct]) {
+                if ($noteClass->letter === $sLetter) {
+                    $notes[$key][] = $sFix;
+                    $notes[$key][] = $sFix . ($noteClass->oct + $sOct);
+                }
+            }
+            /*
+            if ($noteClass->letter === 'B') {
+                $notes[$key][] = 'Cb';
+                $notes[$key][] = 'Cb' . $noteClass->oct + 1;
+            }             
+            if ($noteClass->letter === 'C') {
+                $notes[$key][] = 'B#';
+                $notes[$key][] = 'B#' . $noteClass->oct - 1;
+            }            
+            if ($noteClass->letter === 'E') {
+                $notes[$key][] = 'Fb';
+                $notes[$key][] = 'Fb' . $noteClass->oct;
+            }            
+            if ($noteClass->letter === 'F') {
+                $notes[$key][] = 'E#';
+                $notes[$key][] = 'E#' . $noteClass->oct;
+            }
+            */
         }
     }
+    #echo "<pre>";print_r($notes);echo"</pre>";
     return $notes;
 }
 

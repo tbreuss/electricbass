@@ -47,4 +47,23 @@ final class Fingering extends ActiveRecord
             Yii::$app->session->set('HITS_FINGERING_IDS', $ids);
         }
     }
+
+    public function getNotesInStandardFormat(): array
+    {
+        $search = ['k', 'g', 'v', 'r', 'u'];
+        $replace = ['m', 'M', 'd', 'P', 'A'];
+        $notes = explode('-', $this->notes);
+        foreach ($notes as $index => $note) {
+            $notes[$index] = str_replace($search, $replace, $note);
+            $notes[$index] = $notes[$index] === '1' ? 'P1' : $notes[$index];
+        }
+        return $notes;
+    }
+
+    public static function convertNotesToOldFormat(string $note): string
+    {
+        $search = ['P1', 'P8', 'm', 'M', 'd', 'P', 'A'];
+        $replace = ['R', 'R',  'b', '',  'd', '',  'a'];
+        return str_replace($search, $replace, $note);
+    }
 }

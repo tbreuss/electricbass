@@ -82,7 +82,67 @@ $this->params['breadcrumbs'][] = $model->title;
         <?php echo $fb->getFingerboard(Yii::getAlias('@web') . '/img/fingerboard/') ?>
     </div>
 
+    <?php
+
+    $tuning = new tebe\tonal\fretboard\Tuning(
+        'E-Bass', 
+        [['G2', 'G'], ['D2', 'D'], ['A1', 'A'], ['E1', 'E'], ['B0', 'B']]
+    );
+
+    $rootFingering = tebe\tonal\fretboard\findLowestNote($tuning, $root);
+
+    foreach ($fb->getResults() as $results) {
+        $fingerings = [];
+        foreach ($results as $res) {
+            $fingerings[] = $res['fret'] 
+            . '/' 
+            . str_replace(['E', 'A', 'D', 'G'], ['4', '3', '2', '1'], $res['string']) 
+            . '-' 
+            . preg_replace('/[0-9]/', '', $res['absolut']);
+        }
+        echo app\widgets\Fretboard::widget([
+            'colors' => 'diatonic',
+            'notes' => $fingerings,
+            'root' => $rootFingering
+        ]);
+    }
+    ?>
+
     <div class="markdown"><?= Markdown::process($model->abstract) ?></div>
+
+    <?php /** FRETBOARD */ ?>
+
+    <?php 
+    
+    $notesInStandardFormat = $model->getNotesInStandardFormat();
+    $notes = array_map(function ($interval) use ($root) {
+        $transposed = tebe\tonal\core\distance\transpose($root, $interval);
+        if (abs(tebe\tonal\note\get($transposed)->alt) > 1) {
+            return [tebe\tonal\note\simplify($transposed), $interval];
+        }
+        return [$transposed, $interval];
+    }, $notesInStandardFormat);
+
+    $fingerings = tebe\tonal\fretboard\findNotes($tuning, $notes);
+
+    echo app\widgets\Fretboard::widget([
+        'notes' => array_map(fn($note) => $note['fingering'] . '-' . $note['note'], $fingerings),
+        'root' => $rootFingering
+    ]);
+
+    /*$notes = array_map(fn($note) => $note['fingering'] . '-' . $note['label'], $fingerings);
+    echo app\widgets\Fretboard::widget([
+        'notes' => $notes,
+        'root' => $rootFingering
+    ]);*/
+
+    $notes = array_map(fn($note) => $note['fingering'] . '-' . $model::convertNotesToOldFormat($note['label']), $fingerings);
+    echo app\widgets\Fretboard::widget([
+        'notes' => $notes,
+        'root' => $rootFingering
+    ]);
+
+    ?>
 
     <?php /*$rtttl = $fb->toRTTTL() ?>
     <?php if($rtttl): ?>

@@ -11,7 +11,7 @@
 <h2>Form (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
-    'colors' => 'default',
+    'colors' => 'diatonic',
     'notes' => ['3/3', '5/3', '2/2', '3/2', '5/2', '2/1', '4/1', '5/1']
 ]) ?>
 
@@ -32,34 +32,35 @@
 <h2>Form mit Intervallen (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
-    'colors' => 'default',
+    'colors' => 'diatonic',
     'notes' => ['3/3-R', '5/3-2', '2/2-3', '3/2-4', '5/2-5', '2/1-6', '4/1-7', '5/1-R']
 ]) ?>
 
 <h2>Form mit Intervallen und Fingersatz (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
-    'colors' => 'default',
+    'colors' => 'diatonic',
     'notes' => ['3/3-R-2', '5/3-2-4', '2/2-3-1', '3/2-4-2', '5/2-5-4', '2/1-6-1', '4/1-7-3', '5/1-R-4']
 ]) ?>
 
 <h2>Form mit Intervallen (Intervall-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
-    'colors' => 'intervals',
+    'colors' => 'diatonic',
     'notes' => ['3/3-R', '5/3-2', '2/2-3', '3/2-4', '5/2-5', '2/1-6', '4/1-7', '5/1-R']
 ]) ?>
 
 <h2>Form mit Intervallen und Fingersatz (Intervall-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
-    'colors' => 'intervals',
+    'colors' => 'diatonic',
     'notes' => ['3/3-R-2', '5/3-2-4', '2/2-3-1', '3/2-4-2', '5/2-5-4', '2/1-6-1', '4/1-7-3', '5/1-R-4']
 ]) ?>
 
 <h2>Chromatische Tonleiter aufsteigend (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'colors' => 'diatonic',
     'notes' => [
         '3/3-C-1', 
         '4/3-C#-2', 
@@ -80,6 +81,7 @@
 <h2>Chromatische Tonleiter absteigend (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'colors' => 'diatonic',
     'notes' => [
         '3/3-C-1', 
         '4/3-Db-2', 
@@ -98,12 +100,13 @@
 ]) ?>
 
 <?= app\widgets\Fretboard::widget([
-    'colors' => 'intervals',
-    'notes' => ['0/4-R-4', '12/4-R-4', '3/3-R', '4/3-d2', '6/3-m3', '3/2-4', '4/2-d5', '6/2-a5', '3/1-b7', '5/1-R']
+    'colors' => 'default',
+    'notes' => ['0/4-R-4', '12/4-R-4', '3/3-R', '4/3-d2', '6/3-m3', '3/2-4', '4/2-d5', '6/2-a5', '3/1-b7', '5/1-R'],
+    'root' => '3/3'
 ]) ?>
 
 <?= app\widgets\Fretboard::widget([
-    'colors' => 'intervals',
+    'colors' => 'diatonic',
     'notes' => ['3/3-R', '4/3-b2', '6/3-m3', '3/2-4', '4/2-b5', '6/2-#5', '3/1-b7', '5/1-R']
 ]) ?>
 
@@ -115,6 +118,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/tonal/browser/tonal.min.js"></script>
+
 <?php /*
 <script>
     console.log(Tonal.Core.note("Abb4"));
@@ -172,15 +176,28 @@
 <?php
 $notes = tebe\tonal\fretboard\findNotes($tuning, ['C', 'D', 'E', 'F', 'G', 'A', 'B']);
 echo app\widgets\Fretboard::widget([
-    'notes' => array_map(fn($note) => join('-', $note), $notes)
+    'notes' => array_map(fn($note) => join('-', $note), $notes),
+    'root' => '3/3'
 ]); ?>
 
-<?php $notes = tebe\tonal\fretboard\findNotes($tuning, ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']);
+<?php $notes = tebe\tonal\fretboard\findNotes($tuning, [['C', 'P1'], ['C#', 'A1'], ['D', 'M2'], ['D#', 'A2'], ['E', 'M3'], ['F', 'P4'], ['F#', 'A4'], ['G', 'P5'], ['G#', 'A5'], ['A', 'M6'], ['A#', 'A6'], ['B', 'M7']]);
 echo app\widgets\Fretboard::widget([
-    'notes' => array_map(fn($note) => join('-', $note), $notes)
+    'colors' => 'diatonic',
+    'notes' => array_map(fn($note) => $note['fingering'] . '-' . $note['label'], $notes),
+    'root' => '3/3'
 ]); ?>
 
 <?php $notes = tebe\tonal\fretboard\findNotes($tuning, ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']);
 echo app\widgets\Fretboard::widget([
-    'notes' => array_map(fn($note) => join('-', $note), $notes)
+    'colors' => 'diatonic',
+    'notes' => array_map(fn($note) => join('-', $note), $notes),
+    'root' => '3/3'
+]); ?>
+
+<?php $test = array_map(fn($interval) => transpose("C", $interval), ['P1', 'M3', 'P5', 'M7', 'M9', 'P11', 'M13']);
+$notes = tebe\tonal\fretboard\findNotes($tuning, $test);
+echo app\widgets\Fretboard::widget([
+    'colors' => 'diatonic',
+    'notes' => array_map(fn($note) => join('-', $note), $notes),
+    'root' => '3/3'
 ]); ?>

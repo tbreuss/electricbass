@@ -4,17 +4,12 @@
 /**
  * @var array $config
  * @var array $notes
+ * @var array $strings
+ * @var array $frets
  */
 
 // Setup
-$strings = [
-    ['note' => 'G', 'stringNumber' => 1],
-    ['note' => 'D', 'stringNumber' => 2],
-    ['note' => 'A', 'stringNumber' => 3],
-    ['note' => 'E', 'stringNumber' => 4],
-];
 $numberOfStrings = count($strings);
-$frets = range(0, 12);
 $numberOfFrets = count($frets);
 
 // Layout
@@ -58,7 +53,7 @@ $viewBoxBackgroundColor = '#f9f9f9';
 
 ?>
 
-<svg class="fretboard" viewBox="0 0 <?= $totalWidth ?> <?= $totalHeight ?>" xmlns="http://www.w3.org/2000/svg" width="100%" style="background-color:<?= $viewBoxBackgroundColor ?>">
+<svg class="fretboard fretboard--<?= $config['colors'] ?>" viewBox="0 0 <?= $totalWidth ?> <?= $totalHeight ?>" xmlns="http://www.w3.org/2000/svg" width="100%" style="background-color:<?= $viewBoxBackgroundColor ?>">
 
     <!-- board -->
     <rect class="fretboard__board" x="<?= $paddingLeft ?>" y="<?= $paddingTop ?>" width="<?= $fretboardWidth ?>" height="<?= $fretboardHeight ?>" fill="<?= $fretboardColor ?>" />
@@ -111,20 +106,19 @@ $viewBoxBackgroundColor = '#f9f9f9';
     <?php endif; ?>
 
     <!-- notes -->
-    <?php foreach ($notes as $note): ?>
-        <?php [$stringNumber, $fretNumber, $noteFunction, $noteSign, $noteLabel, $fingering] = app\widgets\Fretboard::stringNumberFromNote($note, $strings) ?>
+    <?php foreach ($notes as ['string' => $stringNumber, 'fret' => $fretNumber, 'label' => $noteLabel, 'hint' => $noteHint, 'chroma' => $chroma]): ?>
         <?php if (($fretIndex = array_search($fretNumber, $frets)) !== false): ?>
             <?php $xNote = $paddingLeft + ($fretIndex * $fretTotalWidth) + ($fretThickness / 2) - ($noteWidth / 2) ?>
             <?php $yNote = $paddingTop + (($stringNumber - 1) * $stringTotalHeight) + ($stringThickness / 2) - ($stringSpacing / 2) ?>
             <?php $xNoteFinger = $xNote  + $noteFingerXOffset ?>
             <?php $yNoteFinger = $yNote + $noteFingerYOffset ?>
             <g class="fretboard__note">
-                <rect class="fretboard__noteSymbol <?php if ($config['colors'] === 'intervals'): ?>fretboard__noteSymbol--<?= $noteFunction ?><?php endif; ?>" x="<?= $xNote ?>" y="<?= $yNote ?>" width="<?= $noteWidth ?>" height="<?= $noteHeight ?>" rx="<?= $noteRadius ?>" fill="<?= $noteColor ?>" />
-                <text class="fretboard__noteText <?php if ($config['colors'] === 'intervals'): ?>fretboard__noteText--<?= $noteFunction ?><?php endif; ?>" x="<?= $xNote + ($noteWidth / 2) ?>" y="<?= $yNote + ($noteHeight / 2) ?>" font-size="<?= $noteLabelSize ?>" dominant-baseline="central" text-anchor="middle" fill="<?= $noteLabelColor ?>">
-                    <tspan class="fretboard__noteTextSign" font-size="<?= $noteLabelSize * 0.9 ?>"><?= $noteSign ?></tspan>
+                <rect class="fretboard__noteSymbol fretboard__noteSymbol--<?= $chroma ?>" x="<?= $xNote ?>" y="<?= $yNote ?>" width="<?= $noteWidth ?>" height="<?= $noteHeight ?>" rx="<?= $noteRadius ?>" fill="<?= $noteColor ?>" />
+                <text class="fretboard__noteText fretboard__noteText--<?= $chroma ?>" x="<?= $xNote + ($noteWidth / 2) ?>" y="<?= $yNote + ($noteHeight / 2) ?>" font-size="<?= $noteLabelSize ?>" dominant-baseline="central" text-anchor="middle" fill="<?= $noteLabelColor ?>">
+                    <?php /*<tspan class="fretboard__noteTextSign" font-size="<?= $noteLabelSize * 0.9 ?>"><?= $noteSign ?></tspan>*/ ?>
                     <tspan class="fretboard__noteTextLabel"><?= $noteLabel ?></tspan>
                 </text>
-                <text class="fretboard__noteFinger" x="<?= $xNoteFinger ?>" y="<?= $yNoteFinger ?>" fill="<?= $noteFingerColor ?>" font-size="<?= $noteFingerSize ?>"><?= $fingering ?></text>
+                <text class="fretboard__noteFinger" x="<?= $xNoteFinger ?>" y="<?= $yNoteFinger ?>" fill="<?= $noteFingerColor ?>" font-size="<?= $noteFingerSize ?>"><?= $noteHint ?></text>
             </g>
         <?php endif; ?>
     <?php endforeach; ?>
