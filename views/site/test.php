@@ -10,7 +10,14 @@
 
 <h2>Form (Default-Farben)</h2>
 
+<?php 
+const FRETS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const STRINGS = ['G', 'D', 'A', 'E', 'B'];
+?>
+
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,
     'colors' => 'diatonic',
     'notes' => ['3/3', '5/3', '2/2', '3/2', '5/2', '2/1', '4/1', '5/1']
 ]) ?>
@@ -18,6 +25,8 @@
 <h2>Form mit Notennamen (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'default',
     'notes' => ['3/3-C', '5/3-D', '2/2-E', '3/2-F', '5/2-G', '2/1-A', '4/1-B', '5/1-C']
 ]) ?>
@@ -25,6 +34,8 @@
 <h2>Form mit Fingersatz (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'default',
     'notes' => ['3/3-2', '5/3-4', '2/2-1', '3/2-2', '5/2-4', '2/1-1', '4/1-3', '5/1-4']
 ]) ?>
@@ -32,6 +43,8 @@
 <h2>Form mit Intervallen (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
     'notes' => ['3/3-R', '5/3-2', '2/2-3', '3/2-4', '5/2-5', '2/1-6', '4/1-7', '5/1-R']
 ]) ?>
@@ -39,6 +52,8 @@
 <h2>Form mit Intervallen und Fingersatz (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
     'notes' => ['3/3-R-2', '5/3-2-4', '2/2-3-1', '3/2-4-2', '5/2-5-4', '2/1-6-1', '4/1-7-3', '5/1-R-4']
 ]) ?>
@@ -46,6 +61,8 @@
 <h2>Form mit Intervallen (Intervall-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
     'notes' => ['3/3-R', '5/3-2', '2/2-3', '3/2-4', '5/2-5', '2/1-6', '4/1-7', '5/1-R']
 ]) ?>
@@ -53,6 +70,8 @@
 <h2>Form mit Intervallen und Fingersatz (Intervall-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
     'notes' => ['3/3-R-2', '5/3-2-4', '2/2-3-1', '3/2-4-2', '5/2-5-4', '2/1-6-1', '4/1-7-3', '5/1-R-4']
 ]) ?>
@@ -60,6 +79,8 @@
 <h2>Chromatische Tonleiter aufsteigend (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
     'notes' => [
         '3/3-C-1', 
@@ -81,6 +102,8 @@
 <h2>Chromatische Tonleiter absteigend (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
     'notes' => [
         '3/3-C-1', 
@@ -100,12 +123,16 @@
 ]) ?>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'default',
     'notes' => ['0/4-R-4', '12/4-R-4', '3/3-R', '4/3-d2', '6/3-m3', '3/2-4', '4/2-d5', '6/2-a5', '3/1-b7', '5/1-R'],
     'root' => '3/3'
 ]) ?>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
     'notes' => ['3/3-R', '4/3-b2', '6/3-m3', '3/2-4', '4/2-b5', '6/2-#5', '3/1-b7', '5/1-R']
 ]) ?>
@@ -113,6 +140,8 @@
 <h2>Null-Bünde (Default-Farben)</h2>
 
 <?= app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'notes' => ['0/4-X', '0/3-X', '0/2-X', '0/1-X']
 ]) ?>
 
@@ -171,33 +200,41 @@
 <?= join(', ', array_map(fn($interval) => transpose("G", $interval), ['P1', 'M3', 'P5', 'm7', 'M9', 'A11', 'M13'])) ?><br>
 <?= join(', ', array_map(fn($interval) => transpose("F#", $interval), ['P1', 'm2', 'm3', 'M3', 'P4', 'P5', 'm7', 'P8'])) ?><br>
 
-<?php $tuning = new tebe\tonal\fretboard\Tuning('E-Bass', [['G2', 'G'], ['D2', 'D'], ['A1', 'A'], ['E1', 'E']]); ?>
+<?php $tuning = new tebe\tonal\fretboard\Tuning('E-Bass', [['G2', 'G'], ['D2', 'D'], ['A1', 'A'], ['E1', 'E'], ['B0', 'B']]); ?>
 
 <?php
 $notes = tebe\tonal\fretboard\findNotes($tuning, ['C', 'D', 'E', 'F', 'G', 'A', 'B']);
 echo app\widgets\Fretboard::widget([
-    'notes' => array_map(fn($note) => join('-', $note), $notes),
+    'strings' => STRINGS,
+    'frets' => FRETS,    
+    'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['label'], $notes),
     'root' => '3/3'
 ]); ?>
 
 <?php $notes = tebe\tonal\fretboard\findNotes($tuning, [['C', 'P1'], ['C#', 'A1'], ['D', 'M2'], ['D#', 'A2'], ['E', 'M3'], ['F', 'P4'], ['F#', 'A4'], ['G', 'P5'], ['G#', 'A5'], ['A', 'M6'], ['A#', 'A6'], ['B', 'M7']]);
 echo app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,
     'colors' => 'diatonic',
-    'notes' => array_map(fn($note) => $note['fingering'] . '-' . $note['label'], $notes),
+    'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['label'], $notes),
     'root' => '3/3'
 ]); ?>
 
 <?php $notes = tebe\tonal\fretboard\findNotes($tuning, ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']);
 echo app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
-    'notes' => array_map(fn($note) => join('-', $note), $notes),
+    'notes' => array_map(fn($n) => $n['coord'] . '-' . $n['label'], $notes),
     'root' => '3/3'
 ]); ?>
 
 <?php $test = array_map(fn($interval) => transpose("C", $interval), ['P1', 'M3', 'P5', 'M7', 'M9', 'P11', 'M13']);
 $notes = tebe\tonal\fretboard\findNotes($tuning, $test);
 echo app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,    
     'colors' => 'diatonic',
-    'notes' => array_map(fn($note) => join('-', $note), $notes),
+    'notes' => array_map(fn($n) => $n['coord'] . '-' . $n['label'], $notes),
     'root' => '3/3'
 ]); ?>

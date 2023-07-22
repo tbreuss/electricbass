@@ -2,14 +2,11 @@
 
 namespace tebe\tonal\fretboard;
 
-use tebe\tonal\core\note\Note;
-
+use Exception;
 use function tebe\tonal\note\get;
 use function tebe\tonal\midi\midiToNoteName;
 use function tebe\tonal\note\enharmonic;
 
-const STRING_FROM = 0;
-const STRING_TO = 4;
 const FRET_FROM = 0;
 const FRET_TO = 24;
 
@@ -36,10 +33,17 @@ function getNote(Tuning $tuning, string $fingering): array
     return $note === $enharmonic ? [$note] : [$note, $enharmonic];
 }
 
-function findNotes(Tuning $tuning, array $notes, array $frets = [FRET_FROM, FRET_TO], array $strings = [STRING_FROM, STRING_TO]): array
+function findNotes(Tuning $tuning, array $notes, ?int $fretFrom = null, ?int $fretTo = null, ?int $stringFrom = null, ?int $stringTo = null): array
 {
-    [$fretFrom, $fretTo] = $frets;
-    [$stringFrom, $stringTo] = $strings;
+    $stringCount = count($tuning->strings);
+    $stringFrom = is_null($stringFrom) ? 1 : bound(abs($stringFrom), 1, $stringCount);
+    $stringTo = is_null($stringTo) ? count($tuning->strings) : bound(abs($stringTo), 1, $stringCount);
+    $fretFrom = is_null($fretFrom) ? 0 : bound(abs($fretFrom), 0, FRET_TO);
+    $fretTo = is_null($fretTo) ? FRET_TO : bound(abs($fretTo), 0, FRET_TO);
+
+    if ($stringFrom > $stringTo || $fretFrom > $fretTo) {
+        return [];
+    }
 
     $labels = array_map(fn($note) => is_array($note) ? $note[1] : $note, $notes);
     $notes = array_map(fn($note) => is_array($note) ? $note[0] : $note, $notes);
@@ -63,7 +67,7 @@ function findNotes(Tuning $tuning, array $notes, array $frets = [FRET_FROM, FRET
                 continue;
             }
             $foundNotes[] = [
-                "fingering" => $fretString,
+                "coord" => $fretString,
                 "note" => $notes[$foundKey],
                 "label" => $labels[$foundKey],
             ];
@@ -123,28 +127,14 @@ function notes(Tuning $tuning, int $fretTo = FRET_TO): array
                     $notes[$key][] = $sFix . ($noteClass->oct + $sOct);
                 }
             }
-            /*
-            if ($noteClass->letter === 'B') {
-                $notes[$key][] = 'Cb';
-                $notes[$key][] = 'Cb' . $noteClass->oct + 1;
-            }             
-            if ($noteClass->letter === 'C') {
-                $notes[$key][] = 'B#';
-                $notes[$key][] = 'B#' . $noteClass->oct - 1;
-            }            
-            if ($noteClass->letter === 'E') {
-                $notes[$key][] = 'Fb';
-                $notes[$key][] = 'Fb' . $noteClass->oct;
-            }            
-            if ($noteClass->letter === 'F') {
-                $notes[$key][] = 'E#';
-                $notes[$key][] = 'E#' . $noteClass->oct;
-            }
-            */
         }
     }
-    #echo "<pre>";print_r($notes);echo"</pre>";
     return $notes;
+}
+
+function bound(int $x, int $min, int $max): int
+{
+     return min(max($x, $min), $max);
 }
 
 function tuning(string $name, array $strings): Tuning

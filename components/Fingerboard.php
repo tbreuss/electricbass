@@ -125,7 +125,8 @@ final class Fingerboard
 
     public static function getRoots()
     {
-        return ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','B'];
+        return ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F'];
+        #return ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','B'];
     }
 
     public static function getPositions()
@@ -468,6 +469,7 @@ final class Fingerboard
     {
 
         $intervals = $this->getIntervalDefinitions();
+        #echo"<pre>";print_r($intervals);echo"</pre>";exit;
 
 
       // f�r Berechnungen der Tonabst�nde
@@ -882,8 +884,10 @@ final class Fingerboard
     {
       // Definitionen der Intervalle
         $intervals['1'] = 0;
+        $intervals['u1'] = 1;
         $intervals['k2'] = 1;
         $intervals['g2'] = 2;
+        $intervals['u2'] = 3;
         $intervals['k3'] = 3;
         $intervals['g3'] = 4;
         $intervals['v4'] = 4;
@@ -894,6 +898,7 @@ final class Fingerboard
         $intervals['u5'] = 8;
         $intervals['k6'] = 8;
         $intervals['g6'] = 9;
+        $intervals['u6'] = 10;
         $intervals['k7'] = 10;
         $intervals['g7'] = 11;
         $intervals['r8'] = 12;

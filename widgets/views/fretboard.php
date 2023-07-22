@@ -91,17 +91,17 @@ $viewBoxBackgroundColor = '#f9f9f9';
     <?php endif; ?>
 
     <!-- strings -->
-    <?php foreach ($strings as $string): ?>
-        <?php $y = $paddingTop + ($string['stringNumber'] - 1) * $stringTotalHeight ?>
+    <?php foreach (array_keys($strings) as $string): ?>
+        <?php $y = $paddingTop + $string * $stringTotalHeight ?>
         <rect class="fretboard__string" x="<?= $paddingLeft ?>" y="<?= $y ?>" width="<?= $fretboardWidth ?>" height="<?= $stringThickness ?>" />
     <?php endforeach; ?>
 
     <!-- string names -->
     <?php if (!empty($config['showStringNames'])): ?>
-        <?php foreach ($strings as $string): ?>
+        <?php foreach ($strings as $string => $stringLabel): ?>
             <?php $x = 4; ?>
-            <?php $y = $paddingTop + (($string['stringNumber'] - 1) * $stringTotalHeight) + ($stringThickness / 2) ?>
-            <text class="fretboard__stringName" x="<?= $x ?>" y="<?= $y ?>" dominant-baseline="middle" font-size="<?= $stringFontSize ?>"><?= $string['note'] ?></text>
+            <?php $y = $paddingTop + ($string * $stringTotalHeight) + ($stringThickness / 2) ?>
+            <text class="fretboard__stringName" x="<?= $x ?>" y="<?= $y ?>" dominant-baseline="middle" font-size="<?= $stringFontSize ?>"><?= $stringLabel ?></text>
         <?php endforeach; ?>
     <?php endif; ?>
 

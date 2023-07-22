@@ -19,19 +19,13 @@ final class Fretboard extends Widget
 
     public function init(): void
     {
-        $this->frets = range(0, 12);
-        $this->strings = [
-            ['note' => 'G', 'stringNumber' => 1],
-            ['note' => 'D', 'stringNumber' => 2],
-            ['note' => 'A', 'stringNumber' => 3],
-            ['note' => 'E', 'stringNumber' => 4],
-        ];
         FretboardAsset::register($this->getView());
     }
 
     public function run(): string
     {
-        $notes = array_map(fn($note) => $this->stringNumberFromNote($note), $this->notes);
+        $fn = fn($note) => $this->stringNumberFromNote($note);
+        $notes = array_values(array_filter(array_map($fn, $this->notes)));
 
         if ($this->root === null && count($notes) > 0) {
             ['string' => $string, 'fret' => $fret] = $notes[0];
@@ -79,7 +73,7 @@ final class Fretboard extends Widget
         */
     }
 
-    private function stringNumberFromNote(array|string $note): array
+    private function stringNumberFromNote(array|string $note): ?array
     {        
         if (is_array($note)) {
             [
@@ -108,10 +102,10 @@ final class Fretboard extends Widget
             throw new \RuntimeException('Fret or string is not numeric');
         }
 
-        foreach ($this->strings as $string) {
-            if ($string['stringNumber'] == $stringNumber) {
+        foreach ($this->strings as $index => $_) {
+            if ($index + 1 == $stringNumber) {
                 return [
-                    'string' => $string['stringNumber'], 
+                    'string' => $stringNumber,
                     'fret' => $fretNumber, 
                     'label' => $label, 
                     'hint' => $hint, 
@@ -120,38 +114,7 @@ final class Fretboard extends Widget
             }
         }
 
-        /*
-        $noteParts = explode('-', $note);
-        [$fretNumber, $stringNumber] = explode('/', $noteParts[0]);
-        $noteFunction = (string)($noteParts[1] ?? '');
-        $fingering = (string)($noteParts[2] ?? '');
-        $noteLabel = $noteFunction;
-        $noteSign = '';
-
-        $flatOrShartSign = substr($noteLabel, 0, 1);
-
-        if (in_array($flatOrShartSign, ['d', 'b'])) {
-            $noteSign = '&#9837;';
-            $noteLabel = substr($noteLabel, 1);
-        }
-
-        if ($flatOrShartSign === 'a') {
-            $noteSign = '&#9839;';
-            $noteLabel = substr($noteLabel, 1);
-        }
-
-        if ($flatOrShartSign === 'm') {
-            $noteLabel = $flatOrShartSign;
-        }
-
-        foreach ($this->strings as $string) {
-            if ($string['stringNumber'] == $stringNumber) {
-                return [$string['stringNumber'], $fretNumber, $noteFunction, $noteSign, $noteLabel, $fingering];
-            }
-        }
-        */
-
-        throw new \RuntimeException('Could not determine string number from note');
+        return null;
     }
 
     private function calcAbsoluteValue(int $fretNumber, int $stringNumber): int
