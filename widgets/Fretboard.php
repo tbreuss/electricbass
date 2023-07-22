@@ -39,7 +39,7 @@ final class Fretboard extends Widget
             $abs = $this->calcAbsoluteValue($note['fret'], $note['string']);
             $chroma = ($abs - $absRoot) % 12;
             $note['abs'] = $abs;
-            $note['chroma'] = $chroma < 0 ? 12+$chroma : $chroma;
+            $note['chroma'] = $chroma < 0 ? 12 + $chroma : $chroma;
         }
 
         return $this->render('fretboard', [
@@ -74,7 +74,7 @@ final class Fretboard extends Widget
     }
 
     private function stringNumberFromNote(array|string $note): ?array
-    {        
+    {
         if (is_array($note)) {
             [
                 'tab' => $tab,
@@ -106,9 +106,9 @@ final class Fretboard extends Widget
             if ($index + 1 == $stringNumber) {
                 return [
                     'string' => $stringNumber,
-                    'fret' => $fretNumber, 
-                    'label' => $label, 
-                    'hint' => $hint, 
+                    'fret' => $fretNumber,
+                    'label' => $label,
+                    'hint' => $hint,
                     'chroma' => null
                 ];
             }

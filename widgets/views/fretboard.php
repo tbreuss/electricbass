@@ -32,7 +32,7 @@ $paddingRight = $noteWidth;
 $paddingBottom = $noteHeight * 1.2;
 $paddingLeft = $noteWidth * 1.2;
 $fretboardWidth = ($numberOfFrets * $fretThickness) + (($numberOfFrets - 1) * $fretSpacing);
-$fretboardHeight = ($numberOfStrings * $stringThickness) + (($numberOfStrings -1) * $stringSpacing);
+$fretboardHeight = ($numberOfStrings * $stringThickness) + (($numberOfStrings - 1) * $stringSpacing);
 $totalWidth = $paddingLeft + $fretboardWidth + $paddingRight;
 $totalHeight = $paddingTop + $fretboardHeight + $paddingBottom;
 

@@ -80,25 +80,25 @@ $this->params['breadcrumbs'][] = $model->title;
 
     $FRETBOARD_STRINGS = array_keys($fb->getOpenStringDefinitions());
     $TUNING = new tebe\tonal\fretboard\Tuning(
-        'E-Bass', 
+        'E-Bass',
         [['C3', 'C'], ['G2', 'G'], ['D2', 'D'], ['A1', 'A'], ['E1', 'E'], ['B0', 'B']]
     );
 
     if ($strings == 4) {
         $FRETBOARD_STRINGS = array_slice($FRETBOARD_STRINGS, 1, 4);
         $TUNING = new tebe\tonal\fretboard\Tuning(
-            'E-Bass', 
+            'E-Bass',
             [['G2', 'G'], ['D2', 'D'], ['A1', 'A'], ['E1', 'E']]
-        );        
+        );
     }
     if ($strings == 5) {
         $FRETBOARD_STRINGS = array_slice($FRETBOARD_STRINGS, 1, 5);
         $TUNING = new tebe\tonal\fretboard\Tuning(
-            'E-Bass', 
+            'E-Bass',
             [['G2', 'G'], ['D2', 'D'], ['A1', 'A'], ['E1', 'E'], ['B0', 'B']]
-        );        
-    }    
-    $FRETBOARD_FRETS = range(0, 12);    
+        );
+    }
+    $FRETBOARD_FRETS = range(0, 12);
 
     $rootFingering = tebe\tonal\fretboard\findLowestNote($TUNING, $root);
 
@@ -122,9 +122,15 @@ $this->params['breadcrumbs'][] = $model->title;
         <tr>
             <td style="padding-right: 1rem"><strong>Art</strong>:</td>
             <td>
-                <?php if ($model->category === 'tonleiter'): ?>Tonleiter<?php endif; ?>
-                <?php if ($model->category === 'akkord'): ?>Akkord/Arpeggio<?php endif; ?>
-                <?php if ($model->category === 'intervall'): ?>Intervall<?php endif; ?>
+                <?php if ($model->category === 'tonleiter'):
+                    ?>Tonleiter<?php
+                endif; ?>
+                <?php if ($model->category === 'akkord'):
+                    ?>Akkord/Arpeggio<?php
+                endif; ?>
+                <?php if ($model->category === 'intervall'):
+                    ?>Intervall<?php
+                endif; ?>
             </td>
         </tr>
         <tr>
@@ -171,13 +177,15 @@ $this->params['breadcrumbs'][] = $model->title;
     <?php
 
     foreach ($fbResults as $index => $results) {
-        if (empty($results)) continue;
+        if (empty($results)) {
+            continue;
+        }
         $fingerings = [];
         foreach ($results as $res) {
-            $fingerings[] = $res['fret'] 
-            . '/' 
+            $fingerings[] = $res['fret']
+            . '/'
             . replaceStringDef($strings, $res['string'])
-            . '-' 
+            . '-'
             . preg_replace('/[0-9]/', '', $res['absolut']);
         }
 
@@ -187,7 +195,7 @@ $this->params['breadcrumbs'][] = $model->title;
 
         echo app\widgets\Fretboard::widget([
             'strings' => $FRETBOARD_STRINGS,
-            'frets' => $FRETBOARD_FRETS,    
+            'frets' => $FRETBOARD_FRETS,
             'colors' => 'diatonic',
             'notes' => $fingerings,
             'root' => $rootFingering
