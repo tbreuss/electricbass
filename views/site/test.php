@@ -3,11 +3,10 @@
 /**
  * Links
  * https://en.wikipedia.org/wiki/Interval_(music)
- *
+ * @var yii\web\View $this
  */
 
 ?>
-<?php $this->context->layout = 'empty' ?>
 
 <h2>Form (Default-Farben)</h2>
 

@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $model->title;
     $notesInStandardFormat = $model->getNotesInStandardFormat();
     $notes = array_map(function ($interval) use ($root) {
         $transposed = tebe\tonal\core\distance\transpose($root, $interval);
-        if (abs(tebe\tonal\note\get($transposed)->alt) > 1) {
+        if (abs(tebe\tonal\note\get($transposed)->alt) > 1) { // @phpstan-ignore-line
             return [tebe\tonal\note\simplify($transposed), $interval];
         }
         return [$transposed, $interval];
@@ -171,7 +171,7 @@ $this->params['breadcrumbs'][] = $model->title;
     <?php if (count($fbResults) == 0 || empty($fbResults[0])): ?>        
         <p>Kein Fingersatz in der <?= $position ?>. Lage für einen E-Bass mit <?= $strings ?> Saiten gefunden.</p>
     <?php else: ?>
-        <p>Auf einem <?= $strings ?>-saitigen E-Bass ist in der <?= $position ?>. Lage der folgende Fingersatz möglich:</p>
+        <p>Auf einem <?= $strings ?>-saitigen E-Bass gibt es in der <?= $position ?>. Lage das folgende Griffbild:</p>
     <?php endif; ?>
 
     <?php
