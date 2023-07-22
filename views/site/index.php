@@ -153,7 +153,7 @@ $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Le
                 <?php foreach ($latestComments as $latestComment): ?>
                     <?php $search = $latestComment->search ?>
                     <p class="last__item">
-                        <a class="last__link" href="<?= $search->url ?>"><b><?= $search->title ?></b></a>
+                        <a class="last__link" href="<?= $search->url ?>#comments"><b><?= $search->title ?></b></a>
                         <span class="last__text">Von <?= $latestComment->name ?> am <?= Yii::$app->formatter->asDate($latestComment->created, 'long') ?></span>
                     </p>
                 <?php endforeach; ?>
