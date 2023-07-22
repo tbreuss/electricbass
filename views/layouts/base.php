@@ -123,6 +123,60 @@ if (!empty($this->params['metaDescription'])) {
 
     <div class="container navbar-border-bottom"><div class="border"></div></div>
 
+    <?php if (!empty($this->params['breadcrumbs'])): ?>
+    <div class="container container--breadcumbList">
+        <ol vocab="https://schema.org/" typeof="BreadcrumbList">
+            <li property="itemListElement" typeof="ListItem">
+                <a property="item" typeof="WebPage" href="<?= Url::home() ?>">
+                <span property="name">Startseite</span></a>
+                <meta property="position" content="1">
+            </li>              
+            <?php foreach ($this->params['breadcrumbs'] as $itemCount => $item): ?>              
+                <?php if (is_array($item)): ?>
+                <li property="itemListElement" typeof="ListItem">
+                    <a property="item" typeof="WebPage" href="<?= Url::to($item['url']) ?>">
+                    <span property="name"><?= $item['label'] ?></span></a>
+                    <meta property="position" content="<?= $itemCount + 2 ?>">
+                </li>                
+                <?php endif; ?>
+                <?php if (is_string($item)): ?>
+                <li property="itemListElement" typeof="ListItem">
+                    <span property="name"><?= $item ?></span>
+                    <meta property="position" content="<?= $itemCount + 2 ?>">
+                </li>            
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ol>
+        <style>
+            up-modal .container--breadcumbList {
+                display: none;
+            }
+            ol[typeof=BreadcrumbList] {
+                list-style-type: none;
+                margin:1rem 0 0 0;
+                padding:0;
+                font-size: 0.9rem;
+                color: #c2c2c2;
+            }
+            li[typeof=ListItem] {
+                display: inline;
+            }
+            li[typeof=ListItem]::after {
+                content: " › ";
+            }
+            li:last-child[typeof=ListItem]::after {
+                content: "";
+            }            
+            li[typeof=ListItem] a {
+                color: #c2c2c2;
+            }
+            li[typeof=ListItem] a:hover {
+                color: #7f7f7f;
+            }
+        </style>
+    </div>
+    <?php endif; ?>
+
     <?php if (isset($this->blocks['jumbotron'])): ?>
         <?= $this->blocks['jumbotron'] ?>
     <?php endif; ?>

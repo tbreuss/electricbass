@@ -7,6 +7,7 @@
 use app\helpers\Html;
 
 $this->title = 'Sitemap';
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="sitemap">
@@ -27,6 +28,7 @@ $this->title = 'Sitemap';
     <h2 class="sitemap__section"><?= Html::a('Tools', ['/tools'], ['class' => 'sitemap__link']) ?></h2>
     <ul class="sitemap__links">
         <li><?= Html::a('Fingersätze für Tonleitern, Intervalle und Akkorde', ['/fingering/index'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Online Metronom zum Üben', ['/tools/metronom'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Notenpapier zum Herunterladen und Ausdrucken', ['/tool/musicpaper'], ['class' => 'sitemap__link']) ?></li>
     </ul>
     <h2 class="sitemap__section"><?= Html::a('Katalog', ['/catalog/overview'], ['class' => 'sitemap__link']) ?></h2>

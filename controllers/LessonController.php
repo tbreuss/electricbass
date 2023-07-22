@@ -57,7 +57,7 @@ final class LessonController extends Controller
     }
 
     /**
-     * @phpstan-return array<int, array{"label": string, "url": string}>
+     * @phpstan-return array<int, array{"label": string, "url": string}|string>
      */
     protected function getBreadcrumbs(Lesson $model): array
     {
@@ -72,6 +72,7 @@ final class LessonController extends Controller
                 'url' => $parent->url
             ];
         }
+        $breadcrumbs[] = $model->menuTitle;
         return $breadcrumbs;
     }
 }

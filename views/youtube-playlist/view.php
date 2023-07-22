@@ -7,8 +7,12 @@
  * @var ?string $nextId
  */
 ?>
-
+ 
 <?php $this->title = $playlistItem['title'] . ' | ' . $playlist['title'] . ' | Videos' ?>
+<?php $this->params['breadcrumbs'][] = ['label' => 'Videos', 'url' => '/videos/']; ?>
+<?php $this->params['breadcrumbs'][] = ['label' => $playlist['title'], 'url' => '/videos/' . $playlist['segment']]; ?>
+<?php $this->params['breadcrumbs'][] = $playlistItem['title']; ?>
+
 <h1><?= $playlistItem['title'] ?></h1>
 
 <div class="ratio ratio--16x9">

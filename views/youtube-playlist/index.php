@@ -1,13 +1,20 @@
 <?php
+
 /**
  * @var yii\web\View $this
  * @var array $playlist
  * @var array $playlistItems
  */
+
+use yii\helpers\Url;
+
 ?>
 
 <?php $this->title = $playlist['title'] . ' | Videos'; ?>
 <?php $this->params['metaDescription'] = $playlist['description']; ?>
+<?php $this->params['breadcrumbs'][] = ['label' => 'Videos', 'url' => Url::previous('video')]; ?>
+<?php $this->params['breadcrumbs'][] = $playlist['title']; ?>
+
 <h1><?= $playlist['title'] ?></h1>
 
 <div class="widgetListSummary">

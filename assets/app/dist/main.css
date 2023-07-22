@@ -4660,6 +4660,10 @@ progress {
 }
 
 .container--content {
+  margin-top: 1.5rem;
+}
+
+.action-site-index .container--content {
   margin-top: 2.5rem;
 }
 

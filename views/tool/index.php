@@ -30,6 +30,15 @@ $this->params['breadcrumbs'][] = 'Tools';
         <hr>
         <div class="row">
             <div class="col-sm-12">
+                <h3 class="title"><?= Html::a('Online Metronom', ['/tools/metronom']) ?></h3>
+                <p>
+                Einfach bedienbares Online Metronom, das beim Üben eine Hilfe sein kann, um dein Timing, deine Rhythmik und deine musikalische Genauigkeit zu verbessern.
+                </p>
+            </div>
+        </div>
+        <hr>        
+        <div class="row">
+            <div class="col-sm-12">
                 <h3 class="title"><?= Html::a('Blanko Notenpapier zum Herunterladen und Ausdrucken', ['/tool/musicpaper']) ?></h3>
                 <p>
                     Schreibe deine eigenen Basslininen, Leadsheets, Musiknoten oder Charts mit dem Notenpapier von uns.

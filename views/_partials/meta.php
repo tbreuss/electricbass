@@ -4,6 +4,9 @@
         <?php
         $delim = '';
         foreach ($categories as $category) {
+            if (is_string($category)) {
+                continue;
+            }
             echo $delim;
             echo app\helpers\Html::a($category['label'], $category['url'], ['class' => 'meta__link']);
             $delim = ' &gt; ';

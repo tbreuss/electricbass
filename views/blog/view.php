@@ -18,10 +18,7 @@ use yii\helpers\Url;
 $this->title = $blog->title . ' | Blog';
 $this->params['pageTitle'] = $blog->pageTitle;
 $this->params['metaDescription'] = $blog->metaDescription;
-$this->params['breadcrumbs'][] = [
-    'label' => 'Blog',
-    'url' => Url::previous('blog')
-];
+$this->params['breadcrumbs'][] = ['label' => 'Bass Blog', 'url' => Url::previous('blog')];
 $this->params['breadcrumbs'][] = $blog->title;
 ?>
 
