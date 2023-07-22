@@ -1,0 +1,81 @@
+.fretboard {
+    margin-bottom: 1rem;
+}
+.fretboard__noteText {
+    font-weight: 600;
+}
+.fretboard--diatonic .fretboard__noteSymbol--0 {
+    fill: #ff0000;
+}
+.fretboard--diatonic .fretboard__noteSymbol--1 {
+    fill: #ff6600;
+}    
+.fretboard--diatonic .fretboard__noteSymbol--2 {
+    fill: #ff9900;
+}
+.fretboard--diatonic .fretboard__noteSymbol--3 {
+    fill: #FFCC00;
+}
+.fretboard--diatonic .fretboard__noteSymbol--4 {
+    fill: #ffff00;
+}
+.fretboard--diatonic .fretboard__noteSymbol--5 {
+    fill: #00aa00;
+}
+.fretboard--diatonic .fretboard__noteSymbol--6 {
+    fill: #007777;
+}
+.fretboard--diatonic .fretboard__noteSymbol--7 {
+    fill: #0099ff;
+}
+.fretboard--diatonic .fretboard__noteSymbol--8 {
+    fill: #6600cc;
+}    
+.fretboard--diatonic .fretboard__noteSymbol--9 {
+    fill: #660099;
+}
+.fretboard--diatonic .fretboard__noteSymbol--10 {
+    fill: #990088;
+}
+.fretboard--diatonic .fretboard__noteSymbol--11 {
+    fill: #CC00AA;
+}
+.fretboard--diatonic .fretboard__noteText--0 {
+    fill: #222222;
+}
+.fretboard--diatonic .fretboard__noteText--1 {
+    fill: #333333;
+}
+.fretboard--diatonic .fretboard__noteText--2 {
+    fill: #333333;
+}
+.fretboard--diatonic .fretboard__noteText--3 {
+    fill: #555555;
+}    
+.fretboard--diatonic .fretboard__noteText--4 {
+    fill: #333333;
+}
+.fretboard--diatonic .fretboard__noteText--5 {
+    fill: #ffffff;
+}
+.fretboard--diatonic .fretboard__noteText--6 {
+    fill: #ffffff;
+}    
+.fretboard--diatonic .fretboard__noteText--7 {
+    fill: #ffffff;
+}
+.fretboard--diatonic .fretboard__noteText--8 {
+    fill: #ffffff;
+}
+.fretboard--diatonic .fretboard__noteText--9 {
+    fill: #ffffff;
+}
+.fretboard--diatonic .fretboard__noteText--10 {
+    fill: #ffffff;
+}    
+.fretboard--diatonic .fretboard__noteText--11 {
+    fill: #ffffff;
+}
+.fretboard--diatonic .fretboard__fretNumber {
+    fill: #cccccc;
+}

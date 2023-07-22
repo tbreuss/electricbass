@@ -27,7 +27,8 @@
     "vlucas/phpdotenv": "^5.2",
     "mobiledetect/mobiledetectlib": "^2.8",
     "yiisoft/yii2-bootstrap": "^2.0",
-    "mtdowling/jmespath.php": "^2.6"
+    "mtdowling/jmespath.php": "^2.6",
+    "tebe/tonal": "@dev"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "^2.1",
@@ -82,6 +83,13 @@
     {
       "type": "composer",
       "url": "https://asset-packagist.org"
+    },
+    {
+      "type": "path",
+      "url": "./packages/tebe/tonal",
+      "options": {
+          "symlink": true
+      }
     }
   ]
 }
