@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Links
- * https://en.wikipedia.org/wiki/Interval_(music)
- * @var yii\web\View $this
- */
+use function tebe\tonal\core\transpose;
 
 ?>
 
@@ -192,8 +188,6 @@ const STRINGS = ['G', 'D', 'A', 'E', 'B'];
 <script>
     console.log(Tonal.Core.transpose("C4", "5P"));
 </script>
-
-<?php use function tebe\tonal\core\transpose; ?>
 
 <?= join(', ', array_map(fn($interval) => transpose("C", $interval), ['P1', 'M3', 'P5', 'M7', 'M9', 'P11', 'M13'])) ?><br>
 <?= join(', ', array_map(fn($interval) => transpose("G", $interval), ['P1', 'm3', 'P5', 'm7', 'M9', 'P11', 'M13'])) ?><br>
