@@ -52,7 +52,7 @@ $fretColor = '#888888';
 $noteColor = '#222222';
 $noteFingerColor = '#999999';
 $noteLabelColor = '#ffffff';
-$positionColor = '#dddddd';
+$positionColor = '#cccccc';
 $viewBoxBackgroundColor = '#f9f9f9';
 
 ?>
@@ -64,10 +64,10 @@ $viewBoxBackgroundColor = '#f9f9f9';
 
     <!-- position -->
     <?php if (!is_null($position)): ?>
-        <?php $x = ($position - 1) * $fretTotalWidth + $fretThickness / 2 ?>
-        <?php $y = 0 ?>
-        <?php $width = $positionWidth * $fretTotalWidth ?>
-        <?php $height = $totalHeight ?>
+        <?php $x = max($paddingLeft + $fretThickness, $paddingLeft + $fretThickness + ($position - ($positionStretched ? 2 : 1)) * $fretTotalWidth) ?>
+        <?php $y = $paddingTop ?>
+        <?php $width = ($positionStretched && $position === 1 ? $positionWidth - 1 : $positionWidth) * $fretTotalWidth - $fretThickness; //($positionWidth - (($position === 1 && $positionStretched) ? 1 : 0)) * $fretTotalWidth - $fretThickness ?>
+        <?php $height = $fretboardHeight ?>
         <rect class="fretboard__position" x="<?= $x ?>" y="<?= $y ?>" width="<?= $width ?>" height="<?= $height ?>" fill="<?= $positionColor ?>" />
     <?php endif; ?>
 

@@ -8,8 +8,92 @@ use function tebe\tonal\core\transpose;
 
 <?php
 const FRETS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-const STRINGS = ['G', 'D', 'A', 'E', 'B'];
+const STRINGS = [
+    #'C', 
+    'G', 
+    'D', 
+    'A', 
+    'E', 
+    #'B'
+];
 ?>
+
+<?php
+
+$root = 'B';
+$notesInStandardFormat = explode(' ', 'P1 M2 M3 A4 P5 M6 M7 P8');
+$stretched = false;
+$stretchedOffset = $stretched ? 1 : 0;
+
+$TUNING = new tebe\tonal\fretboard\Tuning(
+    'E-Bass',
+    [
+        //['C3', 'C'], 
+        ['G2', 'G'], 
+        ['D2', 'D'], 
+        ['A1', 'A'], 
+        ['E1', 'E'], 
+        //['B0', 'B']
+    ]
+);
+
+$notes = array_map(function ($interval) use ($root) {
+    $transposed = tebe\tonal\core\distance\transpose($root, $interval);
+    if (abs(tebe\tonal\note\get($transposed)->alt) > 1) { // @phpstan-ignore-line
+        return [tebe\tonal\note\simplify($transposed), $interval];
+    }
+    return [$transposed, $interval];
+}, $notesInStandardFormat);
+
+$lowest = tebe\tonal\fretboard\findLowestNote($TUNING, $root);
+
+$i = 1;
+foreach(range(1, 8) as $position) {
+
+    [$fretFrom, $fretTo] = tebe\tonal\fretboard\positionBound($position, $stretched);
+    $fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes, fretFrom: $fretFrom, fretTo: $fretTo);
+    
+    // remove fingerings until root tone
+    $firstRoot = null;
+    $lastRoot = null;
+    foreach ($fingerings as $index => $fingering) {
+        if ($fingering['note'] === $root || $fingering['pc'] === $root) {
+            if (is_null($firstRoot)) {
+                $firstRoot = $index;
+            }
+            $lastRoot = $index;
+        }
+    }
+
+    if (!is_null($firstRoot) && !is_null($lastRoot)) {
+        $fingerings = array_slice($fingerings, $firstRoot, $lastRoot - $firstRoot + 1);
+    }
+
+    $uniqueNotesCount = count(array_unique(array_column($fingerings, 'abs')));
+    if ($uniqueNotesCount % count($notes) <> 0) {
+        continue;
+    }
+
+    #echo"<pre>";print_r($notes);echo"</pre>";
+    #echo"<pre>";print_r($fingerings);echo"</pre>";
+
+    echo "<h2>$position. Lage (Variante $i)</h2>";
+    echo app\widgets\Fretboard::widget([
+        'position' => $position,
+        'positionStretched' => $stretched,
+        'strings' => STRINGS,
+        'frets' => FRETS,
+        'colors' => 'diatonic',
+        'notes' => array_map(fn($f) => $f['coord'], $fingerings),
+        'root' => $lowest
+    ]);
+
+    $i++;
+}
+
+return;
+?>
+
 
 <?= app\widgets\Fretboard::widget([
     'strings' => STRINGS,

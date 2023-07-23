@@ -9,6 +9,7 @@ use function tebe\tonal\note\enharmonic;
 
 const FRET_FROM = 0;
 const FRET_TO = 24;
+const POSITION_WIDTH = 4;
 
 function getNote(Tuning $tuning, string $fingering): array
 {
@@ -33,6 +34,9 @@ function getNote(Tuning $tuning, string $fingering): array
     return $note === $enharmonic ? [$note] : [$note, $enharmonic];
 }
 
+/**
+ * Find notes from lowest to highest
+ */
 function findNotes(Tuning $tuning, array $notes, ?int $fretFrom = null, ?int $fretTo = null, ?int $stringFrom = null, ?int $stringTo = null): array
 {
     $stringCount = count($tuning->strings);
@@ -69,7 +73,9 @@ function findNotes(Tuning $tuning, array $notes, ?int $fretFrom = null, ?int $fr
             $foundNotes[] = [
                 "coord" => $fretString,
                 "note" => $notes[$foundKey],
+                "pc" => preg_replace('/[0-9]/', '', $notes[$foundKey]),
                 "label" => $labels[$foundKey],
+                "abs" => coordToAbs($stringCount, $fretString)
             ];
         }
     }
@@ -87,6 +93,15 @@ function findLowestNote(Tuning $tuning, string $note): string
     return '';
 }
 
+function findHighestNote(Tuning $tuning, string $note): string
+{
+    foreach (array_reverse(notes($tuning)) as $fretString => $notesPerFretString) {
+        if (in_array($note, $notesPerFretString)) {
+            return $fretString;
+        }
+    }
+}
+
 function midi(Tuning $tuning, int $fretTo = FRET_TO): array
 {
     $notes = [];
@@ -100,6 +115,9 @@ function midi(Tuning $tuning, int $fretTo = FRET_TO): array
     return $notes;
 }
 
+/**
+ * All notes from lowest to highest
+ */
 function notes(Tuning $tuning, int $fretTo = FRET_TO): array
 {
     $notes = [];    
@@ -135,6 +153,20 @@ function notes(Tuning $tuning, int $fretTo = FRET_TO): array
 function bound(int $x, int $min, int $max): int
 {
      return min(max($x, $min), $max);
+}
+
+function positionBound(int $position, bool $stretched): array
+{
+    $width = $stretched ? POSITION_WIDTH + 2 : POSITION_WIDTH;
+    $fretFrom = $stretched ? $position - 1 : $position;
+    $fretTo = $fretFrom + $width - 1;
+    return [$position === 1 ? 0 : $fretFrom, $fretTo];
+}
+
+function coordToAbs(int $stringCount, string $coord): int
+{
+    [$fret, $string] = explode('/', $coord);
+    return ($stringCount - $string) * 5 + $fret;
 }
 
 function tuning(string $name, array $strings): Tuning
