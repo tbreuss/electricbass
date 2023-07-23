@@ -11,6 +11,7 @@
 // Setup
 $numberOfStrings = count($strings);
 $numberOfFrets = count($frets);
+$positionWidth = $positionStretched ? 6 : 4;
 
 // Layout
 $fretThickness = 5;
@@ -108,7 +109,7 @@ $viewBoxBackgroundColor = '#f9f9f9';
     <!-- notes -->
     <?php foreach ($notes as ['string' => $stringNumber, 'fret' => $fretNumber, 'label' => $noteLabel, 'hint' => $noteHint, 'chroma' => $chroma]): ?>
         <?php if (($fretIndex = array_search($fretNumber, $frets)) !== false): ?>
-            <?php $xNote = $paddingLeft + ((int)$fretIndex * (int)$fretTotalWidth) + ($fretThickness / 2) - ($noteWidth / 2) ?>
+            <?php $xNote = empty($fretIndex) ? 0 : $paddingLeft + ((int)$fretIndex * (int)$fretTotalWidth) - ($fretTotalWidth / 2) + ($fretThickness / 2) - ($noteWidth / 2) ?>
             <?php $yNote = $paddingTop + (($stringNumber - 1) * $stringTotalHeight) + ($stringThickness / 2) - ($stringSpacing / 2) ?>
             <?php $xNoteFinger = $xNote  + $noteFingerXOffset ?>
             <?php $yNoteFinger = $yNote + $noteFingerYOffset ?>
