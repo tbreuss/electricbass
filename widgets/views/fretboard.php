@@ -6,6 +6,8 @@
  * @var array $notes
  * @var array $strings
  * @var array $frets
+ * @var ?int $position
+ * @var bool $positionStretched
  */
 
 // Setup
@@ -58,6 +60,15 @@ $viewBoxBackgroundColor = '#f9f9f9';
 
     <!-- board -->
     <rect class="fretboard__board" x="<?= $paddingLeft ?>" y="<?= $paddingTop ?>" width="<?= $fretboardWidth ?>" height="<?= $fretboardHeight ?>" fill="<?= $fretboardColor ?>" />
+
+    <!-- position -->
+    <?php if (!is_null($position)): ?>
+        <?php $x = ($position - 1) * $fretTotalWidth + $fretThickness / 2 ?>
+        <?php $y = 0 ?>
+        <?php $width = $positionWidth * $fretTotalWidth ?>
+        <?php $height = $totalHeight ?>
+        <rect class="fretboard__position" x="<?= $x ?>" y="<?= $y ?>" width="<?= $width ?>" height="<?= $height ?>" fill="<?= $positionColor ?>" />
+    <?php endif; ?>
 
     <!-- dots -->
     <?php if (!empty($config['showDots'])): ?>
