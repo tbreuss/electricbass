@@ -52,6 +52,7 @@ $fretColor = '#888888';
 $noteColor = '#222222';
 $noteFingerColor = '#999999';
 $noteLabelColor = '#ffffff';
+$positionColor = '#dddddd';
 $viewBoxBackgroundColor = '#f9f9f9';
 
 ?>
