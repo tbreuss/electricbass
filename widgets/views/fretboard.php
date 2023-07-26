@@ -7,13 +7,12 @@
  * @var array $strings
  * @var array $frets
  * @var ?int $position
- * @var bool $positionStretched
+ * @var int $expandPosition
  */
 
 // Setup
 $numberOfStrings = count($strings);
 $numberOfFrets = count($frets);
-$positionWidth = $positionStretched ? 6 : 4;
 
 // Layout
 $fretThickness = 5;
@@ -64,9 +63,10 @@ $viewBoxBackgroundColor = '#f9f9f9';
 
     <!-- position -->
     <?php if (!is_null($position)): ?>
-        <?php $x = max($paddingLeft + $fretThickness, $paddingLeft + $fretThickness + ($position - ($positionStretched ? 2 : 1)) * $fretTotalWidth) ?>
+        <?php [$positionFretFrom, $positionFretTo] = tebe\tonal\fretboard\positionBound($position, $expandPosition); ?>
+        <?php $x = max($paddingLeft + $fretThickness, $paddingLeft + $fretThickness + ($positionFretFrom - 1) * $fretTotalWidth) ?>
         <?php $y = $paddingTop ?>
-        <?php $width = ($positionStretched && $position === 1 ? $positionWidth - 1 : $positionWidth) * $fretTotalWidth - $fretThickness; //($positionWidth - (($position === 1 && $positionStretched) ? 1 : 0)) * $fretTotalWidth - $fretThickness ?>
+        <?php $width = ($positionFretTo - $positionFretFrom + ($positionFretFrom === 0 ? 0 : 1)) * $fretTotalWidth - $fretThickness; //($positionWidth - (($position === 1 && $positionStretched) ? 1 : 0)) * $fretTotalWidth - $fretThickness ?>
         <?php $height = $fretboardHeight ?>
         <rect class="fretboard__position" x="<?= $x ?>" y="<?= $y ?>" width="<?= $width ?>" height="<?= $height ?>" fill="<?= $positionColor ?>" />
     <?php endif; ?>

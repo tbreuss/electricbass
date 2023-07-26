@@ -16,7 +16,7 @@ final class Fretboard extends Widget
     public array $frets = []; // @phpstan-ignore-line
     public ?string $root = null;
     public ?int $position = null;
-    public bool $positionStretched = false;
+    public bool $expandPosition = false;
 
     public function init(): void
     {
@@ -54,7 +54,7 @@ final class Fretboard extends Widget
             'frets' => $this->frets,
             'strings' => $this->strings,
             'position' => $this->position,
-            'positionStretched' => $this->positionStretched,
+            'expandPosition' => $this->expandPosition,
         ]);
 
         /*

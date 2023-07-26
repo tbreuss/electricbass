@@ -5,7 +5,6 @@
  * @var app\models\Fingering $model
  */
 
-use app\components\Fingerboard;
 use app\helpers\Html;
 use app\widgets\Comments;
 use app\widgets\Hits;
@@ -13,10 +12,40 @@ use app\widgets\Rating;
 use app\widgets\SocialBar;
 use yii\helpers\Markdown;
 
+use const tebe\tonal\fretboard\EXPAND_NO;
+use const tebe\tonal\fretboard\EXPAND_HIGHER;
+
 $this->title = $model->title . ' | Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
 $this->params['breadcrumbs'][] = $model->title;
+
+/**
+ * @return string[][]
+ */
+function getOpenStringDefinitions(): array
+{
+    $openStrings = [];
+    $openStrings['C'] = ['F' => '', 'N' => 'C3', 'S' => ''];
+    $openStrings['G'] = ['F' => '', 'N' => 'G2', 'S' => ''];
+    $openStrings['D'] = ['F' => '', 'N' => 'D2', 'S' => ''];
+    $openStrings['A'] = ['F' => '', 'N' => 'A1', 'S' => ''];
+    $openStrings['E'] = ['F' => '', 'N' => 'E1', 'S' => ''];
+    $openStrings['B'] = ['F' => '', 'N' => 'B0', 'S' => ''];
+    return $openStrings;
+}
+
+function replaceStringDef(int $strings, string $note): string
+{
+    if ($strings == 6) {
+        return str_replace(['B', 'E', 'A', 'D', 'G', 'C'], range(6, 1), $note);
+    }
+    if ($strings == 5) {
+        return str_replace(['B', 'E', 'A', 'D', 'G'], range(5, 1), $note);
+    }
+    return str_replace(['E', 'A', 'D', 'G'], range(4, 1), $note);
+}
+
 ?>
 
 <div class="content">
@@ -38,14 +67,14 @@ $this->params['breadcrumbs'][] = $model->title;
     <form class="fretboardForm" action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="get">
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormRoot">Grundton</label>
-            <?php $roots = Fingerboard::getRoots() ?>
+            <?php $roots = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F'] ?>
             <?php echo Html::dropDownList('root', $root, array_combine($roots, $roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
         </div>
-        <div class="fretboardForm__column">
+        <?php /*<div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormPosition">Position</label>
-        <?php $positions = Fingerboard::getPositions() ?>
+        <?php $positions = range(1, 8) ?>
         <?php echo Html::dropDownList('position', $position, array_combine($positions, $positions), ['id' => 'fretboardFormPosition', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
-        </div>
+        </div>*/ ?>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormStrings">Saiten</label>
             <?php echo Html::dropDownList('strings', $strings, ['4' => '4','5' => '5','6' => '6'], ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
@@ -73,12 +102,9 @@ $this->params['breadcrumbs'][] = $model->title;
         }
     </style>
 
-    <?php $fb = new Fingerboard($strings, $root, $model->notes, $position); ?>
-    <?php #echo $fb->getFingerboard(Yii::getAlias('@web') . '/img/fingerboard/') ?>
-
     <?php
 
-    $FRETBOARD_STRINGS = array_keys($fb->getOpenStringDefinitions());
+    $FRETBOARD_STRINGS = array_keys(getOpenStringDefinitions());
     $TUNING = new tebe\tonal\fretboard\Tuning(
         'E-Bass',
         [['C3', 'C'], ['G2', 'G'], ['D2', 'D'], ['A1', 'A'], ['E1', 'E'], ['B0', 'B']]
@@ -110,6 +136,9 @@ $this->params['breadcrumbs'][] = $model->title;
         }
         return [$transposed, $interval];
     }, $notesInStandardFormat);
+
+    $fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes);
+    $lowest = tebe\tonal\fretboard\findLowestNote($TUNING, $root);
 
     ?>
 
@@ -154,58 +183,31 @@ $this->params['breadcrumbs'][] = $model->title;
 
     <?php
 
-    function replaceStringDef(int $strings, string $note): string
-    {
-        if ($strings == 6) {
-            return str_replace(['B', 'E', 'A', 'D', 'G', 'C'], range(6, 1), $note);
+    $expandPosition = EXPAND_NO;
+
+    foreach (range(1, 8) as $pos) {
+        $possibilities = \tebe\tonal\fretboard\get_all_possibilities($notes, $fingerings, $pos, $expandPosition);
+        if (!empty($possibilities)) {
+            echo "<div>$pos. Lage</div>";
+            foreach ($possibilities as $i => $result) {
+                echo app\widgets\Fretboard::widget([
+                    'position' => $pos,
+                    'expandPosition' => $expandPosition,
+                    'strings' => $FRETBOARD_STRINGS,
+                    'frets' => $FRETBOARD_FRETS,
+                    'colors' => 'diatonic',
+                    'notes' => array_map(fn($f) => $f['coord'] . '-' . $f['pc'], $result),
+                    'root' => $lowest
+                ]);
+            }
         }
-        if ($strings == 5) {
-            return str_replace(['B', 'E', 'A', 'D', 'G'], range(5, 1), $note);
-        }
-        return str_replace(['E', 'A', 'D', 'G'], range(4, 1), $note);
     }
 
-    $fbResults = $fb->getResults();
-    ?>
-
-    <?php if (count($fbResults) == 0 || empty($fbResults[0])): ?>        
-        <p>Kein Fingersatz in der <?= $position ?>. Lage für einen E-Bass mit <?= $strings ?> Saiten gefunden.</p>
-    <?php else: ?>
-        <p>Auf einem <?= $strings ?>-saitigen E-Bass gibt es in der <?= $position ?>. Lage das folgende Griffbild:</p>
-    <?php endif; ?>
-
-    <?php
-
-    foreach ($fbResults as $index => $results) {
-        if (empty($results)) {
-            continue;
-        }
-        $fingerings = [];
-        foreach ($results as $res) {
-            $fingerings[] = $res['fret']
-            . '/'
-            . replaceStringDef($strings, $res['string'])
-            . '-'
-            . preg_replace('/[0-9]/', '', $res['absolut']);
-        }
-
-        if ($index > 0 && $index < 2) {
-            echo "<p>Weitere mögliche Fingersätze oder Griffbilder sind:</p>";
-        }
-
-        echo app\widgets\Fretboard::widget([
-            'strings' => $FRETBOARD_STRINGS,
-            'frets' => $FRETBOARD_FRETS,
-            'colors' => 'diatonic',
-            'notes' => $fingerings,
-            'root' => $rootFingering
-        ]);
-    }
     ?>
 
     <?php /** FRETBOARD */ ?>
 
-    <p>Griffbrett mit allen Noten bis zum zwölften Bund:</p>
+    <p>Alle Noten auf dem Griffbrett bis zum zwölften Bund:</p>
 
     <?php
 
@@ -221,7 +223,7 @@ $this->params['breadcrumbs'][] = $model->title;
 
     ?>
 
-    <p>Griffbrett mit allen Intervallen bis zum zwölften Bund:</p>
+    <p>Alle Noten in der Intervallschrift bis zum zwölften Bund:</p>
 
     <?php
     echo app\widgets\Fretboard::widget([
@@ -234,7 +236,7 @@ $this->params['breadcrumbs'][] = $model->title;
 
     ?>
 
-    <p>Griffbrett mit allen Intervallen in alternativer Schreibweise bis zum zwölften Bund:</p>
+    <p>Allen Noten in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
 
     <?php
     echo app\widgets\Fretboard::widget([

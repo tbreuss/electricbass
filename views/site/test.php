@@ -2,38 +2,77 @@
 
 use function tebe\tonal\core\transpose;
 
-?>
+use const tebe\tonal\fretboard\EXPAND_HIGHER;
+use const tebe\tonal\fretboard\EXPAND_LOWER;
+use const tebe\tonal\fretboard\EXPAND_NO;
 
+echo 'EXPAND_NO<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(1, EXPAND_NO);
+echo 'Pos: 1 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(2, EXPAND_NO);
+echo 'Pos: 2 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(3, EXPAND_NO);
+echo 'Pos: 3 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(4, EXPAND_NO);
+echo 'Pos: 4 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(5, EXPAND_NO);
+echo 'Pos: 5 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(6, EXPAND_NO);
+echo 'Pos: 6 - From: ', $from, ' - To: ', $to, '<br>';
+echo '---', '<br>';
+echo 'EXPAND_LOWER<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(1, EXPAND_LOWER);
+echo 'Pos: 1 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(2, EXPAND_LOWER);
+echo 'Pos: 2 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(3, EXPAND_LOWER);
+echo 'Pos: 3 - From: ', $from, ' - To: ', $to, '<br>';
+echo '---', '<br>';
+echo 'EXPAND_HIGHER<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(1, EXPAND_HIGHER);
+echo 'Pos: 1 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(2, EXPAND_HIGHER);
+echo 'Pos: 2 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(3, EXPAND_HIGHER);
+echo 'Pos: 3 - From: ', $from, ' - To: ', $to, '<br>';
+echo '---', '<br>';
+echo 'EXPAND_LOWER|EXPAND_HIGHER<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(1, EXPAND_LOWER | EXPAND_HIGHER);
+echo 'Pos: 1 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(2, EXPAND_LOWER | EXPAND_HIGHER);
+echo 'Pos: 2 - From: ', $from, ' - To: ', $to, '<br>';
+[$from, $to] = tebe\tonal\fretboard\positionBound(3, EXPAND_LOWER | EXPAND_HIGHER);
+echo 'Pos: 3 - From: ', $from, ' - To: ', $to, '<br>';
+?>
 <h2>Form (Default-Farben)</h2>
 
 <?php
 const FRETS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const STRINGS = [
-    #'C', 
-    'G', 
-    'D', 
-    'A', 
-    'E', 
-    #'B'
+    'C',
+    'G',
+    'D',
+    'A',
+    'E',
+    'B'
 ];
 ?>
 
 <?php
 
-$root = 'B';
-$notesInStandardFormat = explode(' ', 'P1 M2 M3 A4 P5 M6 M7 P8');
-$stretched = false;
-$stretchedOffset = $stretched ? 1 : 0;
+$root = 'E';
+$notesInStandardFormat = explode(' ', 'P1 M2 M3 P4 P5 M6 M7 P8');
+$expandPosition = tebe\tonal\fretboard\EXPAND_HIGHER;
 
 $TUNING = new tebe\tonal\fretboard\Tuning(
     'E-Bass',
     [
-        //['C3', 'C'], 
-        ['G2', 'G'], 
-        ['D2', 'D'], 
-        ['A1', 'A'], 
-        ['E1', 'E'], 
-        //['B0', 'B']
+        ['C3', 'C'],
+        ['G2', 'G'],
+        ['D2', 'D'],
+        ['A1', 'A'],
+        ['E1', 'E'],
+        ['B0', 'B']
     ]
 );
 
@@ -44,56 +83,40 @@ $notes = array_map(function ($interval) use ($root) {
     }
     return [$transposed, $interval];
 }, $notesInStandardFormat);
+$lowestNote = reset($notes)[0];
+$highestNote = end($notes)[0];
 
 $lowest = tebe\tonal\fretboard\findLowestNote($TUNING, $root);
 
-$i = 1;
-foreach(range(1, 8) as $position) {
+$fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes);
 
-    [$fretFrom, $fretTo] = tebe\tonal\fretboard\positionBound($position, $stretched);
-    $fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes, fretFrom: $fretFrom, fretTo: $fretTo);
-    
-    // remove fingerings until root tone
-    $firstRoot = null;
-    $lastRoot = null;
-    foreach ($fingerings as $index => $fingering) {
-        if ($fingering['note'] === $root || $fingering['pc'] === $root) {
-            if (is_null($firstRoot)) {
-                $firstRoot = $index;
-            }
-            $lastRoot = $index;
-        }
+echo "<h2>Alle Noten</h2>";
+echo app\widgets\Fretboard::widget([
+    'strings' => STRINGS,
+    'frets' => FRETS,
+    'colors' => 'diatonic',
+    'notes' => array_map(fn($f) => $f['coord'] . '-' . $f['note'], $fingerings),
+    'root' => $lowest
+]);
+
+foreach (range(1, 8) as $position) {
+    $possibilities = \tebe\tonal\fretboard\get_all_possibilities($notes, $fingerings, $position, $expandPosition);
+    echo "<h2>$position. Lage</h2>";
+
+    foreach ($possibilities as $i => $result) {
+        echo app\widgets\Fretboard::widget([
+            'position' => $position,
+            'expandPosition' => $expandPosition,
+            'strings' => STRINGS,
+            'frets' => FRETS,
+            'colors' => 'diatonic',
+            'notes' => array_map(fn($f) => $f['coord'] . '-' . $f['pc'], $result),
+            'root' => $lowest
+        ]);
     }
-
-    if (!is_null($firstRoot) && !is_null($lastRoot)) {
-        $fingerings = array_slice($fingerings, $firstRoot, $lastRoot - $firstRoot + 1);
-    }
-
-    $uniqueNotesCount = count(array_unique(array_column($fingerings, 'abs')));
-    if ($uniqueNotesCount % count($notes) <> 0) {
-        continue;
-    }
-
-    #echo"<pre>";print_r($notes);echo"</pre>";
-    #echo"<pre>";print_r($fingerings);echo"</pre>";
-
-    echo "<h2>$position. Lage (Variante $i)</h2>";
-    echo app\widgets\Fretboard::widget([
-        'position' => $position,
-        'positionStretched' => $stretched,
-        'strings' => STRINGS,
-        'frets' => FRETS,
-        'colors' => 'diatonic',
-        'notes' => array_map(fn($f) => $f['coord'], $fingerings),
-        'root' => $lowest
-    ]);
-
-    $i++;
 }
 
-return;
 ?>
-
 
 <?= app\widgets\Fretboard::widget([
     'strings' => STRINGS,
