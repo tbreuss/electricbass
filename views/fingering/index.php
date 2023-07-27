@@ -27,23 +27,19 @@ $this->params['breadcrumbs'][] = 'Fingersätze';
             <h3 id="<?= $subCategory ?>"><?= Yii::t('app', ucfirst((string)$mainCategory) . ' ' . $subCategory . ' Töne') ?></h3>
             <?php endif; ?>
             <table class="table">
-                <tr>
+                <colgroup>
+                    <col style="width:50%" />
+                    <col style="width:50%" />
+                </colgroup>
+                <!--tr>
                     <td style="width:55%">Name</td>
                     <td style="width:40%">Intervalle</td>
                     <td style="width:5%">Töne</td>
-                </tr>
+                </tr-->
                 <?php foreach ($modelGrouped2 as $model): ?>
-                    <?php /*if ($category != $model->category): ?>
-                        <?php if (!empty($category)) {
-                            echo "</ul>";
-                        } ?>
-                        <?php $category = $model->category ?>
-                        <ul>
-                    <?php endif;*/ ?>
                     <tr>
                         <td><?= Html::a($model['title'], $model['url']) ?></td>
                         <td><?= join(' ', $model['notesStandardFormat']) ?></td>
-                        <td><?= $model['noteCount'] ?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>

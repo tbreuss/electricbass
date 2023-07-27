@@ -29,7 +29,7 @@ $noteRadius = $noteHeight / 4;
 $noteWidth = $noteHeight * 1.12;
 $noteFingerXOffset = $noteWidth + ($stringSpacing / 10);
 $noteFingerYOffset = $noteHeight + ($stringSpacing / 10);
-$paddingTop = $noteHeight;
+$paddingTop = isset($position) ? $noteHeight * 1.6 : $noteHeight;
 $paddingRight = $noteWidth;
 $paddingBottom = $noteHeight * 1.2;
 $paddingLeft = $noteWidth * 1.2;
@@ -43,6 +43,7 @@ $noteLabelSize = $noteHeight * 0.72;
 $fretNumberSize = 13;
 $noteFingerSize = $stringSpacing / 2;
 $stringFontSize = 20;
+$positionFontSize = 20;
 
 // Colors
 $dotColor = '#bbbbbb';
@@ -52,6 +53,7 @@ $noteColor = '#222222';
 $noteFingerColor = '#999999';
 $noteLabelColor = '#ffffff';
 $positionColor = '#cccccc';
+$positionFontColor = '#888888';
 $viewBoxBackgroundColor = '#f9f9f9';
 
 ?>
@@ -69,6 +71,7 @@ $viewBoxBackgroundColor = '#f9f9f9';
         <?php $width = ($positionFretTo - $positionFretFrom + ($positionFretFrom === 0 ? 0 : 1)) * $fretTotalWidth - $fretThickness; //($positionWidth - (($position === 1 && $positionStretched) ? 1 : 0)) * $fretTotalWidth - $fretThickness ?>
         <?php $height = $fretboardHeight ?>
         <rect class="fretboard__position" x="<?= $x ?>" y="<?= $y ?>" width="<?= $width ?>" height="<?= $height ?>" fill="<?= $positionColor ?>" />
+        <text dominant-baseline="hanging" class="fretboard__positionText" x="<?= $x ?>" y="8" fill="<?= $positionFontColor ?>" font-size="<?= $positionFontSize ?>"><?= (new NumberFormatter('@numbers=roman', NumberFormatter::DECIMAL))->format($position) ?>. Lage</text>
     <?php endif; ?>
 
     <!-- dots -->

@@ -55,8 +55,8 @@ function replaceStringDef(int $strings, string $note): string
     <?php
 
     $root = isset($_GET['root']) ? $_GET['root'] : $model->root;
-    $position = isset($_GET['position']) ? $_GET['position'] : $model->position;
     $strings = isset($_GET['strings']) ? $_GET['strings'] : $model->strings;
+    $expand = isset($_GET['expand']) ? $_GET['expand'] : 0;
 
     ?>
 
@@ -70,14 +70,13 @@ function replaceStringDef(int $strings, string $note): string
             <?php $roots = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F'] ?>
             <?php echo Html::dropDownList('root', $root, array_combine($roots, $roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
         </div>
-        <?php /*<div class="fretboardForm__column">
-            <label class="fretboardForm__label" for="fretboardFormPosition">Position</label>
-        <?php $positions = range(1, 8) ?>
-        <?php echo Html::dropDownList('position', $position, array_combine($positions, $positions), ['id' => 'fretboardFormPosition', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
-        </div>*/ ?>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormStrings">Saiten</label>
             <?php echo Html::dropDownList('strings', $strings, ['4' => '4','5' => '5','6' => '6'], ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
+        </div>
+        <div class="fretboardForm__column">
+            <label class="fretboardForm__label" for="fretboardFormExpand">Gestreckte Lage</label>
+            <?php echo Html::dropDownList('expand', $expand, ['0' => 'Nein', '1' => 'Ja'], ['id' => 'fretboardFormExpand', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
         </div>
     </form>
     <style>
@@ -181,16 +180,30 @@ function replaceStringDef(int $strings, string $note): string
     </table>
     </div>
 
+
+    
     <?php
 
-    $expandPosition = EXPAND_NO;
-
+    $allPossibilitites = [];
+    $expandPosition = $expand;
     foreach (range(1, 8) as $pos) {
         $possibilities = \tebe\tonal\fretboard\get_all_possibilities($notes, $fingerings, $pos, $expandPosition);
         if (!empty($possibilities)) {
-            echo "<div>$pos. Lage</div>";
-            foreach ($possibilities as $i => $result) {
-                echo app\widgets\Fretboard::widget([
+            $allPossibilitites[$pos] = $possibilities;
+        }
+    }
+    ?>
+
+    <?php if (count($allPossibilitites) == 0): ?>
+        <p>
+            Für <?= $model->categoryAsAccusative() ?> auf dem <?= $strings ?>-saitigen E-Bass wurde kein Fingersatz gefunden.
+            Probiere es mit der <a href="?root=<?= $root ?>&strings=<?= $strings ?>&expand=1">gestreckten Lage</a>.
+        </p>
+    <?php else: ?>
+        <p>Für <?= $model->categoryAsAccusative() ?> gibt es auf dem <?= $strings ?>-saitigen E-Bass Griffbilder in den folgenden Lagen.</p>
+        <?php foreach ($allPossibilitites as $pos => $possibilitiesPerPosition): ?>
+            <?php foreach ($possibilitiesPerPosition as $result): ?>
+                <?= app\widgets\Fretboard::widget([
                     'position' => $pos,
                     'expandPosition' => $expandPosition,
                     'strings' => $FRETBOARD_STRINGS,
@@ -198,16 +211,16 @@ function replaceStringDef(int $strings, string $note): string
                     'colors' => 'diatonic',
                     'notes' => array_map(fn($f) => $f['coord'] . '-' . $f['pc'], $result),
                     'root' => $lowest
-                ]);
-            }
-        }
-    }
-
-    ?>
+                ]); ?>
+            <?php endforeach; ?>
+        <?php endforeach; ?>        
+    <?php endif; ?>
 
     <?php /** FRETBOARD */ ?>
 
-    <p>Alle Noten auf dem Griffbrett bis zum zwölften Bund:</p>
+    <?php $categoryAsGenitiv = $model->categoryAsGenitive() ?>
+
+    <p>Alle Noten <?= $categoryAsGenitiv ?> auf dem Griffbrett bis zum zwölften Bund:</p>
 
     <?php
 
@@ -223,7 +236,7 @@ function replaceStringDef(int $strings, string $note): string
 
     ?>
 
-    <p>Alle Noten in der Intervallschrift bis zum zwölften Bund:</p>
+    <p>Alle Noten <?= $categoryAsGenitiv ?> in der Intervallschrift bis zum zwölften Bund:</p>
 
     <?php
     echo app\widgets\Fretboard::widget([
@@ -236,7 +249,7 @@ function replaceStringDef(int $strings, string $note): string
 
     ?>
 
-    <p>Allen Noten in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
+    <p>Allen Noten <?= $categoryAsGenitiv ?> in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
 
     <?php
     echo app\widgets\Fretboard::widget([

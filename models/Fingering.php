@@ -66,4 +66,24 @@ final class Fingering extends ActiveRecord
         $replace = ['R', 'R',  'b', '',  'd', '',  'a'];
         return str_replace($search, $replace, $note);
     }
+
+    public function categoryAsGenitive(): string
+    {
+        $genitivs = [
+            'intervall' => 'des Intervalls',
+            'akkord' => 'des Akkords',
+            'tonleiter' => 'der Tonleiter',
+        ];
+        return $genitivs[$this->category];
+    }
+
+    public function categoryAsAccusative(): string
+    {
+        $genitivs = [
+            'intervall' => 'den Intervall',
+            'akkord' => 'den Akkord',
+            'tonleiter' => 'die Tonleiter',
+        ];
+        return $genitivs[$this->category];
+    }
 }
