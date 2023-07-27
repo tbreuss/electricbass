@@ -63,7 +63,27 @@ final class Fingering extends ActiveRecord
     public static function convertNotesToOldFormat(string $note): string
     {
         $search = ['P1', 'P8', 'm', 'M', 'd', 'P', 'A'];
-        $replace = ['R', 'R',  'b', '',  'd', '',  'a'];
+        $replace = ['1', '8',  'b', '',  'd', '',  '#'];
         return str_replace($search, $replace, $note);
+    }
+
+    public function categoryAsGenitive(): string
+    {
+        $genitivs = [
+            'intervall' => 'des Intervalls',
+            'akkord' => 'des Akkords',
+            'tonleiter' => 'der Tonleiter',
+        ];
+        return $genitivs[$this->category];
+    }
+
+    public function categoryAsAccusative(): string
+    {
+        $genitivs = [
+            'intervall' => 'dieses Intervall',
+            'akkord' => 'diesen Akkord',
+            'tonleiter' => 'diese Tonleiter',
+        ];
+        return $genitivs[$this->category];
     }
 }
