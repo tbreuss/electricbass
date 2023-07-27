@@ -64,7 +64,6 @@ final class FingeringController extends Controller
             }, []);
         }
 
-        $this->layout = 'empty';
         return $this->render('index', [
             'models' => $modelsGroupedByCategory
         ]);

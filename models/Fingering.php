@@ -80,9 +80,9 @@ final class Fingering extends ActiveRecord
     public function categoryAsAccusative(): string
     {
         $genitivs = [
-            'intervall' => 'den Intervall',
-            'akkord' => 'den Akkord',
-            'tonleiter' => 'die Tonleiter',
+            'intervall' => 'dieses Intervall',
+            'akkord' => 'diesen Akkord',
+            'tonleiter' => 'diese Tonleiter',
         ];
         return $genitivs[$this->category];
     }
