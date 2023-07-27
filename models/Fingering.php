@@ -63,7 +63,7 @@ final class Fingering extends ActiveRecord
     public static function convertNotesToOldFormat(string $note): string
     {
         $search = ['P1', 'P8', 'm', 'M', 'd', 'P', 'A'];
-        $replace = ['R', 'R',  'b', '',  'd', '',  '#'];
+        $replace = ['1', '8',  'b', '',  'd', '',  '#'];
         return str_replace($search, $replace, $note);
     }
 
