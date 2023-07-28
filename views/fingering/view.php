@@ -299,9 +299,9 @@ function replaceStringDef(int $strings, string $note): string
 
     <?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
 
-</div>
+    <?= Comments::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
-<?= Comments::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
+</div>
 
 <?= Hits::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
