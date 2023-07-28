@@ -212,6 +212,7 @@ if (!empty($this->params['metaDescription'])) {
                 </form>
             </div>
         </div>
+        <?php if (Yii::$app->controller->id === 'site' && Yii::$app->controller->action->id === 'index'): ?>
         <div class="row">
             <div class="col-md-12">
                 <hr class="footer__hr">
@@ -259,6 +260,7 @@ if (!empty($this->params['metaDescription'])) {
                 </div>
             </div>
         </div>
+        <?php endif; ?>
         <div class="row">
             <div class="col-md-12">
                 <hr class="footer__hr">
