@@ -6,6 +6,7 @@
  */
 
 use app\helpers\Html;
+use app\helpers\Url;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Rating;
@@ -48,7 +49,7 @@ function replaceStringDef(int $strings, string $note): string
 
 ?>
 
-<div class="content">
+<div class="content col-12 col-lg-12 col-xl-11 col-xxl-10">
 
     <h1><?= $model->title ?></h1>
 
@@ -196,11 +197,11 @@ function replaceStringDef(int $strings, string $note): string
 
     <?php if (count($allPossibilitites) == 0): ?>
         <p>
-            Für <?= $model->categoryAsAccusative() ?> auf dem <?= $strings ?>-saitigen E-Bass wurde kein Fingersatz gefunden.
+            Für <?= $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> auf dem <?= $strings ?>-saitigen E-Bass wurde kein Fingersatz gefunden.
             Probiere es mit der <a href="?root=<?= $root ?>&strings=<?= $strings ?>&expand=1">gestreckten Lage</a>.
         </p>
     <?php else: ?>
-        <p>Für <?= $model->categoryAsAccusative() ?> gibt es auf dem <?= $strings ?>-saitigen E-Bass Griffbilder in den folgenden Lagen.</p>
+        <p>Für <?= $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> gibt es auf dem <?= $strings ?>-saitigen E-Bass Griffbilder in den folgenden Lagen.</p>
         <?php foreach ($allPossibilitites as $pos => $possibilitiesPerPosition): ?>
             <?php foreach ($possibilitiesPerPosition as $result): ?>
                 <?= app\widgets\Fretboard::widget([
@@ -249,7 +250,7 @@ function replaceStringDef(int $strings, string $note): string
 
     ?>
 
-    <p>Allen Noten <?= $categoryAsGenitiv ?> in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
+    <p>Alle Noten <?= $categoryAsGenitiv ?> in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
 
     <?php
     echo app\widgets\Fretboard::widget([
@@ -307,16 +308,17 @@ function replaceStringDef(int $strings, string $note): string
 <?php if (!empty($similars)): ?>
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
-        <h3 class="sidebarWidget__title">Ähnliche Fingersätze</h3>
+        <h3 class="sidebarWidget__title">Fingersätze</h3>
         <ul class="sidebarWidget__list">
-            <?php foreach ($similars as $model): ?>
             <li class="sidebarWidget__item">
-                <a class="sidebarWidget__link" href="<?= $model->url ?>">
-                    <strong><?= $model->title ?></strong><br>
-                    <span class="text-muted"><?= join(', ', $model->getTagsAsArray(['Bass-Griff'])) ?></span>
-                </a>
+                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#intervall">Intervalle</a>
             </li>
-            <?php endforeach; ?>
+            <li class="sidebarWidget__item">
+                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#akkord">Akkorde & Arpeggios</a>
+            </li>
+            <li class="sidebarWidget__item">
+                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#tonleiter">Tonleitern</a>
+            </li>
         </ul>
     </div>
     <?php $this->endBlock() ?>

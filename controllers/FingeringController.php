@@ -9,6 +9,8 @@ use yii\web\NotFoundHttpException;
 
 final class FingeringController extends Controller
 {
+    public $layout = 'empty';
+
     /**
      * @phpstan-return array<array>
      */

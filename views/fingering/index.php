@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Fingersätze';
 ?>
 
-<div class="content">
+<div class="content col-12 col-lg-12 col-xl-11 col-xxl-10">
 
     <h1>Fingersätze für E-Bass</h1>
 

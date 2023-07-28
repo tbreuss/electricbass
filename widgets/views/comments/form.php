@@ -10,13 +10,13 @@ use app\helpers\Html;
 <div class="comments__form">
 
     <?php if (Yii::$app->session->hasFlash('comment/error')): ?>
-        <div class="flash flash--danger">
+        <div class="flash flash--danger col-12 col-sm-8">
             <?= Yii::$app->session->getFlash('comment/error') ?>
         </div>
     <?php endif; ?>
 
     <?php if (Yii::$app->session->hasFlash('comment/success')): ?>
-        <div class="flash flash--success">
+        <div class="flash flash--success col-12 col-sm-8">
             <?= Yii::$app->session->getFlash('comment/success') ?>
         </div>
     <?php endif; ?>
@@ -30,7 +30,7 @@ use app\helpers\Html;
     <?= Html::beginForm('#form', 'post', ['id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
 
     <div class="row">
-        <div class="col-12 form__row">
+        <div class="col-12 col-sm-8 form__row">
             <?php $errorClass = $model->hasErrors('text') ? 'is-invalid' : ''; ?>
             <?= Html::label($model->getAttributeLabel('text'), 'text', ['class' => 'form__label']); ?>
             <?= Html::textarea('Comment[text]', $model->text, ['rows' => 6, 'class' => 'form__textarea form-control ' . $errorClass]); ?>
@@ -45,7 +45,7 @@ use app\helpers\Html;
             <?= Html::error($model, 'name', ['class' => 'invalid-feedback']); ?>
         </div>
 
-        <div class="col-12 form__row">
+        <div class="col-12 col-sm-8 form__row">
             <?php $errorClass = $model->hasErrors('check') ? 'is-invalid' : ''; ?>
             <div class="form__checkboxWrapper">
                 <?= Html::checkbox('Comment[check]', $model->check, ['id' => 'check', 'class' => 'form__checkbox ' . $errorClass]); ?>
@@ -54,7 +54,7 @@ use app\helpers\Html;
             <?= Html::error($model, 'check', ['class' => 'invalid-feedback']); ?>
         </div>
 
-        <div class="col-12 form__row collapsible comments__rules" id="comment-rules">
+        <div class="col-12 col-sm-8 form__row collapsible comments__rules" id="comment-rules">
             <p><b>Kommentarregeln</b></p>
             <p><i>Ehrverletzung/Beleidigung</i>: Um einen angenehmen, sachlichen und fairen Umgang miteinander zu gewährleisten, publizieren wir keine Beiträge, die sich im Ton vergreifen. Dazu gehören die Verwendung von polemischen und beleidigenden Ausdrücken ebenso wie persönliche Angriffe auf andere Diskussionsteilnehmer.</p>
             <p><i>Rassismus/Diskriminierung</i>: Es ist nicht erlaubt, Inhalte zu verbreiten, die unter die Schweizerische Rassismusstrafnorm fallen und Personen aufgrund ihrer Rasse, Ethnie oder Religion herabsetzen oder zu Hass aufrufen. Diskriminierende Äusserungen werden nicht publiziert.</p>
