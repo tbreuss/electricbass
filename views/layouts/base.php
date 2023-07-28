@@ -212,7 +212,7 @@ if (!empty($this->params['metaDescription'])) {
                 </form>
             </div>
         </div>
-        <?php if (Yii::$app->controller->id === 'site' && Yii::$app->controller->action->id === 'index'): ?>
+        <?php if (Yii::$app->controller->id === 'site' && isset(Yii::$app->controller->action) && Yii::$app->controller->action->id === 'index'): ?>
         <div class="row">
             <div class="col-md-12">
                 <hr class="footer__hr">
