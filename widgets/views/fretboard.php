@@ -78,7 +78,7 @@ $viewBoxBackgroundColor = '#f9f9f9';
     <?php if (!empty($config['showDots'])): ?>
         <?php foreach ($frets as $fretIndex => $fretNumber): ?>
             <?php $cx = $paddingLeft + ($fretIndex * ($fretTotalWidth) - ($fretSpacing / 2)) ?>
-            <?php $cy = $paddingTop + ($totalHeight / 2) - $paddingBottom ?>
+            <?php $cy = $paddingTop + ($fretboardHeight / 2) ?>
             <?php if (in_array($fretNumber, $dots)): ?>
                 <circle class="fretboard__dot" cx="<?= $cx ?>" cy="<?= $cy ?>" r="<?= $dotRadius ?>" fill="<?= $dotColor ?>" />
             <?php endif; ?>
