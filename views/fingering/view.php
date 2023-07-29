@@ -80,27 +80,6 @@ function replaceStringDef(int $strings, string $note): string
             <?php echo Html::dropDownList('expand', $expand, ['0' => 'Nein', '1' => 'Ja'], ['id' => 'fretboardFormExpand', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
         </div>
     </form>
-    <style>
-        .fretboardForm {
-            display: flex;
-            /*flex-direction: row;*/
-            justify-content: normal;
-        }
-        .fretboardForm__column {
-            margin-right: 1rem;
-        }
-        .fretboardForm__label {
-            display: block;
-        }
-        .fretboardForm__dropdown {
-            width: 100%;
-        }
-        .fretboardForm__submit {
-            background-color: #ffffff;
-            border: 1px solid rgb(118, 118, 118);
-            font-size: 0.8rem;
-        }
-    </style>
 
     <?php
 
@@ -181,7 +160,19 @@ function replaceStringDef(int $strings, string $note): string
     </table>
     </div>
 
-
+    <?php if (!empty($model->fingering)): ?>
+        <h2>Fingersatz</h3>
+        <p>Der meist verwendete Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> sieht wie folgt aus.</p>
+        <?= app\widgets\Fretboard::widget([
+            'showDots' => false,
+            'showFretNumbers' => false,
+            'showStringNames' => false,
+            'colors' => 'default',
+            'strings' => $FRETBOARD_STRINGS,
+            'frets' => $FRETBOARD_FRETS,
+            'notes' => preg_split('/\s+/', $model->fingering),
+        ]); ?>
+    <?php endif; ?>
     
     <?php
 
@@ -196,12 +187,14 @@ function replaceStringDef(int $strings, string $note): string
     ?>
 
     <?php if (count($allPossibilitites) == 0): ?>
+        <h2>Lagen</h3>
         <p>
-            Für <?= $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> auf dem <?= $strings ?>-saitigen E-Bass wurde kein Fingersatz gefunden.
+            Für <?= $model->title_accusative ? $model->title_accusative : $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> auf dem <?= $strings ?>-saitigen E-Bass wurde kein Fingersatz gefunden.
             Probiere es mit der <a href="?root=<?= $root ?>&strings=<?= $strings ?>&expand=1">gestreckten Lage</a>.
         </p>
     <?php else: ?>
-        <p>Für <?= $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> gibt es auf dem <?= $strings ?>-saitigen E-Bass Griffbilder in den folgenden Lagen.</p>
+        <h2>Lagen</h3>
+        <p>Für <?= $model->title_accusative ? $model->title_accusative : $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> gibt es auf dem <?= $strings ?>-saitigen E-Bass Griffbilder in den folgenden Lagen.</p>
         <?php foreach ($allPossibilitites as $pos => $possibilitiesPerPosition): ?>
             <?php foreach ($possibilitiesPerPosition as $result): ?>
                 <?= app\widgets\Fretboard::widget([
@@ -217,11 +210,9 @@ function replaceStringDef(int $strings, string $note): string
         <?php endforeach; ?>        
     <?php endif; ?>
 
-    <?php /** FRETBOARD */ ?>
+    <h2>Griffbrett</h3>
 
-    <?php $categoryAsGenitiv = $model->categoryAsGenitive() ?>
-
-    <p>Alle Noten <?= $categoryAsGenitiv ?> auf dem Griffbrett bis zum zwölften Bund:</p>
+    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> auf dem Griffbrett bis zum zwölften Bund:</p>
 
     <?php
 
@@ -234,10 +225,9 @@ function replaceStringDef(int $strings, string $note): string
         'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['note'], $fingerings),
         'root' => $rootFingering
     ]);
-
     ?>
 
-    <p>Alle Noten <?= $categoryAsGenitiv ?> in der Intervallschrift bis zum zwölften Bund:</p>
+    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> in der Intervallschrift bis zum zwölften Bund:</p>
 
     <?php
     echo app\widgets\Fretboard::widget([
@@ -247,10 +237,9 @@ function replaceStringDef(int $strings, string $note): string
         'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['label'], $fingerings),
         'root' => $rootFingering
     ]);
-
     ?>
 
-    <p>Alle Noten <?= $categoryAsGenitiv ?> in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
+    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
 
     <?php
     echo app\widgets\Fretboard::widget([
@@ -260,28 +249,7 @@ function replaceStringDef(int $strings, string $note): string
         'notes' => array_map(fn($note) => $note['coord'] . '-' . $model::convertNotesToOldFormat($note['label']), $fingerings),
         'root' => $rootFingering
     ]);
-
     ?>
-    <?php /*$rtttl = $fb->toRTTTL() ?>
-    <?php if($rtttl): ?>
-        <div style="margin-bottom:1.4em">
-
-            <?php Yii::import('application.vendors.midi_class.*'); ?>
-            <?php require_once('classes/midi_rttl.class.php') ?>
-
-            <?php
-            $midi = new MidiRttl();
-            $midi->importRttl($fb->toRTTTL(), 33);
-
-            $basename = empty($model->url) ? $model->id : $model->url;
-            $root = $fb->getAbsoluteRoot(true);
-            $file = "media/midi/fretboard/{$basename}-{$root}.mid";
-            if(!is_file($file)) $midi->saveMidFile($file, 0666);
-
-            $midi->playMidFile(baseUrl().'/'.$file,1,0,0);
-            ?>
-        </div>
-    <?php endif;*/ ?>
 
     <?php if (!empty($model->abstract)): ?>
         <div class="markdown"><?= Markdown::process($model->abstract) ?></div>
@@ -327,5 +295,24 @@ function replaceStringDef(int $strings, string $note): string
 <style>
     .fretboard {
         margin-bottom: 2rem;
+    }    
+    .fretboardForm {
+        display: flex;
+        /*flex-direction: row;*/
+        justify-content: normal;
+    }
+    .fretboardForm__column {
+        margin-right: 1rem;
+    }
+    .fretboardForm__label {
+        display: block;
+    }
+    .fretboardForm__dropdown {
+        width: 100%;
+    }
+    .fretboardForm__submit {
+        background-color: #ffffff;
+        border: 1px solid rgb(118, 118, 118);
+        font-size: 0.8rem;
     }
 </style>

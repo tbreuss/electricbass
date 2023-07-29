@@ -9,9 +9,12 @@ use yii\db\ActiveRecord;
 /**
  * @property int $id
  * @property string $title
+ * @property string $title_accusative
+ * @property string $title_genitive
  * @property string $root
  * @property string $position
  * @property string $notes
+ * @property string $fingering
  * @property string $strings
  * @property string $abstract
  * @property string $category
