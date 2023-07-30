@@ -127,14 +127,14 @@ if (!empty($this->params['metaDescription'])) {
     <div class="container container--breadcumbList">
         <ol vocab="https://schema.org/" typeof="BreadcrumbList">
             <li property="itemListElement" typeof="ListItem">
-                <a property="item" typeof="WebPage" href="<?= Url::home() ?>">
+                <a property="item" typeof="WebPage" href="<?= Url::home(true) ?>">
                 <span property="name">Startseite</span></a>
                 <meta property="position" content="1">
             </li>              
             <?php foreach ($this->params['breadcrumbs'] as $itemCount => $item): ?>              
                 <?php if (is_array($item)): ?>
                 <li property="itemListElement" typeof="ListItem">
-                    <a property="item" typeof="WebPage" href="<?= Url::to($item['url']) ?>">
+                    <a property="item" typeof="WebPage" href="<?= Url::to($item['url'], true) ?>">
                     <span property="name"><?= $item['label'] ?></span></a>
                     <meta property="position" content="<?= $itemCount + 2 ?>">
                 </li>                
