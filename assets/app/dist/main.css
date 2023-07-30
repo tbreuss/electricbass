@@ -5165,6 +5165,54 @@ h3 a:hover {
   text-decoration: none;
 }
 
+up-modal .breadcumbList {
+  display: none;
+}
+
+.breadcumbList {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.breadcumbList__home {
+  color: #c2c2c2;
+}
+
+.breadcumbList__home:hover {
+  color: #7f7f7f;
+}
+
+.breadcumbList__home::after {
+  content: " › ";
+}
+
+ol[typeof=BreadcrumbList] {
+  display: inline;
+  list-style-type: none;
+  padding: 0;
+  color: #c2c2c2;
+}
+
+li[typeof=ListItem] {
+  display: inline;
+}
+
+li[typeof=ListItem]::after {
+  content: " › ";
+}
+
+li:last-child[typeof=ListItem]::after {
+  content: "";
+}
+
+li[typeof=ListItem] a {
+  color: #c2c2c2;
+}
+
+li[typeof=ListItem] a:hover {
+  color: #7f7f7f;
+}
+
 .button {
   display: inline-block;
   font-weight: 400;
