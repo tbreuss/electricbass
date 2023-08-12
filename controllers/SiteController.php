@@ -185,7 +185,7 @@ final class SiteController extends Controller
                 $redirect->updated = date('Y-m-d H:i:s');
                 $redirect->count += 1;
                 $redirect->save(false, ['count', 'updated']);
-                return $this->redirect($redirect->to, 301)->send();
+                return $this->redirect($redirect->to, 301);
             }
 
             Log404::log404Error($requestUrl, $referrer, date('Y-m-d H:i:s'));
