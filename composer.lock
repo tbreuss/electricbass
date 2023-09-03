@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c409b9e74b9936c62c4a4165b9451c06",
+    "content-hash": "c1510e900f15b5dcabc323fd60bb4555",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -2041,7 +2041,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/tebe/tonal",
-                "reference": "c8b67dd965e2f4a7272cdbf0b76098f0897495d8"
+                "reference": "416e3e834b2ae9546fcc1a1add2a62b30a9d1493"
             },
             "require": {
                 "php": ">=8.0.0"
@@ -2063,7 +2063,7 @@
                 ]
             },
             "transport-options": {
-                "symlink": true,
+                "symlink": false,
                 "relative": true
             }
         },
