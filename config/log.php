@@ -48,7 +48,7 @@ return [
         [
             'class' => 'yii\log\EmailTarget',
             'mailer' => 'mailer',
-            'levels' => ['error', 'warning'],
+            'levels' => ['error'],
             'maskVars' => $maskVars,
             'except' => [
                 'yii\web\HttpException:404',
