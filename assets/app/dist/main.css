@@ -5092,6 +5092,21 @@ main {
     padding-left: calc(var(--bs-gutter-x));
   }
 }
+/* Print */
+@media print {
+  .navbar, .navbar-border-bottom, .breadcumbList, .sidebar, .footer, .socialbar, .meta, .comments, .top {
+    display: none !important;
+    border: none !important;
+  }
+  .rating, .rating * {
+    display: none !important;
+    border: none !important;
+  }
+  .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+    width: 100%;
+    max-width: 100%;
+  }
+}
 html {
   font-size: 15px;
   line-height: 1.5;
