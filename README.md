@@ -37,6 +37,10 @@ Fix
 
 ## Build Asset Files
 
+Install NPM modules
+
+    npm install
+
 Build CSS
 
     npm run build-css

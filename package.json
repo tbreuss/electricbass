@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "build-css": "node-sass --include-path scss assets/app/scss/main.scss assets/app/dist/main.css --output-style expanded",
-        "build-min-css": "node-sass --include-path scss assets/app/scss/main.scss assets/app/dist/main.min.css --output-style compressed",
+        "build-css": "sass assets/app/scss/main.scss assets/app/dist/main.css",
+        "build-min-css": "sass assets/app/scss/main.scss assets/app/dist/main.min.css --style=compressed",
         "build-js": "terser assets/app/js/*.js --output assets/app/dist/main.js",
         "build-min-js": "terser assets/app/js/*.js --compress --output assets/app/dist/main.min.js",
         "watch-css": "nodemon -e scss -x \"npm run build-css\""
@@ -14,9 +14,9 @@
     "license": "ISC",
     "bugs": {},
     "devDependencies": {
-        "bootstrap": "^5.2.0",
-        "node-sass": "^9.0.0",
-        "nodemon": "^2.0.19",
-        "terser": "^5.15.0"
+        "bootstrap": "^5.3.8",
+        "nodemon": "^3.1.11",
+        "sass": "^1.97.1",
+        "terser": "^5.44.1"
     }
 }
