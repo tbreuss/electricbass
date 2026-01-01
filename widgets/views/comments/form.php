@@ -27,7 +27,7 @@ use app\helpers\Html;
         <h2 class="comments__formTitle">Diskutiere mit.</h2>
     <?php endif; ?>
 
-    <?= Html::beginForm('#form', 'post', ['id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
+    <?php // Html::beginForm('#form', 'post', ['id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
 
     <div class="row">
         <div class="col-12 col-sm-8 form__row">
@@ -72,6 +72,7 @@ use app\helpers\Html;
         </div>
 
     </div>
-    <?= Html::endForm() ?>
+    <?php // Html::endForm() ?>
+    <div class="col-12 flash flash--warning">Wegen Spam können zur Zeit keine Kommentare erfasst werden.</div>
 
 </div>
