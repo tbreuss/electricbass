@@ -18,6 +18,6 @@ $this->params['breadcrumbs'][] = 'Inserat hinzufügen';
     Die Inserate haben eine Laufzeit von 60 Tagen.</p>
 
     <?php // $this->render('_form', ['model' => $model]) ?>
-    <div class="col-12 flash flash--warning">Wegen Spam können zur Zeit keine Kommentare erfasst werden.</div>
+    <div class="col-12 flash flash--warning">Wegen Spam können zur Zeit keine neuen Inserate erfasst werden.</div>
 
 </div>
