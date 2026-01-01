@@ -34,5 +34,5 @@
         <span class="rating__textCount"><?php echo $ratingCount ?></span>
         Stimmen
     </span>
-    <span class="rating__empty <?php echo ($ratingCount > 0) ? 'rating__empty--hidden' : '' ?>">Abstimmen</span>
+    <span class="rating__empty <?php echo ($ratingCount > 0) ? 'rating__empty--hidden' : '' ?>">Bewerten</span>
 </div>
