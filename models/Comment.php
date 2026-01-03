@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\Div;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -75,13 +76,13 @@ final class Comment extends ActiveRecord
             ['name', 'required'],
             ['name', 'filter', 'filter' => 'strip_tags'],
             ['name', 'string', 'max' => 50, 'encoding' => 'utf-8'],
-            ['name', 'sanitizeField'],
+            ['name', 'detectEmailsAndLinks'],
             // email
 //            ['email', 'required'],
 //            ['email', 'filter', 'filter' => 'strip_tags'],
 //            ['email', 'string', 'max' => 100, 'encoding' => 'utf-8'],
 //            ['email', 'email'],
-//            ['email', 'sanitizeField'],
+//            ['email', 'detectEmailsAndLinks'],
             // website
 //            ['website', 'filter', 'filter' => 'strip_tags'],
 //            ['website', 'filter', 'filter' => 'trim'],
@@ -92,7 +93,7 @@ final class Comment extends ActiveRecord
             ['text', 'filter', 'filter' => 'strip_tags'],
             ['text', 'filter', 'filter' => 'trim'],
             ['text', 'string', 'min' => 10, 'max' => 1000, 'encoding' => 'utf-8'],
-            ['text', 'sanitizeField'],
+            ['text', 'detectEmailsAndLinks'],
             /*['verifyCode', 'captcha'],*/
             ['check', 'required', 'requiredValue' => 1, 'message' => 'Du musst dich mit den Kommentarregeln einverstanden erklären.'],
             // nsmp
@@ -102,11 +103,14 @@ final class Comment extends ActiveRecord
         ];
     }
 
-    public function sanitizeField(string $attribute): void
+    public function detectEmailsAndLinks(string $attribute): void
     {
-        if (preg_match('/ftp:|http:|https:|www\./i', $this->$attribute)) {
-            $error = sprintf('Der %s darf keine Links enthalten.', $this->getAttributeLabel($attribute));
-            $this->addError($attribute, $error);
+        $label = $this->getAttributeLabel($attribute);
+        if (Div::detectEmails($this->$attribute)) {
+            $this->addError($attribute, sprintf('%s darf keine E-Mails enthalten.', $label));
+        }
+        if (Div::detectLinks($this->$attribute)) {
+            $this->addError($attribute, sprintf('%s darf keine Links enthalten.', $label));
         }
     }
 

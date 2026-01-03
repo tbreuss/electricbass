@@ -244,4 +244,16 @@ final class Div
         $width += 100;
         return intval($width);
     }
+
+    public static function detectEmails(string $text): bool
+    {
+        /** @see https://stackoverflow.com/a/78713027 */
+        return preg_match('/(\S+?)@(\S+)/m', $text) === 1;
+    }
+
+    public static function detectLinks(string $text): bool
+    {
+        /** @see https://regex101.com/r/vrOpe5/1 */
+        return preg_match('/((\w+):\/\/)?(([\w.-]*)\.([a-z]+))/m', $text) === 1;
+    }
 }

@@ -7,10 +7,8 @@ use app\models\Advertisement;
 use app\models\AdvertisementContactForm;
 use app\models\AdvertisementEmailForm;
 use Yii;
-use yii\base\BaseObject;
 use yii\db\Expression;
 use yii\web\Controller;
-use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
