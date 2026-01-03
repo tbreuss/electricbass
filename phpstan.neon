@@ -47,3 +47,4 @@ parameters:
 	    - '#Method .+ return type has no value type specified in iterable type .+models.+#'
 	    - '#Method .+ return type has no value type specified in iterable type array.#'
 	    - '#Property .+ type has no value type specified in iterable type .+models.+#'
+	checkGenericClassInNonGenericObjectType: false
