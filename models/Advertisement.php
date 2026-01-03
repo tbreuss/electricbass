@@ -108,13 +108,16 @@ final class Advertisement extends ActiveRecord
         return [
             // category_id
             ['category_id', 'required'],
+            ['category_id', 'integer'],
             // title
             ['title', 'required'],
+            ['title', 'detectEmailsAndLinks'],
             ['title', 'filter', 'filter' => 'strip_tags'],
             ['title', 'string', 'max' => 60, 'encoding' => 'utf-8'],
             ['title', 'badWord'],
             // longtext
             ['longtext', 'required'],
+            ['longtext', 'detectEmailsAndLinks'],
             ['longtext', 'filter', 'filter' => 'strip_tags'],
             // new_price
             ['new_price', 'double'],
@@ -122,17 +125,22 @@ final class Advertisement extends ActiveRecord
             ['sell_price', 'double'],
             // currency
             ['currency', 'validateCurrency'],
+            ['currency', 'detectEmailsAndLinks'],
             ['currency', 'filter', 'filter' => 'strip_tags'],
             // name
             ['name', 'required'],
+            ['name', 'detectEmailsAndLinks'],
             ['name', 'filter', 'filter' => 'strip_tags'],
             // phone
+            ['phone', 'detectEmailsAndLinks'],
             ['phone', 'filter', 'filter' => 'strip_tags'],
             // region
             ['region', 'required'],
+            ['region', 'detectEmailsAndLinks'],
             ['region', 'filter', 'filter' => 'strip_tags'],
             // country
             ['country', 'required'],
+            ['country', 'detectEmailsAndLinks'],
             ['country', 'filter', 'filter' => 'strip_tags'],
             // email
             ['email', 'required'],
@@ -142,7 +150,9 @@ final class Advertisement extends ActiveRecord
             // homepage
             ['homepage', 'url'],
             // geocodingAddress
+            ['geocodingAddress', 'detectEmailsAndLinks'],
             ['geocodingAddress', 'string', 'max' => 128, 'encoding' => 'utf-8'],
+            ['geocodingAddress', 'filter', 'filter' => 'strip_tags'],
             // nspm
             ['nspm', 'safe'],
             // upload
@@ -221,6 +231,17 @@ final class Advertisement extends ActiveRecord
             if (array_search($word, $badWords) !== false) {
                 $this->addError($attribute, 'Unser Spamfilter hat mindestens ein ungültiges Wort entdeckt.');
             }
+        }
+    }
+
+    public function detectEmailsAndLinks(string $attribute): void
+    {
+        $label = $this->getAttributeLabel($attribute);
+        if (Div::detectEmails($this->$attribute)) {
+            $this->addError($attribute, sprintf('%s darf keine E-Mails enthalten.', $label));
+        }
+        if (Div::detectLinks($this->$attribute)) {
+            $this->addError($attribute, sprintf('%s darf keine Links enthalten.', $label));
         }
     }
 

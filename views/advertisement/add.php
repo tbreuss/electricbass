@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = 'Inserat hinzufügen';
     <p>Keine Anmeldung notwendig! Einfach das Inserat erfassen und fertig!<br />
     Die Inserate haben eine Laufzeit von 60 Tagen.</p>
 
-    <?php // $this->render('_form', ['model' => $model]) ?>
-    <div class="col-12 flash flash--warning">Wegen Spam können zur Zeit keine neuen Inserate erfasst werden.</div>
+    <?= $this->render('_form', ['model' => $model]) ?>
 
 </div>

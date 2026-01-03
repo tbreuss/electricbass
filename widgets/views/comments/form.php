@@ -27,7 +27,7 @@ use app\helpers\Html;
         <h2 class="comments__formTitle">Diskutiere mit.</h2>
     <?php endif; ?>
 
-    <?php // Html::beginForm('#form', 'post', ['id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
+    <?= Html::beginForm('#form', 'post', ['id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
 
     <div class="row">
         <div class="col-12 col-sm-8 form__row">
@@ -54,6 +54,13 @@ use app\helpers\Html;
             <?= Html::error($model, 'check', ['class' => 'invalid-feedback']); ?>
         </div>
 
+        <?php /*<div class="col-sm-10 form__row">
+            <?php $errorClass = $model->hasErrors('verifyCode') ? 'is-invalid' : ''; ?>
+            <?= Html::label($model->getAttributeLabel('verifyCode'), 'verifyCode', ['class' => 'form__label is-required']); ?>
+            <?= Captcha::widget(['name' => 'Comment[verifyCode]', 'options' => ['class' => 'form__textInput ' . $errorClass]]) ?>
+            <?= Html::error($model, 'verifyCode', ['class' => 'invalid-feedback']); ?>
+        </div>*/ ?>
+
         <div class="col-12 col-sm-8 form__row collapsible comments__rules" id="comment-rules">
             <p><b>Kommentarregeln</b></p>
             <p><i>Ehrverletzung/Beleidigung</i>: Um einen angenehmen, sachlichen und fairen Umgang miteinander zu gewährleisten, publizieren wir keine Beiträge, die sich im Ton vergreifen. Dazu gehören die Verwendung von polemischen und beleidigenden Ausdrücken ebenso wie persönliche Angriffe auf andere Diskussionsteilnehmer.</p>
@@ -72,7 +79,6 @@ use app\helpers\Html;
         </div>
 
     </div>
-    <?php // Html::endForm() ?>
-    <div class="col-12 flash flash--warning">Wegen Spam können zur Zeit keine Kommentare erfasst werden.</div>
+    <?= Html::endForm() ?>
 
 </div>
