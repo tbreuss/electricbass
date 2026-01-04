@@ -15,6 +15,8 @@ final class ApiController extends Controller
 {
     public function actionHits(): bool
     {
+        Yii::$app->response->headers->add('X-Robots-Tag', 'noindex');
+
         if (!Yii::$app->request->isPost) {
             return false;
         }
@@ -38,6 +40,8 @@ final class ApiController extends Controller
      */
     public function actionRate(): array
     {
+        Yii::$app->response->headers->add('X-Robots-Tag', 'noindex');
+
         $request = Yii::$app->request;
 
         if (!$request->isPost) {

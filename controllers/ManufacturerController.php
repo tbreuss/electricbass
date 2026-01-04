@@ -63,7 +63,7 @@ final class ManufacturerController extends Controller
 
         $manufacturer->updateCounters(['visits' => 1]);
 
-        Yii::$app->response->headers->add('X-Robots-Tag', 'noindex, nofollow');
+        Yii::$app->response->headers->add('X-Robots-Tag', 'noindex');
 
         return $this->redirect($manufacturer->website, 301);
     }
