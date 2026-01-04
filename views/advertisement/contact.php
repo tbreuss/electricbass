@@ -13,6 +13,7 @@ $this->title = 'Anbieter kontaktieren';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
 $this->params['breadcrumbs'][] = ['label' => $advertisement->title, 'url' => $advertisement->url];
 $this->params['breadcrumbs'][] = 'Anbieter kontaktieren';
+$this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
 ?>
 
 <div class="content">

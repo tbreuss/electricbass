@@ -17,6 +17,7 @@ use yii\helpers\Url;
 
 $this->title = 'Suche';
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
 
 /**
  * @param string $text

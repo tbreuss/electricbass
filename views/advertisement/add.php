@@ -8,6 +8,7 @@
 $this->title = 'Inserat hinzufügen | Bassmarkt';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
 $this->params['breadcrumbs'][] = 'Inserat hinzufügen';
+$this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
 ?>
 
 <div class="content">

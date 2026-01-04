@@ -11,7 +11,7 @@ use yii\captcha\Captcha;
 $this->title = 'Inserate verwalten | Bassmarkt';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
 $this->params['breadcrumbs'][] = 'Inserate verwalten';
-
+$this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
 ?>
 
 <div class="content">

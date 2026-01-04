@@ -10,6 +10,7 @@ use app\helpers\Html;
 $this->title = 'Inserat verlängert';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
 $this->params['breadcrumbs'][] = 'Inserat verlängert';
+$this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
 ?>
 
 <div class="content">

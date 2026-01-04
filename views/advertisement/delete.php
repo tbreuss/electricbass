@@ -10,6 +10,7 @@ use app\helpers\Html;
 $this->title = 'Inserat löschen';
 $this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
 $this->params['breadcrumbs'][] = 'Inserat löschen';
+$this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
 ?>
 
 <div class="content">

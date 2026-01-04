@@ -28,7 +28,7 @@ final class FingeringController extends Controller
             [
                 'class' => 'app\filters\Canonical',
                 'only' => ['view'],
-                'filters' => ['root', 'position', 'strings'],
+                'filters' => ['root', 'position', 'strings', 'expand'],
                 'params' => ['id']
             ]
         ];

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Manufacturer;
+use Yii;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\Response;
@@ -62,6 +63,8 @@ final class ManufacturerController extends Controller
 
         $manufacturer->updateCounters(['visits' => 1]);
 
-        return $this->redirect($manufacturer->website);
+        Yii::$app->response->headers->add('X-Robots-Tag', 'noindex, nofollow');
+
+        return $this->redirect($manufacturer->website, 301);
     }
 }
