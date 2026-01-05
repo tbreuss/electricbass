@@ -20,7 +20,6 @@ if (!empty($this->params['metaDescription'])) {
 }
 
 ?>
-<?php yii\widgets\Spaceless::begin(); ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
@@ -126,20 +125,20 @@ if (!empty($this->params['metaDescription'])) {
     <?php if (!empty($this->params['breadcrumbs'])): ?>
     <div class="container breadcumbList">
         <a class="breadcumbList__home" href="javascript:window.location.href='<?= Url::home() ?>'">Start</a>
-        <ol vocab="https://schema.org/" typeof="BreadcrumbList">           
-            <?php foreach ($this->params['breadcrumbs'] as $itemCount => $item): ?>              
+        <ol vocab="https://schema.org/" typeof="BreadcrumbList">
+            <?php foreach ($this->params['breadcrumbs'] as $itemCount => $item): ?>
                 <?php if (is_array($item)): ?>
                 <li property="itemListElement" typeof="ListItem">
                     <a property="item" typeof="WebPage" href="<?= Url::to($item['url']) ?>">
                     <span property="name"><?= $item['label'] ?></span></a>
                     <meta property="position" content="<?= $itemCount + 1 ?>">
-                </li>                
+                </li>
                 <?php endif; ?>
                 <?php if (is_string($item)): ?>
                 <li property="itemListElement" typeof="ListItem">
                     <span property="name"><?= $item ?></span>
                     <meta property="position" content="<?= $itemCount + 1 ?>">
-                </li>            
+                </li>
                 <?php endif; ?>
             <?php endforeach; ?>
         </ol>
@@ -186,7 +185,7 @@ if (!empty($this->params['metaDescription'])) {
             <div class="col-md-12">
                 <hr class="footer__hr">
             </div>
-        </div>        
+        </div>
         <div class="row">
             <div class="col-12 col-md-4">
                 <h5 class="footer__title">Lektionen, Übungen & Ideen</h5>
@@ -249,4 +248,3 @@ if (!empty($this->params['metaDescription'])) {
 </body>
 </html>
 <?php $this->endPage() ?>
-<?php yii\widgets\Spaceless::end() ?>
