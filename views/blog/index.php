@@ -9,6 +9,7 @@
  * @var app\models\Blog[] $popular
  */
 
+use app\widgets\CanonicalLink;
 use app\widgets\ListSummary;
 use app\widgets\ListView;
 use app\widgets\LinkPager;
@@ -17,7 +18,7 @@ $this->title = 'Blog';
 $this->params['breadcrumbs'][] = 'Bass Blog';
 $this->params['pageTitle'] = sprintf('Blog für Bassist*innen zum Thema E-Bass und Musik (%d/%d)', $pagination->page + 1, $pagination->pageCount);
 $this->params['metaDescription'] = sprintf('Blog zum Thema E-Bass und Musik, mit inspirierenden und lesenswerten Artikeln aus der Welt der tiefen Töne (Seite %d von %d)', $pagination->page + 1, $pagination->pageCount);
-
+CanonicalLink::widget(['isPaginated' => true]);
 ?>
 
 <div class="content">
