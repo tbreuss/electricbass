@@ -20,11 +20,6 @@ final class BlogController extends Controller
             [
                 'class' => 'app\filters\RedirectFilter'
             ],
-            [
-                'class' => 'app\filters\Canonical',
-                'only' => ['index'],
-                'filters' => ['sort', 'tag', 'filter']
-            ]
         ];
     }
 

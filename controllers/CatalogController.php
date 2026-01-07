@@ -25,12 +25,6 @@ final class CatalogController extends Controller
             [
                 'class' => 'app\filters\RedirectFilter'
             ],
-            [
-                'class' => 'app\filters\Canonical',
-                'only' => ['index'],
-                'filters' => ['sort', 'filter', 'series', 'publisher', 'autor'],
-                'params' => ['category']
-            ]
         ];
     }
 
@@ -117,7 +111,6 @@ final class CatalogController extends Controller
             'popular' => $popular
         ]);
     }
-
 
     /**
      * @param int|string $id

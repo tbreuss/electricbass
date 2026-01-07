@@ -9,6 +9,7 @@
 
 use app\controllers\SearchController;
 use app\helpers\Html;
+use app\widgets\CanonicalLink;
 use app\widgets\LinkPager;
 use app\widgets\ListSummary;
 use app\widgets\RatingReadOnly;
@@ -18,6 +19,7 @@ use yii\helpers\Url;
 $this->title = 'Suche';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
+CanonicalLink::widget();
 
 /**
  * @param string $text

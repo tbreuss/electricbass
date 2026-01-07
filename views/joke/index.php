@@ -7,6 +7,7 @@
  * @var app\models\Joke[] $models
  */
 
+use app\widgets\CanonicalLink;
 use app\widgets\ListSummary;
 use app\widgets\Comments;
 use app\widgets\LinkPager;
@@ -17,7 +18,7 @@ $this->title = 'Bassistenwitze';
 $this->params['breadcrumbs'][] = 'Bassistenwitze';
 $this->params['pageTitle'] = 'Die besten Bassistenwitze aller Zeiten';
 $this->params['metaDescription'] = 'Die Sammlung mit den besten Bassistenwitzen 😂 aller Zeiten. Mit Witzen über Bassisten oder zum Thema Bass. Jetzt lesen und ablachen.';
-
+CanonicalLink::widget(['isPaginated' => true]);
 ?>
 <div class="content">
 

@@ -12,6 +12,7 @@
 
 use app\helpers\Html;
 use app\helpers\Url;
+use app\widgets\CanonicalLink;
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;
 use app\widgets\RatingReadOnly;
@@ -25,7 +26,7 @@ $this->params['breadcrumbs'][] = 'Bass-Alben';
 
 $this->params['pageTitle'] = sprintf('Inspirierende Musikalben von E-Bassist*innen (%d/%d)', $pagination->page + 1, $pagination->pageCount);
 $this->params['metaDescription'] = sprintf('Inspirierende und hörenswerte Musikalben berühmter E-Bassisten. Unentdeckte Alben und Songs von Bassisten wie du und ich (Seite %d von %d)', $pagination->page + 1, $pagination->pageCount);
-
+CanonicalLink::widget(['isPaginated' => true]);
 ?>
 
 <div class="content">

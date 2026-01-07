@@ -7,6 +7,7 @@
  * @var app\models\Video[] $videos
  */
 
+use app\widgets\CanonicalLink;
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;
 
@@ -14,7 +15,7 @@ $this->title = 'Videos';
 $this->params['breadcrumbs'][] = 'Videos';
 $this->params['pageTitle'] = sprintf('Videos von und für E-Bassist*innen (%d/%d)', $pagination->page + 1, $pagination->pageCount);
 $this->params['metaDescription'] = sprintf('Videos von und für E-Bassisten und Bassistinnen. Lass dich von anderen Bassisten inspirieren und lerne von den bessten ihres Fachs. (Seite %d von %d)', $pagination->page + 1, $pagination->pageCount);
-
+CanonicalLink::widget(['isPaginated' => true]);
 ?>
 
 <div class="content">

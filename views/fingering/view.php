@@ -7,6 +7,7 @@
 
 use app\helpers\Html;
 use app\helpers\Url;
+use app\widgets\CanonicalLink;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Rating;
@@ -20,6 +21,7 @@ $this->title = $model->title . ' | Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
 $this->params['breadcrumbs'][] = $model->title;
+CanonicalLink::widget(['keepParams' => ['id']]);
 
 /**
  * @return string[][]
@@ -126,7 +128,7 @@ function replaceStringDef(int $strings, string $note): string
         <tr>
             <td style="padding-right: 1rem"><strong>Name</strong>:</td>
             <td><?= $model->title ?></td>
-        </tr>        
+        </tr>
         <tr>
             <td style="padding-right: 1rem"><strong>Art</strong>:</td>
             <td>
@@ -161,7 +163,7 @@ function replaceStringDef(int $strings, string $note): string
     </div>
 
     <?php if (!empty($model->fingering)): ?>
-        <h2>Fingersatz</h3>
+        <h2>Fingersatz</h2>
         <p>Der meist verwendete Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> sieht wie folgt aus.</p>
         <?= app\widgets\Fretboard::widget([
             'showDots' => false,
@@ -173,7 +175,7 @@ function replaceStringDef(int $strings, string $note): string
             'notes' => preg_split('/\s+/', $model->fingering),
         ]); ?>
     <?php endif; ?>
-    
+
     <?php
 
     $allPossibilitites = [];
@@ -187,13 +189,13 @@ function replaceStringDef(int $strings, string $note): string
     ?>
 
     <?php if (count($allPossibilitites) == 0): ?>
-        <h2>Lagen</h3>
+        <h2>Lagen</h2>
         <p>
             Für <?= $model->title_accusative ? $model->title_accusative : $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> auf dem <?= $strings ?>-saitigen E-Bass wurde kein Fingersatz gefunden.
             Probiere es mit der <a href="?root=<?= $root ?>&strings=<?= $strings ?>&expand=1">gestreckten Lage</a>.
         </p>
     <?php else: ?>
-        <h2>Lagen</h3>
+        <h2>Lagen</h2>
         <p>Für <?= $model->title_accusative ? $model->title_accusative : $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> gibt es auf dem <?= $strings ?>-saitigen E-Bass Griffbilder in den folgenden Lagen.</p>
         <?php foreach ($allPossibilitites as $pos => $possibilitiesPerPosition): ?>
             <?php foreach ($possibilitiesPerPosition as $result): ?>
@@ -207,10 +209,10 @@ function replaceStringDef(int $strings, string $note): string
                     'root' => $lowest
                 ]); ?>
             <?php endforeach; ?>
-        <?php endforeach; ?>        
+        <?php endforeach; ?>
     <?php endif; ?>
 
-    <h2>Griffbrett</h3>
+    <h2>Griffbrett</h2>
 
     <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> auf dem Griffbrett bis zum zwölften Bund:</p>
 
@@ -295,7 +297,7 @@ function replaceStringDef(int $strings, string $note): string
 <style>
     .fretboard {
         margin-bottom: 2rem;
-    }    
+    }
     .fretboardForm {
         display: flex;
         /*flex-direction: row;*/

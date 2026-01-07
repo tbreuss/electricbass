@@ -9,6 +9,7 @@
  * @phpstan-var array<int, array{"label": string, "url": string}> $breadcrumbs
  */
 
+use app\widgets\CanonicalLink;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
@@ -17,8 +18,8 @@ use app\widgets\RatingReadOnly;
 use app\widgets\SocialBar;
 
 $this->params['breadcrumbs'] = $breadcrumbs;
-$this->title = $model->title . ' | Lektionen'
-
+$this->title = $model->title . ' | Lektionen';
+CanonicalLink::widget(['keepParams' => ['path']]);
 ?>
 
 <div class="content">

@@ -16,6 +16,7 @@
  */
 
 use app\helpers\Html;
+use app\widgets\CanonicalLink;
 use app\widgets\ListSummary;
 use app\widgets\LinkPager;
 
@@ -27,7 +28,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Katalog', 'url' => ['catalog/overv
 $this->params['breadcrumbs'][] = $title;
 $this->params['pageTitle'] = $pageTitle;
 $this->params['metaDescription'] = $metaDescription;
-
+CanonicalLink::widget(['isPaginated' => true, 'keepParams' => ['category']]);
 ?>
 
 <div class="content">
