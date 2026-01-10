@@ -58,8 +58,8 @@ function highlightWords(string $text, string $words): string
 
         <?php endif; ?>
 
-        <p>Suche gezielt nach einem Beitrag. Gib dazu ein oder mehrere ganze Wörter ein. Das Wort kann auch ein ASIN-, ISBN- oder EAN-Code sein.</p>
-        <p>Beispiele: Jaco Pastorius, Rock Bass, Tonleiter, Lehrbuch, Album, B000PY31I4 (ASIN), 1617806013 (ISBN), 9780793592746 (EAN)</p>
+        <p>Suche gezielt nach einem Beitrag. Gib dazu ein oder mehrere ganze Wörter ein. Das Wort kann auch ein ASIN-, ISBN-10 oder ISBN-13-Code sein.</p>
+        <p>Beispiele: Jaco Pastorius, Rock Bass, Tonleiter, Lehrbuch, Album, B000PY31I4, 1617806013, 9780793592746</p>
 
     <?php elseif (mb_strlen($term) < SearchController::MIN_QUERY_LENGTH): ?>
         <p>Die Suchanfrage muss mindestens drei Zeichen lang sein.</p>

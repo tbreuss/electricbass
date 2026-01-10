@@ -198,14 +198,14 @@ final class Catalog extends ActiveRecord
         if (!empty($this->isbn)) {
             $infos[] = [
                 'key' => 'isbn',
-                'label' => 'ISBN',
+                'label' => 'ISBN-10',
                 'value' => $this->isbn
             ];
         }
         if (!empty($this->ean)) {
             $infos[] = [
                 'key' => 'ean',
-                'label' => 'EAN',
+                'label' => 'ISBN-13',
                 'value' => $this->ean
             ];
         }
