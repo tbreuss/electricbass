@@ -38,15 +38,14 @@ $this->params['metaDescription'] = 'Die Sammlung mit den besten Zitaten berühmt
         <?php endforeach; ?>
     </div>
 
+    <?= $this->render('//_partials/meta', [
+            'categories' => [
+                    ['label' => 'Zitate von Bassisten', 'url' => ['quote/index']]
+            ]
+    ]); ?>
 </div>
 
 <?php // LinkPager::widget(['pagination' => $pagination]) ?>
-
-<?= $this->render('//_partials/meta', [
-    'categories' => [
-        ['label' => 'Zitate von Bassisten', 'url' => ['quote/index']]
-    ]
-]); ?>
 
 <?= Rating::widget(["tableName" => "quote", "tableId" => 0]) ?>
 

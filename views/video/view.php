@@ -43,6 +43,26 @@ $moreVideos = array_slice($similarVideos, 3);
 </div>
 <?php endif; ?>
 
+<div class="moreVideos">
+    <h2>Diese Videos könnten dir auch gefallen</h2>
+    <div class="row">
+        <?php foreach ($moreVideos as $i => $moreVideo): ?>
+            <div class="col-6 col-xl-4 moreVideos__row">
+                <div class="moreVideos__video">
+                    <a href="<?= $moreVideo->url ?>">
+                        <?php if ($moreVideo->platform === 'youtube'): ?>
+                            <img class="img-fluid" src="https://img.youtube.com/vi/<?php echo $moreVideo->key ?>/mqdefault.jpg" alt="<?php echo $moreVideo->title ?>">
+                        <?php endif; ?>
+                    </a>
+                </div>
+                <div class="moreVideos__link">
+                    <a href="<?= $moreVideo->url ?>"><?= $moreVideo->title ?></a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
 <?= $this->render('//_partials/meta', [
     'categories' => [
         ['label' => 'Katalog', 'url' => ['/catalog/overview']],
@@ -52,29 +72,7 @@ $moreVideos = array_slice($similarVideos, 3);
 ]); ?>
 
 <?= Rating::widget(["tableName" => "video", "tableId" => $video->id]) ?>
-
 <?= SocialBar::widget(["id" => $video->id, "text" => $video->title]) ?>
-
-<div class="moreVideos">
-    <h2>Diese Videos könnten dir auch gefallen</h2>
-    <div class="row">
-        <?php foreach ($moreVideos as $i => $moreVideo): ?>
-        <div class="col-6 col-xl-4 moreVideos__row">
-            <div class="moreVideos__video">
-                <a href="<?= $moreVideo->url ?>">
-                    <?php if ($moreVideo->platform === 'youtube'): ?>
-                        <img class="img-fluid" src="https://img.youtube.com/vi/<?php echo $moreVideo->key ?>/mqdefault.jpg" alt="<?php echo $moreVideo->title ?>">
-                    <?php endif; ?>
-                </a>
-            </div>
-            <div class="moreVideos__link">
-                <a href="<?= $moreVideo->url ?>"><?= $moreVideo->title ?></a>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-
 <?= Comments::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 <?= Hits::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 
@@ -95,7 +93,7 @@ $moreVideos = array_slice($similarVideos, 3);
 
 <style>
     .moreVideos {
-        margin-bottom: 1rem;
+        margin-top: 2rem;
     }
     .moreVideos__row {
         margin-bottom: 1rem;

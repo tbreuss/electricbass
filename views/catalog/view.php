@@ -102,18 +102,17 @@ $this->params['metaDescription'] = join($metaDescription);
     <?php endif; ?>
 
     <?= $this->render('//_partials/meta', [
-        'categories' => [
-            ['label' => 'Katalog', 'url' => ['/catalog/overview']],
-            ['label' => $title, 'url' => Url::previous('catalog' . $model->category)]
-        ],
-        'tags' => $model->tags,
+            'categories' => [
+                    ['label' => 'Katalog', 'url' => ['/catalog/overview']],
+                    ['label' => $title, 'url' => Url::previous('catalog' . $model->category)]
+            ],
+            'tags' => $model->tags,
     ]); ?>
-
-    <?= Rating::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
-
-    <?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
-
 </div>
+
+<?= Rating::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
+
+<?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
 
 <?= Comments::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
 

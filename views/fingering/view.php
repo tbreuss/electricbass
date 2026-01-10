@@ -264,14 +264,13 @@ function replaceStringDef(int $strings, string $note): string
         ],
         'tags' => $model->tags,
     ]); ?>
-
-    <?= Rating::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
-
-    <?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
-
-    <?= Comments::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
-
 </div>
+
+<?= Rating::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
+
+<?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
+
+<?= Comments::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
 <?= Hits::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 

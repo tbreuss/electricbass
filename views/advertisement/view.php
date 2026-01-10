@@ -82,15 +82,13 @@ $this->title = $model->getPageTitle();
             'categories' => [['label' => 'Kleinanzeigen', 'url' => ['/advertisement/index']]],
             'tags' => [],
         ]); ?>
-
-        <?= Rating::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
-
-        <?= SocialBar::widget(["text" => $model->title]) ?>
-
     </div>
+
+    <?= Rating::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
+
+    <?= SocialBar::widget(["text" => $model->title]) ?>
 
     <?= Comments::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
 
     <?= Hits::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
-
 <?php endif; ?>

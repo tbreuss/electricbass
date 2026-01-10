@@ -39,6 +39,8 @@ return [
     'advertisement/renew' => 'advertisement/renew',
     'advertisement/delete' => 'advertisement/delete',
     'advertisement/update' => 'advertisement/update',
+    'kommentar/<name>-<id>' => 'comment/index',
+    'kommentar/regeln' => 'comment/rules',
     // Kontakt
     'kontakt' => 'site/contact',
     // Suche

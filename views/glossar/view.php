@@ -49,16 +49,15 @@ $this->params['breadcrumbs'][] = $glossar->title;
     </ul>
 
     <?php echo $this->render('_sidebar', ['glossar' => $glossar, 'selectedCategory' => $selectedCategory]) ?>
-
-    <?= Rating::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
-
-    <?= SocialBar::widget(["id" => $glossar->id, "text" => $glossar->title]) ?>
-
-    <?= Hits::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
-
-    <?= Comments::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
-
 </div>
+
+<?= Rating::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
+
+<?= SocialBar::widget(["id" => $glossar->id, "text" => $glossar->title]) ?>
+
+<?= Hits::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
+
+<?= Comments::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
 
 <style>
     .pager .next {

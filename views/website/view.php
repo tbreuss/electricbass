@@ -88,13 +88,11 @@ $this->params['breadcrumbs'][] = $website->title;
         ],
         'tags' => $website->tags,
     ]); ?>
-
-    <?= Rating::widget(["tableName" => "website", "tableId" => $website->id]) ?>
-
-
-    <?= SocialBar::widget(["id" => $website->id, "text" => $website->title]) ?>
-
 </div>
+
+<?= Rating::widget(["tableName" => "website", "tableId" => $website->id]) ?>
+
+<?= SocialBar::widget(["id" => $website->id, "text" => $website->title]) ?>
 
 <?= Comments::widget(["tableName" => "website", "tableId" => $website->id]) ?>
 
