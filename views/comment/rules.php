@@ -1,5 +1,5 @@
+<?php /** @var yii\web\View $this */ ?>
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
-
 <h1>Kommentarregeln</h1>
 <p><i>Ehrverletzung/Beleidigung</i>: Um einen angenehmen, sachlichen und fairen Umgang miteinander zu gewährleisten, publizieren wir keine Beiträge, die sich im Ton vergreifen. Dazu gehören die Verwendung von polemischen und beleidigenden Ausdrücken ebenso wie persönliche Angriffe auf andere Diskussionsteilnehmer.</p>
 <p><i>Rassismus/Diskriminierung</i>: Es ist nicht erlaubt, Inhalte zu verbreiten, die unter die Schweizerische Rassismusstrafnorm fallen und Personen aufgrund ihrer Rasse, Ethnie oder Religion herabsetzen oder zu Hass aufrufen. Diskriminierende Äusserungen werden nicht publiziert.</p>

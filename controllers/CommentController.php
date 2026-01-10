@@ -12,9 +12,10 @@ final class CommentController extends Controller
     public function actionIndex(string $name, int $id, string $url, string $title): string
     {
         $request = Yii::$app->request;
-
         $referrer = $request->getReferrer();
-        if (!str_starts_with($referrer, $request->getHostInfo())) {
+        $hostInfo = $request->getHostInfo();
+
+        if (is_string($referrer) && is_string($hostInfo) && !str_starts_with($referrer, $hostInfo)) {
             throw new NotFoundHttpException();
         }
 
