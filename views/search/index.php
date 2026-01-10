@@ -58,20 +58,14 @@ function highlightWords(string $text, string $words): string
 
         <?php endif; ?>
 
-        <p>
-            Suche gezielt nach einem Beitrag.
-            Gib dazu ein oder mehrere ganze Wörter ein.
-            Beispiele: "Jaco Pastorius", "Rock Bass", "Tonleiter", "Lehrbuch", "Album"
-        </p>
+        <p>Suche gezielt nach einem Beitrag. Gib dazu ein oder mehrere ganze Wörter ein. Das Wort kann auch ein ASIN-, ISBN- oder EAN-Code sein.</p>
+        <p>Beispiele: Jaco Pastorius, Rock Bass, Tonleiter, Lehrbuch, Album, B000PY31I4 (ASIN), 1617806013 (ISBN), 9780793592746 (EAN)</p>
 
     <?php elseif (mb_strlen($term) < SearchController::MIN_QUERY_LENGTH): ?>
         <p>Die Suchanfrage muss mindestens drei Zeichen lang sein.</p>
 
     <?php elseif ($dataProvider->getTotalCount() === 0): ?>
-        <p>Es wurden keine mit deiner Suchanfrage - <?= Html::encode($term) ?> - übereinstimmenden Dokumente
-            gefunden.<br>
-            <br>
-            Vorschläge:</p>
+        <p>Es wurden keine mit deiner Suchanfrage - <?= Html::encode($term) ?> - übereinstimmenden Dokumente gefunden.<br><br>Vorschläge:</p>
         <ul>
             <li>Achte darauf, dass alle Wörter richtig geschrieben sind</li>
             <li>Probiere andere Suchbegriffe</li>

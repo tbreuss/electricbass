@@ -35,7 +35,7 @@ final class SearchController extends Controller
 
         if (!empty($term) && (mb_strlen($term) >= SearchController::MIN_QUERY_LENGTH)) {
             $condition = '';
-            $fields = ['title', 'subtitle', 'abstract', 'content'/*, 'tags'*/];
+            $fields = ['title', 'subtitle', 'abstract', 'content', 'keywords'];
             $queryParts = explode(' ', $term);
             $queryParts = array_filter($queryParts, [$this, 'filterQueryParts']);
 
