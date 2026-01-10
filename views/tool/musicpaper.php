@@ -150,7 +150,6 @@ $this->params['breadcrumbs'][] = 'Leeres Notenpapier als PDF';
         <?php endif; ?>
     <?php endforeach; ?>
     </div>
-
-    <?= SocialBar::widget(["text" => "Notenpapier zum Herunterladen und Ausdrucken"]) ?>
-
 </div>
+
+<?= SocialBar::widget(["text" => "Notenpapier zum Herunterladen und Ausdrucken"]) ?>

@@ -23,9 +23,7 @@ CanonicalLink::widget(['keepParams' => ['path']]);
 ?>
 
 <div class="content">
-
     <h1><?= $model->title ?></h1>
-
     <?php if (!empty($model->text)): ?>
         <div class="widget widget-parser">
             <?= Parser::widget(["model" => $model, "attribute" => "text"]) ?>
@@ -35,15 +33,16 @@ CanonicalLink::widget(['keepParams' => ['path']]);
             'categories' => $breadcrumbs,
             'tags' => $model->tags,
         ]); ?>
-
-        <?= Rating::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
-    <?php else: ?>
-        <?= RatingReadOnly::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
     <?php endif; ?>
-
-    <?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
-
 </div>
+
+<?php if (!empty($model->text)): ?>
+    <?= Rating::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
+<?php else: ?>
+    <?= RatingReadOnly::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
+<?php endif; ?>
+
+<?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
 
 <?= Comments::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
 

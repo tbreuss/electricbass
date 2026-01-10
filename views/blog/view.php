@@ -69,20 +69,19 @@ $this->params['breadcrumbs'][] = $blog->title;
         ],
         'tags' => $blog->tags,
     ]); ?>
-
-    <?php if (empty($redirect)): ?>
-        <?= Rating::widget(["tableName" => "blog", "tableId" => $blog->id]) ?>
-    <?php endif; ?>
-
-    <?= SocialBar::widget(["id" => $blog->id, "text" => $blog->title]) ?>
-
-    <?php if (!empty($redirect)): ?>
-        <div class="flash flash--info"><?= Html::a('Dieser Artikel wurde in diesen neuen Bereich der Website verschoben', $redirect->to) ?></div>
-    <?php endif; ?>
-
-    <?php /*<p><?= Html::a("Alle Blogposts anzeigen", Url::previous("blog")) ?></p>*/ ?>
-
 </div>
+
+<?php if (empty($redirect)): ?>
+    <?= Rating::widget(["tableName" => "blog", "tableId" => $blog->id]) ?>
+<?php endif; ?>
+
+<?= SocialBar::widget(["id" => $blog->id, "text" => $blog->title]) ?>
+
+<?php if (!empty($redirect)): ?>
+    <div class="flash flash--info"><?= Html::a('Dieser Artikel wurde in diesen neuen Bereich der Website verschoben', $redirect->to) ?></div>
+<?php endif; ?>
+
+<?php /*<p><?= Html::a("Alle Blogposts anzeigen", Url::previous("blog")) ?></p>*/ ?>
 
 <?php if (empty($redirect)): ?>
     <?= Comments::widget(["tableName" => "blog", "tableId" => $blog->id]) ?>

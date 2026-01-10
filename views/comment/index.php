@@ -5,29 +5,32 @@
  */
 
 use app\helpers\Html;
+use app\helpers\Url;
 
+$this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
+$this->title = 'Kommentar zum Artikel';
 ?>
-<div class="comments__form">
 
-    <?php if (Yii::$app->session->hasFlash('comment/error')): ?>
+<?php if (Yii::$app->session->hasFlash('comment/success')): ?>
+    <h2><?= urldecode($title) ?></h2>
+    <div class="flash flash--success col-12">
+        <?= Yii::$app->session->getFlash('comment/success') ?>
+    </div>
+    <p><a href="<?= urldecode($url) ?>">Zurück zum Artikel</a></p>
+    <?php return ?>
+<?php endif; ?>
+
+<div class="comments__form">
+    <h2 style="margin-bottom:0">Kommentar zum Artikel</h2>
+    <p><a href="<?= urldecode($url) ?>" style="color: #5F5C52; text-decoration: underline"><?= urldecode($title) ?></a></p>
+
+    <?php /* if (Yii::$app->session->hasFlash('comment/error')): ?>
         <div class="flash flash--danger col-12">
             <?= Yii::$app->session->getFlash('comment/error') ?>
         </div>
-    <?php endif; ?>
+    <?php endif; */ ?>
 
-    <?php if (Yii::$app->session->hasFlash('comment/success')): ?>
-        <div class="flash flash--success col-12">
-            <?= Yii::$app->session->getFlash('comment/success') ?>
-        </div>
-    <?php endif; ?>
-
-    <?php if (empty($count)): ?>
-        <h2 class="comments__formTitle">Schreib den ersten Kommentar.</h2>
-    <?php else: ?>
-        <h2 class="comments__formTitle">Diskutiere mit.</h2>
-    <?php endif; ?>
-
-    <?= Html::beginForm('#form', 'post', ['id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
+    <?= Html::beginForm(['/comment/index', 'name' => $model->tableName, 'id' => $model->tableId, 'url' => $url, 'title' => $title], 'post', ['up-layer' => 'current', 'id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
 
     <div class="row">
         <div class="col-12 form__row">
@@ -49,7 +52,7 @@ use app\helpers\Html;
             <?php $errorClass = $model->hasErrors('check') ? 'is-invalid' : ''; ?>
             <div class="form__checkboxWrapper">
                 <?= Html::checkbox('Comment[check]', $model->check, ['id' => 'check', 'class' => 'form__checkbox ' . $errorClass]); ?>
-                <?= Html::label('Ich habe die <a role="button" data-collapsible="#comment-rules" href="#">Kommentarregeln</a> gelesen und erkläre mich einverstanden.', 'check', ['class' => 'form__labelCheckbox']); ?>
+                <?= Html::label('Ich habe die <a up-layer="new" href="' . Url::to(['/comment/rules']) . '">Kommentarregeln</a> gelesen und erkläre mich einverstanden.', 'check', ['class' => 'form__labelCheckbox']); ?>
             </div>
             <?= Html::error($model, 'check', ['class' => 'invalid-feedback']); ?>
         </div>
@@ -74,7 +77,7 @@ use app\helpers\Html;
             <p><i>Recht auf Publikation</i>: Bitte habe Verständnis dafür, dass kein Recht auf Publikation von Kommentaren besteht.</p>
         </div>
 
-        <div class="col-6 form__row form__row--buttons">
+        <div class="col-6 form__row form__row--buttons" style="margin-top: 0.5rem">
             <?= Html::submitButton('Kommentar absenden', ['class' => 'form__submit']) ?>
         </div>
 

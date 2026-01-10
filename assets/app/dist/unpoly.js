@@ -5,7 +5,7 @@
 /***/ (() => {
 
 window.up = {
-    version: '3.2.0'
+    version: '3.12.1'
 };
 
 
@@ -51,11 +51,8 @@ up.util = (function () {
             }
         };
     }
-    const NORMALIZE_URL_DEFAULTS = {
-        host: 'cross-domain',
-    };
     function normalizeURL(url, options) {
-        options = newOptions(options, NORMALIZE_URL_DEFAULTS);
+        options = newOptions(options, { host: 'cross-domain' });
         const parts = parseURL(url);
         let normalized = '';
         if (options.host === 'cross-domain') {
@@ -77,8 +74,22 @@ up.util = (function () {
         }
         return normalized;
     }
-    function matchURLs(leftURL, rightURL) {
-        return normalizeURL(leftURL) === normalizeURL(rightURL);
+    function matchURLs(leftURL, rightURL, options) {
+        return matchableURL(leftURL, options) === matchableURL(rightURL, options);
+    }
+    function matchableURL(url, options) {
+        if (!url)
+            return;
+        return normalizeURL(url, { hash: false, trailingSlash: false, ...options });
+    }
+    function matchableURLPatternAtom(patternAtom) {
+        if (patternAtom.endsWith('/'))
+            return [patternAtom, patternAtom.slice(0, -1)];
+        if (patternAtom.includes('/?'))
+            return [patternAtom, patternAtom.replace('/?', '?')];
+        if (patternAtom.endsWith('/*'))
+            return [patternAtom, patternAtom.slice(0, -2), patternAtom.slice(0, -2) + '?*'];
+        return patternAtom;
     }
     const APP_PROTOCOL = location.protocol;
     const APP_HOSTNAME = location.hostname;
@@ -105,7 +116,7 @@ up.util = (function () {
     }
     function iteratee(block) {
         if (isString(block)) {
-            return item => item[block];
+            return (item) => item[block];
         }
         else {
             return block;
@@ -124,11 +135,7 @@ up.util = (function () {
         return mapped;
     }
     function mapObject(array, pairer) {
-        const merger = function (object, pair) {
-            object[pair[0]] = pair[1];
-            return object;
-        };
-        return map(array, pairer).reduce(merger, {});
+        return Object.fromEntries(array.map(pairer));
     }
     function each(array, block) {
         let i = 0;
@@ -136,15 +143,18 @@ up.util = (function () {
             block(item, i++);
         }
     }
-    function isNull(object) {
-        return object === null;
+    function isNull(value) {
+        return value === null;
     }
-    function isUndefined(object) {
-        return object === undefined;
+    function isTruthy(value) {
+        return !!value;
+    }
+    function isUndefined(value) {
+        return value === undefined;
     }
     const isDefined = negate(isUndefined);
-    function isMissing(object) {
-        return isUndefined(object) || isNull(object);
+    function isMissing(value) {
+        return isUndefined(value) || isNull(value);
     }
     const isGiven = negate(isMissing);
     function isBlank(value) {
@@ -169,46 +179,49 @@ up.util = (function () {
         }
     }
     const isPresent = negate(isBlank);
-    function isFunction(object) {
-        return typeof (object) === 'function';
+    function isFunction(value) {
+        return typeof (value) === 'function';
     }
-    function isString(object) {
-        return (typeof (object) === 'string') || object instanceof String;
+    function isString(value) {
+        return (typeof (value) === 'string') || value instanceof String;
     }
-    function isBoolean(object) {
-        return (typeof (object) === 'boolean') || object instanceof Boolean;
+    function isBoolean(value) {
+        return (typeof (value) === 'boolean') || value instanceof Boolean;
     }
-    function isNumber(object) {
-        return (typeof (object) === 'number') || object instanceof Number;
+    function isNumber(value) {
+        return (typeof (value) === 'number') || value instanceof Number;
     }
-    function isOptions(object) {
-        return (typeof (object) === 'object') && !isNull(object) && (isUndefined(object.constructor) || (object.constructor === Object));
+    function isOptions(value) {
+        return (typeof (value) === 'object') && !isNull(value) && (isUndefined(value.constructor) || (value.constructor === Object));
     }
-    function isObject(object) {
-        const typeOfResult = typeof (object);
-        return ((typeOfResult === 'object') && !isNull(object)) || (typeOfResult === 'function');
+    function isObject(value) {
+        const typeOfResult = typeof (value);
+        return ((typeOfResult === 'object') && !isNull(value)) || (typeOfResult === 'function');
     }
-    function isElement(object) {
-        return object instanceof Element;
+    function isElement(value) {
+        return value instanceof Element;
     }
-    function isRegExp(object) {
-        return object instanceof RegExp;
+    function isTextNode(value) {
+        return value instanceof Text;
     }
-    function isError(object) {
-        return object instanceof Error;
+    function isRegExp(value) {
+        return value instanceof RegExp;
     }
-    function isJQuery(object) {
-        return up.browser.canJQuery() && object instanceof jQuery;
+    function isError(value) {
+        return value instanceof Error;
     }
-    function isElementish(object) {
-        return !!(object && (object.addEventListener || object[0]?.addEventListener));
+    function isJQuery(value) {
+        return up.browser.canJQuery() && value instanceof jQuery;
     }
-    function isPromise(object) {
-        return isObject(object) && isFunction(object.then);
+    function isElementLike(value) {
+        return !!(value && (value.addEventListener || (isJQuery(value) && value[0]?.addEventListener)));
+    }
+    function isPromise(value) {
+        return isObject(value) && isFunction(value.then);
     }
     const { isArray } = Array;
-    function isFormData(object) {
-        return object instanceof FormData;
+    function isFormData(value) {
+        return value instanceof FormData;
     }
     function toArray(value) {
         return isArray(value) ? value : copyArrayLike(value);
@@ -229,10 +242,8 @@ up.util = (function () {
     function isArguments(value) {
         return Object.prototype.toString.call(value) === '[object Arguments]';
     }
-    function nullToUndefined(value) {
-        if (!isNull(value)) {
-            return value;
-        }
+    function isAdjacentPosition(value) {
+        return /^(before|after)/.test(value);
     }
     function wrapList(value) {
         if (isList(value)) {
@@ -291,10 +302,9 @@ up.util = (function () {
         }
     }
     function parseArgIntoOptions(args, argKey) {
-        let options = extractOptions(args);
-        if (isDefined(args[0])) {
-            options = copy(options);
-            options[argKey] = args[0];
+        let [positionalArg, options] = parseArgs(args, 'val', 'options');
+        if (isDefined(positionalArg)) {
+            options[argKey] = positionalArg;
         }
         return options;
     }
@@ -337,9 +347,6 @@ up.util = (function () {
     function compact(array) {
         return filterList(array, isGiven);
     }
-    function filterMap(list, mapping) {
-        return filterList(map(list, mapping), isDefined);
-    }
     function compactObject(object) {
         return pickBy(object, isGiven);
     }
@@ -381,22 +388,28 @@ up.util = (function () {
         return filterList(list, tester);
     }
     function intersect(array1, array2) {
-        return filterList(array1, element => contains(array2, element));
+        return filterList(array1, (element) => contains(array2, element));
     }
     function scheduleTimer(millis, callback) {
         return setTimeout(callback, millis);
     }
     function queueTask(task) {
-        return setTimeout(task);
+        setTimeout(task);
     }
-    function queueMicrotask(task) {
-        return Promise.resolve().then(task);
+    function queueFastTask(task) {
+        const channel = new MessageChannel();
+        channel.port1.onmessage = () => task();
+        channel.port2.postMessage(0);
     }
     function last(value) {
         return value[value.length - 1];
     }
     function contains(value, subValue) {
-        return value.indexOf(subValue) >= 0;
+        let indexOf = value.indexOf || Array.prototype.indexOf;
+        return indexOf.call(value, subValue) >= 0;
+    }
+    function containsAll(values, subValues) {
+        return every(subValues, (subValue) => contains(values, subValue));
     }
     function objectContains(object, subObject) {
         const reducedValue = pick(object, Object.keys(subObject));
@@ -416,7 +429,7 @@ up.util = (function () {
         const filtered = {};
         for (let key in object) {
             const value = object[key];
-            if (tester(value, key, object)) {
+            if (tester(value, key)) {
                 filtered[key] = object[key];
             }
         }
@@ -453,7 +466,7 @@ up.util = (function () {
         "'": '&#x27;'
     };
     function escapeHTML(string) {
-        return string.replace(/[&<>"']/g, char => ESCAPE_HTML_ENTITY_MAP[char]);
+        return string.replace(/[&<>"']/g, (char) => ESCAPE_HTML_ENTITY_MAP[char]);
     }
     function escapeRegExp(string) {
         return string.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -464,7 +477,9 @@ up.util = (function () {
         return value;
     }
     function renameKey(object, oldKey, newKey) {
-        return object[newKey] = pluckKey(object, oldKey);
+        if (oldKey in object) {
+            object[newKey] = pluckKey(object, oldKey);
+        }
     }
     function extractLastArg(args, tester) {
         if (tester(last(args))) {
@@ -480,9 +495,9 @@ up.util = (function () {
     function identity(arg) {
         return arg;
     }
-    function sequence(functions) {
-        functions = compact(functions);
-        return (...args) => map(functions, fn => fn(...args));
+    function sequence(...args) {
+        let functions = scanFunctions(...args);
+        return (...args) => map(functions, (fn) => fn(...args));
     }
     function flatten(array) {
         const flattened = [];
@@ -517,59 +532,69 @@ up.util = (function () {
         return Object.prototype.hasOwnProperty(k);
     }
     function isEqual(a, b) {
+        if (a === b) {
+            return true;
+        }
         if (a?.valueOf) {
             a = a.valueOf();
         }
         if (b?.valueOf) {
             b = b.valueOf();
         }
+        if (a === b) {
+            return true;
+        }
         if (typeof (a) !== typeof (b)) {
             return false;
         }
-        else if (isList(a) && isList(b)) {
+        if (isList(a) && isList(b)) {
             return isEqualList(a, b);
         }
-        else if (isObject(a) && a[isEqual.key]) {
+        if (isObject(a) && a[isEqual.key]) {
             return a[isEqual.key](b);
         }
-        else if (isOptions(a) && isOptions(b)) {
-            const aKeys = Object.keys(a);
-            const bKeys = Object.keys(b);
-            if (isEqualList(aKeys, bKeys)) {
-                return every(aKeys, aKey => isEqual(a[aKey], b[aKey]));
-            }
-            else {
-                return false;
-            }
+        if (isOptions(a) && isOptions(b)) {
+            return isEqualOptions(a, b);
         }
-        else {
-            return a === b;
-        }
+        return false;
+    }
+    function isEqualOptions(a, b) {
+        const aKeys = Object.keys(a);
+        const bKeys = Object.keys(b);
+        return isEqualList(aKeys, bKeys) && every(aKeys, (key) => isEqual(a[key], b[key]));
     }
     isEqual.key = 'up.util.isEqual';
     function isEqualList(a, b) {
         return (a.length === b.length) && every(a, (elem, index) => isEqual(elem, b[index]));
     }
-    const PARSE_TOKEN_PATTERNS = {
-        'space/or': /\s+(?:or\s+)?/,
-        'or': /\s+or\s+/,
-        'comma': /\s*,\s*/
-    };
-    function parseTokens(value, options = {}) {
-        if (isString(value)) {
-            value = value.trim();
-            if (options.json && /^\[.*]$/.test(value)) {
-                return JSON.parse(value);
-            }
-            else {
-                let separator = options.separator || 'space/or';
-                let pattern = PARSE_TOKEN_PATTERNS[separator];
-                return value.split(pattern);
-            }
-        }
-        else {
+    function getSimpleTokens(value, { json = false, separator = /[,\s]/ } = {}) {
+        if (!isString(value)) {
             return wrapList(value);
         }
+        else if (json && /^\[.*]$/.test(value)) {
+            return parseRelaxedJSON(value);
+        }
+        else {
+            return splitSimpleTokenString(value, separator);
+        }
+    }
+    function splitSimpleTokenString(value, separator) {
+        let parts = up.migrate.splitAtOr?.(value) || value.split(separator);
+        return parts.map((s) => s.trim()).filter(identity);
+    }
+    function getComplexTokens(value) {
+        if (!isString(value)) {
+            return wrapList(value);
+        }
+        else {
+            let { maskedTokens, restore } = complexTokenOutlines(value);
+            return maskedTokens.map((token) => restore(token));
+        }
+    }
+    function complexTokenOutlines(string) {
+        let { masked, restore } = expressionOutline(string);
+        let maskedTokens = splitSimpleTokenString(masked, ',');
+        return { maskedTokens, restore };
     }
     function wrapValue(constructor, ...args) {
         return (args[0] instanceof constructor) ? args[0] : new constructor(...args);
@@ -581,24 +606,24 @@ up.util = (function () {
     function reverse(list) {
         return copy(list).reverse();
     }
-    function renameKeys(object, renameKeyFn) {
+    function withRenamedKeys(object, renameKeyFn) {
         const renamed = {};
         for (let key in object) {
-            renamed[renameKeyFn(key)] = object[key];
+            let transformed = renameKeyFn(key);
+            if (isGiven(transformed)) {
+                renamed[transformed] = object[key];
+            }
         }
         return renamed;
     }
     function camelToKebabCase(str) {
-        return str.replace(/[A-Z]/g, char => '-' + char.toLowerCase());
+        return str.replace(/[A-Z]/g, (char) => '-' + char.toLowerCase());
     }
     function lowerCaseFirst(str) {
         return str[0].toLowerCase() + str.slice(1);
     }
     function upperCaseFirst(str) {
         return str[0].toUpperCase() + str.slice(1);
-    }
-    function defineGetter(object, prop, get) {
-        Object.defineProperty(object, prop, { get });
     }
     function defineDelegates(object, props, targetProvider) {
         for (let prop of props) {
@@ -617,6 +642,9 @@ up.util = (function () {
                 }
             });
         }
+    }
+    function delegatePromise(object, targetProvider) {
+        return defineDelegates(object, ['then', 'catch', 'finally'], targetProvider);
     }
     function stringifyArg(arg, placeholder = '%o') {
         let string;
@@ -701,16 +729,17 @@ up.util = (function () {
             return { error: e };
         }
     }
-    function memoizeMethod(object, propOrProps) {
-        for (let prop of wrapList(propOrProps)) {
-            let oldImpl = object[prop];
-            object[prop] = function (...args) {
-                var _a;
-                let cache = this[_a = `__${prop}MemoizeCache`] || (this[_a] = {});
+    function memoizeMethod(object, propLiteral) {
+        for (let prop in propLiteral) {
+            let originalDescriptor = Object.getOwnPropertyDescriptor(object, prop);
+            let oldImpl = originalDescriptor.value;
+            let cachingImpl = function (...args) {
+                let cache = this[`__${prop}MemoizeCache`] ||= {};
                 let cacheKey = JSON.stringify(args);
-                cache[cacheKey] || (cache[cacheKey] = buildMemoizeCacheEntry(oldImpl, this, args));
+                cache[cacheKey] ||= buildMemoizeCacheEntry(oldImpl, this, args);
                 return useMemoizeCacheEntry(cache[cacheKey]);
             };
+            object[prop] = cachingImpl;
         }
     }
     function safeStringifyJSON(value) {
@@ -726,14 +755,146 @@ up.util = (function () {
         Object.assign(variant, changes);
         return variant;
     }
+    function parseArgs(args, ...specs) {
+        let results = [];
+        while (specs.length) {
+            let lastSpec = specs.pop();
+            if (lastSpec === 'options') {
+                results.unshift(extractOptions(args));
+            }
+            else if (lastSpec === 'callback') {
+                results.unshift(extractCallback(args));
+            }
+            else if (lastSpec === 'val') {
+                results.unshift(args.pop());
+            }
+            else if (isFunction(lastSpec)) {
+                let value = lastSpec(last(args)) ? args.pop() : undefined;
+                results.unshift(value);
+            }
+        }
+        return results;
+    }
+    function scanFunctions(...values) {
+        return values.flat().filter(isFunction);
+    }
+    function cleaner(order = 'lifo') {
+        let fns = [];
+        let track = function (values, transform) {
+            values = scanFunctions(...values).map(transform);
+            fns.push(...scanFunctions(...values));
+        };
+        let api = function (...values) {
+            track(values, identity);
+        };
+        api.guard = function (...values) {
+            track(values, up.error.guardFn);
+        };
+        api.clean = function (...args) {
+            if (order === 'lifo')
+                fns.reverse();
+            fns.forEach((fn) => fn(...args));
+            fns = [];
+        };
+        return api;
+    }
+    function maskPattern(str, patterns, { keepDelimiters = false } = {}) {
+        let maskCount = 0;
+        let maskPattern = /§\d+/g;
+        let maskings = {};
+        let replaceLayers = [];
+        let replace = (replacePattern, allowRestoreTransform) => {
+            let didReplace = false;
+            str = str.replaceAll(replacePattern, function (match) {
+                didReplace = true;
+                let mask = '§' + (maskCount++);
+                let remain;
+                let masked;
+                if (keepDelimiters) {
+                    let startDelimiter = match[0];
+                    let endDelimiter = match.slice(-1);
+                    masked = match.slice(1, -1);
+                    remain = startDelimiter + mask + endDelimiter;
+                }
+                else {
+                    masked = match;
+                    remain = mask;
+                }
+                maskings[mask] = masked;
+                return remain;
+            });
+            if (didReplace)
+                replaceLayers.unshift({ allowRestoreTransform });
+        };
+        replace(maskPattern, false);
+        for (let pattern of patterns)
+            replace(pattern, true);
+        let restore = (s, transform = identity) => {
+            for (let { allowRestoreTransform } of replaceLayers) {
+                let iterationTransform = allowRestoreTransform ? transform : identity;
+                s = s.replace(maskPattern, (match) => iterationTransform(assert(maskings[match], isString)));
+            }
+            return s;
+        };
+        return { masked: str, restore };
+    }
+    const QUOTED_STRING_PATTERN = /'(?:\\\\|\\'|[^'])*'|"(?:\\\\|\\"|[^"])*"/g;
+    const NESTED_GROUP_PATTERN = /{(?:[^{}]|{[^{}]*})*}|\((?:[^\(\)]|\([^\(\)]*\))*\)|\[(?:[^\[\]]|\[[^\[\]]*\])*\]/g;
+    function expressionOutline(str) {
+        return maskPattern(str, [QUOTED_STRING_PATTERN, NESTED_GROUP_PATTERN], { keepDelimiters: true });
+    }
+    function ensureDoubleQuotes(str) {
+        if (str[0] === '"')
+            return str;
+        assert(str[0] === "'");
+        str = str.slice(1, -1);
+        let transformed = str.replace(/(\\\\)|(\\')|(\\")|(")/g, function (_match, escapedBackslash, escapedSingleQuote, _doubleQuote) {
+            return escapedBackslash
+                || (escapedSingleQuote && "'")
+                || '\\"';
+        });
+        return '"' + transformed + '"';
+    }
+    function parseString(value) {
+        return JSON.parse(ensureDoubleQuotes(value));
+    }
+    function parseRelaxedJSON(str) {
+        let { masked, restore } = maskPattern(str, [QUOTED_STRING_PATTERN]);
+        masked = masked.replace(/([a-z_$][\w$]*:)/gi, (unquotedProperty) => ('"' + unquotedProperty.slice(0, -1) + '":'));
+        masked = masked.replace(/,\s*([}\]])/g, '$1');
+        masked = restore(masked, ensureDoubleQuotes);
+        return JSON.parse(masked);
+    }
+    function parseScalarJSONPairs(str) {
+        let { maskedTokens, restore } = complexTokenOutlines(str);
+        return maskedTokens.map((maskedToken) => {
+            let [_match, string, json] = maskedToken.match(/([^{]+)({[^}]*})?/);
+            return [
+                restore(string.trim()),
+                json && parseRelaxedJSON(restore(json))
+            ];
+        });
+    }
+    function spanObject(keys, value) {
+        return mapObject(keys, (key) => [key, value]);
+    }
+    function assert(value, testFn = isTruthy) {
+        if (testFn(value)) {
+            return value;
+        }
+        else {
+            throw "assert failed";
+        }
+    }
     return {
         parseURL,
         normalizeURL,
+        matchableURL,
+        matchableURLPatternAtom,
         matchURLs,
         normalizeMethod,
         methodAllowsPayload,
         copy,
-        copyArrayLike,
         merge,
         mergeDefined,
         options: newOptions,
@@ -742,12 +903,12 @@ up.util = (function () {
         map,
         flatMap,
         mapObject,
+        spanObject,
         findResult,
         some,
         every,
         find: findInList,
         filter: filterList,
-        filterMap: filterMap,
         reject,
         intersect,
         compact,
@@ -769,16 +930,19 @@ up.util = (function () {
         isBoolean,
         isNumber,
         isElement,
+        isTextNode,
         isJQuery,
-        isElementish,
+        isElementLike,
         isPromise,
         isOptions,
         isArray,
         isFormData,
         isList,
         isRegExp,
+        isAdjacentPosition,
         timer: scheduleTimer,
         contains,
+        containsAll,
         objectContains,
         toArray,
         pick,
@@ -805,25 +969,33 @@ up.util = (function () {
         isBasicObjectProperty,
         isCrossOrigin,
         task: queueTask,
-        microtask: queueMicrotask,
+        fastTask: queueFastTask,
         isEqual,
-        parseTokens,
+        getSimpleTokens,
+        getComplexTokens,
         wrapList,
         wrapValue,
         uid,
         upperCaseFirst,
         lowerCaseFirst,
-        getter: defineGetter,
         delegate: defineDelegates,
+        delegatePromise,
         reverse,
         camelToKebabCase,
-        nullToUndefined,
         sprintf,
-        renameKeys,
-        negate,
+        withRenamedKeys,
         memoizeMethod,
         safeStringifyJSON,
         variant,
+        cleaner,
+        scanFunctions,
+        args: parseArgs,
+        parseRelaxedJSON,
+        parseScalarJSONPairs,
+        maskPattern,
+        expressionOutline,
+        parseString,
+        assert,
     };
 })();
 
@@ -833,10 +1005,6 @@ up.util = (function () {
 /***/ (() => {
 
 up.error = (function () {
-    function emitGlobal(error) {
-        const { message } = error;
-        up.emit(window, 'error', { message, error, log: false });
-    }
     function fail(...args) {
         throw new up.Error(args);
     }
@@ -844,17 +1012,43 @@ up.error = (function () {
         return (typeof error !== 'object') || ((error.name !== 'AbortError') && !(error instanceof up.RenderResult) && !(error instanceof up.Response));
     }
     function muteUncriticalRejection(promise) {
-        return promise.catch(function (reason) {
-            if (isCritical(reason)) {
-                throw reason;
-            }
-        });
+        return promise.catch(throwCritical);
+    }
+    function muteUncriticalSync(block) {
+        try {
+            return block();
+        }
+        catch (e) {
+            throwCritical(e);
+        }
+    }
+    function throwCritical(value) {
+        if (isCritical(value)) {
+            throw value;
+        }
+    }
+    function guard(fn, ...args) {
+        try {
+            return fn(...args);
+        }
+        catch (error) {
+            reportError(error);
+        }
+    }
+    function guardPromise(promise) {
+        return promise.catch(reportError);
+    }
+    function guardFn(fn) {
+        return (...args) => guard(() => fn(...args));
     }
     return {
         fail,
-        emitGlobal,
-        isCritical,
+        throwCritical,
         muteUncriticalRejection,
+        muteUncriticalSync,
+        guard,
+        guardPromise,
+        guardFn,
     };
 })();
 up.fail = up.error.fail;
@@ -864,7 +1058,9 @@ up.fail = up.error.fail;
 /* 5 */
 /***/ (() => {
 
-up.migrate = { config: {} };
+up.migrate = {
+    config: {},
+};
 
 
 /***/ }),
@@ -872,7 +1068,6 @@ up.migrate = { config: {} };
 /***/ (() => {
 
 up.browser = (function () {
-    const u = up.util;
     function submitForm(form) {
         form.submit();
     }
@@ -882,14 +1077,6 @@ up.browser = (function () {
     function canJQuery() {
         return !!window.jQuery;
     }
-    const canEval = u.memoize(function () {
-        try {
-            return new Function('return true')();
-        }
-        catch {
-            return false;
-        }
-    });
     function popCookie(name) {
         let value = document.cookie.match(new RegExp(name + "=(\\w+)"))?.[1];
         if (value) {
@@ -908,7 +1095,6 @@ up.browser = (function () {
         submitForm,
         canPushState,
         canJQuery,
-        canEval,
         assertConfirmed,
         popCookie,
     };
@@ -923,32 +1109,30 @@ __webpack_require__(8);
 up.element = (function () {
     const u = up.util;
     function first(...args) {
-        const selector = args.pop();
-        const root = args[0] || document;
+        let [root = document, selector] = u.args(args, 'val', 'val');
         return root.querySelector(selector);
     }
     function subtree(root, selector) {
-        const results = [];
-        if (root.matches(selector)) {
-            results.push(root);
+        const descendantMatches = root.querySelectorAll(selector);
+        if (elementLikeMatches(root, selector)) {
+            return [root, ...descendantMatches];
         }
-        results.push(...root.querySelectorAll(selector));
-        return results;
+        else {
+            return descendantMatches;
+        }
     }
-    function isInSubtree(root, selectorOrElement) {
+    function subtreeFirst(root, selector) {
+        return elementLikeMatches(root, selector) ? root : root.querySelector(selector);
+    }
+    function elementLikeMatches(elementLike, selector) {
+        return u.isElement(elementLike) && elementLike.matches(selector);
+    }
+    function contains(root, selectorOrElement) {
         const element = getOne(selectorOrElement);
-        return root.contains(element);
+        return Node.prototype.contains.call(root, element);
     }
     function ancestor(element, selector) {
-        let parentElement = element.parentElement;
-        if (parentElement) {
-            if (parentElement.matches(selector)) {
-                return parentElement;
-            }
-            else {
-                return ancestor(parentElement, selector);
-            }
-        }
+        return element.parentNode?.closest(selector);
     }
     function around(element, selector) {
         return getList(element.closest(selector), subtree(element, selector));
@@ -983,24 +1167,38 @@ up.element = (function () {
         }
     }
     function hide(element) {
-        element.setAttribute('hidden', '');
+        setVisible(element, false);
     }
     function show(element) {
-        element.removeAttribute('hidden');
-        if (element.style.display === 'none') {
-            element.style.display = '';
+        setVisible(element, true);
+    }
+    function showTemp(element) {
+        return setVisibleTemp(element, true);
+    }
+    function hideTemp(element) {
+        return setVisibleTemp(element, false);
+    }
+    function setVisibleTemp(element, newVisible) {
+        if (newVisible === isVisible(element))
+            return u.noop;
+        setVisible(element, newVisible);
+        return () => setVisible(element, !newVisible);
+    }
+    function setVisible(element, newVisible) {
+        if (newVisible) {
+            element.removeAttribute('hidden');
+            if (element.style.display === 'none') {
+                element.style.display = '';
+            }
+        }
+        else {
+            element.setAttribute('hidden', '');
         }
     }
-    function toggle(element, newVisible) {
-        if (newVisible == null) {
-            newVisible = !isVisible(element);
-        }
-        (newVisible ? show : hide)(element);
+    function toggle(element, newVisible = !isVisible(element)) {
+        setVisible(element, newVisible);
     }
-    function toggleAttr(element, attr, value, newPresent) {
-        if (newPresent == null) {
-            newPresent = !element.hasAttribute(attr);
-        }
+    function setAttrPresence(element, attr, value, newPresent) {
         if (newPresent) {
             return element.setAttribute(attr, value);
         }
@@ -1019,28 +1217,26 @@ up.element = (function () {
             }
         }
     }
-    function setTemporaryAttrs(element, attrs) {
-        const oldAttrs = {};
-        for (let key of Object.keys(attrs)) {
-            oldAttrs[key] = element.getAttribute(key);
-        }
+    function setAttrsTemp(element, attrs) {
+        let keys = Object.keys(attrs);
+        let oldAttrs = pickAttrs(element, keys);
         setAttrs(element, attrs);
         return () => setAttrs(element, oldAttrs);
     }
     function metaContent(name) {
         const selector = "meta" + attrSelector('name', name);
-        return first(selector)?.getAttribute('content');
+        return document.head.querySelector(selector)?.getAttribute('content');
     }
-    function insertBefore(existingElement, newElement) {
-        existingElement.insertAdjacentElement('beforebegin', newElement);
+    function insertBefore(existingNode, newNode) {
+        existingNode.parentNode.insertBefore(newNode, existingNode);
     }
-    function createFromSelector(selector, attrs) {
+    function createFromSelector(selector, attrs = {}) {
         let { includePath } = parseSelector(selector);
         let rootElement;
         let depthElement;
         let previousElement;
         for (let includeSegment of includePath) {
-            let { tagName, id, classNames, attributes } = includeSegment;
+            let { tagName } = includeSegment;
             if (!tagName || tagName === '*') {
                 tagName = 'div';
             }
@@ -1048,47 +1244,53 @@ up.element = (function () {
             if (!rootElement) {
                 rootElement = depthElement;
             }
-            if (id) {
-                depthElement.id = id;
-            }
-            for (let className of classNames) {
-                depthElement.classList.add(className);
-            }
-            for (let attributeName in attributes) {
-                let attributeValue = attributes[attributeName];
-                depthElement.setAttribute(attributeName, attributeValue || '');
-            }
+            makeVariation(depthElement, includeSegment);
             previousElement?.appendChild(depthElement);
             previousElement = depthElement;
         }
-        if (attrs) {
-            let value;
-            if (value = u.pluckKey(attrs, 'class')) {
-                for (let klass of u.wrapList(value)) {
-                    rootElement.classList.add(klass);
-                }
+        for (let key in attrs) {
+            let value = attrs[key];
+            if (key === 'class') {
+                addClasses(rootElement, u.wrapList(value));
             }
-            if (value = u.pluckKey(attrs, 'style')) {
+            else if (key === 'style') {
                 setInlineStyle(rootElement, value);
             }
-            if (value = u.pluckKey(attrs, 'text')) {
+            else if (key === 'text') {
                 rootElement.textContent = value;
             }
-            if (value = u.pluckKey(attrs, 'content')) {
-                rootElement.innerHTML = value;
+            else if (key === 'content') {
+                if (u.isString(value)) {
+                    rootElement.innerHTML = value;
+                }
+                else {
+                    rootElement.append(...u.wrapList(value));
+                }
             }
-            setAttrs(rootElement, attrs);
+            else {
+                rootElement.setAttribute(key, value);
+            }
         }
         return rootElement;
     }
-    function parseSelector(selector) {
+    function makeVariation(element, { id, classNames, attributes }) {
+        if (id) {
+            element.id = id;
+        }
+        for (let [name, value] of Object.entries(attributes)) {
+            element.setAttribute(name, value);
+        }
+        addClasses(element, classNames);
+    }
+    function parseSelector(rawSelector) {
         let excludeRaw;
-        const includeRaw = selector.replace(/:not\([^)]+\)/, function (match) {
-            excludeRaw = match;
+        const { masked: selectorOutline, restore: restoreSelectorLiterals, } = u.expressionOutline(rawSelector);
+        const includeWithoutAttrs = selectorOutline.replace(/:not\([^)]*\)/, function (match) {
+            excludeRaw = restoreSelectorLiterals(match);
             return '';
         });
-        const [includeSelectorWithoutAttrValues, attrValues] = removeAttrSelectorValues(includeRaw);
-        const includeSegments = includeSelectorWithoutAttrValues.split(/[ >]+/);
+        let includeRaw = restoreSelectorLiterals(includeWithoutAttrs);
+        const includeSegments = includeWithoutAttrs.split(/[ >]+/);
         let includePath = includeSegments.map(function (depthSelector) {
             let parsed = {
                 tagName: null,
@@ -1108,14 +1310,15 @@ up.element = (function () {
                 parsed.classNames.push(className);
                 return '';
             });
-            if (attrValues.length) {
-                depthSelector = replaceAttrSelectors(depthSelector, function ({ name }) {
-                    parsed.attributes[name] = attrValues.shift();
-                    return '';
-                });
-            }
+            depthSelector = depthSelector.replace(/\[[^\]]*]/g, function (attr) {
+                attr = restoreSelectorLiterals(attr);
+                let [_raw, name, _operator, quote, value] = attr.match(/\[([\w-]+)(?:([~|^$*]?=)(["'])?([^\3\]]*?)\3)?]/);
+                quote ||= '"';
+                parsed.attributes[name] = value ? u.parseString(quote + value + quote) : '';
+                return '';
+            });
             if (depthSelector) {
-                up.fail('Cannot parse selector: ' + selector);
+                up.fail('Cannot parse selector: ' + rawSelector);
             }
             return parsed;
         });
@@ -1125,39 +1328,14 @@ up.element = (function () {
             excludeRaw,
         };
     }
-    const ATTR_SELECTOR_PATTERN = /\[([\w-]+)(?:([~|^$*]?=)(["'])?([^\3\]]*?)\3)?]/g;
-    function replaceAttrSelectors(string, replacement) {
-        return string.replace(ATTR_SELECTOR_PATTERN, function (_match, name, operator, quote, value) {
-            if (value) {
-                value = value.replace(/\\([\\"'])/, '$1');
-            }
-            return replacement({ name, operator, quote, value });
-        });
-    }
-    function removeAttrSelectorValues(selector) {
-        let values = [];
-        selector = replaceAttrSelectors(selector, function ({ name, value }) {
-            values.push(value);
-            return `[${name}]`;
-        });
-        return [selector, values];
-    }
-    function affix(parent, ...args) {
-        let position, selector;
-        const attributes = u.extractOptions(args);
-        if (args.length === 2) {
-            [position, selector] = args;
-        }
-        else {
-            position = 'beforeend';
-            selector = args[0];
-        }
+    function affix(...args) {
+        let [parent, position = 'beforeend', selector, attributes] = u.args(args, 'val', u.isAdjacentPosition, 'val', 'options');
         const element = createFromSelector(selector, attributes);
         parent.insertAdjacentElement(position, element);
         return element;
     }
     const SINGLETON_TAG_NAMES = ['HTML', 'BODY', 'HEAD', 'TITLE'];
-    const isSingleton = up.mockable(element => element.matches(SINGLETON_TAG_NAMES.join(',')));
+    const isSingleton = up.mockable((element) => element.matches(SINGLETON_TAG_NAMES.join()));
     function elementTagName(element) {
         return element.tagName.toLowerCase();
     }
@@ -1171,7 +1349,7 @@ up.element = (function () {
         }
     }
     function idSelector(id) {
-        if (id.match(/^[a-z0-9\-_]+$/i)) {
+        if (id.match(/^[a-z][a-z0-9\-_]*$/i)) {
             return `#${id}`;
         }
         else {
@@ -1179,29 +1357,39 @@ up.element = (function () {
         }
     }
     function classSelector(klass) {
-        klass = klass.replace(/:/g, '\\:');
+        klass = klass.replace(/[^\w-]/g, '\\$&');
         return `.${klass}`;
     }
     function createBrokenDocumentFromHTML(html) {
+        const firstTag = firstTagNameInHTML(html);
+        if (['TR', 'TD', 'TH', 'THEAD', 'TBODY'].includes(firstTag)) {
+            html = `<table>${html}</table>`;
+        }
         return new DOMParser().parseFromString(html, 'text/html');
     }
-    function fixScriptish(scriptish) {
-        let clone = document.createElement(scriptish.tagName);
-        for (let { name, value } of scriptish.attributes) {
-            clone.setAttribute(name, value);
-        }
-        clone.textContent = scriptish.innerHTML;
-        scriptish.replaceWith(clone);
+    function revivedClone(element) {
+        let clone = createFromHTML(element.outerHTML);
+        if ('nonce' in element)
+            clone.nonce = element.nonce;
+        return clone;
     }
     function createFromHTML(html) {
+        return extractSingular(createNodesFromHTML(html));
+    }
+    function extractSingular(nodes) {
+        if (nodes.length === 1 && u.isElementLike(nodes[0])) {
+            return nodes[0];
+        }
+        else {
+            up.fail('Expected a single element, but got %d elements', nodes.length);
+        }
+    }
+    function createNodesFromHTML(html) {
+        html = html.trim();
         const range = document.createRange();
         range.setStart(document.body, 0);
-        const fragment = range.createContextualFragment(html.trim());
-        let elements = fragment.childNodes;
-        if (elements.length !== 1) {
-            throw new Error('HTML must have a single root element');
-        }
-        return elements[0];
+        const fragment = range.createContextualFragment(html);
+        return fragment.childNodes;
     }
     function getRoot() {
         return document.documentElement;
@@ -1210,20 +1398,13 @@ up.element = (function () {
         element.offsetHeight;
     }
     function concludeCSSTransition(element) {
-        const undo = setTemporaryStyle(element, { transition: 'none' });
+        const undo = setStyleTemp(element, { transition: 'none' });
         paint(element);
         return undo;
     }
-    function hasCSSTransition(elementOrStyleHash) {
-        let styleHash;
-        if (u.isOptions(elementOrStyleHash)) {
-            styleHash = elementOrStyleHash;
-        }
-        else {
-            styleHash = computedStyle(elementOrStyleHash);
-        }
-        const prop = styleHash.transitionProperty;
-        const duration = styleHash.transitionDuration;
+    function hasCSSTransition(styleHash) {
+        const prop = styleHash['transition-property'];
+        const duration = styleHash['transition-duration'];
         const noTransition = ((prop === 'none') || ((prop === 'all') && (duration === 0)));
         return !noTransition;
     }
@@ -1232,8 +1413,8 @@ up.element = (function () {
         element.style.position = 'absolute';
         const offsetParentRect = element.offsetParent.getBoundingClientRect();
         setInlineStyle(element, {
-            left: elementRectAsFixed.left - computedStyleNumber(element, 'margin-left') - offsetParentRect.left,
-            top: elementRectAsFixed.top - computedStyleNumber(element, 'margin-top') - offsetParentRect.top,
+            left: (elementRectAsFixed.left - computedStyleNumber(element, 'margin-left') - offsetParentRect.left) + 'px',
+            top: (elementRectAsFixed.top - computedStyleNumber(element, 'margin-top') - offsetParentRect.top) + 'px',
             right: '',
             bottom: ''
         });
@@ -1250,23 +1431,29 @@ up.element = (function () {
     }
     function unwrap(wrapper) {
         preservingFocus(function () {
-            const parent = wrapper.parentNode;
-            const wrappedNodes = u.toArray(wrapper.childNodes);
-            u.each(wrappedNodes, wrappedNode => parent.insertBefore(wrappedNode, wrapper));
-            parent.removeChild(wrapper);
+            let childNodes = [...wrapper.childNodes];
+            for (let child of childNodes)
+                insertBefore(wrapper, child);
+            wrapper.remove();
         });
     }
-    function wrapChildren(element) {
-        let childNode;
+    function wrapNodes(nodeOrNodes) {
         const wrapper = document.createElement('up-wrapper');
-        while ((childNode = element.firstChild)) {
-            wrapper.appendChild(childNode);
-        }
-        element.appendChild(wrapper);
+        wrapper.append(...u.wrapList(nodeOrNodes));
         return wrapper;
     }
-    function isWrapper(element) {
-        return element.matches('up-wrapper');
+    function wrapIfRequired(nodes) {
+        if (nodes.length === 1 && u.isElement(nodes[0])) {
+            return nodes[0];
+        }
+        else {
+            return wrapNodes(nodes);
+        }
+    }
+    function wrapChildren(element) {
+        const wrapper = wrapNodes(element.childNodes);
+        element.append(wrapper);
+        return wrapper;
     }
     function preservingFocus(fn) {
         const oldFocusElement = document.activeElement;
@@ -1279,78 +1466,90 @@ up.element = (function () {
             }
         }
     }
-    function stringAttr(element, attribute) {
-        return u.nullToUndefined(element.getAttribute(attribute));
+    function parseAttr(element, attribute, ...parsers) {
+        if (!element.hasAttribute?.(attribute))
+            return undefined;
+        let rawValue = element.getAttribute(attribute);
+        for (let parser of parsers) {
+            let parserResult = parser(rawValue, attribute, element);
+            if (u.isDefined(parserResult))
+                return parserResult;
+        }
     }
-    function booleanAttr(element, attribute, pass) {
-        if (!element.hasAttribute(attribute))
-            return;
-        const value = stringAttr(element, attribute);
+    function stringAttr(element, attribute) {
+        return parseAttr(element, attribute, tryParseString);
+    }
+    let tryParseString = u.identity;
+    function booleanAttr(element, attribute) {
+        return parseAttr(element, attribute, tryParseBoolean);
+    }
+    function tryParseBoolean(value, attribute) {
         switch (value) {
             case 'false': {
                 return false;
             }
             case 'true':
             case '':
-            case attribute: {
-                return true;
-            }
-            default: {
-                if (pass) {
-                    return value;
-                }
-                else {
+            case attribute:
+                {
                     return true;
                 }
-            }
         }
     }
     function booleanOrStringAttr(element, attribute) {
-        return booleanAttr(element, attribute, true);
+        return parseAttr(element, attribute, tryParseBoolean, tryParseString);
+    }
+    function booleanOrNumberAttr(element, attribute) {
+        return parseAttr(element, attribute, tryParseBoolean, tryParseNumber);
     }
     function numberAttr(element, attribute) {
-        let value = element.getAttribute(attribute);
-        if (value) {
-            value = value.replace(/_/g, '');
-            if (value.match(/^[\d.]+$/)) {
-                return parseFloat(value);
-            }
+        return parseAttr(element, attribute, tryParseNumber);
+    }
+    function tryParseNumber(value) {
+        value = value.replaceAll('_', '');
+        if (value.match(/^-?[\d.]+$/)) {
+            return parseFloat(value);
         }
     }
     function jsonAttr(element, attribute) {
-        let json = element.getAttribute?.(attribute)?.trim();
-        if (json) {
-            return JSON.parse(json);
+        return parseAttr(element, attribute, tryParseJSON);
+    }
+    function tryParseJSON(value) {
+        if (value?.trim()) {
+            return u.parseRelaxedJSON(value);
         }
     }
-    function callbackAttr(link, attr, { exposedKeys = [], mainKey = 'event' } = {}) {
-        let code = link.getAttribute(attr);
-        if (code) {
-            const callback = up.NonceableCallback.fromString(code).toFunction(mainKey, ...exposedKeys);
-            return function (event) {
-                const exposedValues = Object.values(u.pick(event, exposedKeys));
-                return callback.call(link, event, ...exposedValues);
-            };
-        }
+    function callbackAttr(link, attr, callbackOptions) {
+        return parseAttr(link, attr, (value) => tryParseCallback(value, link, callbackOptions));
     }
-    function closestAttr(element, attr, parseFn = stringAttr) {
+    function tryParseCallback(code, link, { exposedKeys = [], mainKey = 'event' } = {}) {
+        const callback = up.NonceableCallback.fromString(code).toFunction(mainKey, ...exposedKeys);
+        return function (event) {
+            const exposedValues = Object.values(u.pick(event, exposedKeys));
+            return callback.call(link, event, ...exposedValues);
+        };
+    }
+    function closestAttr(element, attr, readAttrFn = stringAttr) {
         let match = element.closest('[' + attr + ']');
         if (match) {
-            return parseFn(match, attr);
+            return readAttrFn(match, attr);
         }
     }
-    function setTemporaryStyle(element, newStyles) {
-        const oldStyles = inlineStyle(element, Object.keys(newStyles));
-        setInlineStyle(element, newStyles);
-        return () => setInlineStyle(element, oldStyles);
+    function addClasses(element, classes) {
+        for (let klass of classes)
+            element.classList.add(klass);
     }
-    function addTemporaryClass(element, klass) {
-        element.classList.add(klass);
-        return () => element.classList.remove(klass);
+    function addClassTemp(element, klass) {
+        return setClassStateTemp(element, klass, true);
     }
-    function setTemporaryAttr(element, attr, value) {
-        element.setAttribute(attr, value);
-        return () => element.removeAttribute(element, attr);
+    function removeClassTemp(element, klass) {
+        return setClassStateTemp(element, klass, false);
+    }
+    function setClassStateTemp(element, klass, targetState) {
+        if (element.classList.contains(klass) === targetState)
+            return u.noop;
+        element.classList.toggle(klass, targetState);
+        return () => element.classList.toggle(klass, !targetState);
     }
     function computedStyle(element, props) {
         const style = window.getComputedStyle(element);
@@ -1358,7 +1557,7 @@ up.element = (function () {
     }
     function computedStyleNumber(element, prop) {
         const rawValue = computedStyle(element, prop);
-        if (u.isGiven(rawValue)) {
+        if (u.isPresent(rawValue)) {
             return parseFloat(rawValue);
         }
     }
@@ -1367,14 +1566,18 @@ up.element = (function () {
         return extractFromStyleObject(style, props);
     }
     function extractFromStyleObject(style, keyOrKeys) {
+        if (up.migrate.loaded)
+            keyOrKeys = up.migrate.fixGetStyleProps(keyOrKeys);
         if (u.isString(keyOrKeys)) {
-            return style[keyOrKeys];
+            return style.getPropertyValue(keyOrKeys);
         }
         else {
-            return u.pick(style, keyOrKeys);
+            return u.mapObject(keyOrKeys, (key) => [key, style.getPropertyValue(key)]);
         }
     }
-    function setInlineStyle(element, props) {
+    function setInlineStyle(element, props, unit = '') {
+        if (up.migrate.loaded)
+            props = up.migrate.fixSetStyleProps(props, unit);
         if (u.isString(props)) {
             element.setAttribute('style', props);
         }
@@ -1382,59 +1585,86 @@ up.element = (function () {
             const { style } = element;
             for (let key in props) {
                 let value = props[key];
-                value = normalizeStyleValueForWrite(key, value);
-                style[key] = value;
+                style.setProperty(key, value + unit);
             }
         }
     }
-    function normalizeStyleValueForWrite(key, value) {
-        if (u.isMissing(value)) {
-            value = '';
-        }
-        else if (CSS_LENGTH_PROPS.has(key.toLowerCase().replace(/-/, ''))) {
-            value = cssLength(value);
-        }
-        return value;
-    }
-    const CSS_LENGTH_PROPS = new Set([
-        'top', 'right', 'bottom', 'left',
-        'padding', 'paddingtop', 'paddingright', 'paddingbottom', 'paddingleft',
-        'margin', 'margintop', 'marginright', 'marginbottom', 'marginleft',
-        'borderwidth', 'bordertopwidth', 'borderrightwidth', 'borderbottomwidth', 'borderleftwidth',
-        'width', 'height',
-        'maxwidth', 'maxheight',
-        'minwidth', 'minheight',
-    ]);
-    function cssLength(obj) {
-        if (u.isNumber(obj) || (u.isString(obj) && /^\d+$/.test(obj))) {
-            return obj.toString() + "px";
-        }
-        else {
-            return obj;
-        }
+    function setStyleTemp(element, newStyles) {
+        const oldStyles = inlineStyle(element, Object.keys(newStyles));
+        setInlineStyle(element, newStyles);
+        return () => setInlineStyle(element, oldStyles);
     }
     function isVisible(element) {
         return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
     }
+    function isUpPrefixed(string) {
+        return /^up-/.test(string);
+    }
+    function pickAttrs(element, attrNames) {
+        return u.mapObject(attrNames, (name) => [name, element.getAttribute(name)]);
+    }
     function upAttrs(element) {
-        const upAttributePattern = /^up-/;
-        const attrs = {};
-        for (let attribute of element.attributes) {
-            const { name } = attribute;
-            if (name.match(upAttributePattern)) {
-                attrs[name] = attribute.value;
-            }
-        }
-        return attrs;
+        let attrNames = element.getAttributeNames().filter(isUpPrefixed);
+        return pickAttrs(element, attrNames);
+    }
+    function upClasses(element) {
+        return u.filter(element.classList.values(), isUpPrefixed);
     }
     function cleanJQuery(element) {
         if (up.browser.canJQuery()) {
             jQuery(element).remove();
         }
     }
+    function isEmpty(element) {
+        return !element.children.length > 0 && !element.innerText.trim();
+    }
+    function crossOriginSelector(attr) {
+        return `[${attr}*="//"]:not([${attr}*="//${location.host}/"])`;
+    }
+    function isIntersectingWindow(element, { margin = 0 } = {}) {
+        const rect = up.Rect.fromElement(element);
+        rect.grow(margin);
+        return (rect.bottom > 0) && (rect.top < window.innerHeight) &&
+            (rect.right > 0) && (rect.left < window.innerWidth);
+    }
+    function unionSelector(includes, excludes) {
+        let selector = `:is(${includes.join()})`;
+        if (u.isPresent(excludes))
+            selector += `:not(${excludes.join()})`;
+        return selector;
+    }
+    function matchSelectorMap(selectorMap, element) {
+        let matches = [];
+        if (selectorMap) {
+            for (let [selector, value] of Object.entries(selectorMap)) {
+                if (u.isDefined(value) && element.matches(selector)) {
+                    matches.push(value);
+                }
+            }
+        }
+        return matches;
+    }
+    function documentPosition(element) {
+        let nextSibling = element.nextElementSibling;
+        if (nextSibling) {
+            return [nextSibling, 'beforebegin'];
+        }
+        else {
+            return [element.parentElement, 'beforeend'];
+        }
+    }
+    const FIRST_TAG_NAME_PATTERN = /^\s*(<!--[^-]*.*?-->\s*)*<([a-z-!]+)\b/i;
+    function firstTagNameInHTML(html) {
+        return FIRST_TAG_NAME_PATTERN.exec(html)?.[2].toUpperCase();
+    }
+    function isFullDocumentHTML(html) {
+        let firstTag = firstTagNameInHTML(html);
+        return firstTag === 'HTML' || firstTag === '!DOCTYPE';
+    }
     return {
         subtree,
-        isInSubtree,
+        subtreeFirst,
+        contains,
         closestAttr,
         ancestor,
         around,
@@ -1442,12 +1672,14 @@ up.element = (function () {
         list: getList,
         toggle,
         hide,
+        hideTemp,
         show,
+        showTemp,
         metaContent,
         insertBefore,
         createFromSelector,
         setAttrs,
-        setTemporaryAttrs,
+        setAttrsTemp,
         affix,
         idSelector,
         classSelector,
@@ -1455,8 +1687,10 @@ up.element = (function () {
         attrSelector,
         tagName: elementTagName,
         createBrokenDocumentFromHTML,
-        fixScriptish,
+        revivedClone,
+        createNodesFromHTML,
         createFromHTML,
+        extractSingular,
         get root() { return getRoot(); },
         paint,
         concludeCSSTransition,
@@ -1466,25 +1700,37 @@ up.element = (function () {
         setMissingAttr,
         unwrap,
         wrapChildren,
-        isWrapper,
+        wrapIfRequired,
         attr: stringAttr,
         booleanAttr,
         numberAttr,
         jsonAttr,
         callbackAttr,
         booleanOrStringAttr,
-        setTemporaryStyle,
+        booleanOrNumberAttr,
+        setStyleTemp,
         style: computedStyle,
         styleNumber: computedStyleNumber,
         inlineStyle,
         setStyle: setInlineStyle,
         isVisible,
         upAttrs,
-        toggleAttr,
-        addTemporaryClass,
-        setTemporaryAttr,
+        upClasses,
+        setAttrPresence,
+        addClasses,
+        addClassTemp,
+        removeClassTemp,
         cleanJQuery,
         parseSelector,
+        isEmpty,
+        crossOriginSelector,
+        isIntersectingWindow,
+        unionSelector,
+        matchSelectorMap,
+        elementLikeMatches,
+        documentPosition,
+        firstTagNameInHTML,
+        isFullDocumentHTML,
     };
 })();
 
@@ -1537,7 +1783,7 @@ up.Aborted = class Aborted extends up.Error {
 /* 12 */
 /***/ (() => {
 
-up.CannotCompile = class CannotCompile extends up.Error {
+up.CannotMatch = class CannotMatch extends up.Error {
 };
 
 
@@ -1545,7 +1791,7 @@ up.CannotCompile = class CannotCompile extends up.Error {
 /* 13 */
 /***/ (() => {
 
-up.CannotMatch = class CannotMatch extends up.Error {
+up.CannotParse = class CannotParse extends up.Error {
 };
 
 
@@ -1553,7 +1799,7 @@ up.CannotMatch = class CannotMatch extends up.Error {
 /* 14 */
 /***/ (() => {
 
-up.CannotParse = class CannotParse extends up.Error {
+up.CannotTarget = class CannotTarget extends up.Error {
 };
 
 
@@ -1561,20 +1807,12 @@ up.CannotParse = class CannotParse extends up.Error {
 /* 15 */
 /***/ (() => {
 
-up.CannotTarget = class CannotTarget extends up.Error {
-};
-
-
-/***/ }),
-/* 16 */
-/***/ (() => {
-
 up.Offline = class Offline extends up.Error {
 };
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (() => {
 
 const u = up.util;
@@ -1586,7 +1824,7 @@ up.Record = class Record {
         return {};
     }
     constructor(options) {
-        Object.assign(this, this.defaults(options), this.attributes(options));
+        Object.assign(this, u.mergeDefined(this.defaults(options), this.attributes(options)));
     }
     attributes(source = this) {
         return u.pick(source, this.keys());
@@ -1601,22 +1839,36 @@ up.Record = class Record {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (() => {
 
+const u = up.util;
+const e = up.element;
 up.Config = class Config {
     constructor(blueprintFn = (() => ({}))) {
-        this.blueprintFn = blueprintFn;
+        this._blueprintFn = blueprintFn;
         this.reset();
+        document.addEventListener('up:framework:reset', () => this.reset());
     }
     reset() {
-        Object.assign(this, this.blueprintFn());
+        Object.assign(this, this._blueprintFn());
+    }
+    matches(element, prop) {
+        return element.matches(this.selector(prop));
+    }
+    selector(prop) {
+        let includes = this[prop];
+        let excludes = this['no' + u.upperCaseFirst(prop)];
+        return e.unionSelector(includes, excludes);
+    }
+    selectorFn(prop) {
+        return () => this.selector(prop);
     }
 };
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (() => {
 
 let enabledKey = 'up.log.enabled';
@@ -1648,36 +1900,149 @@ up.LogConfig = class LogConfig extends up.Config {
 
 
 /***/ }),
+/* 19 */
+/***/ (() => {
+
+const u = up.util;
+up.Registry = class Registry {
+    constructor(valueDescription, normalize = u.identity) {
+        this._data = {};
+        this._normalize = normalize;
+        this._valueDescription = valueDescription;
+        this.put = this.put.bind(this);
+        document.addEventListener('up:framework:reset', () => this.reset());
+    }
+    put(key, object) {
+        object = this._normalize(object);
+        object.isDefault = up.framework.evaling;
+        this._data[key] = object;
+    }
+    get(name) {
+        return this._data[name] || up.fail("Unknown %s %o", this._valueDescription, name);
+    }
+    reset() {
+        this._data = u.pickBy(this._data, 'isDefault');
+    }
+};
+
+
+/***/ }),
 /* 20 */
 /***/ (() => {
 
 const u = up.util;
-up.FIFOCache = class FIFOCache {
-    constructor({ capacity = 10, normalizeKey = u.identity } = {}) {
-        this.map = new Map();
-        this.capacity = capacity;
-        this.normalizeKey = normalizeKey;
+const e = up.element;
+up.OptionsParser = class OptionsParser {
+    constructor(element, options, parserOptions = {}) {
+        this._options = options;
+        this._element = element;
+        this._fail = parserOptions.fail;
+        this._closest = parserOptions.closest;
+        this._attrPrefix = parserOptions.attrPrefix || 'up-';
+        this._defaults = parserOptions.defaults ?? {};
     }
-    get(key) {
-        key = this.normalizeKey(key);
-        return this.map.get(key);
+    string(key, keyOptions) {
+        this.parse(e.attr, key, keyOptions);
     }
-    set(key, value) {
-        if (this.map.size === this.capacity) {
-            let oldestKey = this.map.keys().next().value;
-            this.map.delete(oldestKey);
+    boolean(key, keyOptions) {
+        this.parse(e.booleanAttr, key, keyOptions);
+    }
+    number(key, keyOptions) {
+        this.parse(e.numberAttr, key, keyOptions);
+    }
+    booleanOrString(key, keyOptions) {
+        this.parse(e.booleanOrStringAttr, key, keyOptions);
+    }
+    booleanOrNumber(key, keyOptions) {
+        this.parse(e.booleanOrNumberAttr, key, keyOptions);
+    }
+    json(key, keyOptions) {
+        this.parse(e.jsonAttr, key, keyOptions);
+    }
+    callback(key, keyOptions = {}) {
+        let parser = (link, attr) => e.callbackAttr(link, attr, keyOptions);
+        this.parse(parser, key, keyOptions);
+    }
+    parse(attrValueFn, key, keyOptions = {}) {
+        const attrNames = u.wrapList(keyOptions.attr ?? this._attrNameForKey(key));
+        let value = this._options[key];
+        for (let attrName of attrNames) {
+            value ??= this._parseFromAttr(attrValueFn, this._element, attrName);
         }
-        key = this.normalizeKey(key);
-        this.map.set(key, value);
+        if (this._defaults !== false) {
+            value ??= keyOptions.default ?? this._defaults[key];
+        }
+        if (u.isDefined(value)) {
+            let normalizeFn = keyOptions.normalize;
+            if (normalizeFn) {
+                value = normalizeFn(value);
+            }
+            this._options[key] = value;
+        }
+        let failKey;
+        if (this._fail && (failKey = up.fragment.failKey(key))) {
+            const failAttrNames = u.compact(u.map(attrNames, (attrName) => this._deriveFailAttrName(attrName)));
+            this.parse(attrValueFn, failKey, { ...keyOptions, attr: failAttrNames });
+        }
     }
-    clear() {
-        this.map.clear();
+    include(optionsFn, parserOptions) {
+        let fnResult = optionsFn(this._element, this._options, { defaults: this._defaults, ...parserOptions });
+        Object.assign(this._options, fnResult);
+    }
+    _parseFromAttr(attrValueFn, element, attrName) {
+        if (this._closest) {
+            return e.closestAttr(element, attrName, attrValueFn);
+        }
+        else {
+            return attrValueFn(element, attrName);
+        }
+    }
+    _deriveFailAttrName(attr) {
+        return this._deriveFailAttrNameForPrefix(attr, this._attrPrefix + 'on-') ||
+            this._deriveFailAttrNameForPrefix(attr, this._attrPrefix);
+    }
+    _deriveFailAttrNameForPrefix(attr, prefix) {
+        if (attr.startsWith(prefix)) {
+            return `${prefix}fail-${attr.substring(prefix.length)}`;
+        }
+    }
+    _attrNameForKey(option) {
+        return `${this._attrPrefix}${u.camelToKebabCase(option)}`;
     }
 };
 
 
 /***/ }),
 /* 21 */
+/***/ (() => {
+
+const u = up.util;
+up.FIFOCache = class FIFOCache {
+    constructor({ capacity = 10, normalizeKey = u.identity } = {}) {
+        this._map = new Map();
+        this._capacity = capacity;
+        this._normalizeKey = normalizeKey;
+    }
+    get(key) {
+        key = this._normalizeKey(key);
+        return this._map.get(key);
+    }
+    set(key, value) {
+        if (this._map.size === this._capacity) {
+            let oldestKey = this._map.keys().next().value;
+            this._map.delete(oldestKey);
+        }
+        key = this._normalizeKey(key);
+        this._map.set(key, value);
+    }
+    clear() {
+        this._map.clear();
+    }
+};
+
+
+/***/ }),
+/* 22 */
 /***/ (() => {
 
 up.Rect = class Rect extends up.Record {
@@ -1695,68 +2060,76 @@ up.Rect = class Rect extends up.Record {
     get right() {
         return this.left + this.width;
     }
+    grow(padding) {
+        this.left -= padding;
+        this.top -= padding;
+        this.width += padding * 2;
+        this.height += padding * 2;
+    }
     static fromElement(element) {
         return new (this)(element.getBoundingClientRect());
     }
-};
-
-
-/***/ }),
-/* 22 */
-/***/ (() => {
-
-const e = up.element;
-up.BodyShifter = class BodyShifter {
-    constructor() {
-        this.unshiftFns = [];
-        this.reset();
-    }
-    reset() {
-        this.unshiftNow();
-        this.shiftCount = 0;
-    }
-    shift() {
-        this.shiftCount++;
-        if (this.shiftCount > 1) {
-            return;
-        }
-        const scrollbarTookSpace = up.viewport.rootHasReducedWidthFromScrollbar();
-        const overflowElement = up.viewport.rootOverflowElement();
-        this.changeStyle(overflowElement, { overflowY: 'hidden' });
-        if (!scrollbarTookSpace) {
-            return;
-        }
-        const { body } = document;
-        const scrollbarWidth = up.viewport.scrollbarWidth();
-        const bodyRightPadding = e.styleNumber(body, 'paddingRight');
-        const bodyRightShift = scrollbarWidth + bodyRightPadding;
-        this.changeStyle(body, { paddingRight: bodyRightShift });
-        for (let anchor of up.viewport.anchoredRight()) {
-            const elementRight = e.styleNumber(anchor, 'right');
-            const elementRightShift = scrollbarWidth + elementRight;
-            this.changeStyle(anchor, { right: elementRightShift });
-        }
-    }
-    changeStyle(element, styles) {
-        this.unshiftFns.push(e.setTemporaryStyle(element, styles));
-    }
-    unshift() {
-        this.shiftCount--;
-        if (this.shiftCount == 0) {
-            this.unshiftNow();
-        }
-    }
-    unshiftNow() {
-        let unshiftFn;
-        while (unshiftFn = this.unshiftFns.pop()) {
-            unshiftFn();
-        }
+    static fromElementAsFixed(element) {
+        let fixedClone = element.cloneNode(true);
+        element.after(fixedClone);
+        fixedClone.style.position = 'fixed';
+        let rect = this.fromElement(fixedClone);
+        fixedClone.remove();
+        return rect;
     }
 };
 
 
 /***/ }),
 /* 23 */
+/***/ (() => {
+
+const e = up.element;
+const u = up.util;
+const SHIFT_CLASS = 'up-scrollbar-away';
+up.BodyShifter = class BodyShifter {
+    constructor() {
+        this._anchoredElements = new Set();
+        this._stack = 0;
+        this._cleaner = u.cleaner();
+    }
+    lowerStack() {
+        if (--this._stack === 0)
+            this._cleaner.clean();
+    }
+    raiseStack() {
+        if (++this._stack === 1)
+            this._shiftNow();
+    }
+    onAnchoredElementInserted(element) {
+        this._anchoredElements.add(element);
+        this._shiftElement(element, 'right');
+        return () => this._anchoredElements.delete(element);
+    }
+    _isShifted() {
+        return this._rootScrollbarWidth && this._stack > 0;
+    }
+    _shiftNow() {
+        this._rootScrollbarWidth = up.viewport.rootScrollbarWidth();
+        this._cleaner(e.setStyleTemp(e.root, {
+            '--up-scrollbar-width': this._rootScrollbarWidth + 'px'
+        }));
+        this._shiftElement(document.body, 'padding-right');
+        for (let element of this._anchoredElements) {
+            this._shiftElement(element, 'right');
+        }
+    }
+    _shiftElement(element, styleProp) {
+        if (!this._isShifted())
+            return;
+        let originalValue = e.style(element, styleProp);
+        this._cleaner(e.setStyleTemp(element, { ['--up-original-' + styleProp]: originalValue }), e.addClassTemp(element, SHIFT_CLASS));
+    }
+};
+
+
+/***/ }),
+/* 24 */
 /***/ (() => {
 
 const u = up.util;
@@ -1766,9 +2139,6 @@ up.Change = class Change {
     }
     execute() {
         throw new up.NotImplemented();
-    }
-    onFinished(renderResult) {
-        return this.options.onFinished?.(renderResult);
     }
     improveHistoryValue(existingValue, newValue) {
         if ((existingValue === false) || u.isString(existingValue)) {
@@ -1781,78 +2151,10 @@ up.Change = class Change {
     deriveFailOptions() {
         return up.RenderOptions.deriveFailOptions(this.options);
     }
-};
-
-
-/***/ }),
-/* 24 */
-/***/ (() => {
-
-const u = up.util;
-const e = up.element;
-up.Change.Addition = class Addition extends up.Change {
-    constructor(options) {
-        super(options);
-        this.responseDoc = options.responseDoc;
-        this.acceptLayer = options.acceptLayer;
-        this.dismissLayer = options.dismissLayer;
-        this.eventPlans = options.eventPlans || [];
-        this.response = options.meta?.response;
-    }
-    handleLayerChangeRequests() {
-        if (this.layer.isOverlay()) {
-            this.tryAcceptLayerFromServer();
-            this.abortWhenLayerClosed();
-            this.layer.tryAcceptForLocation(this.responseOption());
-            this.abortWhenLayerClosed();
-            this.tryDismissLayerFromServer();
-            this.abortWhenLayerClosed();
-            this.layer.tryDismissForLocation(this.responseOption());
-            this.abortWhenLayerClosed();
+    ensureLayerAlive(layer = this.layer) {
+        if (!layer.isAlive()) {
+            throw new up.Aborted("Layer is already " + layer.state);
         }
-        this.layer.asCurrent(() => {
-            for (let eventPlan of this.eventPlans) {
-                up.emit({ ...eventPlan, ...this.responseOption() });
-                this.abortWhenLayerClosed();
-            }
-        });
-    }
-    tryAcceptLayerFromServer() {
-        if (u.isDefined(this.acceptLayer) && this.layer.isOverlay()) {
-            this.layer.accept(this.acceptLayer, this.responseOption());
-        }
-    }
-    tryDismissLayerFromServer() {
-        if (u.isDefined(this.dismissLayer) && this.layer.isOverlay()) {
-            this.layer.dismiss(this.dismissLayer, this.responseOption());
-        }
-    }
-    abortWhenLayerClosed() {
-        if (this.layer.isClosed()) {
-            throw new up.Aborted('Layer was closed');
-        }
-    }
-    setSource({ oldElement, newElement, source }) {
-        if (source === 'keep') {
-            source = (oldElement && up.fragment.source(oldElement));
-        }
-        if (source) {
-            e.setMissingAttr(newElement, 'up-source', u.normalizeURL(source, { hash: false }));
-        }
-    }
-    setTime({ newElement, time }) {
-        e.setMissingAttr(newElement, 'up-time', time ? time.toUTCString() : false);
-    }
-    setETag({ newElement, etag }) {
-        e.setMissingAttr(newElement, 'up-etag', etag || false);
-    }
-    setReloadAttrs(options) {
-        this.setSource(options);
-        this.setTime(options);
-        this.setETag(options);
-    }
-    responseOption() {
-        return { response: this.response };
     }
 };
 
@@ -1861,38 +2163,124 @@ up.Change.Addition = class Addition extends up.Change {
 /* 25 */
 /***/ (() => {
 
+const u = up.util;
+const e = up.element;
+up.Change.Addition = class Addition extends up.Change {
+    constructor(options) {
+        super(options);
+        this._acceptLayer = options.acceptLayer;
+        this._dismissLayer = options.dismissLayer;
+        this._eventPlans = options.eventPlans || [];
+        this._response = options.response;
+    }
+    handleLayerChangeRequests() {
+        if (this.layer.isOverlay()) {
+            this._tryAcceptLayerFromServer();
+            this.ensureLayerAlive();
+            this.layer.tryAcceptForLocation(this._responseOptions());
+            this.ensureLayerAlive();
+            this._tryDismissLayerFromServer();
+            this.ensureLayerAlive();
+            this.layer.tryDismissForLocation(this._responseOptions());
+            this.ensureLayerAlive();
+        }
+        this.layer.asCurrent(() => {
+            for (let eventPlan of this._eventPlans) {
+                up.emit({ ...eventPlan, ...this._responseOptions() });
+                this.ensureLayerAlive();
+            }
+        });
+    }
+    _tryAcceptLayerFromServer() {
+        if (u.isDefined(this._acceptLayer) && this.layer.isOverlay()) {
+            this.layer.accept(this._acceptLayer, this._responseOptions());
+        }
+    }
+    _tryDismissLayerFromServer() {
+        if (u.isDefined(this._dismissLayer) && this.layer.isOverlay()) {
+            this.layer.dismiss(this._dismissLayer, this._responseOptions());
+        }
+    }
+    _setSource({ oldElement, newElement, source }) {
+        if (source === 'keep') {
+            source = (oldElement && up.fragment.source(oldElement));
+        }
+        if (source) {
+            e.setMissingAttr(newElement, 'up-source', up.fragment.normalizeSource(source));
+        }
+    }
+    _setTime({ newElement, time }) {
+        e.setMissingAttr(newElement, 'up-time', time ? time.toUTCString() : false);
+    }
+    _setETag({ newElement, etag }) {
+        e.setMissingAttr(newElement, 'up-etag', etag || false);
+    }
+    setReloadAttrs(options) {
+        this._setSource(options);
+        this._setTime(options);
+        this._setETag(options);
+    }
+    _responseOptions() {
+        return { response: this._response };
+    }
+    executeSteps({ steps, responseDoc, noneOptions, passRenderOptions = this.options }) {
+        return new up.Change.UpdateSteps({ steps, noneOptions, passRenderOptions }).execute(responseDoc);
+    }
+};
+
+
+/***/ }),
+/* 26 */
+/***/ (() => {
+
 var _a;
 const u = up.util;
 up.RenderJob = (_a = class RenderJob {
-        constructor(options) {
-            this.options = up.RenderOptions.preprocess(options);
-            this.rendered = this.execute();
+        constructor(renderOptions) {
+            this.renderOptions = renderOptions;
         }
-        async execute() {
+        execute() {
+            this._rendered = this._executePromise();
+            return this;
+        }
+        async _executePromise() {
             try {
-                let result = await this.makeChange();
-                this.runResultCallbacks(result);
+                this._emitGuardEvent();
+                this.renderOptions = up.RenderOptions.preprocess(this.renderOptions);
+                up.browser.assertConfirmed(this.renderOptions);
+                up.RenderOptions.assertContentGiven(this.renderOptions);
+                let result = await this._getChange().execute();
+                this._handleResult(result);
                 return result;
             }
-            catch (error) {
-                this.runResultCallbacks(error) || this.options.onError?.(error);
-                throw error;
+            catch (resultOrError) {
+                this._handleResult(resultOrError) || this._handleError(resultOrError);
+                throw resultOrError;
             }
         }
-        runResultCallbacks(result) {
+        _handleResult(result) {
             if (result instanceof up.RenderResult) {
+                let { onRendered, onFinished } = result.renderOptions;
                 if (!result.none)
-                    result.options.onRendered?.(result);
-                result.finished.then(result.options.onFinished);
+                    up.error.guard(() => onRendered?.(result));
+                let guardedOnFinished = function (result) {
+                    up.error.guard(() => onFinished?.(result));
+                };
+                this.finished.then(guardedOnFinished, u.noop);
                 return true;
             }
         }
-        get finished() {
-            return this.awaitFinished();
+        _handleError(error) {
+            let prefix = error instanceof up.Aborted ? 'Rendering was aborted' : 'Error while rendering';
+            up.puts('up.render()', `${prefix}: ${error.name}: ${error.message}`);
+            up.error.guard(() => this.renderOptions.onError?.(error));
         }
-        async awaitFinished() {
+        get finished() {
+            return this._awaitFinished();
+        }
+        async _awaitFinished() {
             try {
-                let result = await this.rendered;
+                let result = await this._rendered;
                 return await result.finished;
             }
             catch (error) {
@@ -1904,49 +2292,44 @@ up.RenderJob = (_a = class RenderJob {
                 }
             }
         }
-        makeChange() {
-            this.guardRender();
-            if (this.options.url) {
-                let onRequest = (request) => this.handleAbortOption(request);
-                this.change = new up.Change.FromURL({ ...this.options, onRequest });
+        _getChange() {
+            let handleAbort = u.memoize((request) => this._handleAbortOption(request));
+            let renderOptions = { ...this.renderOptions, handleAbort };
+            if (renderOptions.url) {
+                return new up.Change.FromURL(renderOptions);
             }
-            else if (this.options.response) {
-                this.change = new up.Change.FromResponse(this.options);
-                this.handleAbortOption(null);
+            else if (renderOptions.response) {
+                return new up.Change.FromResponse(renderOptions);
             }
             else {
-                this.change = new up.Change.FromContent(this.options);
-                this.handleAbortOption(null);
+                return new up.Change.FromContent(renderOptions);
             }
-            return this.change.execute();
         }
-        guardRender() {
-            up.browser.assertConfirmed(this.options);
-            let guardEvent = u.pluckKey(this.options, 'guardEvent');
+        _emitGuardEvent() {
+            let guardEvent = u.pluckKey(this.renderOptions, 'guardEvent');
             if (guardEvent) {
-                guardEvent.renderOptions = this.options;
-                if (up.emit(guardEvent, { target: this.options.origin }).defaultPrevented) {
-                    let message = `Rendering was prevented by ${guardEvent.type} listener`;
-                    up.puts('up.render()', message);
-                    throw new up.Aborted(message);
+                guardEvent.renderOptions = this.renderOptions;
+                if (up.emit(guardEvent, { target: this.renderOptions.origin }).defaultPrevented) {
+                    throw new up.Aborted(`Rendering was prevented by ${guardEvent.type} listener`);
                 }
             }
-            up.RenderOptions.assertContentGiven(this.options);
         }
-        handleAbortOption(request) {
-            let { abort } = this.options;
-            if (!abort || !up.network.isBusy())
+        _handleAbortOption({ bindFragments, bindLayer, origin, layer, request }) {
+            let { abort } = this.renderOptions;
+            if (!abort)
                 return;
-            let { fragments, layer, origin } = this.change.getPreflightProps();
             let abortOptions = {
                 except: request,
                 logOnce: ['up.render()', 'Change with { abort } option will abort other requests'],
+                newLayer: (layer === 'new'),
+                origin,
+                jid: this.renderOptions.jid,
             };
             if (abort === 'target') {
-                up.fragment.abort(fragments, abortOptions);
+                up.fragment.abort(bindFragments, { ...abortOptions });
             }
             else if (abort === 'layer') {
-                up.fragment.abort({ ...abortOptions, layer });
+                up.fragment.abort({ ...abortOptions, layer: bindLayer });
             }
             else if (abort === 'all' || abort === true) {
                 up.fragment.abort({ ...abortOptions, layer: 'any' });
@@ -1955,64 +2338,67 @@ up.RenderJob = (_a = class RenderJob {
                 abort(abortOptions);
             }
             else {
-                up.fragment.abort(abort, { ...abortOptions, layer, origin });
+                up.fragment.abort(abort, { ...abortOptions, layer: bindLayer });
             }
         }
     },
     (() => {
-        u.delegate(_a.prototype, ['then', 'catch', 'finally'], function () { return this.rendered; });
+        u.delegatePromise(_a.prototype, function () { return this._rendered; });
+        u.memoizeMethod(_a.prototype, {
+            _awaitFinished: true,
+            _getChange: true,
+        });
     })(),
     _a);
-
-
-/***/ }),
-/* 26 */
-/***/ (() => {
-
-up.Change.Removal = class Removal extends up.Change {
-};
 
 
 /***/ }),
 /* 27 */
 /***/ (() => {
 
-up.Change.DestroyFragment = class DestroyFragment extends up.Change.Removal {
+up.Change.DestroyFragment = class DestroyFragment extends up.Change {
     constructor(options) {
         super(options);
-        this.layer = up.layer.get(options) || up.layer.current;
-        this.element = this.options.element;
-        this.animation = this.options.animation;
-        this.log = this.options.log;
+        this._layer = up.layer.get(options) || up.layer.current;
+        this._element = this.options.element;
+        this._animation = this.options.animation;
+        this._log = this.options.log;
+        this._onFinished = this.options.onFinished;
     }
-    async execute() {
-        this.parent = this.element.parentNode;
-        up.fragment.markAsDestroying(this.element);
-        if (up.motion.willAnimate(this.element, this.animation, this.options)) {
-            this.emitDestroyed();
-            await this.animate();
-            this.wipe();
-            this.onFinished();
+    execute() {
+        this._parent = this._element.parentNode;
+        up.fragment.markAsDestroying(this._element);
+        if (up.motion.willAnimate(this._element, this._animation, this.options)) {
+            this._destroyAfterAnimation();
         }
         else {
-            this.wipe();
-            this.emitDestroyed();
-            this.onFinished();
+            this._destroyNow();
         }
     }
-    animate() {
-        return up.motion.animate(this.element, this.animation, this.options);
+    async _destroyAfterAnimation() {
+        this._emitDestroyed();
+        await this._animate();
+        this._erase();
+        this._onFinished?.();
     }
-    wipe() {
-        this.layer.asCurrent(() => {
-            up.fragment.abort(this.element);
-            up.syntax.clean(this.element, { layer: this.layer });
-            up.element.cleanJQuery(this.element);
-            this.element.remove();
+    _destroyNow() {
+        this._erase();
+        this._emitDestroyed();
+        this._onFinished?.();
+    }
+    _animate() {
+        return up.motion.animate(this._element, this._animation, this.options);
+    }
+    _erase() {
+        this._layer.asCurrent(() => {
+            up.fragment.abort(this._element);
+            up.script.clean(this._element, { layer: this._layer });
+            up.element.cleanJQuery(this._element);
+            this._element.remove();
         });
     }
-    emitDestroyed() {
-        up.fragment.emitDestroyed(this.element, { parent: this.parent, log: this.log });
+    _emitDestroyed() {
+        up.fragment.emitDestroyed(this._element, { parent: this._parent, log: this._log });
     }
 };
 
@@ -2026,111 +2412,151 @@ up.Change.OpenLayer = class OpenLayer extends up.Change.Addition {
     constructor(options) {
         super(options);
         this.target = options.target;
-        this.origin = options.origin;
-        this.baseLayer = options.baseLayer;
+        this._origin = options.origin;
+        this._baseLayer = options.baseLayer;
     }
     getPreflightProps() {
         return {
             mode: this.options.mode,
-            context: this.buildLayer().context,
+            context: this._buildLayer().context,
             origin: this.options.origin,
             target: this.target,
-            layer: this.baseLayer,
-            fragments: u.compact([up.fragment.get(':main', { layer: this.baseLayer })]),
+            bindLayer: this._baseLayer,
+            layer: 'new',
+            bindFragments: u.compact([up.fragment.get(':main', { layer: this._baseLayer })]),
+            fragments: [],
         };
     }
     execute(responseDoc, onApplicable) {
+        this.responseDoc = responseDoc;
+        this._matchPostflight();
+        onApplicable();
+        this._createOverlay();
+        let unbindClosing = this.layer.on('up:layer:accepting up:layer:dimissing', this._renderOtherLayers.bind(this));
+        try {
+            this._renderOverlayContent();
+            this._renderOtherLayers();
+            return up.RenderResult.both(this._newOverlayResult, this._otherLayersResult);
+        }
+        finally {
+            unbindClosing();
+        }
+    }
+    _matchPostflight() {
         if (this.target === ':none') {
-            this.content = document.createElement('up-none');
+            this._content = document.createElement('up-none');
         }
         else {
-            this.content = responseDoc.select(this.target);
+            this._content = this.responseDoc.select(this.target);
         }
-        if (!this.content || this.baseLayer.isClosed()) {
+        if (!this._content || !this._baseLayer.isAlive()) {
             throw new up.CannotMatch();
         }
-        onApplicable();
+    }
+    _createOverlay() {
         up.puts('up.render()', `Opening element "${this.target}" in new overlay`);
-        this.options.title = this.improveHistoryValue(this.options.title, responseDoc.getTitle());
-        if (this.emitOpenEvent().defaultPrevented) {
-            throw new up.Aborted('Open event was prevented');
-        }
-        this.baseLayer.peel();
-        this.layer = this.buildLayer();
+        this._assertOpenEventEmitted();
+        this.layer = this._buildLayer();
+        this._baseLayer.peel({ history: !this.layer.history });
+        this._baseLayer.saveHistory();
         up.layer.stack.push(this.layer);
-        this.layer.createElements(this.content);
+        this.layer.createElements();
         this.layer.setupHandlers();
-        this.handleHistory();
-        this.setReloadAttrs({ newElement: this.content, source: this.options.source });
-        responseDoc.finalizeElement(this.content);
-        up.hello(this.layer.element, { ...this.options, layer: this.layer });
+    }
+    _renderOverlayContent() {
+        this._handleHistory();
         this.handleLayerChangeRequests();
-        this.handleScroll();
-        let renderResult = new up.RenderResult({
+        this.responseDoc.commitElement(this._content);
+        this.layer.setContent(this._content);
+        this.responseDoc.finalizeElement(this._content);
+        this.setReloadAttrs({ newElement: this._content, source: this.options.source });
+        this._helloPromise = up.hello(this.layer.element, { ...this.options, layer: this.layer, dataRoot: this._content });
+        this._newOverlayResult = new up.RenderResult({
             layer: this.layer,
-            fragments: [this.content],
+            fragments: [this._content],
             target: this.target,
+            renderOptions: this.options,
         });
-        renderResult.finished = this.finish(renderResult);
-        this.layer.opening = false;
-        this.emitOpenedEvent();
-        this.abortWhenLayerClosed();
-        return renderResult;
+        this._handleScroll();
+        this._newOverlayResult.finished = this._finish();
+        this.layer.state = 'opened';
+        this._emitOpenedEvent();
+        this.ensureLayerAlive();
     }
-    async finish(renderResult) {
+    _renderOtherLayers() {
+        if (this._otherLayersResult)
+            return;
+        let otherLayerSteps = this._getHungrySteps().other;
+        this._otherLayersResult = this.executeSteps({
+            steps: otherLayerSteps,
+            responseDoc: this.responseDoc,
+        });
+    }
+    async _finish() {
         await this.layer.startOpenAnimation();
-        this.abortWhenLayerClosed();
-        this.handleFocus();
-        return renderResult;
+        this.ensureLayerAlive();
+        this._handleFocus();
+        await this._helloPromise;
+        return this._newOverlayResult;
     }
-    buildLayer() {
-        const buildOptions = { ...this.options, opening: true };
-        const beforeNew = optionsWithLayerDefaults => {
+    _buildLayer() {
+        const beforeNew = (optionsWithLayerDefaults) => {
             return this.options = up.RenderOptions.finalize(optionsWithLayerDefaults);
         };
-        return up.layer.build(buildOptions, beforeNew);
+        return up.layer.build(this.options, beforeNew);
     }
-    handleHistory() {
+    _handleHistory() {
         if (this.layer.history === 'auto') {
-            this.layer.history = up.fragment.hasAutoHistory(this.content);
+            this.layer.history = up.fragment.hasAutoHistory([this._content], this.layer);
         }
-        this.layer.parent.saveHistory();
+        this.layer.history &&= this._baseLayer.history;
         this.layer.updateHistory(this.options);
     }
-    handleFocus() {
-        this.baseLayer.overlayFocus?.moveToBack();
+    _handleFocus() {
+        this._baseLayer.overlayFocus?.moveToBack();
         this.layer.overlayFocus.moveToFront();
         const fragmentFocus = new up.FragmentFocus({
-            fragment: this.content,
+            fragment: this._content,
             layer: this.layer,
-            autoMeans: ['autofocus', 'layer']
+            autoMeans: ['autofocus', 'layer'],
+            inputDevice: this.options.inputDevice,
         });
         fragmentFocus.process(this.options.focus);
     }
-    handleScroll() {
+    _handleScroll() {
         const scrollingOptions = {
             ...this.options,
-            fragment: this.content,
+            fragment: this._content,
             layer: this.layer,
             autoMeans: ['hash', 'layer']
         };
         const scrolling = new up.FragmentScrolling(scrollingOptions);
         scrolling.process(this.options.scroll);
     }
-    emitOpenEvent() {
-        return up.emit('up:layer:open', {
-            origin: this.origin,
-            baseLayer: this.baseLayer,
+    _assertOpenEventEmitted() {
+        up.event.assertEmitted('up:layer:open', {
+            origin: this._origin,
+            baseLayer: this._baseLayer,
             layerOptions: this.options,
             log: "Opening new overlay"
         });
     }
-    emitOpenedEvent() {
-        return this.layer.emit('up:layer:opened', {
-            origin: this.origin,
+    _emitOpenedEvent() {
+        this.layer.emit('up:layer:opened', {
+            origin: this._origin,
             callback: this.layer.callback('onOpened'),
             log: `Opened new ${this.layer}`
         });
+    }
+    _getHungrySteps() {
+        return up.radio.hungrySteps(this._getEffectiveRenderOptions());
+    }
+    _getEffectiveRenderOptions() {
+        return {
+            ...this.options,
+            layer: this.layer,
+            history: this.layer.history,
+        };
     }
 };
 
@@ -2141,48 +2567,56 @@ up.Change.OpenLayer = class OpenLayer extends up.Change.Addition {
 
 var _a;
 const u = up.util;
-const e = up.element;
 up.Change.UpdateLayer = (_a = class UpdateLayer extends up.Change.Addition {
         constructor(options) {
             options = up.RenderOptions.finalize(options);
             super(options);
             this.layer = options.layer;
             this.target = options.target;
-            this.context = options.context;
-            this.useKeep = options.useKeep;
-            this.steps = up.fragment.parseTargetSteps(this.target, this.options);
+            this._context = options.context;
+            this._steps = up.fragment.parseTargetSteps(this.target, this.options);
         }
         getPreflightProps() {
-            this.matchPreflight();
+            this._matchPreflight();
+            let fragments = this._getFragments();
             return {
                 layer: this.layer,
+                bindLayer: this.layer,
                 mode: this.layer.mode,
-                context: u.merge(this.layer.context, this.context),
+                context: u.merge(this.layer.context, this._context),
                 origin: this.options.origin,
-                target: this.bestPreflightSelector(),
-                fragments: this.getFragments(),
+                target: this._bestPreflightSelector(),
+                fragments,
+                bindFragments: fragments,
             };
         }
-        bestPreflightSelector() {
-            this.matchPreflight();
-            return u.map(this.steps, 'selector').join(', ') || ':none';
+        _bestPreflightSelector() {
+            this._matchPreflight();
+            return up.fragment.targetForSteps(this._steps);
         }
-        getFragments() {
-            this.matchPreflight();
-            return u.map(this.steps, 'oldElement');
+        _getFragments() {
+            this._matchPreflight();
+            return u.map(this._steps, 'oldElement');
         }
         execute(responseDoc, onApplicable) {
             this.responseDoc = responseDoc;
-            this.matchPostflight();
+            this._matchPostflight();
             onApplicable();
-            if (this.steps.length) {
-                up.puts('up.render()', `Updating "${this.bestPreflightSelector()}" in ${this.layer}`);
+            let unbindClosing = this.layer.on('up:layer:accepting up:layer:dimissing', this._renderOtherLayers.bind(this));
+            try {
+                this._renderCurrentLayer();
+                this._renderOtherLayers();
+                return up.RenderResult.both(this._currentLayerResult, this._otherLayersResult);
             }
-            else {
-                up.puts('up.render()', 'Nothing was rendered');
+            finally {
+                unbindClosing();
             }
-            this.options.title = this.improveHistoryValue(this.options.title, this.responseDoc.getTitle());
-            this.setScrollAndFocusOptions();
+        }
+        _renderCurrentLayer() {
+            if (this._steps.length) {
+                up.puts('up.render()', `Updating "${this._bestPreflightSelector()}" in ${this.layer}`);
+            }
+            this._setScrollAndFocusOptions();
             if (this.options.saveScroll) {
                 up.viewport.saveScroll({ layer: this.layer });
             }
@@ -2190,175 +2624,51 @@ up.Change.UpdateLayer = (_a = class UpdateLayer extends up.Change.Addition {
                 up.viewport.saveFocus({ layer: this.layer });
             }
             if (this.options.peel) {
-                this.layer.peel();
+                this.layer.peel({ history: !this._hasHistory() });
             }
             if (this.options.abort !== false) {
-                up.fragment.abort(this.getFragments(), { reason: 'Fragment is being replaced' });
+                up.fragment.abort(this._getFragments(), {
+                    reason: 'Fragment is being replaced',
+                    jid: this.options.jid,
+                });
             }
-            Object.assign(this.layer.context, this.context);
-            if (this.hasHistory()) {
+            Object.assign(this.layer.context, this._context);
+            if (this._hasHistory()) {
                 this.layer.updateHistory(this.options);
             }
             this.handleLayerChangeRequests();
-            this.renderResult = new up.RenderResult({
-                layer: this.layer,
-                target: this.target,
+            this._currentLayerResult = this.executeSteps({
+                steps: this._steps,
+                responseDoc: this.responseDoc,
+                noneOptions: this.options,
             });
-            this.steps.reverse();
-            const motionEndPromises = this.steps.map(step => this.executeStep(step));
-            this.renderResult.finished = this.finish(motionEndPromises);
-            if (!this.steps.length) {
-                this.handleFocus(null, this.options);
-                this.handleScroll(null, this.options);
-            }
-            return this.renderResult;
         }
-        async finish(motionEndPromises) {
-            await Promise.all(motionEndPromises);
-            this.abortWhenLayerClosed();
-            return this.renderResult;
-        }
-        addToResult(fragment) {
-            let newFragments = fragment.matches('up-wrapper') ? fragment.children : [fragment];
-            this.renderResult.fragments.unshift(...newFragments);
-        }
-        executeStep(step) {
-            this.setReloadAttrs(step);
-            switch (step.placement) {
-                case 'swap': {
-                    let keepPlan = this.findKeepPlan(step);
-                    if (keepPlan) {
-                        this.handleFocus(step.oldElement, step);
-                        this.handleScroll(step.oldElement, step);
-                        return Promise.resolve();
-                    }
-                    else {
-                        this.preserveKeepables(step);
-                        const parent = step.oldElement.parentNode;
-                        const morphOptions = {
-                            ...step,
-                            beforeStart() {
-                                up.fragment.markAsDestroying(step.oldElement);
-                            },
-                            afterInsert: () => {
-                                this.responseDoc.finalizeElement(step.newElement);
-                                this.restoreKeepables(step);
-                                up.hello(step.newElement, step);
-                                this.addToResult(step.newElement);
-                            },
-                            beforeDetach: () => {
-                                up.syntax.clean(step.oldElement, { layer: this.layer });
-                            },
-                            afterDetach() {
-                                up.element.cleanJQuery();
-                                up.fragment.emitDestroyed(step.oldElement, { parent, log: false });
-                            },
-                            scrollNew: () => {
-                                this.handleFocus(step.newElement, step);
-                                this.handleScroll(step.newElement, step);
-                            }
-                        };
-                        return up.morph(step.oldElement, step.newElement, step.transition, morphOptions);
-                    }
-                }
-                case 'content': {
-                    let oldWrapper = e.wrapChildren(step.oldElement);
-                    let newWrapper = e.wrapChildren(step.newElement);
-                    let wrapperStep = {
-                        ...step,
-                        placement: 'swap',
-                        oldElement: oldWrapper,
-                        newElement: newWrapper,
-                        focus: false
-                    };
-                    return this.executeStep(wrapperStep).then(() => {
-                        e.unwrap(newWrapper);
-                        this.handleFocus(step.oldElement, step);
-                    });
-                }
-                case 'before':
-                case 'after': {
-                    let wrapper = e.wrapChildren(step.newElement);
-                    let position = step.placement === 'before' ? 'afterbegin' : 'beforeend';
-                    step.oldElement.insertAdjacentElement(position, wrapper);
-                    this.responseDoc.finalizeElement(wrapper);
-                    up.hello(wrapper, step);
-                    this.addToResult(wrapper);
-                    this.handleFocus(wrapper, step);
-                    this.handleScroll(wrapper, step);
-                    return up.animate(wrapper, step.transition, step).then(() => e.unwrap(wrapper));
-                }
-                default: {
-                    up.fail('Unknown placement: %o', step.placement);
-                }
-            }
-        }
-        findKeepPlan(options) {
-            if (!this.useKeep) {
+        _renderOtherLayers() {
+            if (this._otherLayersResult)
                 return;
-            }
-            const { oldElement, newElement } = options;
-            let doKeep = e.booleanAttr(oldElement, 'up-keep');
-            if (!doKeep) {
-                return;
-            }
-            let partner;
-            let partnerSelector = up.fragment.toTarget(oldElement);
-            const lookupOpts = { layer: this.layer };
-            if (options.descendantsOnly) {
-                partner = up.fragment.get(newElement, partnerSelector, lookupOpts);
-            }
-            else {
-                partner = up.fragment.subtree(newElement, partnerSelector, lookupOpts)[0];
-            }
-            if (partner && e.booleanAttr(partner, 'up-keep')) {
-                const plan = {
-                    oldElement,
-                    newElement: partner,
-                    newData: up.syntax.data(partner)
-                };
-                if (!up.fragment.emitKeep(plan).defaultPrevented) {
-                    return plan;
-                }
-            }
+            let otherLayerSteps = this._getHungrySteps().other;
+            this._otherLayersResult = this.executeSteps({
+                steps: otherLayerSteps,
+                responseDoc: this.responseDoc,
+            });
         }
-        preserveKeepables(step) {
-            const keepPlans = [];
-            if (this.useKeep) {
-                for (let keepable of step.oldElement.querySelectorAll('[up-keep]')) {
-                    let keepPlan = this.findKeepPlan({ ...step, oldElement: keepable, descendantsOnly: true });
-                    if (keepPlan) {
-                        const keepableClone = keepable.cloneNode(true);
-                        keepable.insertAdjacentElement('beforebegin', keepableClone);
-                        let viewports = up.viewport.subtree(keepPlan.oldElement);
-                        keepPlan.revivers = viewports.map(function (viewport) {
-                            let cursorProps = up.viewport.copyCursorProps(viewport);
-                            return () => up.viewport.copyCursorProps(cursorProps, viewport);
-                        });
-                        if (this.willChangeElement(document.body)) {
-                            keepPlan.newElement.replaceWith(keepable);
-                        }
-                        else {
-                            document.body.append(keepable);
-                        }
-                        keepPlans.push(keepPlan);
-                    }
-                }
-            }
-            step.keepPlans = keepPlans;
+        _matchPreflight() {
+            this._matchOldElements();
+            this._compressNestedSteps();
         }
-        restoreKeepables(step) {
-            for (let keepPlan of step.keepPlans) {
-                keepPlan.newElement.replaceWith(keepPlan.oldElement);
-                for (let reviver of keepPlan.revivers) {
-                    reviver();
-                }
-            }
+        _matchPostflight() {
+            this._matchOldElements();
+            this._addHungryStepsOnCurrentLayer();
+            this._compressNestedSteps();
+            this._matchNewElements();
         }
-        matchPreflight() {
-            this.filterSteps((step) => {
-                const finder = new up.FragmentFinder(step);
-                step.oldElement || (step.oldElement = finder.find());
+        _addHungryStepsOnCurrentLayer() {
+            this._steps.push(...this._getHungrySteps().current);
+        }
+        _matchOldElements() {
+            this._steps = this._steps.filter((step) => {
+                const finder = new up.FragmentFinder(u.pick(step, ['selector', 'origin', 'layer', 'match', 'preferOldElements']));
+                step.oldElement ||= finder.find();
                 if (step.oldElement) {
                     return true;
                 }
@@ -2366,105 +2676,48 @@ up.Change.UpdateLayer = (_a = class UpdateLayer extends up.Change.Addition {
                     throw new up.CannotMatch();
                 }
             });
-            this.resolveOldNesting();
         }
-        matchPostflight() {
-            this.matchPreflight();
-            if (this.options.useHungry) {
-                this.addHungrySteps();
-            }
-            this.filterSteps((step) => {
-                step.newElement = this.responseDoc.select(step.selector);
-                if (step.newElement) {
-                    return true;
-                }
-                else if (!step.maybe) {
-                    throw new up.CannotMatch();
-                }
-            });
-            this.resolveOldNesting();
+        _matchNewElements() {
+            this._steps = this.responseDoc.selectSteps(this._steps);
         }
-        filterSteps(condition) {
-            this.steps = u.filter(this.steps, condition);
+        _compressNestedSteps() {
+            this._steps = up.fragment.compressNestedSteps(this._steps);
         }
-        addHungrySteps() {
-            const hungrySolutions = up.radio.hungrySolutions({
-                layer: this.layer,
-                history: this.hasHistory(),
-                origin: this.options.origin
-            });
-            for (let { element: oldElement, target: selector } of hungrySolutions) {
-                const transition = e.booleanOrStringAttr(oldElement, 'transition');
-                const step = {
-                    selector,
-                    oldElement,
-                    transition,
-                    placement: 'swap',
-                    maybe: true
-                };
-                this.steps.push(step);
-            }
+        _getHungrySteps() {
+            return up.radio.hungrySteps(this._getEffectiveRenderOptions());
         }
-        containedByRivalStep(steps, candidateStep) {
-            return u.some(steps, function (rivalStep) {
-                return (rivalStep !== candidateStep) &&
-                    ((rivalStep.placement === 'swap') || (rivalStep.placement === 'content')) &&
-                    rivalStep.oldElement.contains(candidateStep.oldElement);
-            });
-        }
-        resolveOldNesting() {
-            let compressed = u.uniqBy(this.steps, 'oldElement');
-            compressed = u.reject(compressed, step => this.containedByRivalStep(compressed, step));
-            this.steps = compressed;
-        }
-        setScrollAndFocusOptions() {
-            this.steps.forEach((step, i) => {
+        _setScrollAndFocusOptions() {
+            let focusCapsule = up.FocusCapsule.preserve(this.layer);
+            this._steps.forEach((step, i) => {
+                step.focusCapsule = focusCapsule;
                 if (i > 0) {
                     step.scroll = false;
                     step.focus = false;
                 }
-                if ((step.placement === 'swap') || (step.placement === 'content')) {
-                    step.scrollBehavior = 'instant';
-                }
             });
-            this.focusCapsule = up.FocusCapsule.preserve(this.layer);
         }
-        handleFocus(fragment, options) {
-            const fragmentFocus = new up.FragmentFocus({
-                ...options,
-                fragment,
+        _hasHistory() {
+            return u.evalAutoOption(this.options.history, this._hasAutoHistory.bind(this));
+        }
+        _hasAutoHistory() {
+            const oldFragments = u.map(this._steps, 'oldElement');
+            return up.fragment.hasAutoHistory(oldFragments, this.layer);
+        }
+        _getEffectiveRenderOptions() {
+            return {
+                ...this.options,
                 layer: this.layer,
-                focusCapsule: this.focusCapsule,
-                autoMeans: up.fragment.config.autoFocus,
-            });
-            return fragmentFocus.process(options.focus);
-        }
-        handleScroll(fragment, options) {
-            const scrolling = new up.FragmentScrolling({
-                ...options,
-                fragment,
-                layer: this.layer,
-                autoMeans: up.fragment.config.autoScroll
-            });
-            return scrolling.process(options.scroll);
-        }
-        hasHistory() {
-            return u.evalAutoOption(this.options.history, this.hasAutoHistory.bind(this));
-        }
-        hasAutoHistory() {
-            const oldFragments = u.map(this.steps, 'oldElement');
-            return u.some(oldFragments, up.fragment.hasAutoHistory);
-        }
-        willChangeElement(element) {
-            return u.some(this.steps, (step) => step.oldElement.contains(element));
+                history: this._hasHistory(),
+            };
         }
     },
     (() => {
-        u.memoizeMethod(_a.prototype, [
-            'matchPreflight',
-            'matchPostflight',
-            'hasHistory',
-        ]);
+        u.memoizeMethod(_a.prototype, {
+            _matchPreflight: true,
+            _matchOldElements: true,
+            _hasHistory: true,
+            _getHungrySteps: true,
+        });
     })(),
     _a);
 
@@ -2474,65 +2727,189 @@ up.Change.UpdateLayer = (_a = class UpdateLayer extends up.Change.Addition {
 /***/ (() => {
 
 const u = up.util;
-up.Change.CloseLayer = class CloseLayer extends up.Change.Removal {
+const e = up.element;
+up.Change.UpdateSteps = class UpdateSteps extends up.Change.Addition {
     constructor(options) {
         super(options);
-        this.verb = options.verb;
-        this.layer = up.layer.get(options);
-        this.origin = options.origin;
-        this.value = options.value;
-        this.preventable = options.preventable ?? true;
-        this.response = options.response;
+        this._steps = u.copy(u.assert(options.steps));
+        this._passRenderOptions = u.assert(options.passRenderOptions);
+        this._noneOptions = options.noneOptions || {};
+        this._finishDelays = [];
     }
-    execute() {
-        if (!this.layer.isOpen()) {
-            return Promise.resolve();
+    execute(responseDoc) {
+        this.responseDoc = responseDoc;
+        this._steps = responseDoc.selectSteps(this._steps);
+        this._steps = responseDoc.commitSteps(this._steps);
+        this.renderResult = new up.RenderResult({
+            layer: this._passRenderOptions.layer,
+            target: up.fragment.targetForSteps(this._steps),
+            renderOptions: this._passRenderOptions,
+        });
+        if (!this._steps.length) {
+            this._handleFocus(null, this._noneOptions);
+            this._handleScroll(null, this._noneOptions);
         }
-        up.browser.assertConfirmed(this.options);
-        if (this.emitCloseEvent().defaultPrevented && this.preventable) {
-            throw new up.Aborted('Close event was prevented');
+        else {
+            this._steps.reverse();
+            up.fragment.mutate(() => {
+                const motionEndPromises = this._steps.map((step) => this._executeStep(step));
+                this.renderResult.finished = this._finish(motionEndPromises);
+            });
         }
-        up.fragment.abort({ reason: 'Layer is closing', layer: this.layer });
-        const { parent } = this.layer;
-        this.layer.peel();
-        this.layer.stack.remove(this.layer);
-        parent.restoreHistory();
-        this.handleFocus(parent);
-        this.layer.teardownHandlers();
-        this.layer.destroyElements(this.options);
-        this.emitClosedEvent(parent);
+        return this.renderResult;
     }
-    emitCloseEvent() {
-        let event = this.layer.emit(this.buildEvent(`up:layer:${this.verb}`), {
-            callback: this.layer.callback(`on${u.upperCaseFirst(this.verb)}`),
-            log: [`Will ${this.verb} ${this.layer} with value %o`, this.value]
+    _delayFinish(delay) {
+        this._finishDelays.push(delay);
+    }
+    async _finish() {
+        await Promise.all(this._finishDelays);
+        for (let step of this._steps) {
+            this.ensureLayerAlive(step.layer);
+        }
+        return this.renderResult;
+    }
+    _addToResult(fragment) {
+        let newFragments = fragment.matches('up-wrapper') ? fragment.children : [fragment];
+        this.renderResult.fragments.unshift(...newFragments);
+    }
+    _executeStep(step) {
+        switch (step.placement) {
+            case 'swap': {
+                let keepPlan = up.fragment.keepPlan(step);
+                if (keepPlan) {
+                    this._handleFocus(step.oldElement, step);
+                    this._handleScroll(step.oldElement, step);
+                    up.fragment.emitKept(keepPlan);
+                    break;
+                }
+                else {
+                    this._preserveDescendantKeepables(step);
+                    const parent = step.oldElement.parentNode;
+                    const morphOptions = {
+                        ...step,
+                        beforeStart() {
+                            up.fragment.markAsDestroying(step.oldElement);
+                        },
+                        afterInsert: () => {
+                            this._restoreDescendantKeepables(step);
+                            this._welcomeElement(step.newElement, step);
+                            this._finalizeDescendantKeepables(step);
+                        },
+                        beforeDetach: () => {
+                            up.script.clean(step.oldElement, { layer: step.layer });
+                        },
+                        afterDetach() {
+                            e.cleanJQuery();
+                            up.fragment.emitDestroyed(step.oldElement, { parent, log: false });
+                            step.afterDetach?.();
+                        },
+                        scrollNew: () => {
+                            this._handleFocus(step.newElement, step);
+                            this._handleScroll(step.newElement, step);
+                        }
+                    };
+                    this._delayFinish(up.morph(step.oldElement, step.newElement, step.transition, morphOptions));
+                    break;
+                }
+            }
+            case 'content': {
+                let oldWrapper = e.wrapChildren(step.oldElement);
+                let newWrapper = e.wrapChildren(step.newElement);
+                let wrapperStep = {
+                    ...step,
+                    placement: 'swap',
+                    oldElement: oldWrapper,
+                    newElement: newWrapper,
+                    focus: false,
+                    afterDetach: () => {
+                        e.unwrap(newWrapper);
+                        this._handleFocus(step.oldElement, step);
+                    },
+                };
+                this._executeStep(wrapperStep);
+                break;
+            }
+            case 'before':
+            case 'after': {
+                let wrapper = e.wrapChildren(step.newElement);
+                let position = step.placement === 'before' ? 'afterbegin' : 'beforeend';
+                step.oldElement.insertAdjacentElement(position, wrapper);
+                this._welcomeElement(wrapper, step);
+                this._handleFocus(wrapper, step);
+                this._handleScroll(wrapper, step);
+                this._delayFinish(up.animate(wrapper, step.animation, step).then(() => e.unwrap(wrapper)));
+                break;
+            }
+            default: {
+                up.fail('Unknown placement: %o', step.placement);
+            }
+        }
+    }
+    _welcomeElement(element, step) {
+        this.responseDoc.finalizeElement(element);
+        this.setReloadAttrs(step);
+        this._delayFinish(up.hello(element, step));
+        this._addToResult(element);
+    }
+    _preserveDescendantKeepables(step) {
+        const descendantKeepPlans = [];
+        if (step.keep) {
+            for (let keepable of step.oldElement.querySelectorAll('[up-keep]')) {
+                let keepPlan = up.fragment.keepPlan({ ...step, oldElement: keepable, descendantsOnly: true });
+                if (keepPlan) {
+                    const keepableClone = keepable.cloneNode(true);
+                    keepable.insertAdjacentElement('beforebegin', keepableClone);
+                    keepable.classList.add('up-keeping');
+                    up.script.disableSubtree(keepPlan.newElement);
+                    let viewports = up.viewport.subtree(keepPlan.oldElement);
+                    keepPlan.revivers = u.map(viewports, function (viewport) {
+                        let cursorProps = up.viewport.copyCursorProps(viewport);
+                        return () => up.viewport.copyCursorProps(cursorProps, viewport);
+                    });
+                    if (this._willChangeBody()) {
+                        keepPlan.newElement.replaceWith(keepable);
+                    }
+                    else {
+                        document.body.append(keepable);
+                    }
+                    descendantKeepPlans.push(keepPlan);
+                }
+            }
+        }
+        step.descendantKeepPlans = descendantKeepPlans;
+    }
+    _restoreDescendantKeepables(step) {
+        for (let keepPlan of step.descendantKeepPlans) {
+            keepPlan.newElement.replaceWith(keepPlan.oldElement);
+            for (let reviver of keepPlan.revivers) {
+                reviver();
+            }
+        }
+    }
+    _finalizeDescendantKeepables(step) {
+        for (let keepPlan of step.descendantKeepPlans) {
+            keepPlan.oldElement.classList.remove('up-keeping');
+            up.fragment.emitKept(keepPlan);
+        }
+    }
+    _willChangeBody() {
+        return u.some(this._steps, (step) => step.oldElement.matches('body'));
+    }
+    _handleFocus(fragment, options) {
+        const fragmentFocus = new up.FragmentFocus({
+            ...options,
+            fragment,
+            autoMeans: up.fragment.config.autoFocus,
         });
-        this.value = event.value;
-        return event;
+        return fragmentFocus.process(options.focus);
     }
-    emitClosedEvent(formerParent) {
-        const verbPast = `${this.verb}ed`;
-        const verbPastUpperCaseFirst = u.upperCaseFirst(verbPast);
-        return this.layer.emit(this.buildEvent(`up:layer:${verbPast}`), {
-            baseLayer: formerParent,
-            callback: this.layer.callback(`on${verbPastUpperCaseFirst}`),
-            ensureBubbles: true,
-            log: [`${verbPastUpperCaseFirst} ${this.layer} with value %o`, this.value]
+    _handleScroll(fragment, options) {
+        const scrolling = new up.FragmentScrolling({
+            ...options,
+            fragment,
+            autoMeans: up.fragment.config.autoScroll
         });
-    }
-    buildEvent(name) {
-        return up.event.build(name, {
-            layer: this.layer,
-            value: this.value,
-            origin: this.origin,
-            response: this.response,
-        });
-    }
-    handleFocus(formerParent) {
-        this.layer.overlayFocus.teardown();
-        formerParent.overlayFocus?.moveToFront();
-        let newFocusElement = this.layer.origin || formerParent.element;
-        newFocusElement.focus({ preventScroll: true });
+        return scrolling.process(options.scroll);
     }
 };
 
@@ -2541,66 +2918,140 @@ up.Change.CloseLayer = class CloseLayer extends up.Change.Removal {
 /* 31 */
 /***/ (() => {
 
+const u = up.util;
+up.Change.CloseLayer = class CloseLayer extends up.Change {
+    constructor(options) {
+        super(options);
+        this._verb = options.verb;
+        this.layer = up.layer.get(options);
+        this._origin = options.origin;
+        this._value = options.value;
+        this._preventable = options.preventable ?? true;
+        this._response = options.response;
+        this._history = options.history ?? true;
+    }
+    execute() {
+        this.ensureLayerAlive();
+        up.browser.assertConfirmed(this.options);
+        if (this._emitCloseEvent().defaultPrevented && this._preventable) {
+            throw new up.Aborted('Close event was prevented');
+        }
+        this._emitClosingEvent();
+        up.fragment.abort({ reason: 'Layer is closing', layer: this.layer });
+        this.layer.state = 'closing';
+        const { parent } = this.layer;
+        this.layer.peel();
+        this._handleFocus(parent);
+        this.layer.teardownHandlers();
+        this.layer.destroyElements(this.options);
+        this.layer.stack.remove(this.layer);
+        if (this._history) {
+            parent.restoreHistory();
+        }
+        this.layer.state = 'closed';
+        this._emitClosedEvent(parent);
+    }
+    _emitCloseEvent() {
+        let event = this.layer.emit(this._buildEvent(`up:layer:${this._verb}`), {
+            callback: this.layer.callback(`on${u.upperCaseFirst(this._verb)}`),
+            log: [`Will ${this._verb} ${this.layer} with value %o`, this._value]
+        });
+        this._value = event.value;
+        return event;
+    }
+    _emitClosingEvent() {
+        let event = this._buildEvent(`up:layer:${this._verb}ing`);
+        this.layer.emit(event, { log: false });
+    }
+    _emitClosedEvent(formerParent) {
+        const verbPast = `${this._verb}ed`;
+        const verbPastUpperCaseFirst = u.upperCaseFirst(verbPast);
+        return this.layer.emit(this._buildEvent(`up:layer:${verbPast}`), {
+            baseLayer: formerParent,
+            callback: this.layer.callback(`on${verbPastUpperCaseFirst}`),
+            ensureBubbles: true,
+            log: [`${verbPastUpperCaseFirst} ${this.layer} with value %o`, this._value]
+        });
+    }
+    _buildEvent(name) {
+        return up.event.build(name, {
+            layer: this.layer,
+            value: this._value,
+            origin: this._origin,
+            response: this._response,
+        });
+    }
+    _handleFocus(formerParent) {
+        let hadFocus = this.layer.hasFocus();
+        this.layer.overlayFocus.teardown();
+        formerParent.overlayFocus?.moveToFront();
+        if (hadFocus) {
+            let newFocusElement = this.layer.origin || formerParent.element;
+            up.focus(newFocusElement, { preventScroll: true });
+        }
+    }
+};
+
+
+/***/ }),
+/* 32 */
+/***/ (() => {
+
 var _a;
 const u = up.util;
 up.Change.FromURL = (_a = class FromURL extends up.Change {
-        constructor(options) {
-            super(options);
-            this.options.layer = up.layer.getAll(this.options);
-            this.options.normalizeLayerOptions = false;
-        }
-        execute() {
-            let newPageReason = this.newPageReason();
+        async execute() {
+            let newPageReason = this._newPageReason();
             if (newPageReason) {
                 up.puts('up.render()', newPageReason);
                 up.network.loadPage(this.options);
                 return u.unresolvablePromise();
             }
-            this.request = up.request(this.getRequestAttrs());
-            this.options.onRequest?.(this.request);
-            up.feedback.showAroundRequest(this.request, this.options);
-            up.form.disableWhile(this.request, this.options);
-            if (this.options.preload) {
-                return this.request;
-            }
-            return u.always(this.request, responseOrError => this.onRequestSettled(responseOrError));
+            let requestAttrs = this._getRequestAttrs();
+            let request = this.request = up.request(requestAttrs);
+            this.options.onRequestKnown?.(request);
+            if (this.options.preload)
+                return request;
+            this.options.handleAbort({ request, ...requestAttrs });
+            request.runPreviews(this.options);
+            return await u.always(request, (responseOrError) => this._onRequestSettled(responseOrError));
         }
-        newPageReason() {
+        _newPageReason() {
             if (u.isCrossOrigin(this.options.url)) {
                 return 'Loading cross-origin content in new page';
             }
-            if (!up.browser.canPushState()) {
+            if (this.options.history && !up.browser.canPushState()) {
                 return 'Loading content in new page to restore history support';
             }
         }
-        getRequestAttrs() {
-            const successAttrs = this.preflightPropsForRenderOptions(this.options);
-            const failAttrs = this.preflightPropsForRenderOptions(this.deriveFailOptions(), { optional: true });
+        _getRequestAttrs() {
+            const successAttrs = this._preflightPropsForRenderOptions(this.options);
+            const failAttrs = this._preflightPropsForRenderOptions(this.deriveFailOptions(), { optional: true });
             return {
                 ...this.options,
                 ...successAttrs,
-                ...u.renameKeys(failAttrs, up.fragment.failKey)
+                ...u.withRenamedKeys(failAttrs, up.fragment.failKey),
             };
         }
         getPreflightProps() {
-            return this.getRequestAttrs();
+            return this._getRequestAttrs();
         }
-        preflightPropsForRenderOptions(renderOptions, requestAttributesOptions) {
-            const preview = new up.Change.FromContent({ ...renderOptions, preview: true });
-            return preview.getPreflightProps(requestAttributesOptions);
+        _preflightPropsForRenderOptions(renderOptions, getPreflightPropsOptions) {
+            const preflightChange = new up.Change.FromContent({ ...renderOptions, preflight: true });
+            return preflightChange.getPreflightProps(getPreflightPropsOptions);
         }
-        onRequestSettled(response) {
+        _onRequestSettled(response) {
             if (response instanceof up.Response) {
-                return this.onRequestSettledWithResponse(response);
+                return this._onRequestSettledWithResponse(response);
             }
             else {
-                return this.onRequestSettledWithError(response);
+                return this._onRequestSettledWithError(response);
             }
         }
-        onRequestSettledWithResponse(response) {
+        _onRequestSettledWithResponse(response) {
             return new up.Change.FromResponse({ ...this.options, response }).execute();
         }
-        onRequestSettledWithError(error) {
+        _onRequestSettledWithError(error) {
             if (error instanceof up.Offline) {
                 this.request.emit('up:fragment:offline', {
                     callback: this.options.onOffline,
@@ -2613,146 +3064,9 @@ up.Change.FromURL = (_a = class FromURL extends up.Change {
         }
     },
     (() => {
-        u.memoizeMethod(_a.prototype, [
-            'getRequestAttrs',
-        ]);
-    })(),
-    _a);
-
-
-/***/ }),
-/* 32 */
-/***/ (() => {
-
-var _a;
-const u = up.util;
-up.Change.FromResponse = (_a = class FromResponse extends up.Change {
-        constructor(options) {
-            super(options);
-            this.response = options.response;
-            this.request = this.response.request;
-        }
-        execute() {
-            if (up.fragment.config.skipResponse(this.loadedEventProps())) {
-                this.skip();
-            }
-            else {
-                this.request.assertEmitted('up:fragment:loaded', {
-                    ...this.loadedEventProps(),
-                    callback: this.options.onLoaded,
-                    log: ['Loaded fragment from %s', this.response.description],
-                    skip: () => this.skip()
-                });
-            }
-            let fail = u.evalOption(this.options.fail, this.response) ?? !this.response.ok;
-            if (fail) {
-                throw this.updateContentFromResponse(this.deriveFailOptions());
-            }
-            return this.updateContentFromResponse(this.options);
-        }
-        skip() {
-            up.puts('up.render()', 'Skipping ' + this.response.description);
-            this.options.target = ':none';
-            this.options.failTarget = ':none';
-        }
-        updateContentFromResponse(finalRenderOptions) {
-            if (finalRenderOptions.failPrefixForced) {
-                up.puts('up.render()', 'Rendering failed response using fail-prefixed options (https://unpoly.com/failed-responses)');
-            }
-            this.augmentOptionsFromResponse(finalRenderOptions);
-            finalRenderOptions.meta = this.compilerPassMeta();
-            let result = new up.Change.FromContent(finalRenderOptions).execute();
-            result.finished = this.finish(result, finalRenderOptions);
-            return result;
-        }
-        async finish(renderResult, originalRenderOptions) {
-            renderResult = await renderResult.finished;
-            if (up.fragment.shouldRevalidate(this.request, this.response, originalRenderOptions)) {
-                renderResult = await this.revalidate(renderResult, originalRenderOptions);
-            }
-            return renderResult;
-        }
-        async revalidate(renderResult, originalRenderOptions) {
-            let target = originalRenderOptions.target;
-            if (/:(before|after)/.test(target)) {
-                up.warn('up.render()', 'Cannot revalidate cache when prepending/appending (target %s)', target);
-            }
-            else {
-                up.puts('up.render()', 'Revalidating cached response for target "%s"', target);
-                let verifyResult = await up.reload(renderResult.target, {
-                    ...originalRenderOptions,
-                    layer: renderResult.layer,
-                    onFinished: null,
-                    scroll: false,
-                    focus: 'keep',
-                    transition: false,
-                    cache: false,
-                    confirm: false,
-                    feedback: false,
-                    abort: false,
-                    expiredResponse: this.response,
-                });
-                if (!verifyResult.none) {
-                    renderResult = verifyResult;
-                }
-            }
-            return renderResult;
-        }
-        loadedEventProps() {
-            const { expiredResponse } = this.options;
-            return {
-                request: this.request,
-                response: this.response,
-                renderOptions: this.options,
-                revalidating: !!expiredResponse,
-                expiredResponse,
-            };
-        }
-        compilerPassMeta() {
-            return u.pick(this.loadedEventProps(), [
-                'revalidating',
-                'response'
-            ]);
-        }
-        augmentOptionsFromResponse(renderOptions) {
-            const responseURL = this.response.url;
-            let serverLocation = responseURL;
-            let hash = this.request.hash;
-            if (hash) {
-                renderOptions.hash = hash;
-                serverLocation += hash;
-            }
-            const isReloadable = (this.response.method === 'GET');
-            if (isReloadable) {
-                renderOptions.source = this.improveHistoryValue(renderOptions.source, responseURL);
-            }
-            else {
-                renderOptions.source = this.improveHistoryValue(renderOptions.source, 'keep');
-                renderOptions.history = !!renderOptions.location;
-            }
-            renderOptions.location = this.improveHistoryValue(renderOptions.location, serverLocation);
-            renderOptions.title = this.improveHistoryValue(renderOptions.title, this.response.title);
-            renderOptions.eventPlans = this.response.eventPlans;
-            let serverTarget = this.response.target;
-            if (serverTarget) {
-                renderOptions.target = serverTarget;
-            }
-            renderOptions.acceptLayer = this.response.acceptLayer;
-            renderOptions.dismissLayer = this.response.dismissLayer;
-            renderOptions.document = this.response.text;
-            if (this.response.none) {
-                renderOptions.target = ':none';
-            }
-            renderOptions.context = u.merge(renderOptions.context, this.response.context);
-            renderOptions.cspNonces = this.response.cspNonces;
-            renderOptions.time ?? (renderOptions.time = this.response.lastModified);
-            renderOptions.etag ?? (renderOptions.etag = this.response.etag);
-        }
-    },
-    (() => {
-        u.memoizeMethod(_a.prototype, [
-            'loadedEventProps',
-        ]);
+        u.memoizeMethod(_a.prototype, {
+            _getRequestAttrs: true,
+        });
     })(),
     _a);
 
@@ -2763,134 +3077,159 @@ up.Change.FromResponse = (_a = class FromResponse extends up.Change {
 
 var _a;
 const u = up.util;
-up.Change.FromContent = (_a = class FromContent extends up.Change {
+up.Change.FromResponse = (_a = class FromResponse extends up.Change {
         constructor(options) {
             super(options);
-            this.layers = u.filter(up.layer.getAll(this.options), this.isRenderableLayer);
-            this.origin = this.options.origin;
-            this.preview = this.options.preview;
-            this.mode = this.options.mode;
-            if (this.origin) {
-                this.originLayer = up.layer.get(this.origin);
-            }
-        }
-        isRenderableLayer(layer) {
-            return (layer === 'new') || layer.isOpen();
-        }
-        getPlans() {
-            var _a;
-            let plans = [];
-            if (this.options.fragment) {
-                (_a = this.options).target || (_a.target = this.getResponseDoc().rootSelector());
-            }
-            this.expandIntoPlans(plans, this.layers, this.options.target);
-            this.expandIntoPlans(plans, this.layers, this.options.fallback);
-            return plans;
-        }
-        expandIntoPlans(plans, layers, targets) {
-            for (let layer of layers) {
-                for (let target of this.expandTargets(targets, layer)) {
-                    const props = { ...this.options, target, layer, defaultPlacement: this.defaultPlacement() };
-                    const change = layer === 'new' ? new up.Change.OpenLayer(props) : new up.Change.UpdateLayer(props);
-                    plans.push(change);
-                }
-            }
-        }
-        expandTargets(targets, layer) {
-            return up.fragment.expandTargets(targets, { layer, mode: this.mode, origin: this.origin });
+            this._response = options.response;
+            this._request = this._response.request;
         }
         execute() {
-            if (this.options.preload) {
-                return Promise.resolve();
-            }
-            return this.seekPlan(this.executePlan.bind(this)) || this.cannotMatchPostflightTarget();
-        }
-        executePlan(matchedPlan) {
-            let result = matchedPlan.execute(this.getResponseDoc(), this.onPlanApplicable.bind(this, matchedPlan));
-            result.options = this.options;
-            return result;
-        }
-        onPlanApplicable(plan) {
-            let primaryPlan = this.getPlans()[0];
-            if (plan !== primaryPlan) {
-                up.puts('up.render()', 'Could not match primary target "%s". Updating a fallback target "%s".', primaryPlan.target, plan.target);
-            }
-        }
-        getResponseDoc() {
-            if (this.preview)
-                return;
-            const docOptions = u.pick(this.options, [
-                'target',
-                'content',
-                'fragment',
-                'document',
-                'html',
-                'cspNonces',
-                'origin',
-            ]);
-            up.migrate.handleResponseDocOptions?.(docOptions);
-            if (this.defaultPlacement() === 'content') {
-                docOptions.target = this.firstExpandedTarget(docOptions.target);
-            }
-            return new up.ResponseDoc(docOptions);
-        }
-        defaultPlacement() {
-            if (!this.options.document && !this.options.fragment) {
-                return 'content';
-            }
-        }
-        firstExpandedTarget(target) {
-            return this.expandTargets(target || ':main', this.layers[0])[0];
-        }
-        getPreflightProps(opts = {}) {
-            const getPlanProps = plan => plan.getPreflightProps();
-            return this.seekPlan(getPlanProps) || opts.optional || this.cannotMatchPreflightTarget();
-        }
-        cannotMatchPreflightTarget() {
-            this.cannotMatchTarget('Could not find target in current page');
-        }
-        cannotMatchPostflightTarget() {
-            this.cannotMatchTarget('Could not find common target in current page and response');
-        }
-        cannotMatchTarget(reason) {
-            let message;
-            if (this.getPlans().length) {
-                const planTargets = u.uniq(u.map(this.getPlans(), 'target'));
-                const humanizedLayerOption = up.layer.optionToString(this.options.layer);
-                message = [reason + " (tried selectors %o in %s)", planTargets, humanizedLayerOption];
-            }
-            else if (this.layers.length) {
-                if (this.options.failPrefixForced) {
-                    message = 'No target selector given for failed responses (https://unpoly.com/failed-responses)';
-                }
-                else {
-                    message = 'No target selector given';
-                }
+            if (up.fragment.config.skipResponse(this._loadedEventProps())) {
+                this._skip();
             }
             else {
-                message = 'Could not find a layer to render in. You may have passed a non-existing layer reference, or a detached element.';
+                this._request.assertEmitted('up:fragment:loaded', {
+                    ...this._loadedEventProps(),
+                    callback: this.options.onLoaded,
+                    log: ['Loaded fragment from %s', this._response.description],
+                    skip: () => this._skip()
+                });
+                this._assetRenderableResponse();
             }
-            throw new up.CannotMatch(message);
+            let fail = u.evalOption(this.options.fail, this._response) ?? !this._response.ok;
+            if (fail) {
+                throw this._updateContentFromResponse(this.deriveFailOptions());
+            }
+            return this._updateContentFromResponse(this.options);
         }
-        seekPlan(fn) {
-            for (let plan of this.getPlans()) {
-                try {
-                    return fn(plan);
-                }
-                catch (error) {
-                    if (!(error instanceof up.CannotMatch)) {
-                        throw error;
-                    }
+        _assetRenderableResponse() {
+            if (!up.fragment.config.renderableResponse(this._response)) {
+                throw new up.CannotParse(['Cannot render response with content-type "%s" (configure with up.fragment.config.renderableResponse)', this._response.contentType]);
+            }
+        }
+        _skip() {
+            up.puts('up.render()', 'Skipping ' + this._response.description);
+            this.options.target = ':none';
+            this.options.failTarget = ':none';
+        }
+        _updateContentFromResponse(finalRenderOptions) {
+            if (finalRenderOptions.didForceFailOptions) {
+                up.puts('up.render()', 'Rendering failed response using fail-prefixed options (https://unpoly.com/failed-responses)');
+            }
+            this._augmentOptionsFromResponse(finalRenderOptions);
+            finalRenderOptions.meta = this._compilerPassMeta();
+            let result = new up.Change.FromContent(finalRenderOptions).execute();
+            result.finished = this.finish(result, finalRenderOptions);
+            return result;
+        }
+        async finish(renderResult, originalRenderOptions) {
+            renderResult = await renderResult.finished;
+            if (up.fragment.shouldRevalidate(this._request, this._response, originalRenderOptions)) {
+                renderResult = await this._revalidate(renderResult, originalRenderOptions);
+            }
+            return renderResult;
+        }
+        async _revalidate(renderResult, originalRenderOptions) {
+            let inputTarget = originalRenderOptions.target;
+            let effectiveTarget = renderResult.target;
+            if (/:(before|after)/.test(inputTarget)) {
+                up.warn('up.render()', 'Cannot revalidate cache when prepending/appending (target %s)', inputTarget);
+            }
+            else {
+                up.puts('up.render()', 'Revalidating cached response for target "%s"', effectiveTarget);
+                let verifyResult = await up.reload(effectiveTarget, {
+                    ...originalRenderOptions,
+                    ...up.RenderOptions.NO_MOTION,
+                    ...up.RenderOptions.NO_INPUT_INTERFERENCE,
+                    ...up.RenderOptions.NO_PREVIEWS,
+                    preferOldElements: renderResult.fragments,
+                    layer: renderResult.layer,
+                    onFinished: null,
+                    expiredResponse: this._response,
+                    preview: this._revalidatePreview(originalRenderOptions),
+                    abort: false,
+                    cache: false,
+                    background: true,
+                });
+                if (!verifyResult.none) {
+                    renderResult = verifyResult;
                 }
             }
+            return renderResult;
+        }
+        _revalidatePreview({ preview, revalidatePreview }) {
+            if (revalidatePreview === true) {
+                return preview;
+            }
+            else {
+                return revalidatePreview;
+            }
+        }
+        _loadedEventProps() {
+            const { expiredResponse } = this.options;
+            return {
+                request: this._request,
+                response: this._response,
+                renderOptions: this.options,
+                revalidating: !!expiredResponse,
+                expiredResponse,
+            };
+        }
+        _compilerPassMeta() {
+            let meta = { revalidating: !!this.options.expiredResponse };
+            up.migrate.processCompilerPassMeta?.(meta, this._response);
+            return meta;
+        }
+        _augmentOptionsFromResponse(renderOptions) {
+            const responseURL = this._response.url;
+            let serverLocation = responseURL;
+            let hash = this._request.hash;
+            if (hash) {
+                renderOptions.hash = hash;
+                serverLocation += hash;
+            }
+            const isReloadable = (this._response.method === 'GET');
+            if (isReloadable) {
+                renderOptions.source = this.improveHistoryValue(renderOptions.source, responseURL);
+            }
+            else {
+                renderOptions.source = this.improveHistoryValue(renderOptions.source, 'keep');
+                renderOptions.history = !!renderOptions.location;
+            }
+            let openLayerOptions = this._response.openLayer;
+            if (openLayerOptions) {
+                Object.assign(renderOptions, {
+                    ...up.Layer.Overlay.UNSET_VISUALS,
+                    target: undefined,
+                    ...up.fragment.config.navigateOptions,
+                    ...openLayerOptions,
+                    layer: 'new',
+                });
+                Object.assign(renderOptions, openLayerOptions);
+            }
+            renderOptions.location = this.improveHistoryValue(renderOptions.location, serverLocation);
+            renderOptions.title = this.improveHistoryValue(renderOptions.title, this._response.title);
+            renderOptions.eventPlans = this._response.eventPlans;
+            let serverTarget = this._response.target;
+            if (serverTarget) {
+                renderOptions.target = serverTarget;
+            }
+            renderOptions.acceptLayer = this._response.acceptLayer;
+            renderOptions.dismissLayer = this._response.dismissLayer;
+            renderOptions.document = this._response.text;
+            if (this._response.none) {
+                renderOptions.target = ':none';
+            }
+            renderOptions.context = u.merge(renderOptions.context, this._response.context);
+            renderOptions.cspInfo = this._response.cspInfo;
+            renderOptions.time ??= this._response.lastModified;
+            renderOptions.etag ??= this._response.etag;
         }
     },
     (() => {
-        u.memoizeMethod(_a.prototype, [
-            'getPlans',
-            'getResponseDoc',
-            'getPreflightProps',
-        ]);
+        u.memoizeMethod(_a.prototype, {
+            _loadedEventProps: true,
+        });
     })(),
     _a);
 
@@ -2899,111 +3238,153 @@ up.Change.FromContent = (_a = class FromContent extends up.Change {
 /* 34 */
 /***/ (() => {
 
+var _a;
 const u = up.util;
-up.CompilerPass = class CompilerPass {
-    constructor(root, compilers, { layer, data, dataMap, meta }) {
-        layer || (layer = up.layer.get(root) || up.layer.current);
-        this.root = root;
-        this.compilers = compilers;
-        this.layer = layer;
-        this.data = data;
-        this.dataMap = dataMap;
-        this.meta = { layer, ...meta };
-        this.errors = [];
-    }
-    run() {
-        this.layer.asCurrent(() => {
-            this.setCompileData();
-            for (let compiler of this.compilers) {
-                this.runCompiler(compiler);
-            }
-        });
-        if (this.errors.length) {
-            throw new up.CannotCompile('Errors while compiling', { errors: this.errors });
+up.Change.FromContent = (_a = class FromContent extends up.Change {
+        constructor(options) {
+            super(options);
+            this._origin = options.origin;
+            this._preflight = options.preflight;
+            this._layers = up.layer.getAll(options);
         }
-    }
-    setCompileData() {
-        if (this.data) {
-            this.root.upCompileData = this.data;
+        _getPlans() {
+            let plans = [];
+            this._filterLayers();
+            this._improveOptionsFromResponseDoc();
+            this._expandIntoPlans(plans, this._layers, this.options.target);
+            this._expandIntoPlans(plans, this._layers, this.options.fallback);
+            return plans;
         }
-        if (this.dataMap) {
-            for (let selector in this.dataMap) {
-                for (let match of this.select(selector)) {
-                    match.upCompileData = this.dataMap[selector];
+        _isRenderableLayer(layer) {
+            return (layer === 'new') || layer.isAlive();
+        }
+        _filterLayers() {
+            this._layers = u.filter(this._layers, this._isRenderableLayer);
+        }
+        _expandIntoPlans(plans, layers, targets) {
+            for (let layer of layers) {
+                for (let target of this._expandTargets(targets, layer)) {
+                    const props = { ...this.options, target, layer, defaultPlacement: this._defaultPlacement() };
+                    const change = layer === 'new' ? new up.Change.OpenLayer(props) : new up.Change.UpdateLayer(props);
+                    plans.push(change);
                 }
             }
         }
-    }
-    runCompiler(compiler) {
-        const matches = this.selectOnce(compiler);
-        if (!matches.length) {
-            return;
+        _expandTargets(targets, layer) {
+            return up.fragment.expandTargets(targets, { layer, mode: this.options.mode, origin: this._origin });
         }
-        if (!compiler.isDefault) {
-            up.puts('up.hello()', 'Compiling %d× "%s" on %s', matches.length, compiler.selector, this.layer);
+        execute() {
+            if (this.options.preload) {
+                return Promise.resolve();
+            }
+            return this._seekPlan(this._executePlan.bind(this)) || this._cannotMatchPostflightTarget();
         }
-        if (compiler.batch) {
-            this.compileBatch(compiler, matches);
+        _executePlan(matchedPlan) {
+            return matchedPlan.execute(this._getResponseDoc(), this._onPlanApplicable.bind(this, matchedPlan));
         }
-        else {
-            for (let match of matches) {
-                this.compileOneElement(compiler, match);
+        _isApplicablePlanError(error) {
+            return !(error instanceof up.CannotMatch);
+        }
+        _onPlanApplicable(plan) {
+            let primaryPlan = this._getPlans()[0];
+            if (plan !== primaryPlan) {
+                up.puts('up.render()', 'Could not match primary target "%s". Updating a fallback target "%s".', primaryPlan.target, plan.target);
+            }
+            let { assets } = this._getResponseDoc();
+            if (assets) {
+                up.script.assertAssetsOK(assets, plan.options);
+            }
+            this.options.handleAbort(this.getPreflightProps());
+        }
+        _getResponseDoc() {
+            if (this._preflight)
+                return;
+            const docOptions = u.pick(this.options, [
+                'target',
+                'content',
+                'fragment',
+                'document',
+                'html',
+                'cspInfo',
+                'origin',
+                'data',
+            ]);
+            up.migrate.handleResponseDocOptions?.(docOptions);
+            if (this._defaultPlacement() === 'content') {
+                docOptions.target = this._firstExpandedTarget(docOptions.target);
+            }
+            return new up.ResponseDoc(docOptions);
+        }
+        _improveOptionsFromResponseDoc() {
+            if (this._preflight)
+                return;
+            let responseDoc = this._getResponseDoc();
+            if (this.options.fragment) {
+                this.options.target ||= responseDoc.rootSelector();
+            }
+            this.options.title = this.improveHistoryValue(this.options.title, responseDoc.title);
+            this.options.metaTags = this.improveHistoryValue(this.options.metaTags, responseDoc.metaTags);
+            this.options.lang = this.improveHistoryValue(this.options.lang, responseDoc.lang);
+        }
+        _defaultPlacement() {
+            if (!this.options.document && !this.options.fragment) {
+                return 'content';
             }
         }
-        return up.migrate.postCompile?.(matches, compiler);
-    }
-    compileOneElement(compiler, element) {
-        const compileArgs = [element];
-        if (compiler.length !== 1) {
-            const data = up.syntax.data(element);
-            compileArgs.push(data, this.meta);
+        _firstExpandedTarget(target) {
+            let layer = this._layers[0] || up.layer.root;
+            return this._expandTargets(target || ':main', layer)[0];
         }
-        const result = this.applyCompilerFunction(compiler, element, compileArgs);
-        let destructorOrDestructors = this.destructorPresence(result);
-        if (destructorOrDestructors) {
-            up.destructor(element, destructorOrDestructors);
+        getPreflightProps(opts = {}) {
+            const getPlanProps = (plan) => plan.getPreflightProps();
+            return this._seekPlan(getPlanProps) || opts.optional || this._cannotMatchPreflightTarget();
         }
-    }
-    compileBatch(compiler, elements) {
-        const compileArgs = [elements];
-        if (compiler.length !== 1) {
-            const dataList = u.map(elements, up.syntax.data);
-            compileArgs.push(dataList, this.meta);
+        _cannotMatchPreflightTarget() {
+            this._cannotMatchTarget('Could not find target in current page');
         }
-        const result = this.applyCompilerFunction(compiler, elements, compileArgs);
-        if (this.destructorPresence(result)) {
-            up.fail('Compilers with { batch: true } cannot return destructors');
+        _cannotMatchPostflightTarget() {
+            this._cannotMatchTarget('Could not find common target in current page and response');
         }
-    }
-    applyCompilerFunction(compiler, elementOrElements, compileArgs) {
-        try {
-            return compiler.apply(elementOrElements, compileArgs);
-        }
-        catch (error) {
-            this.errors.push(error);
-            up.log.error('up.hello()', 'While compiling %o: %o', elementOrElements, error);
-            up.error.emitGlobal(error);
-        }
-    }
-    destructorPresence(result) {
-        if (u.isFunction(result) || (u.isArray(result) && (u.every(result, u.isFunction)))) {
-            return result;
-        }
-    }
-    select(selector) {
-        return up.fragment.subtree(this.root, u.evalOption(selector), { layer: this.layer });
-    }
-    selectOnce(compiler) {
-        let matches = this.select(compiler.selector);
-        return u.filter(matches, (element) => {
-            let appliedCompilers = (element.upAppliedCompilers || (element.upAppliedCompilers = new Set()));
-            if (!appliedCompilers.has(compiler)) {
-                appliedCompilers.add(compiler);
-                return true;
+        _cannotMatchTarget(reason) {
+            if (this._getPlans().length) {
+                const planTargets = u.uniq(u.map(this._getPlans(), 'target'));
+                const humanizedLayerOption = up.layer.optionToString(this.options.layer);
+                throw new up.CannotMatch([reason + " (tried selectors %o in %s)", planTargets, humanizedLayerOption]);
             }
+            else if (this._layers.length === 0) {
+                this._cannotMatchLayer();
+            }
+            else if (this.options.didForceFailOptions) {
+                throw new up.CannotMatch('No target selector given for failed responses (https://unpoly.com/failed-responses)');
+            }
+            else {
+                throw new up.CannotMatch('No target selector given');
+            }
+        }
+        _cannotMatchLayer() {
+            throw new up.CannotMatch('Could not find a layer to render in. You may have passed an unmatchable layer reference, or a detached element.');
+        }
+        _seekPlan(fn) {
+            for (let plan of this._getPlans()) {
+                try {
+                    return fn(plan);
+                }
+                catch (error) {
+                    if (this._isApplicablePlanError(error)) {
+                        throw error;
+                    }
+                }
+            }
+        }
+    },
+    (() => {
+        u.memoizeMethod(_a.prototype, {
+            _getPlans: true,
+            _getResponseDoc: true,
+            getPreflightProps: true,
         });
-    }
-};
+    })(),
+    _a);
 
 
 /***/ }),
@@ -3011,108 +3392,106 @@ up.CompilerPass = class CompilerPass {
 /***/ (() => {
 
 const u = up.util;
-const e = up.element;
-up.CSSTransition = class CSSTransition {
-    constructor(element, lastFrameKebab, options) {
-        this.element = element;
-        this.lastFrameKebab = lastFrameKebab;
-        this.lastFrameKeysKebab = Object.keys(this.lastFrameKebab);
-        if (u.some(this.lastFrameKeysKebab, key => key.match(/A-Z/))) {
-            up.fail('Animation keys must be kebab-case');
-        }
-        this.finishEvent = options.finishEvent;
-        this.duration = options.duration;
-        this.easing = options.easing;
-        this.finished = false;
+up.CompilerPass = class CompilerPass {
+    constructor(root, compilers, { layer, data, dataRoot, dataMap, meta }) {
+        layer ||= up.layer.get(root) || up.layer.current;
+        this._root = root;
+        this._compilers = compilers;
+        this._layer = layer;
+        this._data = data;
+        this._dataRoot = dataRoot || root;
+        this._dataMap = dataMap;
+        this._compilePromises = [];
+        meta ||= {};
+        meta.layer = layer;
+        this._meta = meta;
     }
-    start() {
-        if (this.lastFrameKeysKebab.length === 0) {
-            this.finished = true;
-            return Promise.resolve();
-        }
-        this.deferred = u.newDeferred();
-        this.pauseOldTransition();
-        this.startTime = new Date();
-        this.startFallbackTimer();
-        this.listenToFinishEvent();
-        this.listenToTransitionEnd();
-        this.startMotion();
-        return this.deferred;
-    }
-    listenToFinishEvent() {
-        if (this.finishEvent) {
-            this.stopListenToFinishEvent = up.on(this.element, this.finishEvent, this.onFinishEvent.bind(this));
-        }
-    }
-    onFinishEvent(event) {
-        event.stopPropagation();
-        this.finish();
-    }
-    startFallbackTimer() {
-        const timingTolerance = 100;
-        this.fallbackTimer = u.timer((this.duration + timingTolerance), () => {
-            this.finish();
-        });
-    }
-    stopFallbackTimer() {
-        clearTimeout(this.fallbackTimer);
-    }
-    listenToTransitionEnd() {
-        this.stopListenToTransitionEnd = up.on(this.element, 'transitionend', this.onTransitionEnd.bind(this));
-    }
-    onTransitionEnd(event) {
-        if (event.target !== this.element) {
-            return;
-        }
-        const elapsed = new Date() - this.startTime;
-        if (elapsed <= (0.25 * this.duration)) {
-            return;
-        }
-        const completedPropertyKebab = event.propertyName;
-        if (!u.contains(this.lastFrameKeysKebab, completedPropertyKebab)) {
-            return;
-        }
-        this.finish();
-    }
-    finish() {
-        if (this.finished) {
-            return;
-        }
-        this.finished = true;
-        this.stopFallbackTimer();
-        this.stopListenToFinishEvent?.();
-        this.stopListenToTransitionEnd?.();
-        e.concludeCSSTransition(this.element);
-        this.resumeOldTransition();
-        this.deferred.resolve();
-    }
-    pauseOldTransition() {
-        const oldTransition = e.style(this.element, [
-            'transitionProperty',
-            'transitionDuration',
-            'transitionDelay',
-            'transitionTimingFunction'
-        ]);
-        if (e.hasCSSTransition(oldTransition)) {
-            if (oldTransition.transitionProperty !== 'all') {
-                const oldTransitionProperties = oldTransition.transitionProperty.split(/\s*,\s*/);
-                const oldTransitionFrameKebab = e.style(this.element, oldTransitionProperties);
-                this.setOldTransitionTargetFrame = e.setTemporaryStyle(this.element, oldTransitionFrameKebab);
+    run() {
+        this._layer.asCurrent(() => {
+            this.setCompileData();
+            for (let compiler of this._compilers) {
+                this._runCompiler(compiler);
             }
-            this.setOldTransition = e.concludeCSSTransition(this.element);
+        });
+        return Promise.all(this._compilePromises);
+    }
+    setCompileData() {
+        if (this._data) {
+            this._dataRoot.upCompileData = this._data;
+        }
+        if (this._dataMap) {
+            for (let selector in this._dataMap) {
+                for (let match of this._select(selector)) {
+                    match.upCompileData = this._dataMap[selector];
+                }
+            }
         }
     }
-    resumeOldTransition() {
-        this.setOldTransitionTargetFrame?.();
-        this.setOldTransition?.();
+    _runCompiler(compiler) {
+        const matches = this._selectOnce(compiler);
+        if (!matches.length) {
+            return;
+        }
+        if (!compiler.isDefault) {
+            up.puts('up.hello()', 'Compiling %d× "%s" on %s', matches.length, compiler.selector, this._layer);
+        }
+        if (compiler.batch) {
+            this._compileBatch(compiler, matches);
+        }
+        else {
+            for (let match of matches) {
+                this._compileOneElement(compiler, match);
+            }
+        }
+        up.migrate.postCompile?.(matches, compiler);
     }
-    startMotion() {
-        e.setStyle(this.element, {
-            transitionProperty: Object.keys(this.lastFrameKebab).join(', '),
-            transitionDuration: `${this.duration}ms`,
-            transitionTimingFunction: this.easing
-        });
-        e.setStyle(this.element, this.lastFrameKebab);
+    _compileOneElement(compiler, element) {
+        const compileArgs = [element];
+        if (compiler.length !== 1) {
+            const data = up.script.data(element);
+            compileArgs.push(data, this._meta);
+        }
+        let onDestructor = (destructor) => up.destructor(element, destructor);
+        this._applyCompilerFunction(compiler, element, compileArgs, onDestructor);
+    }
+    _compileBatch(compiler, elements) {
+        const compileArgs = [elements];
+        if (compiler.length !== 1) {
+            const dataList = u.map(elements, up.script.data);
+            compileArgs.push(dataList, this._meta);
+        }
+        let onDestructor = () => this._reportBatchCompilerWithDestructor(compiler);
+        this._applyCompilerFunction(compiler, elements, compileArgs, onDestructor);
+    }
+    async _applyCompilerFunction(compiler, elementOrElements, compileArgs, onDestructor) {
+        let maybeDestructor = up.error.guard(() => compiler.apply(elementOrElements, compileArgs));
+        if (u.isPromise(maybeDestructor)) {
+            let guardedPromise = up.error.guardPromise(maybeDestructor);
+            this._compilePromises.push(guardedPromise);
+            maybeDestructor = await guardedPromise;
+        }
+        if (maybeDestructor)
+            onDestructor(maybeDestructor);
+    }
+    _reportBatchCompilerWithDestructor(compiler) {
+        let error = new up.Error(['Batch compiler (%s) cannot return a destructor', compiler.selector]);
+        reportError(error);
+    }
+    _select(selector) {
+        return up.fragment.subtree(this._root, u.evalOption(selector), { layer: this._layer });
+    }
+    _selectOnce(compiler) {
+        let matches = this._select(compiler.selector);
+        if (!compiler.rerun) {
+            matches = u.filter(matches, (element) => {
+                let appliedCompilers = (element.upAppliedCompilers ||= new Set());
+                if (!appliedCompilers.has(compiler)) {
+                    appliedCompilers.add(compiler);
+                    return true;
+                }
+            });
+        }
+        return matches;
     }
 };
 
@@ -3122,45 +3501,131 @@ up.CSSTransition = class CSSTransition {
 /***/ (() => {
 
 const u = up.util;
-up.DestructorPass = class DestructorPass {
-    constructor(fragment, options) {
-        this.fragment = fragment;
-        this.options = options;
-        this.errors = [];
+const e = up.element;
+up.CSSTransition = class CSSTransition {
+    constructor(element, lastFrame, options) {
+        this._element = element;
+        this._lastFrame = lastFrame;
+        this._lastFrameKeys = Object.keys(this._lastFrame);
+        this._finishEvent = options.finishEvent;
+        this._duration = options.duration;
+        this._easing = options.easing;
+        this._finished = false;
     }
-    run() {
-        for (let cleanable of this.selectCleanables()) {
-            let destructors = u.pluckKey(cleanable, 'upDestructors');
-            if (destructors) {
-                for (let destructor of destructors) {
-                    this.applyDestructorFunction(destructor, cleanable);
-                }
+    start() {
+        if (this._lastFrameKeys.length === 0) {
+            this._finished = true;
+            return Promise.resolve();
+        }
+        this._deferred = u.newDeferred();
+        this._pauseOldTransition();
+        this._startTime = new Date();
+        this._startFallbackTimer();
+        this._listenToFinishEvent();
+        this._listenToTransitionEnd();
+        this._startMotion();
+        return this._deferred;
+    }
+    _listenToFinishEvent() {
+        if (this._finishEvent) {
+            this._stopListenToFinishEvent = up.on(this._element, this._finishEvent, this._onFinishEvent.bind(this));
+        }
+    }
+    _onFinishEvent(event) {
+        event.stopPropagation();
+        this._finish();
+    }
+    _startFallbackTimer() {
+        const timingTolerance = 100;
+        this._fallbackTimer = u.timer((this._duration + timingTolerance), () => this._finish());
+    }
+    _stopFallbackTimer() {
+        clearTimeout(this._fallbackTimer);
+    }
+    _listenToTransitionEnd() {
+        this._stopListenToTransitionEnd = up.on(this._element, 'transitionend', this._onTransitionEnd.bind(this));
+    }
+    _onTransitionEnd(event) {
+        if (event.target !== this._element) {
+            return;
+        }
+        const elapsed = new Date() - this._startTime;
+        if (elapsed <= (0.25 * this._duration)) {
+            return;
+        }
+        const completedProperty = event.propertyName;
+        if (u.contains(this._lastFrameKeys, completedProperty)) {
+            this._finish();
+        }
+    }
+    _finish() {
+        if (this._finished) {
+            return;
+        }
+        this._finished = true;
+        this._stopFallbackTimer();
+        this._stopListenToFinishEvent?.();
+        this._stopListenToTransitionEnd?.();
+        e.concludeCSSTransition(this._element);
+        this._resumeOldTransition();
+        this._deferred.resolve();
+    }
+    _pauseOldTransition() {
+        const oldTransition = e.style(this._element, [
+            'transition-property',
+            'transition-duration',
+            'transition-delay',
+            'transition-timing-function'
+        ]);
+        if (e.hasCSSTransition(oldTransition)) {
+            if (oldTransition['transition-property'] !== 'all') {
+                const oldTransitionProperties = oldTransition['transition-property'].split(/\s*,\s*/);
+                const oldTransitionFrame = e.style(this._element, oldTransitionProperties);
+                this._setOldTransitionTargetFrame = e.setStyleTemp(this._element, oldTransitionFrame);
             }
-            cleanable.classList.remove('up-can-clean');
-        }
-        if (this.errors.length) {
-            throw new up.Error('Errors while destroying', { errors: this.errors });
+            this._setOldTransition = e.concludeCSSTransition(this._element);
         }
     }
-    selectCleanables() {
-        const selectOptions = { ...this.options, destroying: true };
-        return up.fragment.subtree(this.fragment, '.up-can-clean', selectOptions);
+    _resumeOldTransition() {
+        this._setOldTransitionTargetFrame?.();
+        this._setOldTransition?.();
     }
-    applyDestructorFunction(destructor, element) {
-        try {
-            destructor();
-        }
-        catch (error) {
-            this.errors.push(error);
-            up.log.error('up.destroy()', 'While destroying %o: %o', element, error);
-            up.error.emitGlobal(error);
-        }
+    _startMotion() {
+        e.setStyle(this._element, {
+            'transition-property': this._lastFrameKeys.join(),
+            'transition-duration': `${this._duration}ms`,
+            'transition-timing-function': this._easing
+        });
+        e.setStyle(this._element, this._lastFrame);
     }
 };
 
 
 /***/ }),
 /* 37 */
+/***/ (() => {
+
+const u = up.util;
+up.DestructorPass = class DestructorPass {
+    constructor(fragment, options) {
+        this._fragment = fragment;
+        this._options = options;
+    }
+    run() {
+        for (let cleanable of this._selectCleanables()) {
+            let registry = u.pluckKey(cleanable, 'upDestructors');
+            registry?.clean(cleanable);
+        }
+    }
+    _selectCleanables() {
+        const selectOptions = { ...this._options, destroying: true };
+        return up.fragment.subtree(this._fragment, '.up-can-clean', selectOptions);
+    }
+};
+
+
+/***/ }),
+/* 38 */
 /***/ (() => {
 
 const u = up.util;
@@ -3177,21 +3642,21 @@ up.EventEmitter = class EventEmitter extends up.Record {
         ];
     }
     emit() {
-        this.logEmission();
+        this._logEmission();
         if (this.baseLayer) {
-            this.baseLayer.asCurrent(() => this.dispatchEvent());
+            this.baseLayer.asCurrent(() => this._dispatchEvent());
         }
         else {
-            this.dispatchEvent();
+            this._dispatchEvent();
         }
         return this.event;
     }
-    dispatchEvent() {
+    _dispatchEvent() {
         this.target.dispatchEvent(this.event);
         if (this.ensureBubbles && !this.target.isConnected) {
             document.dispatchEvent(this.event);
         }
-        this.callback?.(this.event);
+        up.error.guard(() => this.callback?.(this.event));
     }
     assertEmitted() {
         const event = this.emit();
@@ -3199,7 +3664,7 @@ up.EventEmitter = class EventEmitter extends up.Record {
             throw new up.Aborted(`Event ${event.type} was prevented`);
         }
     }
-    logEmission() {
+    _logEmission() {
         if (!up.log.config.enabled) {
             return;
         }
@@ -3222,7 +3687,7 @@ up.EventEmitter = class EventEmitter extends up.Record {
     static fromEmitArgs(args, defaults = {}) {
         let options = u.extractOptions(args);
         options = u.merge(defaults, options);
-        if (u.isElementish(args[0])) {
+        if (u.isElementLike(args[0])) {
             options.target = e.get(args.shift());
         }
         else if (args[0] instanceof up.Layer) {
@@ -3231,8 +3696,8 @@ up.EventEmitter = class EventEmitter extends up.Record {
         let layer;
         if (u.isGiven(options.layer)) {
             layer = up.layer.get(options.layer);
-            options.target || (options.target = layer.element);
-            options.baseLayer || (options.baseLayer = layer);
+            options.target ||= layer.element;
+            options.baseLayer ||= layer;
         }
         if (options.baseLayer) {
             options.baseLayer = up.layer.get(options.baseLayer);
@@ -3245,7 +3710,7 @@ up.EventEmitter = class EventEmitter extends up.Record {
         }
         if (args[0]?.preventDefault) {
             options.event = args[0];
-            options.log ?? (options.log = args[0].log);
+            options.log ??= args[0].log;
         }
         else if (u.isString(args[0])) {
             options.event = up.event.build(args[0], options);
@@ -3259,7 +3724,7 @@ up.EventEmitter = class EventEmitter extends up.Record {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (() => {
 
 const u = up.util;
@@ -3274,35 +3739,35 @@ up.EventListener = class EventListener extends up.Record {
             'baseLayer',
             'passive',
             'once',
+            'capture',
             'beforeBoot',
         ];
     }
     constructor(attributes) {
         super(attributes);
-        this.key = this.constructor.buildKey(attributes);
+        this._key = this.constructor._buildKey(attributes);
         this.isDefault = up.framework.evaling;
-        this.beforeBoot ?? (this.beforeBoot = this.eventType.indexOf('up:framework:') === 0);
+        this.beforeBoot ??= (this.eventType.indexOf('up:framework:') === 0);
         this.nativeCallback = this.nativeCallback.bind(this);
     }
     bind() {
-        var _a;
-        const map = ((_a = this.element).upEventListeners || (_a.upEventListeners = {}));
-        if (map[this.key]) {
+        const map = (this.element.upEventListeners ||= {});
+        if (map[this._key]) {
             up.fail('up.on(): The %o callback %o cannot be registered more than once', this.eventType, this.callback);
         }
-        map[this.key] = this;
-        this.element.addEventListener(...this.addListenerArgs());
+        map[this._key] = this;
+        this.element.addEventListener(...this._addListenerArg());
     }
-    addListenerArgs() {
-        let options = u.compactObject(u.pick(this, ['once', 'passive']));
+    _addListenerArg() {
+        let options = u.compactObject(u.pick(this, ['once', 'passive', 'capture']));
         return [this.eventType, this.nativeCallback, options];
     }
     unbind() {
         let map = this.element.upEventListeners;
         if (map) {
-            delete map[this.key];
+            delete map[this._key];
         }
-        this.element.removeEventListener(...this.addListenerArgs());
+        this.element.removeEventListener(...this._addListenerArg());
     }
     nativeCallback(event) {
         if (up.framework.beforeBoot && !this.beforeBoot) {
@@ -3310,7 +3775,8 @@ up.EventListener = class EventListener extends up.Record {
         }
         let element = event.target;
         if (this.selector) {
-            element = element.closest(u.evalOption(this.selector));
+            let selector = u.evalOption(this.selector);
+            element = element.closest(selector);
         }
         if (this.guard && !this.guard(event)) {
             return;
@@ -3319,8 +3785,11 @@ up.EventListener = class EventListener extends up.Record {
             const args = [event, element];
             const expectedArgCount = this.callback.length;
             if (expectedArgCount !== 1 && expectedArgCount !== 2) {
-                const data = up.syntax.data(element);
+                const data = up.script.data(element);
                 args.push(data);
+            }
+            if (this.eventType === 'click' && element.disabled) {
+                return;
             }
             const applyCallback = this.callback.bind(element, ...args);
             if (this.baseLayer) {
@@ -3334,13 +3803,12 @@ up.EventListener = class EventListener extends up.Record {
     static fromElement(attributes) {
         let map = attributes.element.upEventListeners;
         if (map) {
-            const key = this.buildKey(attributes);
+            const key = this._buildKey(attributes);
             return map[key];
         }
     }
-    static buildKey(attributes) {
-        var _a;
-        (_a = attributes.callback).upUid || (_a.upUid = u.uid());
+    static _buildKey(attributes) {
+        attributes.callback.upUid ||= u.uid();
         return [
             attributes.eventType,
             attributes.selector,
@@ -3361,7 +3829,7 @@ up.EventListener = class EventListener extends up.Record {
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (() => {
 
 const u = up.util;
@@ -3376,37 +3844,38 @@ up.EventListenerGroup = class EventListenerGroup extends up.Record {
             'baseLayer',
             'passive',
             'once',
+            'capture',
             'beforeBoot',
         ];
     }
     bind() {
-        const unbindFns = [];
-        this.eachListenerAttributes(function (attrs) {
+        const cleaner = u.cleaner();
+        this._eachListenerAttributes(function (attrs) {
             const listener = new up.EventListener(attrs);
             listener.bind();
-            return unbindFns.push(listener.unbind.bind(listener));
+            return cleaner(listener.unbind.bind(listener));
         });
-        return u.sequence(unbindFns);
+        return cleaner.clean;
     }
-    eachListenerAttributes(fn) {
+    _eachListenerAttributes(fn) {
         for (let element of this.elements) {
             for (let eventType of this.eventTypes) {
-                fn(this.listenerAttributes(element, eventType));
+                fn(this._listenerAttributes(element, eventType));
             }
         }
     }
-    listenerAttributes(element, eventType) {
+    _listenerAttributes(element, eventType) {
         return { ...this.attributes(), element, eventType };
     }
     unbind() {
-        this.eachListenerAttributes(function (attrs) {
+        this._eachListenerAttributes(function (attrs) {
             let listener = up.EventListener.fromElement(attrs);
             if (listener) {
                 listener.unbind();
             }
         });
     }
-    static fromBindArgs(args, defaults) {
+    static fromBindArgs(args, overrides) {
         args = u.copy(args);
         const callback = args.pop();
         let elements;
@@ -3419,110 +3888,186 @@ up.EventListenerGroup = class EventListenerGroup extends up.Record {
         else {
             elements = [document];
         }
-        let eventTypes = u.parseTokens(args.shift());
+        let eventTypes = u.getSimpleTokens(args.shift());
         let fixTypes = up.migrate.fixEventTypes;
         if (fixTypes) {
             eventTypes = fixTypes(eventTypes);
         }
         const options = u.extractOptions(args);
         const selector = args[0];
-        const attributes = { elements, eventTypes, selector, callback, ...options, ...defaults };
+        const attributes = { elements, eventTypes, selector, callback, ...options, ...overrides };
         return new (this)(attributes);
     }
 };
 
 
 /***/ }),
-/* 40 */
+/* 41 */
+/***/ (() => {
+
+const u = up.util;
+up.SelectorTracker = class SelectorTracker {
+    constructor(selector, options, addCallback) {
+        this._selector = selector;
+        this._addCallback = addCallback;
+        this._layer = options.layer || 'any';
+        this._filter = options.filter || u.identity;
+        this._knownMatches = new Map();
+        this._syncScheduled = false;
+    }
+    start() {
+        this._scheduleSync();
+        return u.sequence(this._trackFragments(), () => this._removeAllMatches());
+    }
+    _trackFragments() {
+        return up.on('up:fragment:inserted up:fragment:destroyed', () => this._scheduleSync());
+    }
+    _scheduleSync() {
+        if (!this._syncScheduled) {
+            this._syncScheduled = true;
+            up.fragment.afterMutate(() => this._sync());
+        }
+    }
+    _sync() {
+        this._syncScheduled = false;
+        let removeMap = new Map(this._knownMatches);
+        this._knownMatches.clear();
+        for (let newMatch of this._currentMatches) {
+            let knownRemoveCallback = removeMap.get(newMatch);
+            removeMap.delete(newMatch);
+            let removeCallback = knownRemoveCallback || this._addCallback(newMatch) || u.noop;
+            this._knownMatches.set(newMatch, removeCallback);
+        }
+        this._runRemoveCallbacks(removeMap);
+    }
+    get _currentMatches() {
+        let allMatches = up.fragment.all(this._selector, { layer: this._layer });
+        return this._filter(allMatches);
+    }
+    _removeAllMatches() {
+        this._runRemoveCallbacks(this._knownMatches);
+    }
+    _runRemoveCallbacks(map) {
+        for (let [element, removeCallback] of map) {
+            removeCallback(element);
+        }
+    }
+};
+
+
+/***/ }),
+/* 42 */
 /***/ (() => {
 
 const u = up.util;
 up.FieldWatcher = class FieldWatcher {
-    constructor(form, fields, options, callback) {
-        this.callback = callback;
-        this.form = form;
-        this.fields = fields;
-        this.options = options;
-        this.batch = options.batch;
-        this.unbindFns = [];
-    }
-    fieldOptions(field) {
-        let options = u.copy(this.options);
-        return up.form.watchOptions(field, options, { defaults: { event: 'input' } });
+    constructor(root, options, callback) {
+        this._options = options;
+        this._root = root;
+        this._callback = callback;
+        this._batch = options.batch;
+        this._logPrefix = options.logPrefix ?? 'up.watch()';
+        this._ensureWatchable();
     }
     start() {
-        this.scheduledValues = null;
-        this.processedValues = this.readFieldValues();
-        this.currentTimer = null;
-        this.callbackRunning = false;
-        for (let field of this.fields) {
-            this.watchField(field);
+        this._scheduledValues = null;
+        this._processedValues = this._readFieldValues();
+        this._currentTimer = null;
+        this._callbackRunning = false;
+        return u.sequence(this._trackFields(), this._trackAbort(), this._trackReset(), () => this._abort());
+    }
+    _ensureWatchable() {
+        const fail = (message) => up.fail(message, this._logPrefix, this._root);
+        if (!this._callback) {
+            fail('No callback provided for %s (%o)');
+        }
+        if (this._root.matches('input[type=radio]')) {
+            fail('Use %s with the container of a radio group, not with an individual radio button (%o)');
+        }
+        if (up.form.isField(this._root) && !this._root.name) {
+            fail('%s can only watch fields with a name (%o)');
         }
     }
-    watchField(field) {
-        let fieldOptions = this.fieldOptions(field);
-        this.unbindFns.push(up.on(field, fieldOptions.event, (event) => this.check(event, fieldOptions)));
-        this.unbindFns.push(up.fragment.onAborted(field, () => this.cancelTimer()));
+    _trackFields() {
+        if (up.form.isField(this._root)) {
+            return this._watchField(this._root);
+        }
+        else {
+            return up.form.trackFields(this._root, (field) => this._watchField(field));
+        }
     }
-    stop() {
-        for (let unbindFn of this.unbindFns)
-            unbindFn();
-        this.cancelTimer();
+    _trackAbort() {
+        let guard = ({ target }) => target.contains(this._region);
+        return up.on('up:fragment:aborted', { guard }, () => this._abort());
     }
-    cancelTimer() {
-        clearTimeout(this.currentTimer);
-        this.currentTimer = null;
+    _trackReset() {
+        let guard = ({ target }) => target === this._region;
+        return up.on('reset', { guard }, (event) => this._onFormReset(event));
     }
-    isAnyFieldAttached() {
-        return u.some(this.fields, 'isConnected');
+    get _region() {
+        return up.form.getRegion(this._root);
     }
-    scheduleValues(values, event, fieldOptions) {
-        this.cancelTimer();
-        this.scheduledValues = values;
-        let delay = u.evalOption(fieldOptions.delay, event);
-        this.currentTimer = u.timer(delay, () => {
-            this.currentTimer = null;
-            if (this.isAnyFieldAttached()) {
-                this.scheduledFieldOptions = fieldOptions;
-                this.requestCallback();
-            }
-            else {
-                this.scheduledValues = null;
-            }
+    _fieldOptions(field) {
+        let rootOptions = u.copy(this._options);
+        return up.form.watchOptions(field, rootOptions, { defaults: { event: 'input' } });
+    }
+    _watchField(field) {
+        let fieldOptions = this._fieldOptions(field);
+        let eventType = fieldOptions.event;
+        return up.on(field, eventType, (event) => this._check(event, fieldOptions));
+    }
+    _abort() {
+        this._scheduledValues = null;
+    }
+    _scheduleValues(values, fieldOptions) {
+        this._scheduledValues = values;
+        this._scheduledFieldOptions = fieldOptions;
+        let delay = fieldOptions.delay || 0;
+        clearTimeout(this._currentTimer);
+        this._currentTimer = u.timer(delay, () => {
+            this._currentTimer = null;
+            this._requestCallback();
         });
     }
-    isNewValues(values) {
-        return !u.isEqual(values, this.processedValues) && !u.isEqual(this.scheduledValues, values);
+    _isNewValues(values) {
+        return !u.isEqual(values, this._processedValues) && !u.isEqual(this._scheduledValues, values);
     }
-    async requestCallback() {
-        let fieldOptions = this.scheduledFieldOptions;
-        if ((this.scheduledValues !== null) && !this.currentTimer && !this.callbackRunning) {
-            const diff = this.changedValues(this.processedValues, this.scheduledValues);
-            this.processedValues = this.scheduledValues;
-            this.scheduledValues = null;
-            this.callbackRunning = true;
-            this.scheduledFieldOptions = null;
-            let callbackOptions = { ...fieldOptions, disable: false };
-            const callbackReturnValues = [];
-            if (this.batch) {
-                callbackReturnValues.push(this.callback(diff, callbackOptions));
-            }
-            else {
-                for (let name in diff) {
-                    const value = diff[name];
-                    callbackReturnValues.push(this.callback(value, name, callbackOptions));
-                }
-            }
-            if (u.some(callbackReturnValues, u.isPromise)) {
-                let callbackDone = Promise.allSettled(callbackReturnValues);
-                up.form.disableWhile(callbackDone, fieldOptions);
-                await callbackDone;
-            }
-            this.callbackRunning = false;
-            this.requestCallback();
+    async _requestCallback() {
+        if (!this._scheduledValues)
+            return;
+        if (this._callbackRunning)
+            return;
+        if (this._currentTimer)
+            return;
+        if (!up.fragment.isAlive(this._region))
+            return;
+        let callbackOptions = u.omit(this._scheduledFieldOptions, ['event', 'delay']);
+        const diff = this._changedValues(this._processedValues, this._scheduledValues);
+        this._processedValues = this._scheduledValues;
+        this._scheduledValues = null;
+        this._callbackRunning = true;
+        this._scheduledFieldOptions = null;
+        const callbackReturnValues = [];
+        if (this._batch) {
+            callbackReturnValues.push(this._runCallback(diff, callbackOptions));
         }
+        else {
+            for (let name in diff) {
+                const value = diff[name];
+                callbackReturnValues.push(this._runCallback(value, name, callbackOptions));
+            }
+        }
+        if (u.some(callbackReturnValues, u.isPromise)) {
+            let callbackDone = Promise.allSettled(callbackReturnValues);
+            await callbackDone;
+        }
+        this._callbackRunning = false;
+        this._requestCallback();
     }
-    changedValues(previous, next) {
+    _runCallback(...args) {
+        return up.error.guard(this._callback, ...args);
+    }
+    _changedValues(previous, next) {
         const changes = {};
         let keys = Object.keys(previous);
         keys = keys.concat(Object.keys(next));
@@ -3536,69 +4081,181 @@ up.FieldWatcher = class FieldWatcher {
         }
         return changes;
     }
-    readFieldValues() {
-        return up.Params.fromFields(this.fields).toObject();
+    _readFieldValues() {
+        return up.Params.fromContainer(this._root).toObject();
     }
-    check(event, fieldOptions) {
-        const values = this.readFieldValues();
-        if (this.isNewValues(values)) {
-            this.scheduleValues(values, event, fieldOptions);
+    _check(event, fieldOptions = {}) {
+        const values = this._readFieldValues();
+        if (this._isNewValues(values)) {
+            up.log.putsEvent(event);
+            this._scheduleValues(values, fieldOptions);
         }
+    }
+    _onFormReset(event) {
+        u.task(() => this._check(event));
     }
 };
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (() => {
 
 const u = up.util;
+const e = up.element;
+const BUILTIN_SWITCH_EFFECTS = [
+    { attr: 'up-hide-for', toggle(target, active) { e.toggle(target, !active); } },
+    { attr: 'up-show-for', toggle(target, active) { e.toggle(target, active); } },
+    { attr: 'up-disable-for', toggle(target, active) { up.form.setDisabled(target, active); } },
+    { attr: 'up-enable-for', toggle(target, active) { up.form.setDisabled(target, !active); } },
+];
+up.Switcher = class Switcher {
+    constructor(root) {
+        this._root = root;
+        this._switcheeSelector = root.getAttribute('up-switch') || up.fail("No switch target given for %o", root);
+        this._regionSelector = root.getAttribute('up-switch-region');
+    }
+    start() {
+        this._switchRegion();
+        return u.sequence(this._trackFieldChanges(), this._trackNewSwitchees());
+    }
+    _trackFieldChanges() {
+        let callback = () => this._onFieldChanged();
+        return up.migrate.watchForSwitch?.(this._root, callback)
+            || up.watch(this._root, { logPrefix: '[up-switch]' }, callback);
+    }
+    _trackNewSwitchees() {
+        let filter = (matches) => {
+            let scope = this._scope;
+            return u.filter(matches, (match) => scope?.contains(match));
+        };
+        let onSwitcheeAdded = (switchee) => this._switchSwitchee(switchee);
+        return up.fragment.trackSelector(this._switcheeSelector, { filter }, onSwitcheeAdded);
+    }
+    _onFieldChanged() {
+        this._switchRegion();
+    }
+    _switchRegion() {
+        const fieldTokens = this._buildFieldTokens();
+        for (let switchee of this._findSwitchees()) {
+            this._switchSwitchee(switchee, fieldTokens);
+        }
+    }
+    _switchSwitchee(switchee, fieldTokens = this._buildFieldTokens()) {
+        let previousValues = switchee.upSwitchValues;
+        if (!u.isEqual(previousValues, fieldTokens)) {
+            switchee.upSwitchValues = fieldTokens;
+            this._switchSwitcheeNow(switchee, fieldTokens);
+        }
+    }
+    _switchSwitcheeNow(switchee, fieldTokens) {
+        for (let { attr, toggle } of BUILTIN_SWITCH_EFFECTS) {
+            let attrValue = switchee.getAttribute(attr);
+            if (attrValue) {
+                let activeTokens = this._parseSwitcheeTokens(attrValue);
+                let isActive = u.intersect(fieldTokens, activeTokens).length > 0;
+                toggle(switchee, isActive);
+            }
+        }
+        let log = ['Switching %o', switchee];
+        up.emit(switchee, 'up:form:switch', { field: this._root, fieldTokens, log });
+    }
+    _findSwitchees() {
+        let scope = this._scope;
+        return scope ? up.fragment.subtree(scope, this._switcheeSelector) : [];
+    }
+    get _scope() {
+        if (this._regionSelector) {
+            return up.fragment.get(this._regionSelector, { origin: this._root });
+        }
+        else {
+            return up.form.getRegion(this._root);
+        }
+    }
+    _parseSwitcheeTokens(str) {
+        return u.getSimpleTokens(str, { json: true });
+    }
+    _buildFieldTokens() {
+        let values = up.Params.fromContainer(this._root).values();
+        let tokens = [...values];
+        let anyPresent = u.some(values, u.isPresent);
+        tokens.push(anyPresent ? ':present' : ':blank');
+        let fields = up.form.fields(this._root);
+        if (fields[0]?.matches('[type=radio], [type=checkbox]')) {
+            let anyChecked = u.some(fields, 'checked');
+            tokens.push(anyChecked ? ':checked' : ':unchecked');
+        }
+        return tokens;
+    }
+};
+
+
+/***/ }),
+/* 44 */
+/***/ (() => {
+
+const u = up.util;
+const e = up.element;
 up.FormValidator = class FormValidator {
     constructor(form) {
-        this.form = form;
-        this.dirtySolutions = [];
-        this.nextRenderTimer = null;
-        this.rendering = false;
-        this.resetNextRenderPromise();
-        this.honorAbort();
+        this._form = form;
+        this._dirtySolutions = [];
+        this._nextRenderTimer = null;
+        this._rendering = false;
+        this._honorAbort();
     }
-    honorAbort() {
-        up.fragment.onAborted(this.form, { around: true }, ({ target }) => this.unscheduleSolutionsWithin(target));
+    start() {
+        let guard = (field) => this._isValidatingField(field);
+        let callback = (field) => this._onFieldAdded(field);
+        return up.form.trackFields(this._form, { guard }, callback);
     }
-    unscheduleSolutionsWithin(container) {
-        this.dirtySolutions = u.reject(this.dirtySolutions, ({ element }) => container.contains(element));
+    _isValidatingField(field) {
+        return field.closest('[up-validate]:not([up-validate=false])');
     }
-    resetNextRenderPromise() {
-        this.nextRenderPromise = u.newDeferred();
+    _onFieldAdded(field) {
+        let eventType = up.form.validateOptions(field).event;
+        return up.on(field, eventType, (event) => {
+            up.log.putsEvent(event);
+            up.error.muteUncriticalRejection(this.validate({ origin: field }));
+        });
     }
-    watchContainer(fieldOrForm) {
-        let { event } = this.originOptions(fieldOrForm);
-        let guard = () => up.fragment.isAlive(fieldOrForm);
-        let callback = () => up.error.muteUncriticalRejection(this.validate({ origin: fieldOrForm }));
-        up.on(fieldOrForm, event, { guard }, callback);
+    _honorAbort() {
+        up.fragment.onAborted(this._form, (event) => this._onAborted(event));
+    }
+    _onAborted(event) {
+        let abortedError = new up.Aborted(event.reason);
+        let solution;
+        while (solution = this._dirtySolutions.shift()) {
+            solution.deferred.reject(abortedError);
+        }
     }
     validate(options = {}) {
-        let solutions = this.getSolutions(options);
-        this.dirtySolutions.push(...solutions);
-        this.scheduleNextRender();
-        return this.nextRenderPromise;
+        let newSolutions = this._getSolutions(options);
+        this._dirtySolutions.push(...newSolutions);
+        this._scheduleNextRender();
+        return newSolutions[0]?.deferred;
     }
-    getSolutions(options) {
-        let solutions = this.getTargetSelectorSolutions(options)
-            || this.getFieldSolutions(options)
-            || this.getElementSolutions(options.origin);
+    _getSolutions(options) {
+        let solutions = this._getTargetSelectorSolutions(options)
+            || this._getFieldSolutions(options)
+            || this._getElementSolutions(options.origin);
+        let deferred = u.newDeferred();
         for (let solution of solutions) {
-            solution.renderOptions = this.originOptions(solution.origin, options);
+            let renderOptions = up.form.validateOptions(solution.origin, options);
+            solution.batch = u.pluckKey(renderOptions, 'batch');
+            solution.renderOptions = renderOptions;
+            solution.destination = `${renderOptions.method} ${renderOptions.url}`;
             solution.target = up.fragment.resolveOrigin(solution.target, solution);
+            solution.deferred = deferred;
         }
         return solutions;
     }
-    getFieldSolutions({ origin, ...options }) {
+    _getFieldSolutions({ origin, ...options }) {
         if (up.form.isField(origin)) {
-            return this.getValidateAttrSolutions(origin) || this.getFormGroupSolutions(origin, options);
+            return this._getValidateAttrSolutions(origin) || this._getFormGroupSolutions(origin, options);
         }
     }
-    getFormGroupSolutions(field, { formGroup = true }) {
+    _getFormGroupSolutions(field, { formGroup = true }) {
         if (!formGroup)
             return;
         let solution = up.form.groupSolution(field);
@@ -3607,8 +4264,8 @@ up.FormValidator = class FormValidator {
             return [solution];
         }
     }
-    getTargetSelectorSolutions({ target, origin }) {
-        if (u.isString(target) && target) {
+    _getTargetSelectorSolutions({ target, origin }) {
+        if (u.isString(target)) {
             up.puts('up.validate()', 'Validating target "%s"', target);
             let simpleSelectors = up.fragment.splitTarget(target);
             return u.compact(simpleSelectors.map(function (simpleSelector) {
@@ -3626,7 +4283,7 @@ up.FormValidator = class FormValidator {
             }));
         }
     }
-    getElementSolutions(element) {
+    _getElementSolutions(element) {
         up.puts('up.validate()', 'Validating element %o', element);
         return [{
                 element,
@@ -3634,108 +4291,133 @@ up.FormValidator = class FormValidator {
                 origin: element
             }];
     }
-    getValidateAttrSolutions(field) {
+    _getValidateAttrSolutions(field) {
         let containerWithAttr = field.closest('[up-validate]');
         if (containerWithAttr) {
-            let target = containerWithAttr.getAttribute('up-validate');
-            return this.getTargetSelectorSolutions({ target, origin: field });
+            let target = e.booleanOrStringAttr(containerWithAttr, 'up-validate');
+            return this._getTargetSelectorSolutions({ target, origin: field });
         }
     }
-    originOptions(element, overrideOptions) {
-        return up.form.watchOptions(element, overrideOptions, { defaults: { event: 'change' } });
-    }
-    scheduleNextRender() {
-        let solutionDelays = this.dirtySolutions.map((solution) => solution.renderOptions.delay);
+    _scheduleNextRender() {
+        let solutionDelays = this._dirtySolutions.map((solution) => solution.renderOptions.delay);
         let shortestDelay = Math.min(...solutionDelays) || 0;
-        this.unscheduleNextRender();
-        this.nextRenderTimer = u.timer(shortestDelay, () => this.renderDirtySolutions());
+        clearTimeout(this._nextRenderTimer);
+        this._nextRenderTimer = u.timer(shortestDelay, () => {
+            this._nextRenderTimer = null;
+            this._renderDirtySolutions();
+        });
     }
-    unscheduleNextRender() {
-        clearTimeout(this.nextRenderTimer);
+    _renderDirtySolutions() {
+        up.error.muteUncriticalRejection(this._doRenderDirtySolutions());
     }
-    renderDirtySolutions() {
-        up.error.muteUncriticalRejection(this.doRenderDirtySolutions());
-    }
-    async doRenderDirtySolutions() {
-        this.dirtySolutions = u.filter(this.dirtySolutions, ({ element, origin }) => up.fragment.isAlive(element) && up.fragment.isAlive(origin));
-        if (!this.dirtySolutions.length || this.rendering) {
+    async _doRenderDirtySolutions() {
+        if (!this._dirtySolutions.length)
             return;
+        if (this._rendering)
+            return;
+        if (this._nextRenderTimer)
+            return;
+        let solutionsBatch = this._selectDirtySolutionsBatch();
+        let renderOptions = this._mergeRenderOptions(solutionsBatch);
+        this._rendering = true;
+        try {
+            let renderPromise = up.render(renderOptions);
+            for (let solution of solutionsBatch) {
+                solution.deferred.resolve(renderPromise);
+            }
+            await renderPromise;
         }
-        let dirtySolutions = this.dirtySolutions;
-        this.dirtySolutions = [];
+        finally {
+            this._rendering = false;
+            this._renderDirtySolutions();
+        }
+    }
+    _selectDirtySolutionsBatch() {
+        let batch = [];
+        let i = 0;
+        while (i < this._dirtySolutions.length) {
+            let solution = this._dirtySolutions[i];
+            if (batch.length === 0 || this._canBatchSolutions(batch[0], solution)) {
+                batch.push(solution);
+                this._dirtySolutions.splice(i, 1);
+            }
+            else {
+                i++;
+            }
+        }
+        return batch;
+    }
+    _canBatchSolutions(s1, s2) {
+        return s1.destination === s2.destination && s1.batch && s2.batch;
+    }
+    _mergeRenderOptions(dirtySolutions) {
         let dirtyOrigins = u.map(dirtySolutions, 'origin');
         let dirtyFields = u.flatMap(dirtyOrigins, up.form.fields);
         let dirtyNames = u.uniq(u.map(dirtyFields, 'name'));
-        let dataMap = this.buildDataMap(dirtySolutions);
         let dirtyRenderOptionsList = u.map(dirtySolutions, 'renderOptions');
-        let options = u.mergeDefined(...dirtyRenderOptionsList, { dataMap }, up.form.destinationOptions(this.form));
+        let formDestinationOptions = up.form.destinationOptions(this._form);
+        let options = u.mergeDefined(formDestinationOptions, ...dirtyRenderOptionsList);
         options.target = u.map(dirtySolutions, 'target').join(', ');
-        options.feedback = u.some(dirtyRenderOptionsList, 'feedback');
-        options.origin = this.form;
-        options.focus ?? (options.focus = 'keep');
+        options.origin = this._form;
+        options.focus ??= 'keep';
         options.failOptions = false;
-        options.params = up.Params.merge(options.params, ...u.map(dirtyRenderOptionsList, 'params'));
-        options.headers = u.merge(...u.map(dirtyRenderOptionsList, 'headers'));
-        options.headers[up.protocol.headerize('validate')] = dirtyNames.join(' ') || ':unknown';
+        options.defaultMaybe = true;
+        options.params = up.Params.merge(formDestinationOptions.params, ...u.map(dirtyRenderOptionsList, 'params'));
+        options.headers = u.merge(formDestinationOptions.headers, ...u.map(dirtyRenderOptionsList, 'headers'));
+        this._addValidateHeader(options.headers, dirtyNames);
+        options.feedback = u.some(dirtyRenderOptionsList, 'feedback');
+        options.data = undefined;
+        options.dataMap = u.mapObject(dirtySolutions, ({ target, element, renderOptions: { data, keepData } }) => [
+            target,
+            keepData ? up.data(element) : data
+        ]);
+        options.preview = undefined;
+        options.previewMap = u.mapObject(dirtySolutions, ({ target, renderOptions: { preview } }) => [target, preview]);
+        options.placeholder = undefined;
+        options.placeholderMap = u.mapObject(dirtySolutions, ({ target, renderOptions: { placeholder } }) => [target, placeholder]);
+        options.disable = dirtySolutions.map((solution) => up.fragment.resolveOrigin(solution.renderOptions.disable, solution));
         options.guardEvent = up.event.build('up:form:validate', {
             fields: dirtyFields,
             log: 'Validating form',
-            params: options.params
+            params: options.params,
+            form: this._form,
         });
-        this.rendering = true;
-        let renderingPromise = this.nextRenderPromise;
-        this.resetNextRenderPromise();
-        options.disable = false;
-        for (let solution of dirtySolutions) {
-            up.form.disableWhile(renderingPromise, {
-                disable: solution.renderOptions.disable,
-                origin: solution.origin,
-            });
-        }
-        try {
-            renderingPromise.resolve(up.render(options));
-            await renderingPromise;
-        }
-        finally {
-            this.rendering = false;
-            this.renderDirtySolutions();
-        }
+        return options;
     }
-    buildDataMap(solutions) {
-        let dataMap = {};
-        for (let solution of solutions) {
-            let data = u.pluckKey(solution.renderOptions, 'data');
-            let keepData = u.pluckKey(solution.renderOptions, 'keepData');
-            if (keepData) {
-                data = up.data(solution.element);
-            }
-            if (data) {
-                dataMap[solution.target] = data;
-            }
-        }
-        return dataMap;
-    }
-    static forElement(element) {
-        let form = up.form.get(element);
-        return form.upFormValidator || (form.upFormValidator = new this(form));
+    _addValidateHeader(headers, names) {
+        let key = up.protocol.headerize('validate');
+        let value = names.join(' ');
+        if (!value || value.length > up.protocol.config.maxHeaderSize)
+            value = ':unknown';
+        headers[key] = value;
     }
 };
 
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (() => {
 
 up.FocusCapsule = class FocusCapsule {
-    constructor(target, cursorProps) {
-        this.target = target;
-        this.cursorProps = cursorProps;
+    constructor(element, target) {
+        this._element = element;
+        this._target = target;
+        this._cursorProps = up.viewport.copyCursorProps(this._element);
     }
-    restore(layer, options) {
-        let rediscoveredElement = up.fragment.get(this.target, { layer });
+    wasLost() {
+        return document.activeElement !== this._element && !this._voided;
+    }
+    autoVoid() {
+        up.on('focusin', { once: true }, () => this._voided = true);
+    }
+    restore(layer, focusOptions) {
+        if (!this.wasLost()) {
+            return false;
+        }
+        let rediscoveredElement = up.fragment.get(this._target, { layer });
         if (rediscoveredElement) {
-            up.viewport.copyCursorProps(this.cursorProps, rediscoveredElement);
-            up.focus(rediscoveredElement, options);
+            up.viewport.copyCursorProps(this._cursorProps, rediscoveredElement);
+            up.focus(rediscoveredElement, focusOptions);
             return true;
         }
     }
@@ -3746,14 +4428,13 @@ up.FocusCapsule = class FocusCapsule {
         let target = up.fragment.tryToTarget(focusedElement);
         if (!target)
             return;
-        const cursorProps = up.viewport.copyCursorProps(focusedElement);
-        return new this(target, cursorProps);
+        return new this(focusedElement, target);
     }
 };
 
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (() => {
 
 const u = up.util;
@@ -3771,14 +4452,15 @@ up.FragmentProcessor = class FragmentProcessor extends up.Record {
         return this.tryProcess(preprocessed);
     }
     preprocess(opt) {
-        return u.parseTokens(opt, { separator: 'or' });
+        return u.getComplexTokens(opt);
     }
     tryProcess(opt) {
         if (u.isArray(opt)) {
             return this.processArray(opt);
         }
         if (u.isFunction(opt)) {
-            return this.tryProcess(opt(this.fragment, this.attributes()));
+            let result = up.error.guard(opt, this.fragment, this.attributes());
+            return this.tryProcess(result);
         }
         if (u.isElement(opt)) {
             return this.processElement(opt);
@@ -3795,7 +4477,7 @@ up.FragmentProcessor = class FragmentProcessor extends up.Record {
         return this.processPrimitive(opt);
     }
     processArray(array) {
-        return u.find(array, opt => this.tryProcess(opt));
+        return u.find(array, (opt) => this.tryProcess(opt));
     }
     resolveCondition(condition) {
         if (condition === 'main') {
@@ -3817,50 +4499,56 @@ up.FragmentProcessor = class FragmentProcessor extends up.Record {
 
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (() => {
 
+const u = up.util;
 const DESCENDANT_SELECTOR = /^([^ >+(]+) (.+)$/;
 up.FragmentFinder = class FragmentFinder {
     constructor(options) {
-        this.options = options;
-        this.origin = options.origin;
-        this.selector = options.selector;
-        this.externalRoot = options.externalRoot;
+        this._options = options;
+        this._origin = options.origin;
+        this._selector = options.selector;
+        this._document = options.document || window.document;
+        this._match = options.match ?? up.fragment.config.match;
+        this._preferOldElements = options.preferOldElements;
     }
     find() {
-        return this.findAroundOrigin() || this.findInLayer();
+        return this._findInPreferredElements() || this._findInRegion() || this._findFirst();
     }
-    findAroundOrigin() {
-        if (this.origin && up.fragment.config.matchAroundOrigin && this.origin.isConnected) {
-            return this.findClosest() || this.findInVicinity();
+    _findInPreferredElements() {
+        if (this._preferOldElements) {
+            return this._preferOldElements.find((preferOldElement) => this._document.contains(preferOldElement) && up.fragment.matches(preferOldElement, this._selector));
         }
     }
-    findClosest() {
-        return up.fragment.closest(this.origin, this.selector, this.options);
+    _findInRegion() {
+        if (this._match === 'region' && !up.fragment.containsMainPseudo(this._selector) && this._origin?.isConnected) {
+            return this._findClosest() || this._findDescendantInRegion();
+        }
     }
-    findInVicinity() {
-        let parts = this.selector.match(DESCENDANT_SELECTOR);
-        if (parts) {
-            let parent = up.fragment.closest(this.origin, parts[1], this.options);
-            if (parent) {
-                return up.fragment.getDumb(parent, parts[2]);
+    _findClosest() {
+        return up.fragment.closest(this._origin, this._selector, this._options);
+    }
+    _findDescendantInRegion() {
+        let simpleSelectors = up.fragment.splitTarget(this._selector);
+        return u.findResult(simpleSelectors, (simpleSelector) => {
+            let parts = simpleSelector.match(DESCENDANT_SELECTOR);
+            if (parts) {
+                let parent = up.fragment.closest(this._origin, parts[1], this._options);
+                if (parent) {
+                    return up.fragment.getFirstDescendant(parent, parts[2]);
+                }
             }
-        }
+        });
     }
-    findInLayer() {
-        if (this.externalRoot) {
-            return up.fragment.subtree(this.externalRoot, this.selector, this.options)[0];
-        }
-        else {
-            return up.fragment.getDumb(this.selector, this.options);
-        }
+    _findFirst() {
+        return up.fragment.getFirstDescendant(this._document, this._selector, this._options);
     }
 };
 
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (() => {
 
 const u = up.util;
@@ -3870,188 +4558,246 @@ up.FragmentFocus = class FragmentFocus extends up.FragmentProcessor {
     keys() {
         return super.keys().concat([
             'hash',
-            'focusCapsule'
+            'focusVisible',
+            'focusCapsule',
+            'inputDevice',
         ]);
     }
     processPrimitive(opt) {
         switch (opt) {
             case 'keep':
-                return this.restoreLostFocus();
+                return this._restoreLostFocus();
             case 'restore':
-                return this.restorePreviousFocusForLocation();
+                return this._restorePreviousFocusForLocation();
             case 'target':
             case true:
-                return this.focusElement(this.fragment);
+                return this._focusElement(this.fragment);
             case 'layer':
-                return this.focusElement(this.layer.getFocusElement());
+                return this._focusElement(this.layer.getFocusElement());
             case 'main':
-                return this.focusSelector(':main');
+                return this._focusSelector(':main');
             case 'hash':
-                return this.focusHash();
+                return this._focusHash();
             case 'autofocus':
-                return this.autofocus();
+                return this._autofocus();
             default:
                 if (u.isString(opt)) {
-                    return this.focusSelector(opt);
+                    return this._focusSelector(opt);
                 }
         }
     }
     processElement(element) {
-        return this.focusElement(element);
+        return this._focusElement(element);
     }
     resolveCondition(condition) {
         if (condition === 'lost') {
-            return this.wasFocusLost();
+            return this._wasFocusLost();
         }
         else {
             return super.resolveCondition(condition);
         }
     }
-    focusSelector(selector) {
+    _focusSelector(selector) {
         let match = this.findSelector(selector);
-        return this.focusElement(match);
+        return this._focusElement(match);
     }
-    restoreLostFocus() {
-        if (this.wasFocusLost()) {
-            return this.focusCapsule?.restore(this.layer, PREVENT_SCROLL_OPTIONS);
-        }
+    _restoreLostFocus() {
+        return this.focusCapsule?.restore(this.layer, PREVENT_SCROLL_OPTIONS);
     }
-    restorePreviousFocusForLocation() {
+    _restorePreviousFocusForLocation() {
         return up.viewport.restoreFocus({ layer: this.layer });
     }
-    autofocus() {
-        let autofocusElement = this.fragment && e.subtree(this.fragment, '[autofocus]')[0];
+    _autofocus() {
+        let autofocusElement = this.fragment && e.subtreeFirst(this.fragment, '[autofocus]');
         if (autofocusElement) {
-            return this.focusElement(autofocusElement);
+            return this._focusElement(autofocusElement);
         }
     }
-    focusElement(element) {
+    _focusElement(element) {
         if (element) {
-            up.focus(element, { force: true, ...PREVENT_SCROLL_OPTIONS });
+            up.focus(element, {
+                force: true,
+                ...PREVENT_SCROLL_OPTIONS,
+                inputDevice: this.inputDevice,
+                focusVisible: this.focusVisible,
+            });
             return true;
         }
     }
-    focusHash() {
+    _focusHash() {
         let hashTarget = up.viewport.firstHashTarget(this.hash, { layer: this.layer });
         if (hashTarget) {
-            return this.focusElement(hashTarget);
+            return this._focusElement(hashTarget);
         }
     }
-    wasFocusLost() {
-        return !this.layer.hasFocus();
+    _wasFocusLost() {
+        return this.focusCapsule?.wasLost();
     }
 };
 
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (() => {
 
 const e = up.element;
+const u = up.util;
 up.FragmentPolling = class FragmentPolling {
-    constructor(fragment) {
-        this.options = {};
-        this.state = 'initialized';
-        this.setFragment(fragment);
-        this.abortable = true;
-    }
     static forFragment(fragment) {
-        return fragment.upPolling || (fragment.upPolling = new this(fragment));
+        return fragment.upPolling ||= new this(fragment);
+    }
+    constructor(fragment) {
+        this._options = up.radio.pollOptions(fragment);
+        this._fragment = fragment;
+        up.destructor(fragment, this._onFragmentDestroyed.bind(this));
+        this._state = 'stopped';
+        this._forceIntent = null;
+        this._reloadJID = u.uid();
+        this._loading = false;
+        this._satisfyInterval();
     }
     onPollAttributeObserved() {
-        this.start();
+        this._start();
     }
-    onFragmentDestroyed() {
-        this.stop();
+    _onFragmentAborted({ newLayer, jid }) {
+        const isOurAbort = (jid === this._reloadJID);
+        if (isOurAbort || newLayer)
+            return;
+        this._stop();
     }
-    onFragmentAborted() {
-        if (this.abortable) {
-            this.stop();
+    _onFragmentKept() {
+        if (this._forceIntent !== 'stop') {
+            this._start();
         }
     }
-    start() {
-        if (this.state !== 'started') {
-            this.state = 'started';
-            this.scheduleReload();
+    _onFragmentDestroyed() {
+        this._stop();
+    }
+    _start(options) {
+        Object.assign(this._options, options);
+        if (this._state === 'stopped') {
+            if (!up.fragment.isTargetable(this._fragment)) {
+                up.warn('[up-poll]', 'Cannot poll untargetable fragment %o', this._fragment);
+                return;
+            }
+            this._state = 'started';
+            this._bindEvents();
+            this._scheduleRemainingTime();
         }
     }
-    stop() {
-        if (this.state === 'started') {
-            clearTimeout(this.reloadTimer);
-            this.state = 'stopped';
+    _stop() {
+        if (this._state === 'started') {
+            this._clearReloadTimer();
+            this._state = 'stopped';
         }
     }
     forceStart(options) {
-        Object.assign(this.options, options);
-        this.forceStarted = true;
-        this.start();
+        Object.assign(this._options, options);
+        this._forceIntent = 'start';
+        this._start();
     }
     forceStop() {
-        this.stop();
-        this.forceStarted = false;
+        this._forceIntent = 'stop';
+        this._stop();
     }
-    scheduleReload(delay = this.getInterval()) {
-        this.reloadTimer = setTimeout(() => this.reload(), delay);
+    _bindEvents() {
+        if (this._eventsBound)
+            return;
+        this._eventsBound = true;
+        up.destructor(this._fragment, up.on('visibilitychange up:layer:opened up:layer:dismissed up:layer:accepted', this._onVisibilityChange.bind(this)));
+        up.fragment.onAborted(this._fragment, this._onFragmentAborted.bind(this));
+        up.fragment.onKept(this._fragment, this._onFragmentKept.bind(this));
     }
-    reload() {
-        if (this.state !== 'started') {
+    _onVisibilityChange() {
+        if (this._isFragmentVisible()) {
+            this._scheduleRemainingTime();
+        }
+        else {
+            this._clearReloadTimer();
+        }
+    }
+    _isFragmentVisible() {
+        return (!document.hidden) &&
+            (this._options.ifLayer === 'any' || this._isOnFrontLayer());
+    }
+    _clearReloadTimer() {
+        clearTimeout(this._reloadTimer);
+        this._reloadTimer = null;
+    }
+    _scheduleRemainingTime() {
+        if (this._reloadTimer || this._loading || this._state === 'stopped')
+            return;
+        this._clearReloadTimer();
+        this._reloadTimer = setTimeout(this._onTimerReached.bind(this), this._getRemainingDelay());
+    }
+    _onTimerReached() {
+        this._reloadTimer = null;
+        this._tryReload();
+    }
+    _tryReload() {
+        if (this._state === 'stopped') {
             return;
         }
-        let issue = up.radio.pollIssue(this.fragment);
-        if (issue) {
-            up.puts('[up-poll]', `Will not poll: ${issue}`);
-            let reconsiderDisabledDelay = Math.min(10 * 1000, this.getInterval());
-            this.scheduleReload(reconsiderDisabledDelay);
+        if (!up.fragment.isAlive(this._fragment)) {
+            this._stop();
+            up.puts('[up-poll]', 'Stopped polling a detached fragment');
+            return;
         }
-        else {
-            this.reloadNow();
+        if (!this._isFragmentVisible()) {
+            up.puts('[up-poll]', 'Will not poll hidden fragment');
+            return;
         }
+        this._reloadNow();
     }
-    reloadNow() {
-        let reloadOptions = {
-            url: this.options.url,
-            fail: false,
-            background: true,
-        };
-        let oldAbortable = this.abortable;
-        this.abortable = false;
-        up.reload(this.fragment, reloadOptions).then(this.onReloadSuccess.bind(this), this.onReloadFailure.bind(this));
-        this.abortable = oldAbortable;
+    _getFullDelay() {
+        return this._options.interval ?? e.numberAttr(this._fragment, 'up-interval') ?? up.radio.config.pollInterval;
     }
-    onReloadSuccess({ fragment }) {
+    _getRemainingDelay() {
+        return Math.max(this._getFullDelay() - this._getFragmentAge(), 0);
+    }
+    _getFragmentAge() {
+        return new Date() - this._lastAttempt;
+    }
+    _isOnFrontLayer() {
+        this.layer ||= up.layer.get(this._fragment);
+        return this.layer?.isFront?.();
+    }
+    _reloadNow() {
+        this._clearReloadTimer();
+        this._loading = true;
+        let guardEvent = up.event.build('up:fragment:poll', { log: ['Polling fragment', this._fragment] });
+        let reloadOptions = { ...this._options, guardEvent, jid: this._reloadJID };
+        up.reload(this._fragment, reloadOptions).then(this._onReloadSuccess.bind(this), this._onReloadFailure.bind(this));
+    }
+    _onReloadSuccess({ fragment }) {
+        this._loading = false;
+        this._satisfyInterval();
         if (fragment) {
-            this.onFragmentSwapped(fragment);
+            this._onFragmentSwapped(fragment);
         }
         else {
-            this.scheduleReload();
+            this._scheduleRemainingTime();
         }
     }
-    onReloadFailure(reason) {
-        this.scheduleReload();
-        if (up.error.isCritical(reason)) {
-            throw reason;
+    _onFragmentSwapped(newFragment) {
+        if (this._forceIntent === 'start' && up.fragment.matches(this._fragment, newFragment)) {
+            this.constructor.forFragment(newFragment).forceStart(this._options);
         }
     }
-    onFragmentSwapped(newFragment) {
-        this.stop();
-        if (this.forceStarted && up.fragment.matches(this.fragment, newFragment)) {
-            this.constructor.forFragment(newFragment).forceStart(this.options);
-        }
+    _onReloadFailure(reason) {
+        this._loading = false;
+        this._satisfyInterval();
+        this._scheduleRemainingTime();
+        up.error.throwCritical(reason);
     }
-    setFragment(newFragment) {
-        this.fragment = newFragment;
-        up.destructor(newFragment, () => this.onFragmentDestroyed());
-        up.fragment.onAborted(newFragment, () => this.onFragmentAborted());
-    }
-    getInterval() {
-        let interval = this.options.interval ?? e.numberAttr(this.fragment, 'up-interval') ?? up.radio.config.pollInterval;
-        return up.radio.config.stretchPollInterval(interval);
+    _satisfyInterval() {
+        this._lastAttempt = new Date();
     }
 };
 
 
 /***/ }),
-/* 47 */
+/* 50 */
 /***/ (() => {
 
 const u = up.util;
@@ -4068,54 +4814,55 @@ up.FragmentScrolling = class FragmentScrolling extends up.FragmentProcessor {
     }
     processPrimitive(opt) {
         switch (opt) {
-            case 'reset':
-                return this.reset();
+            case 'top':
+                return this._scrollTo(0);
+            case 'bottom':
+                return this._scrollTo(99999999);
             case 'layer':
-                return this.revealLayer();
+                return this._revealLayer();
             case 'main':
-                return this.revealSelector(':main');
+                return this._revealSelector(':main');
             case 'restore':
-                return this.restore();
+                return this._restore();
             case 'hash':
                 return this.hash && up.viewport.revealHash(this.hash, this.attributes());
             case 'target':
             case 'reveal':
             case true:
-                return this.revealElement(this.fragment);
+                return this._revealElement(this.fragment);
             default:
                 if (u.isString(opt)) {
-                    return this.revealSelector(opt);
+                    return this._revealSelector(opt);
                 }
         }
     }
     processElement(element) {
-        return this.revealElement(element);
+        return this._revealElement(element);
     }
-    revealElement(element) {
+    _revealElement(element) {
         if (element) {
             up.reveal(element, this.attributes());
             return true;
         }
     }
-    revealSelector(selector) {
+    _revealSelector(selector) {
         let match = this.findSelector(selector);
-        return this.revealElement(match);
+        return this._revealElement(match);
     }
-    revealLayer() {
-        return this.revealElement(this.layer.getBoxElement());
+    _revealLayer() {
+        return this._revealElement(this.layer.getBoxElement());
     }
-    reset() {
-        up.viewport.resetScroll({ ...this.attributes(), around: this.fragment });
-        return true;
+    _scrollTo(position) {
+        return up.viewport.scrollTo(position, { ...this.attributes(), around: this.fragment });
     }
-    restore() {
+    _restore() {
         return up.viewport.restoreScroll({ ...this.attributes(), around: this.fragment });
     }
 };
 
 
 /***/ }),
-/* 48 */
+/* 51 */
 /***/ (() => {
 
 const e = up.element;
@@ -4141,14 +4888,15 @@ up.Layer = class Layer extends up.Record {
     }
     constructor(options = {}) {
         super(options);
-        if (!this.mode) {
-            throw "missing { mode } option";
-        }
+        u.assert(this.mode);
     }
     setupHandlers() {
         up.link.convertClicks(this);
+        this._unbindLocationChanged = up.on('up:location:changed', (event) => this._onBrowserLocationChanged(event));
     }
-    teardownHandlers() { }
+    teardownHandlers() {
+        this._unbindLocationChanged?.();
+    }
     mainTargets() {
         return up.layer.mainTargets(this.mode);
     }
@@ -4178,11 +4926,8 @@ up.Layer = class Layer extends up.Record {
     isOverlay() {
         return this.stack.isOverlay(this);
     }
-    isOpen() {
-        return this.stack.isOpen(this);
-    }
-    isClosed() {
-        return this.stack.isClosed(this);
+    isAlive() {
+        throw new up.NotImplemented();
     }
     get parent() {
         return this.stack.parentOf(this);
@@ -4196,8 +4941,11 @@ up.Layer = class Layer extends up.Record {
     get descendants() {
         return this.stack.descendantsOf(this);
     }
+    get subtree() {
+        return [this, ...this.descendants];
+    }
     get index() {
-        return this.stack.indexOf(this);
+        return this._index ??= this.stack.indexOf(this);
     }
     getContentElement() {
         return this.contentElement || this.element;
@@ -4215,49 +4963,57 @@ up.Layer = class Layer extends up.Record {
         return element.closest(up.layer.anySelector()) === this.element;
     }
     on(...args) {
-        return this.buildEventListenerGroup(args).bind();
+        return this._buildEventListenerGroup(args).bind();
     }
     off(...args) {
-        return this.buildEventListenerGroup(args).unbind();
+        return this._buildEventListenerGroup(args).unbind();
     }
-    buildEventListenerGroup(args) {
+    _buildEventListenerGroup(args) {
         return up.EventListenerGroup.fromBindArgs(args, {
-            guard: (event) => this.containsEventTarget(event),
+            guard: (event) => this._containsEventTarget(event),
             elements: [this.element],
             baseLayer: this
         });
     }
-    containsEventTarget(event) {
+    _containsEventTarget(event) {
         return this.contains(event.target);
     }
-    wasHitByMouseEvent(event) {
-        const hittableElement = document.elementFromPoint(event.clientX, event.clientY);
+    wasHitByMouseEvent({ clientX, clientY }) {
+        const hittableElement = document.elementFromPoint(clientX, clientY);
         return !hittableElement || this.contains(hittableElement);
     }
-    buildEventEmitter(args) {
+    _buildEventEmitter(args) {
         return up.EventEmitter.fromEmitArgs(args, { layer: this });
     }
     emit(...args) {
-        return this.buildEventEmitter(args).emit();
+        return this._buildEventEmitter(args).emit();
     }
     isDetached() {
         return !this.element.isConnected;
     }
     saveHistory() {
-        if (this.isHistoryVisible()) {
-            this.savedTitle = document.title;
-            this.savedLocation = up.history.location;
-        }
+        u.assert(this.isFront());
+        if (!this.showsLiveHistory())
+            return;
+        this._savedTitle = this.title;
+        this._savedMetaTags = this.metaTags;
+        this._savedLocation = this.location;
+        this._savedLang = this.lang;
     }
     restoreHistory() {
-        if (!this.showsLiveHistory()) {
+        if (!this.showsLiveHistory())
             return;
+        if (this._savedLocation) {
+            up.history.push(this._savedLocation);
         }
-        if (this.savedLocation) {
-            up.history.push(this.savedLocation);
+        if (this._savedTitle) {
+            document.title = this._savedTitle;
         }
-        if (this.savedTitle) {
-            document.title = this.savedTitle;
+        if (this._savedMetaTags) {
+            up.history.updateMetaTags(this._savedMetaTags);
+        }
+        if (u.isString(this._savedLang)) {
+            up.history.updateLang(this._savedLang);
         }
     }
     asCurrent(fn) {
@@ -4265,30 +5021,67 @@ up.Layer = class Layer extends up.Record {
     }
     updateHistory(options) {
         if (u.isString(options.location)) {
-            this.location = options.location;
+            this._updateLocation(options.location, { push: true });
+        }
+        if (up.history.config.updateMetaTags && u.isList(options.metaTags)) {
+            up.migrate?.warnOfHungryMetaTags?.(options.metaTags);
+            this._updateMetaTags(options.metaTags);
         }
         if (u.isString(options.title)) {
-            this.title = options.title;
+            this._updateTitle(options.title);
+        }
+        if (u.isString(options.lang)) {
+            this._updateLang(options.lang);
         }
     }
-    isHistoryVisible() {
-        return this.history && (this.isRoot() || this.parent.isHistoryVisible());
-    }
     showsLiveHistory() {
-        return this.isHistoryVisible() && this.isFront() && (up.history.config.enabled || this.isRoot());
+        return this.history && this.isFront();
+    }
+    _onBrowserLocationChanged({ location }) {
+        if (this.showsLiveHistory()) {
+            this._updateLocation(location, { push: false });
+        }
     }
     get title() {
         if (this.showsLiveHistory()) {
             return document.title;
         }
         else {
-            return this.savedTitle;
+            return this._savedTitle;
         }
     }
-    set title(title) {
-        this.savedTitle = title;
+    _updateTitle(title) {
+        this._savedTitle = title;
         if (this.showsLiveHistory()) {
             document.title = title;
+        }
+    }
+    get metaTags() {
+        if (this.showsLiveHistory()) {
+            return up.history.findMetaTags();
+        }
+        else {
+            return this._savedMetaTags;
+        }
+    }
+    _updateMetaTags(metaTags) {
+        this._savedMetaTags = metaTags;
+        if (this.showsLiveHistory()) {
+            up.history.updateMetaTags(metaTags);
+        }
+    }
+    get lang() {
+        if (this.showsLiveHistory()) {
+            return up.history.getLang();
+        }
+        else {
+            return this._savedLang;
+        }
+    }
+    _updateLang(lang) {
+        this._savedLang = lang;
+        if (this.showsLiveHistory()) {
+            up.history.updateLang(lang);
         }
     }
     get location() {
@@ -4296,20 +5089,18 @@ up.Layer = class Layer extends up.Record {
             return up.history.location;
         }
         else {
-            return this.savedLocation;
+            return this._savedLocation;
         }
     }
-    set location(location) {
-        const previousLocation = this.location;
-        location = up.history.normalizeURL(location);
-        if (previousLocation !== location || this.opening) {
-            this.savedLocation = location;
-            if (this.showsLiveHistory()) {
-                up.history.push(location);
-            }
-            if (!this.opening) {
-                this.emit('up:layer:location:changed', { location });
-            }
+    _updateLocation(newLocation, { push }) {
+        let prevSavedLocation = this._savedLocation;
+        let liveLocation = up.history.location;
+        this._savedLocation = newLocation;
+        if (newLocation !== liveLocation && this.showsLiveHistory() && push) {
+            up.history.push(newLocation);
+        }
+        if (newLocation !== prevSavedLocation && this.state !== 'opening') {
+            this.emit('up:layer:location:changed', { location: newLocation, previousLocation: prevSavedLocation, log: false });
         }
     }
     selector(part) {
@@ -4338,311 +5129,340 @@ up.Layer = class Layer extends up.Record {
 
 
 /***/ }),
-/* 49 */
+/* 52 */
 /***/ (() => {
 
+var _a;
 const e = up.element;
 const u = up.util;
-up.Layer.Overlay = class Overlay extends up.Layer {
-    keys() {
-        return super.keys().concat([
-            'position',
-            'align',
-            'size',
-            'origin',
-            'class',
-            'backdrop',
-            'openAnimation',
-            'closeAnimation',
-            'openDuration',
-            'closeDuration',
-            'openEasing',
-            'closeEasing',
-            'backdropOpenAnimation',
-            'backdropCloseAnimation',
-            'dismissable',
-            'dismissLabel',
-            'dismissAriaLabel',
-            'onOpened',
-            'onAccept',
-            'onAccepted',
-            'onDismiss',
-            'onDismissed',
-            'acceptEvent',
-            'dismissEvent',
-            'acceptLocation',
-            'dismissLocation',
-            'opening'
-        ]);
-    }
-    constructor(options) {
-        super(options);
-        if (this.dismissable === true) {
-            this.dismissable = ['button', 'key', 'outside'];
+up.Layer.Overlay = (_a = class Overlay extends up.Layer {
+        keys() {
+            return [
+                ...super.keys(),
+                ...this.constructor.VISUAL_KEYS,
+                'onOpened',
+                'onAccept',
+                'onAccepted',
+                'onDismiss',
+                'onDismissed',
+                'acceptEvent',
+                'dismissEvent',
+                'acceptLocation',
+                'dismissLocation',
+            ];
         }
-        else if (this.dismissable === false) {
-            this.dismissable = [];
-        }
-        else {
-            this.dismissable = u.parseTokens(this.dismissable);
-        }
-        if (this.acceptLocation) {
-            this.acceptLocation = new up.URLPattern(this.acceptLocation);
-        }
-        if (this.dismissLocation) {
-            this.dismissLocation = new up.URLPattern(this.dismissLocation);
-        }
-    }
-    callback(name) {
-        let fn = this[name];
-        if (fn) {
-            return fn.bind(this);
-        }
-    }
-    createElement(parentElement) {
-        this.nesting || (this.nesting = this.suggestVisualNesting());
-        const elementAttrs = u.compactObject(u.pick(this, ['align', 'position', 'size', 'class', 'nesting']));
-        this.element = this.affixPart(parentElement, null, elementAttrs);
-    }
-    createBackdropElement(parentElement) {
-        this.backdropElement = this.affixPart(parentElement, 'backdrop');
-    }
-    createViewportElement(parentElement) {
-        this.viewportElement = this.affixPart(parentElement, 'viewport', { 'up-viewport': '' });
-    }
-    createBoxElement(parentElement) {
-        this.boxElement = this.affixPart(parentElement, 'box');
-    }
-    createContentElement(parentElement, content) {
-        this.contentElement = this.affixPart(parentElement, 'content');
-        this.contentElement.appendChild(content);
-    }
-    createDismissElement(parentElement) {
-        this.dismissElement = this.affixPart(parentElement, 'dismiss', {
-            'up-dismiss': '":button"',
-            'aria-label': this.dismissAriaLabel
-        });
-        return e.affix(this.dismissElement, 'span[aria-hidden="true"]', { text: this.dismissLabel });
-    }
-    affixPart(parentElement, part, options = {}) {
-        return e.affix(parentElement, this.selector(part), options);
-    }
-    static selector(part) {
-        return u.compact(['up', this.mode, part]).join('-');
-    }
-    suggestVisualNesting() {
-        const { parent } = this;
-        if (this.mode === parent.mode) {
-            return 1 + parent.suggestVisualNesting();
-        }
-        else {
-            return 0;
-        }
-    }
-    setupHandlers() {
-        super.setupHandlers();
-        this.overlayFocus = new up.OverlayFocus(this);
-        if (this.supportsDismissMethod('button')) {
-            this.createDismissElement(this.getBoxElement());
-        }
-        if (this.supportsDismissMethod('outside')) {
-            if (this.viewportElement) {
-                up.on(this.viewportElement, 'up:click', event => {
-                    if (event.target === this.viewportElement) {
-                        this.onOutsideClicked(event, true);
-                    }
-                });
+        constructor(options) {
+            super(options);
+            this.state = 'opening';
+            if (this.dismissable === true) {
+                this.dismissable = ['button', 'key', 'outside'];
+            }
+            else if (this.dismissable === false) {
+                this.dismissable = [];
             }
             else {
-                this.unbindParentClicked = this.parent.on('up:click', (event, element) => {
-                    if (!up.layer.isWithinForeignOverlay(element)) {
-                        const originClicked = this.origin && this.origin.contains(element);
-                        this.onOutsideClicked(event, originClicked);
-                    }
-                });
+                this.dismissable = u.getSimpleTokens(this.dismissable);
+            }
+            if (this.acceptLocation) {
+                this.acceptLocation = new up.URLPattern(this.acceptLocation);
+            }
+            if (this.dismissLocation) {
+                this.dismissLocation = new up.URLPattern(this.dismissLocation);
             }
         }
-        if (this.supportsDismissMethod('key')) {
-            this.unbindEscapePressed = up.event.onEscape(event => this.onEscapePressed(event));
-        }
-        this.registerClickCloser('up-accept', (value, closeOptions) => {
-            this.accept(value, closeOptions);
-        });
-        this.registerClickCloser('up-dismiss', (value, closeOptions) => {
-            this.dismiss(value, closeOptions);
-        });
-        up.migrate.registerLayerCloser?.(this);
-        this.registerEventCloser(this.acceptEvent, this.accept);
-        this.registerEventCloser(this.dismissEvent, this.dismiss);
-        this.on('up:click', 'label[for]', (event, label) => this.onLabelClicked(event, label));
-    }
-    onLabelClicked(event, label) {
-        let id = label.getAttribute('for');
-        let fieldSelector = up.form.fieldSelector(e.idSelector(id));
-        let fieldsAnywhere = up.fragment.all(fieldSelector, { layer: 'any' });
-        let fieldsInLayer = up.fragment.all(fieldSelector, { layer: this });
-        if (fieldsAnywhere.length > 1 && fieldsInLayer[0] !== fieldsAnywhere[0]) {
-            event.preventDefault();
-            const field = fieldsInLayer[0];
-            field.focus();
-            if (field.matches('input[type=checkbox], input[type=radio]')) {
-                field.click();
+        callback(name) {
+            let fn = this[name];
+            if (fn) {
+                return fn.bind(this);
             }
         }
-    }
-    onOutsideClicked(event, halt) {
-        up.log.putsEvent(event);
-        if (halt)
-            up.event.halt(event);
-        this.dismiss(':outside', { origin: event.target });
-    }
-    onEscapePressed(event) {
-        if (this.isFront()) {
-            let field = up.form.focusedField();
-            if (field) {
-                field.blur();
+        createElement(parentElement) {
+            this.nesting ||= this._suggestVisualNesting();
+            const elementAttrs = u.compactObject(u.pick(this, ['align', 'position', 'size', 'class', 'nesting']));
+            this.element = this.affixPart(parentElement, null, elementAttrs);
+        }
+        createBackdropElement(parentElement) {
+            this.backdropElement = this.affixPart(parentElement, 'backdrop');
+        }
+        createViewportElement(parentElement) {
+            this.viewportElement = this.affixPart(parentElement, 'viewport', { 'up-viewport': '' });
+        }
+        createBoxElement(parentElement) {
+            this.boxElement = this.affixPart(parentElement, 'box');
+        }
+        createContentElement(parentElement) {
+            this.contentElement = this.affixPart(parentElement, 'content');
+        }
+        setContent(content) {
+            this.contentElement.append(content);
+            this.onContentSet();
+        }
+        onContentSet() {
+        }
+        createDismissElement(parentElement) {
+            this.dismissElement = this.affixPart(parentElement, 'dismiss', {
+                'up-dismiss': '":button"',
+                'aria-label': this.dismissARIALabel
+            });
+            return e.affix(this.dismissElement, 'span[aria-hidden="true"]', { text: this.dismissLabel });
+        }
+        affixPart(parentElement, part, options = {}) {
+            return e.affix(parentElement, this.selector(part), options);
+        }
+        static selector(part) {
+            return u.compact(['up', this.mode, part]).join('-');
+        }
+        _suggestVisualNesting() {
+            const { parent } = this;
+            if (this.mode === parent.mode) {
+                return 1 + parent._suggestVisualNesting();
             }
-            else if (this.supportsDismissMethod('key')) {
+            else {
+                return 0;
+            }
+        }
+        setupHandlers() {
+            super.setupHandlers();
+            this.overlayFocus = new up.OverlayFocus(this);
+            if (this._supportsDismissMethod('button')) {
+                this.createDismissElement(this.getBoxElement());
+            }
+            if (this._supportsDismissMethod('outside')) {
+                if (this.viewportElement) {
+                    up.on(this.viewportElement, 'up:click', (event) => {
+                        if (event.target === this.viewportElement) {
+                            this._onOutsideClicked(event, true);
+                        }
+                    });
+                }
+                else {
+                    this._unbindParentClicked = this.parent.on('up:click', (event, element) => {
+                        if (!up.layer.isWithinForeignOverlay(element)) {
+                            const originClicked = this.origin && this.origin.contains(element);
+                            this._onOutsideClicked(event, originClicked);
+                        }
+                    });
+                }
+            }
+            if (this._supportsDismissMethod('key')) {
+                this._unbindEscapePressed = up.event.onEscape((event) => this.onEscapePressed(event));
+            }
+            this.registerAttrCloser('up-accept', (value, closeOptions) => {
+                this.accept(value, closeOptions);
+            });
+            this.registerAttrCloser('up-dismiss', (value, closeOptions) => {
+                this.dismiss(value, closeOptions);
+            });
+            up.migrate.registerLayerCloser?.(this);
+            this._registerExternalEventCloser(this.acceptEvent, this.accept);
+            this._registerExternalEventCloser(this.dismissEvent, this.dismiss);
+            this.on('up:click', 'label[for]', (event, label) => this._onLabelClicked(event, label));
+        }
+        _onLabelClicked(event, label) {
+            let id = label.getAttribute('for');
+            let fieldSelector = up.form.fieldSelector(e.idSelector(id));
+            let fieldsAnywhere = up.fragment.all(fieldSelector, { layer: 'any' });
+            let fieldsInLayer = up.fragment.all(fieldSelector, { layer: this });
+            if (fieldsAnywhere.length > 1 && fieldsInLayer[0] !== fieldsAnywhere[0]) {
+                event.preventDefault();
+                const field = fieldsInLayer[0];
+                field.focus();
+                if (field.matches('input[type=checkbox], input[type=radio]')) {
+                    field.click();
+                }
+            }
+        }
+        _onOutsideClicked(event, halt) {
+            up.log.putsEvent(event);
+            if (halt)
+                up.event.halt(event);
+            up.error.muteUncriticalSync(() => this.dismiss(':outside', { origin: event.target }));
+        }
+        onEscapePressed(event) {
+            if (this.isFront()) {
+                let field = up.form.focusedField();
+                if (field) {
+                    field.blur();
+                }
+                else if (this._supportsDismissMethod('key')) {
+                    up.event.halt(event, { log: true });
+                    up.error.muteUncriticalSync(() => this.dismiss(':key'));
+                }
+            }
+        }
+        registerAttrCloser(attribute, closeFn) {
+            this._registerClickCloser(attribute, closeFn);
+            this._registerSubmitCloser(attribute, closeFn);
+        }
+        _registerClickCloser(attribute, closeFn) {
+            this.on('up:click', `[${attribute}]:not(form)`, (event, link) => {
                 up.event.halt(event, { log: true });
-                this.dismiss(':key');
-            }
+                const value = e.jsonAttr(link, attribute);
+                this._onAttrCloserActivated(link, value, closeFn);
+            });
         }
-    }
-    registerClickCloser(attribute, closeFn) {
-        let selector = `[${attribute}]`;
-        this.on('up:click', selector, function (event) {
-            up.event.halt(event, { log: true });
-            const origin = event.target.closest(selector);
-            const value = e.jsonAttr(origin, attribute);
+        _registerSubmitCloser(attribute, closeFn) {
+            this.on('submit', `[${attribute}]`, (event, form) => {
+                up.event.halt(event, { log: true });
+                const value = up.Params.fromForm(form);
+                this._onAttrCloserActivated(form, value, closeFn);
+            });
+        }
+        _onAttrCloserActivated(origin, value, closeFn) {
             const closeOptions = { origin };
             const parser = new up.OptionsParser(origin, closeOptions);
             parser.booleanOrString('animation');
             parser.string('easing');
             parser.number('duration');
             parser.string('confirm');
-            closeFn(value, closeOptions);
-        });
-    }
-    registerEventCloser(eventTypes, closeFn) {
-        if (!eventTypes) {
-            return;
+            up.error.muteUncriticalSync(() => closeFn(value, closeOptions));
         }
-        return this.on(eventTypes, event => {
-            event.preventDefault();
-            closeFn.call(this, event, { response: event.response });
-        });
-    }
-    tryAcceptForLocation(options) {
-        this.tryCloseForLocation(this.acceptLocation, this.accept, options);
-    }
-    tryDismissForLocation(options) {
-        this.tryCloseForLocation(this.dismissLocation, this.dismiss, options);
-    }
-    tryCloseForLocation(urlPattern, closeFn, options) {
-        let location, resolution;
-        if (urlPattern && (location = this.location) && (resolution = urlPattern.recognize(location))) {
-            const closeValue = { ...resolution, location };
-            closeFn.call(this, closeValue, options);
+        _registerExternalEventCloser(eventTypes, closeFn) {
+            if (!eventTypes) {
+                return;
+            }
+            return this.on(eventTypes, (event) => {
+                event.preventDefault();
+                up.error.muteUncriticalSync(() => closeFn.call(this, event, { response: event.response }));
+            });
         }
-    }
-    teardownHandlers() {
-        super.teardownHandlers();
-        this.unbindParentClicked?.();
-        this.unbindEscapePressed?.();
-        this.overlayFocus.teardown();
-    }
-    destroyElements(options) {
-        const animation = () => {
-            return this.startCloseAnimation(options);
-        };
-        const onFinished = () => {
-            this.onElementsRemoved();
-            options.onFinished?.();
-        };
-        const destroyOptions = { ...options, animation, onFinished, log: false };
-        up.destroy(this.element, destroyOptions);
-    }
-    onElementsRemoved() { }
-    startAnimation(options = {}) {
-        const boxDone = up.animate(this.getBoxElement(), options.boxAnimation, options);
-        let backdropDone;
-        if (this.backdrop && !up.motion.isNone(options.boxAnimation)) {
-            backdropDone = up.animate(this.backdropElement, options.backdropAnimation, options);
+        tryAcceptForLocation(options) {
+            this._tryCloseForLocation(this.acceptLocation, this.accept, options);
         }
-        return Promise.all([boxDone, backdropDone]);
-    }
-    startOpenAnimation(options = {}) {
-        return this.startAnimation({
-            boxAnimation: options.animation ?? this.evalOption(this.openAnimation),
-            backdropAnimation: 'fade-in',
-            easing: options.easing || this.openEasing,
-            duration: options.duration || this.openDuration
-        }).then(() => {
-            return this.wasEverVisible = true;
-        });
-    }
-    startCloseAnimation(options = {}) {
-        const boxAnimation = this.wasEverVisible && (options.animation ?? this.evalOption(this.closeAnimation));
-        return this.startAnimation({
-            boxAnimation,
-            backdropAnimation: 'fade-out',
-            easing: options.easing || this.closeEasing,
-            duration: options.duration || this.closeDuration
-        });
-    }
-    accept(value = null, options = {}) {
-        return this.executeCloseChange('accept', value, options);
-    }
-    dismiss(value = null, options = {}) {
-        return this.executeCloseChange('dismiss', value, options);
-    }
-    supportsDismissMethod(method) {
-        return u.contains(this.dismissable, method);
-    }
-    executeCloseChange(verb, value, options) {
-        options = { ...options, verb, value, layer: this };
-        return new up.Change.CloseLayer(options).execute();
-    }
-    getFirstSwappableElement() {
-        return this.getContentElement().children[0];
-    }
-    toString() {
-        return `${this.mode} overlay`;
-    }
-};
+        tryDismissForLocation(options) {
+            this._tryCloseForLocation(this.dismissLocation, this.dismiss, options);
+        }
+        _tryCloseForLocation(urlPattern, closeFn, options) {
+            let location, resolution;
+            if (urlPattern && (location = this.location) && (resolution = urlPattern.recognize(location))) {
+                const closeValue = { ...resolution, location };
+                up.error.muteUncriticalSync(() => closeFn.call(this, closeValue, options));
+            }
+        }
+        teardownHandlers() {
+            super.teardownHandlers();
+            this._unbindParentClicked?.();
+            this._unbindEscapePressed?.();
+        }
+        destroyElements(options) {
+            const animation = () => this.startCloseAnimation(options);
+            const onFinished = () => {
+                this.onElementsRemoved();
+                options.onFinished?.();
+            };
+            const destroyOptions = { ...options, animation, onFinished, log: false };
+            up.destroy(this.element, destroyOptions);
+        }
+        onElementsRemoved() {
+        }
+        _startAnimation(options = {}) {
+            const boxDone = up.animate(this.getBoxElement(), options.boxAnimation, options);
+            let backdropDone;
+            if (this.backdrop && !up.motion.isNone(options.boxAnimation)) {
+                backdropDone = up.animate(this.backdropElement, options.backdropAnimation, options);
+            }
+            return Promise.all([boxDone, backdropDone]);
+        }
+        async startOpenAnimation(options = {}) {
+            let boxAnimation = options.animation ?? this.evalOption(this.openAnimation);
+            let backdropAnimation = 'fade-in';
+            await this._startAnimation({
+                boxAnimation,
+                backdropAnimation,
+                easing: options.easing || this.openEasing,
+                duration: options.duration || this.openDuration
+            });
+            this.wasEverVisible = true;
+        }
+        startCloseAnimation(options = {}) {
+            let boxAnimation = this.wasEverVisible && (options.animation ?? this.evalOption(this.closeAnimation));
+            let backdropAnimation = 'fade-out';
+            return this._startAnimation({
+                boxAnimation,
+                backdropAnimation,
+                easing: options.easing || this.closeEasing,
+                duration: options.duration || this.closeDuration,
+            });
+        }
+        isAlive() {
+            return ['opening', 'opened'].includes(this.state);
+        }
+        accept(value = null, options = {}) {
+            return this._executeCloseChange('accept', value, options);
+        }
+        dismiss(value = null, options = {}) {
+            return this._executeCloseChange('dismiss', value, options);
+        }
+        _supportsDismissMethod(method) {
+            return u.contains(this.dismissable, method);
+        }
+        _executeCloseChange(verb, value, options) {
+            options = { ...options, verb, value, layer: this };
+            return new up.Change.CloseLayer(options).execute();
+        }
+        getFirstSwappableElement() {
+            return this.getContentElement().children[0];
+        }
+        toString() {
+            return `${this.mode} overlay`;
+        }
+    },
+    _a.VISUAL_KEYS = [
+        'mode',
+        'position',
+        'align',
+        'size',
+        'origin',
+        'class',
+        'backdrop',
+        'dismissable',
+        'dismissLabel',
+        'dismissARIALabel',
+        'openAnimation',
+        'closeAnimation',
+        'openDuration',
+        'closeDuration',
+        'openEasing',
+        'closeEasing',
+        'trapFocus',
+    ],
+    _a.UNSET_VISUALS = u.spanObject(_a.VISUAL_KEYS, undefined),
+    _a);
 
 
 /***/ }),
-/* 50 */
+/* 53 */
 /***/ (() => {
 
 up.Layer.OverlayWithTether = class OverlayWithTether extends up.Layer.Overlay {
-    createElements(content) {
+    createElements() {
         if (!this.origin) {
             up.fail('Missing { origin } option');
         }
-        this.tether = new up.Tether({
+        this._tether = new up.Tether({
             anchor: this.origin,
             align: this.align,
             position: this.position
         });
-        this.createElement(this.tether.parent);
-        this.createContentElement(this.element, content);
-        this.tether.start(this.element);
+        this.createElement(this._tether.parent);
+        this.createContentElement(this.element);
+    }
+    onContentSet() {
+        this._tether.start(this.element);
     }
     onElementsRemoved() {
-        this.tether.stop();
+        this._tether.stop();
     }
     sync() {
-        if (this.isOpen()) {
-            if (this.isDetached() || this.tether.isDetached()) {
+        if (this.isAlive()) {
+            if (this.isDetached() || this._tether.isDetached()) {
                 this.dismiss(':detached', {
                     animation: false,
                     preventable: false
                 });
             }
             else {
-                this.tether.sync();
+                this._tether.sync();
             }
         }
     }
@@ -4650,56 +5470,47 @@ up.Layer.OverlayWithTether = class OverlayWithTether extends up.Layer.Overlay {
 
 
 /***/ }),
-/* 51 */
+/* 54 */
 /***/ (() => {
 
-var _a;
-up.Layer.OverlayWithViewport = (_a = class OverlayWithViewport extends up.Layer.Overlay {
-        static getParentElement() {
-            return document.body;
+up.Layer.OverlayWithViewport = class OverlayWithViewport extends up.Layer.Overlay {
+    static getParentElement() {
+        return document.body;
+    }
+    createElements() {
+        up.viewport.bodyShifter.raiseStack();
+        this.createElement(this.constructor.getParentElement());
+        if (this.backdrop) {
+            this.createBackdropElement(this.element);
         }
-        createElements(content) {
-            this.shiftBody();
-            this.createElement(this.constructor.getParentElement());
-            if (this.backdrop) {
-                this.createBackdropElement(this.element);
-            }
-            this.createViewportElement(this.element);
-            this.createBoxElement(this.viewportElement);
-            this.createContentElement(this.boxElement, content);
+        this.createViewportElement(this.element);
+        this.createBoxElement(this.viewportElement);
+        this.createContentElement(this.boxElement);
+    }
+    onElementsRemoved() {
+        up.viewport.bodyShifter.lowerStack();
+    }
+    sync() {
+        if (this.isDetached() && this.isAlive()) {
+            this.constructor.getParentElement().appendChild(this.element);
         }
-        onElementsRemoved() {
-            this.unshiftBody();
-        }
-        shiftBody() {
-            this.constructor.bodyShifter.shift();
-        }
-        unshiftBody() {
-            this.constructor.bodyShifter.unshift();
-        }
-        sync() {
-            if (this.isDetached() && this.isOpen()) {
-                this.constructor.getParentElement().appendChild(this.element);
-            }
-        }
-    },
-    _a.bodyShifter = new up.BodyShifter(),
-    _a);
+    }
+};
 
 
 /***/ }),
-/* 52 */
+/* 55 */
 /***/ (() => {
 
 var _a;
 const e = up.element;
 up.Layer.Root = (_a = class Root extends up.Layer {
+        get element() {
+            return e.root;
+        }
         constructor(options) {
             super(options);
             this.setupHandlers();
-        }
-        get element() {
-            return e.root;
         }
         getFirstSwappableElement() {
             return document.body;
@@ -4716,13 +5527,16 @@ up.Layer.Root = (_a = class Root extends up.Layer {
         sync() {
             this.setupHandlers();
         }
+        isAlive() {
+            return true;
+        }
         accept() {
-            this.cannotCloseRoot();
+            this._cannotCloseRoot();
         }
         dismiss() {
-            this.cannotCloseRoot();
+            this._cannotCloseRoot();
         }
-        cannotCloseRoot() {
+        _cannotCloseRoot() {
             up.fail('Cannot close the root layer');
         }
         toString() {
@@ -4734,7 +5548,7 @@ up.Layer.Root = (_a = class Root extends up.Layer {
 
 
 /***/ }),
-/* 53 */
+/* 56 */
 /***/ (() => {
 
 var _a;
@@ -4745,7 +5559,7 @@ up.Layer.Modal = (_a = class Modal extends up.Layer.OverlayWithViewport {
 
 
 /***/ }),
-/* 54 */
+/* 57 */
 /***/ (() => {
 
 var _a;
@@ -4756,7 +5570,7 @@ up.Layer.Popup = (_a = class Popup extends up.Layer.OverlayWithTether {
 
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (() => {
 
 var _a;
@@ -4767,7 +5581,7 @@ up.Layer.Drawer = (_a = class Drawer extends up.Layer.OverlayWithViewport {
 
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (() => {
 
 var _a;
@@ -4778,112 +5592,133 @@ up.Layer.Cover = (_a = class Cover extends up.Layer.OverlayWithViewport {
 
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (() => {
 
+var _a;
 const u = up.util;
 const e = up.element;
-up.LayerLookup = class LayerLookup {
-    constructor(stack, ...args) {
-        this.stack = stack;
-        const options = u.parseArgIntoOptions(args, 'layer');
-        if (options.normalizeLayerOptions !== false) {
-            up.layer.normalizeOptions(options);
+up.LayerLookup = (_a = class LayerLookup {
+        constructor(stack, options) {
+            this._stack = stack;
+            if (options.normalizeLayerOptions !== false) {
+                up.layer.normalizeOptions(options);
+            }
+            this._options = options;
+            this._values = u.getSimpleTokens(options.layer);
         }
-        this.values = u.parseTokens(options.layer);
-        this.origin = options.origin;
-        this.baseLayer = options.baseLayer || this.originLayer() || this.stack.current;
-        if (u.isString(this.baseLayer)) {
-            const recursiveOptions = { ...options, baseLayer: this.stack.current, normalizeLayerOptions: false };
-            this.baseLayer = new this.constructor(this.stack, this.baseLayer, recursiveOptions).first();
+        all() {
+            let results = u.flatMap(this._values, (value) => this._resolveValue(value));
+            results = u.compact(results);
+            results = u.uniq(results);
+            return results;
         }
-    }
-    originLayer() {
-        if (this.origin) {
-            return this.forElement(this.origin);
+        static all(stack, ...args) {
+            const options = u.parseArgIntoOptions(args, 'layer');
+            const { layer } = options;
+            if (layer instanceof up.Layer) {
+                return [layer];
+            }
+            return new this(stack, options).all();
         }
-    }
-    first() {
-        return this.all()[0];
-    }
-    all() {
-        let results = u.flatMap(this.values, value => this.resolveValue(value));
-        results = u.compact(results);
-        results = u.uniq(results);
-        return results;
-    }
-    forElement(element) {
-        element = e.get(element);
-        return u.find(this.stack.reversed(), layer => layer.contains(element));
-    }
-    forIndex(value) {
-        return this.stack[value];
-    }
-    resolveValue(value) {
-        if (value instanceof up.Layer) {
-            return value;
+        _forElement(element) {
+            element = e.get(element);
+            return u.find(this._stack.reversed(), (layer) => layer.contains(element));
         }
-        if (u.isNumber(value)) {
-            return this.forIndex(value);
+        _forIndex(value) {
+            return this._stack.at(value);
         }
-        if (/^\d+$/.test(value)) {
-            return this.forIndex(Number(value));
+        _resolveValue(value) {
+            if (value instanceof up.Layer) {
+                return value;
+            }
+            if (u.isNumber(value)) {
+                return this._forIndex(value);
+            }
+            if (/^\d+$/.test(value)) {
+                return this._forIndex(Number(value));
+            }
+            if (u.isElementLike(value)) {
+                return this._forElement(value);
+            }
+            switch (value) {
+                case 'any':
+                    return [this._getBaseLayer(), ...this._stack.reversed()];
+                case 'current':
+                    return this._getBaseLayer();
+                case 'closest':
+                    return this._stack.selfAndAncestorsOf(this._getBaseLayer());
+                case 'parent':
+                    return this._getBaseLayer().parent;
+                case 'ancestor':
+                case 'ancestors':
+                    return this._getBaseLayer().ancestors;
+                case 'child':
+                    return this._getBaseLayer().child;
+                case 'descendant':
+                case 'descendants':
+                    return this._getBaseLayer().descendants;
+                case 'subtree':
+                    return this._getBaseLayer().subtree;
+                case 'new':
+                    return 'new';
+                case 'root':
+                    return this._stack.root;
+                case 'overlay':
+                case 'overlays':
+                    return u.reverse(this._stack.overlays);
+                case 'front':
+                    return this._stack.front;
+                case 'origin':
+                    return this._getOriginLayer();
+                default:
+                    return up.fail("Unknown { layer } option: %o", value);
+            }
         }
-        if (u.isElementish(value)) {
-            return this.forElement(value);
+        _getOriginLayer() {
+            let { origin, originLayer } = this._options;
+            if (originLayer) {
+                return originLayer;
+            }
+            if (origin) {
+                return this._forElement(origin);
+            }
         }
-        switch (value) {
-            case 'any':
-                return [this.baseLayer, ...this.stack.reversed()];
-            case 'current':
-                return this.baseLayer;
-            case 'closest':
-                return this.stack.selfAndAncestorsOf(this.baseLayer);
-            case 'parent':
-                return this.baseLayer.parent;
-            case 'ancestor':
-            case 'ancestors':
-                return this.baseLayer.ancestors;
-            case 'child':
-                return this.baseLayer.child;
-            case 'descendant':
-            case 'descendants':
-                return this.baseLayer.descendants;
-            case 'new':
-                return 'new';
-            case 'root':
-                return this.stack.root;
-            case 'overlay':
-            case 'overlays':
-                return u.reverse(this.stack.overlays);
-            case 'front':
-                return this.stack.front;
-            case 'origin':
-                return this.originLayer();
-            default:
-                return up.fail("Unknown { layer } option: %o", value);
+        _getBaseLayer() {
+            let { baseLayer } = this._options;
+            if (u.isString(baseLayer)) {
+                const recursiveOptions = { ...this._options, baseLayer: this._stack.current, normalizeLayerOptions: false, layer: baseLayer };
+                return this.constructor.all(this._stack, recursiveOptions)[0];
+            }
+            else {
+                return baseLayer || this._getOriginLayer() || this._stack.current;
+            }
         }
-    }
-};
+    },
+    (() => {
+        u.memoizeMethod(_a.prototype, {
+            _getBaseLayer: true,
+            _getOriginLayer: true,
+        });
+    })(),
+    _a);
 
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (() => {
 
 const u = up.util;
-up.LayerStack = class LayerStack extends Array {
+up.LayerStack = class LayerStack {
     constructor() {
-        super();
-        Object.setPrototypeOf(this, up.LayerStack.prototype);
-        this.currentOverrides = [];
-        this.push(this.buildRoot());
+        this._currentOverrides = [];
+        this.layers = [this._buildRoot()];
     }
-    buildRoot() {
+    _buildRoot() {
         return up.layer.build({ mode: 'root', stack: this });
     }
     remove(layer) {
-        u.remove(this, layer);
+        u.remove(this.layers, layer);
     }
     peel(layer, options) {
         const descendants = u.reverse(layer.descendants);
@@ -4894,35 +5729,29 @@ up.LayerStack = class LayerStack extends Array {
     }
     reset() {
         this.peel(this.root, { animation: false });
-        this.currentOverrides = [];
+        this._currentOverrides = [];
         this.root.reset();
     }
-    isOpen(layer) {
-        return layer.index >= 0;
-    }
-    isClosed(layer) {
-        return !this.isOpen(layer);
-    }
     parentOf(layer) {
-        return this[layer.index - 1];
+        return this.layers[layer.index - 1];
     }
     childOf(layer) {
-        return this[layer.index + 1];
+        return this.layers[layer.index + 1];
     }
     ancestorsOf(layer) {
-        return u.reverse(this.slice(0, layer.index));
+        return u.reverse(this.layers.slice(0, layer.index));
     }
     selfAndAncestorsOf(layer) {
         return [layer, ...layer.ancestors];
     }
     descendantsOf(layer) {
-        return this.slice(layer.index + 1);
+        return this.layers.slice(layer.index + 1);
     }
     isRoot(layer) {
-        return this[0] === layer;
+        return this.root === layer;
     }
     isOverlay(layer) {
-        return !this.isRoot(layer);
+        return this.root !== layer;
     }
     isCurrent(layer) {
         return this.current === layer;
@@ -4934,24 +5763,24 @@ up.LayerStack = class LayerStack extends Array {
         return this.getAll(...args)[0];
     }
     getAll(...args) {
-        return new up.LayerLookup(this, ...args).all();
+        return up.LayerLookup.all(this, ...args);
     }
     sync() {
-        for (let layer of this) {
+        for (let layer of this.layers) {
             layer.sync();
         }
     }
     asCurrent(layer, fn) {
         try {
-            this.currentOverrides.push(layer);
+            this._currentOverrides.push(layer);
             return fn();
         }
         finally {
-            this.currentOverrides.pop();
+            this._currentOverrides.pop();
         }
     }
     reversed() {
-        return u.reverse(this);
+        return u.reverse(this.layers);
     }
     dismissOverlays(value = null, options = {}) {
         options.dismissable = false;
@@ -4959,139 +5788,131 @@ up.LayerStack = class LayerStack extends Array {
             overlay.dismiss(value, options);
         }
     }
-    [u.copy.key]() {
-        return u.copyArrayLike(this);
+    at(index) {
+        return this.layers[index];
+    }
+    indexOf(layer) {
+        return this.layers.indexOf(layer);
     }
     get count() {
-        return this.length;
+        return this.layers.length;
     }
     get root() {
-        return this[0];
+        return this.layers[0];
     }
     get overlays() {
         return this.root.descendants;
     }
     get current() {
-        return u.last(this.currentOverrides) || this.front;
+        return u.last(this._currentOverrides) || this.front;
     }
     get front() {
-        return u.last(this);
+        return u.last(this.layers);
     }
 };
 
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (() => {
 
-up.LinkFeedbackURLs = class LinkFeedbackURLs {
+const u = up.util;
+up.LinkCurrentURLs = class LinkCurrentURLs {
     constructor(link) {
-        const normalize = up.feedback.normalizeURL;
-        this.isSafe = up.link.isSafe(link);
-        if (this.isSafe) {
+        this._isSafe = up.link.isSafe(link);
+        if (this._isSafe) {
             const href = link.getAttribute('href');
             if (href && (href !== '#')) {
-                this.href = normalize(href);
+                this._href = u.matchableURL(href);
             }
             const upHREF = link.getAttribute('up-href');
             if (upHREF) {
-                this.upHREF = normalize(upHREF);
+                this._upHREF = u.matchableURL(upHREF);
             }
             const alias = link.getAttribute('up-alias');
             if (alias) {
-                this.aliasPattern = new up.URLPattern(alias, normalize);
+                this._aliasPattern = new up.URLPattern(alias);
             }
         }
     }
     isCurrent(normalizedLocation) {
-        return this.isSafe && !!((this.href && (this.href === normalizedLocation)) ||
-            (this.upHREF && (this.upHREF === normalizedLocation)) ||
-            (this.aliasPattern && this.aliasPattern.test(normalizedLocation, false)));
+        if (!normalizedLocation) {
+            return false;
+        }
+        return !!(this._href === normalizedLocation ||
+            this._upHREF === normalizedLocation ||
+            this._aliasPattern?.test?.(normalizedLocation, false));
+    }
+    isAnyCurrent(normalizedLocations) {
+        return normalizedLocations.some((normalizedLocation) => (this._href === normalizedLocation ||
+            this._upHREF === normalizedLocation ||
+            this._aliasPattern?.test?.(normalizedLocation, false)));
     }
 };
 
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (() => {
 
 const u = up.util;
 const e = up.element;
-up.LinkPreloader = class LinkPreloader {
-    constructor() {
-        this.considerPreload = this.considerPreload.bind(this);
+up.LinkFollowIntent = class LinkFollowIntent {
+    constructor(link, callback) {
+        this._link = link;
+        this._callback = callback;
+        this._lastRequest = null;
+        this._on('mouseenter mousedown touchstart', (event) => this._scheduleCallback(event));
+        this._on('mouseleave', () => this._unscheduleCallback());
+        up.fragment.onAborted(this._link, () => this._unscheduleCallback());
     }
-    watchLink(link) {
-        if (up.link.isSafe(link)) {
-            this.on(link, 'mouseenter', event => this.considerPreload(event, true));
-            this.on(link, 'mousedown touchstart', event => this.considerPreload(event));
-            this.on(link, 'mouseleave', event => this.stopPreload(event));
-        }
+    _on(eventType, fn) {
+        up.on(this._link, eventType, { passive: true }, fn);
     }
-    on(link, eventTypes, callback) {
-        up.on(link, eventTypes, { passive: true }, callback);
-    }
-    considerPreload(event, applyDelay) {
-        const link = event.target;
-        if (link !== this.currentLink) {
-            this.reset();
-            this.currentLink = link;
-            if (up.link.shouldFollowEvent(event, link)) {
-                if (applyDelay) {
-                    this.preloadAfterDelay(event, link);
-                }
-                else {
-                    this.preloadNow(event, link);
-                }
-            }
-        }
-    }
-    stopPreload(event) {
-        if (event.target === this.currentLink) {
-            return this.reset();
-        }
-    }
-    reset() {
-        if (!this.currentLink) {
+    _scheduleCallback(event) {
+        if (!up.link.shouldFollowEvent(event, this._link))
             return;
+        this._unscheduleCallback();
+        const applyDelay = (event.type === 'mouseenter');
+        if (applyDelay) {
+            let delay = this._parseDelay();
+            this._timer = u.timer(delay, () => this._runCallback(event));
         }
-        clearTimeout(this.timer);
-        if (this.currentRequest?.background) {
-            this.currentRequest.abort();
+        else {
+            this._runCallback(event);
         }
-        this.currentLink = undefined;
-        this.currentRequest = undefined;
     }
-    preloadAfterDelay(event, link) {
-        const delay = e.numberAttr(link, 'up-preload-delay') ?? up.link.config.preloadDelay;
-        this.timer = u.timer(delay, () => this.preloadNow(event, link));
+    _unscheduleCallback() {
+        clearTimeout(this._timer);
+        if (this._lastRequest?.background)
+            this._lastRequest.abort();
+        this._lastRequest = null;
     }
-    preloadNow(event, link) {
-        if (!link.isConnected) {
-            this.reset();
-            return;
-        }
-        const onQueued = request => { return this.currentRequest = request; };
+    _parseDelay() {
+        return e.numberAttr(this._link, 'up-preload-delay') ?? up.link.config.preloadDelay;
+    }
+    _runCallback(event) {
         up.log.putsEvent(event);
-        up.error.muteUncriticalRejection(up.link.preload(link, { onQueued }));
-        this.queued = true;
+        if (!up.fragment.isAlive(this._link))
+            return;
+        this._callback({ onRequestKnown: (request) => this._lastRequest = request });
     }
 };
 
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (() => {
 
 const u = up.util;
 const e = up.element;
 up.MotionController = class MotionController {
     constructor(name) {
-        this.activeClass = `up-${name}`;
-        this.selector = `.${this.activeClass}`;
+        this._activeClass = `up-${name}`;
+        this._selector = `.${this._activeClass}`;
         this.finishEvent = `up:${name}:finish`;
         this.finishCount = 0;
-        this.clusterCount = 0;
+        this._clusterCount = 0;
     }
     startFunction(cluster, startMotion, memory = {}) {
         cluster = e.list(cluster);
@@ -5103,55 +5924,55 @@ up.MotionController = class MotionController {
         else {
             memory.trackMotion = false;
             this.finish(cluster);
-            this.markCluster(cluster);
-            let promise = this.whileForwardingFinishEvent(cluster, mutedAnimator);
-            promise = promise.then(() => this.unmarkCluster(cluster));
+            this._markCluster(cluster);
+            let promise = this._whileForwardingFinishEvent(cluster, mutedAnimator);
+            promise = promise.then(() => this._unmarkCluster(cluster));
             return promise;
         }
     }
     finish(elements) {
         this.finishCount++;
-        if ((this.clusterCount === 0) || !up.motion.isEnabled()) {
+        if ((this._clusterCount === 0) || !up.motion.isEnabled()) {
             return;
         }
-        elements = this.expandFinishRequest(elements);
+        elements = this._expandFinishRequest(elements);
         for (let element of elements) {
-            this.finishOneElement(element);
+            this._finishOneElement(element);
         }
         return up.migrate.formerlyAsync?.('up.motion.finish()');
     }
-    expandFinishRequest(elements) {
+    _expandFinishRequest(elements) {
         if (elements) {
-            return u.flatMap(elements, el => e.list(el.closest(this.selector), el.querySelectorAll(this.selector)));
+            return u.flatMap(elements, (el) => e.list(el.closest(this._selector), el.querySelectorAll(this._selector)));
         }
         else {
-            return document.querySelectorAll(this.selector);
+            return document.querySelectorAll(this._selector);
         }
     }
     isActive(element) {
-        return element.classList.contains(this.activeClass);
+        return element.classList.contains(this._activeClass);
     }
-    finishOneElement(element) {
-        this.emitFinishEvent(element);
+    _finishOneElement(element) {
+        this._emitFinishEvent(element);
     }
-    emitFinishEvent(element, eventAttrs = {}) {
+    _emitFinishEvent(element, eventAttrs = {}) {
         eventAttrs = { target: element, log: false, ...eventAttrs };
         return up.emit(this.finishEvent, eventAttrs);
     }
-    markCluster(cluster) {
-        this.clusterCount++;
-        this.toggleActive(cluster, true);
+    _markCluster(cluster) {
+        this._clusterCount++;
+        this._toggleActive(cluster, true);
     }
-    unmarkCluster(cluster) {
-        this.clusterCount--;
-        this.toggleActive(cluster, false);
+    _unmarkCluster(cluster) {
+        this._clusterCount--;
+        this._toggleActive(cluster, false);
     }
-    toggleActive(cluster, isActive) {
+    _toggleActive(cluster, isActive) {
         for (let element of cluster) {
-            element.classList.toggle(this.activeClass, isActive);
+            element.classList.toggle(this._activeClass, isActive);
         }
     }
-    whileForwardingFinishEvent(cluster, fn) {
+    _whileForwardingFinishEvent(cluster, fn) {
         if (cluster.length < 2) {
             return fn();
         }
@@ -5159,7 +5980,7 @@ up.MotionController = class MotionController {
             if (!event.forwarded) {
                 for (let element of cluster) {
                     if (element !== event.target && this.isActive(element)) {
-                        this.emitFinishEvent(element, { forwarded: true });
+                        this._emitFinishEvent(element, { forwarded: true });
                     }
                 }
             }
@@ -5170,16 +5991,15 @@ up.MotionController = class MotionController {
     async reset() {
         await this.finish();
         this.finishCount = 0;
-        this.clusterCount = 0;
+        this._clusterCount = 0;
     }
 };
 
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (() => {
 
-const u = up.util;
 const e = up.element;
 up.NonceableCallback = class NonceableCallback {
     constructor(script, nonce) {
@@ -5191,39 +6011,34 @@ up.NonceableCallback = class NonceableCallback {
         return new this(match[3], match[2]);
     }
     toFunction(...argNames) {
-        if (up.browser.canEval()) {
-            return new Function(...argNames, this.script);
-        }
-        else if (this.nonce) {
+        let script = this.script;
+        if (this.nonce) {
             let callbackThis = this;
             return function (...args) {
-                return callbackThis.runAsNoncedFunction(this, argNames, args);
+                return callbackThis._runAsNoncedFunction(script, this, argNames, args);
             };
         }
         else {
-            return this.cannotRun.bind(this);
+            return new Function(...argNames, script);
         }
     }
     toString() {
         return `nonce-${this.nonce} ${this.script}`;
     }
-    cannotRun() {
-        throw new Error(`Your Content Security Policy disallows inline JavaScript (${this.script}). See https://unpoly.com/csp for solutions.`);
-    }
-    runAsNoncedFunction(thisArg, argNames, args) {
+    _runAsNoncedFunction(script, thisArg, argNames, args) {
         let wrappedScript = `
       try {
-        up.noncedEval.value = (function(${argNames.join(',')}) {
-          ${this.script}
+        up.noncedEval.value = (function(${argNames.join()}) {
+          ${script}
         }).apply(up.noncedEval.thisArg, up.noncedEval.args)
       } catch (error) {
         up.noncedEval.error = error
       }
     `;
-        let script;
+        let scriptElement;
         try {
             up.noncedEval = { args, thisArg: thisArg };
-            script = up.element.affix(document.body, 'script', { nonce: this.nonce, text: wrappedScript });
+            scriptElement = e.affix(document.body, 'script', { nonce: this.nonce, text: wrappedScript });
             if (up.noncedEval.error) {
                 throw up.noncedEval.error;
             }
@@ -5233,178 +6048,80 @@ up.NonceableCallback = class NonceableCallback {
         }
         finally {
             up.noncedEval = undefined;
-            if (script) {
-                script.remove();
+            if (scriptElement) {
+                scriptElement.remove();
             }
         }
     }
-    allowedBy(allowedNonces) {
-        return this.nonce && u.contains(allowedNonces, this.nonce);
-    }
-    static adoptNonces(element, allowedNonces) {
-        if (!allowedNonces?.length) {
-            return;
-        }
-        const getPageNonce = u.memoize(up.protocol.cspNonce);
-        u.each(up.protocol.config.nonceableAttributes, (attribute) => {
-            let matches = e.subtree(element, `[${attribute}^="nonce-"]`);
-            u.each(matches, (match) => {
-                let attributeValue = match.getAttribute(attribute);
-                let callback = this.fromString(attributeValue);
-                let warn = (message, ...args) => up.log.warn('up.render()', `Cannot use callback [${attribute}="${attributeValue}"]: ${message}`, ...args);
-                if (!callback.allowedBy(allowedNonces)) {
-                    return warn("Callback's CSP nonce (%o) does not match response header (%o)", callback.nonce, allowedNonces);
-                }
-                let pageNonce = getPageNonce();
-                if (!pageNonce) {
-                    return warn("Current page's CSP nonce is unknown");
-                }
-                callback.nonce = pageNonce;
-                match.setAttribute(attribute, callback.toString());
-            });
-        });
-    }
 };
 
 
 /***/ }),
-/* 63 */
-/***/ (() => {
-
-const u = up.util;
-const e = up.element;
-up.OptionsParser = class OptionsParser {
-    constructor(element, options, parserOptions = {}) {
-        this.options = options;
-        this.element = element;
-        this.fail = parserOptions.fail;
-        this.closest = parserOptions.closest;
-        this.attrPrefix = parserOptions.attrPrefix || 'up-';
-        this.defaults = parserOptions.defaults || {};
-    }
-    string(key, keyOptions) {
-        this.parse(e.attr, key, keyOptions);
-    }
-    boolean(key, keyOptions) {
-        this.parse(e.booleanAttr, key, keyOptions);
-    }
-    number(key, keyOptions) {
-        this.parse(e.numberAttr, key, keyOptions);
-    }
-    booleanOrString(key, keyOptions) {
-        this.parse(e.booleanOrStringAttr, key, keyOptions);
-    }
-    json(key, keyOptions) {
-        this.parse(e.jsonAttr, key, keyOptions);
-    }
-    callback(key, keyOptions = {}) {
-        let parser = (link, attr) => e.callbackAttr(link, attr, keyOptions);
-        this.parse(parser, key, keyOptions);
-    }
-    parse(attrValueFn, key, keyOptions = {}) {
-        const attrNames = u.wrapList(keyOptions.attr ?? this.attrNameForKey(key));
-        let value = this.options[key];
-        for (let attrName of attrNames) {
-            value ?? (value = this.parseFromAttr(attrValueFn, this.element, attrName));
-        }
-        value ?? (value = keyOptions.default ?? this.defaults[key]);
-        let normalizeFn = keyOptions.normalize;
-        if (normalizeFn) {
-            value = normalizeFn(value);
-        }
-        if (u.isDefined(value)) {
-            this.options[key] = value;
-        }
-        let failKey;
-        if (this.fail && (failKey = up.fragment.failKey(key))) {
-            const failAttrNames = u.compact(u.map(attrNames, (attrName) => this.deriveFailAttrName(attrName)));
-            this.parse(attrValueFn, failKey, { ...keyOptions, attr: failAttrNames });
-        }
-    }
-    parseFromAttr(attrValueFn, element, attrName) {
-        if (this.closest) {
-            return e.closestAttr(element, attrName, attrValueFn);
-        }
-        else {
-            return attrValueFn(element, attrName);
-        }
-    }
-    deriveFailAttrName(attr) {
-        return this.deriveFailAttrNameForPrefix(attr, this.attrPrefix + 'on-') ||
-            this.deriveFailAttrNameForPrefix(attr, this.attrPrefix);
-    }
-    deriveFailAttrNameForPrefix(attr, prefix) {
-        if (attr.startsWith(prefix)) {
-            return `${prefix}fail-${attr.substring(prefix.length)}`;
-        }
-    }
-    attrNameForKey(option) {
-        return `${this.attrPrefix}${u.camelToKebabCase(option)}`;
-    }
-};
-
-
-/***/ }),
-/* 64 */
+/* 66 */
 /***/ (() => {
 
 const e = up.element;
 const u = up.util;
 up.OverlayFocus = class OverlayFocus {
     constructor(layer) {
-        this.layer = layer;
-        this.focusElement = this.layer.getFocusElement();
+        this._layer = layer;
+        this._focusElement = this._layer.getFocusElement();
+        this._trapFocus = this._layer.trapFocus;
     }
     moveToFront() {
-        if (this.enabled) {
+        if (this._active) {
             return;
         }
-        this.enabled = true;
-        this.untrapFocus = up.on('focusin', event => this.onFocus(event));
-        this.unsetAttrs = e.setTemporaryAttrs(this.focusElement, {
+        this._active = true;
+        this._unsetAttrs = e.setAttrsTemp(this._focusElement, {
             'tabindex': '0',
             'role': 'dialog',
-            'aria-modal': 'true'
+            'aria-modal': this._trapFocus.toString()
         });
-        this.focusTrapBefore = e.affix(this.focusElement, 'beforebegin', 'up-focus-trap[tabindex=0]');
-        this.focusTrapAfter = e.affix(this.focusElement, 'afterend', 'up-focus-trap[tabindex=0]');
+        if (this._trapFocus) {
+            this._untrapFocus = up.on('focusin', (event) => this._onFocus(event));
+            this._focusTrapBefore = e.affix(this._focusElement, 'beforebegin', 'up-focus-trap[tabindex=0]');
+            this._focusTrapAfter = e.affix(this._focusElement, 'afterend', 'up-focus-trap[tabindex=0]');
+        }
     }
     moveToBack() {
         this.teardown();
     }
     teardown() {
-        if (!this.enabled) {
+        if (!this._active) {
             return;
         }
-        this.enabled = false;
-        this.untrapFocus();
-        this.unsetAttrs();
-        this.focusTrapBefore.remove();
-        this.focusTrapAfter.remove();
+        this._active = false;
+        this._unsetAttrs();
+        if (this._trapFocus) {
+            this._untrapFocus();
+            this._focusTrapBefore.remove();
+            this._focusTrapAfter.remove();
+        }
     }
-    onFocus(event) {
+    _onFocus(event) {
         const { target } = event;
-        if (this.processingFocusEvent || up.layer.isWithinForeignOverlay(target)) {
+        if (this._processingFocusEvent || up.layer.isWithinForeignOverlay(target)) {
             return;
         }
-        this.processingFocusEvent = true;
-        if (target === this.focusTrapBefore) {
-            this.focusEnd();
+        this._processingFocusEvent = true;
+        if (target === this._focusTrapBefore) {
+            this._focusEnd();
         }
-        else if ((target === this.focusTrapAfter) || !this.layer.contains(target)) {
-            this.focusStart();
+        else if ((target === this._focusTrapAfter) || !this._layer.contains(target)) {
+            this._focusStart();
         }
-        this.processingFocusEvent = false;
+        this._processingFocusEvent = false;
     }
-    focusStart(focusOptions) {
-        up.focus(this.focusElement, focusOptions);
+    _focusStart(focusOptions) {
+        up.focus(this._focusElement, focusOptions);
     }
-    focusEnd() {
-        this.focusLastDescendant(this.layer.getBoxElement()) || this.focusStart();
+    _focusEnd() {
+        this._focusLastDescendant(this._layer.getBoxElement()) || this._focusStart();
     }
-    focusLastDescendant(element) {
+    _focusLastDescendant(element) {
         for (let child of u.reverse(element.children)) {
-            if (up.viewport.tryFocus(child) || this.focusLastDescendant(child)) {
+            if (up.viewport.tryFocus(child) || this._focusLastDescendant(child)) {
                 return true;
             }
         }
@@ -5413,7 +6130,7 @@ up.OverlayFocus = class OverlayFocus {
 
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (() => {
 
 const u = up.util;
@@ -5434,8 +6151,8 @@ up.Params = class Params {
         for (let entry of this.entries) {
             const { name, value } = entry;
             if (!u.isBasicObjectProperty(name)) {
-                if (this.isArrayKey(name)) {
-                    obj[name] || (obj[name] = []);
+                if (this._isArrayKey(name)) {
+                    obj[name] ||= [];
                     obj[name].push(value);
                 }
                 else {
@@ -5459,15 +6176,12 @@ up.Params = class Params {
         return formData;
     }
     toQuery() {
-        let parts = u.map(this.entries, this.arrayEntryToQuery.bind(this));
-        parts = u.compact(parts);
+        let simpleEntries = this.withoutBinaryEntries().entries;
+        let parts = simpleEntries.map(this._arrayEntryToQuery);
         return parts.join('&');
     }
-    arrayEntryToQuery(entry) {
+    _arrayEntryToQuery(entry) {
         const { value } = entry;
-        if (this.isBinaryValue(value)) {
-            return;
-        }
         let query = encodeURIComponent(entry.name);
         if (u.isGiven(value)) {
             query += "=";
@@ -5475,12 +6189,15 @@ up.Params = class Params {
         }
         return query;
     }
-    isBinaryValue(value) {
+    _isBinaryEntry({ value }) {
         return value instanceof Blob;
     }
-    hasBinaryValues() {
-        const values = u.map(this.entries, 'value');
-        return u.some(values, this.isBinaryValue);
+    hasBinaryEntries() {
+        return u.some(this.entries, this._isBinaryEntry);
+    }
+    withoutBinaryEntries() {
+        let simpleEntries = u.reject(this.entries, this._isBinaryEntry);
+        return new this.constructor(simpleEntries);
     }
     toURL(base) {
         let parts = [base, this.toQuery()];
@@ -5501,19 +6218,25 @@ up.Params = class Params {
             this.entries.push(...raw);
         }
         else if (u.isString(raw)) {
-            this.addAllFromQuery(raw);
+            this._addAllFromQuery(raw);
         }
         else if (u.isFormData(raw)) {
-            this.addAllFromFormData(raw);
+            this._addAllFromFormData(raw);
         }
         else if (u.isObject(raw)) {
-            this.addAllFromObject(raw);
+            this._addAllFromObject(raw);
         }
         else {
-            up.fail("Unsupport params type: %o", raw);
+            up.fail("Unsupported params type: %o", raw);
         }
     }
-    addAllFromObject(object) {
+    keys() {
+        return u.map(this.entries, 'name');
+    }
+    values() {
+        return u.map(this.entries, 'value');
+    }
+    _addAllFromObject(object) {
         for (let key in object) {
             const value = object[key];
             const valueElements = u.isArray(value) ? value : [value];
@@ -5522,7 +6245,7 @@ up.Params = class Params {
             }
         }
     }
-    addAllFromQuery(query) {
+    _addAllFromQuery(query) {
         for (let part of query.split('&')) {
             if (part) {
                 let [name, value] = part.split('=');
@@ -5537,7 +6260,7 @@ up.Params = class Params {
             }
         }
     }
-    addAllFromFormData(formData) {
+    _addAllFromFormData(formData) {
         for (let value of formData.entries()) {
             this.add(...value);
         }
@@ -5547,13 +6270,13 @@ up.Params = class Params {
         this.add(name, value);
     }
     delete(name) {
-        this.entries = u.reject(this.entries, this.matchEntryFn(name));
+        this.entries = u.reject(this.entries, this._matchEntryFn(name));
     }
-    matchEntryFn(name) {
-        return entry => entry.name === name;
+    _matchEntryFn(name) {
+        return (entry) => entry.name === name;
     }
     get(name) {
-        if (this.isArrayKey(name)) {
+        if (this._isArrayKey(name)) {
             return this.getAll(name);
         }
         else {
@@ -5561,27 +6284,25 @@ up.Params = class Params {
         }
     }
     getFirst(name) {
-        const entry = u.find(this.entries, this.matchEntryFn(name));
+        const entry = u.find(this.entries, this._matchEntryFn(name));
         return entry?.value;
     }
     getAll(name) {
-        if (this.isArrayKey(name)) {
-            return this.getAll(name);
-        }
-        else {
-            const entries = u.map(this.entries, this.matchEntryFn(name));
-            return u.map(entries, 'value');
-        }
+        const entries = u.filter(this.entries, this._matchEntryFn(name));
+        return u.map(entries, 'value');
     }
-    isArrayKey(key) {
-        return key.endsWith('[]');
+    _isArrayKey(key) {
+        return u.evalOption(up.form.config.arrayParam, key);
     }
     [u.isBlank.key]() {
         return this.entries.length === 0;
     }
     static fromForm(form) {
-        form = up.fragment.get(form);
-        return this.fromFields(up.form.fields(form));
+        return this.fromContainer(form);
+    }
+    static fromContainer(container) {
+        let fields = up.form.fields(container);
+        return this.fromFields(fields);
     }
     static fromFields(fields) {
         const params = new (this)();
@@ -5634,34 +6355,172 @@ up.Params = class Params {
     static stripURL(url) {
         return u.normalizeURL(url, { search: false });
     }
-    static merge(...objects) {
-        return objects.reduce(function (allParams, params) {
-            allParams.addAll(params);
-            return allParams;
-        }, new up.Params());
+    static merge(start, ...objects) {
+        let merged = u.copy(start);
+        for (let object of objects) {
+            let other = u.wrapValue(this, object);
+            for (let key of other.keys())
+                merged.delete(key);
+            merged.addAll(other);
+        }
+        return merged;
     }
 };
 
 
 /***/ }),
-/* 66 */
+/* 68 */
+/***/ (() => {
+
+const u = up.util;
+const e = up.element;
+up.Preview = class Preview {
+    constructor({ fragment, request, renderOptions, cleaner }) {
+        this.fragment = fragment;
+        this.request = request;
+        this.renderOptions = renderOptions;
+        this._cleaner = cleaner;
+    }
+    undo(...args) {
+        if (this.ended) {
+            reportError(new up.Error('Preview used after end of request'));
+        }
+        else {
+            this._cleaner.guard(...args);
+        }
+    }
+    get origin() {
+        return this.request.origin;
+    }
+    get params() {
+        return this.request.params;
+    }
+    get layer() {
+        return this.request.layer;
+    }
+    get ended() {
+        return this.request.ended;
+    }
+    get expiredResponse() {
+        return this.renderOptions.expiredResponse;
+    }
+    get revalidating() {
+        return !!this.expiredResponse;
+    }
+    run(value, options = {}) {
+        for (let fn of up.status.resolvePreviewFns(value)) {
+            this.undo(up.error.guard(fn, this, options));
+        }
+    }
+    revert() {
+        this._cleaner.clean();
+    }
+    setAttrs(...args) {
+        let [element, attrs] = this._parseMutatorArgs(args, 'val', 'val');
+        this.undo(e.setAttrsTemp(element, attrs));
+    }
+    addClass(...args) {
+        let [element, klass] = this._parseMutatorArgs(args, 'val', 'val');
+        this.undo(e.addClassTemp(element, klass));
+    }
+    addClassBatch(elements, classes) {
+        for (let element of elements) {
+            for (let klass of classes) {
+                this.addClass(element, klass);
+            }
+        }
+    }
+    removeClass(...args) {
+        let [element, klass] = this._parseMutatorArgs(args, 'val', 'val');
+        this.undo(e.removeClassTemp(element, klass));
+    }
+    setStyle(...args) {
+        let [element, styles] = this._parseMutatorArgs(args, 'val', 'val');
+        this.undo(e.setStyleTemp(element, styles));
+    }
+    disable(...args) {
+        let [element] = this._parseMutatorArgs(args, 'val');
+        this.undo(up.form.disableTemp(element));
+    }
+    insert(...args) {
+        let [reference, position = 'beforeend', tempValue] = this._parseMutatorArgs(args, 'val', u.isAdjacentPosition, 'val');
+        this.undo(up.fragment.insertTemp(reference, position, tempValue));
+    }
+    show(...args) {
+        let [element] = this._parseMutatorArgs(args, 'val');
+        this.undo(e.showTemp(element));
+    }
+    hide(...args) {
+        let [element] = this._parseMutatorArgs(args, 'val');
+        this.undo(e.hideTemp(element));
+    }
+    hideContent(...args) {
+        let [parent] = this._parseMutatorArgs(args, 'val');
+        let wrapper = e.wrapChildren(parent);
+        e.hide(wrapper);
+        this.undo(() => e.unwrap(wrapper));
+    }
+    showPlaceholder(...args) {
+        let [parent, placeholderReference] = this._parseMutatorArgs(args, 'val', 'val');
+        let placeholderNodes = up.fragment.provideNodes(placeholderReference, { origin: this.origin });
+        up.puts('[up-placeholder]', 'Showing placeholder %o', placeholderReference);
+        if (parent) {
+            this.swapContent(parent, placeholderNodes);
+        }
+        else if (this.layer === 'new') {
+            this.openLayer(placeholderNodes, { closeAnimation: false });
+            this.renderOptions.openAnimation = false;
+        }
+    }
+    swapContent(...args) {
+        let [parent, newContent] = this._parseMutatorArgs(args, 'val', 'val');
+        this.hideContent(parent);
+        this.insert(parent, newContent);
+    }
+    openLayer(content, options = {}) {
+        let undoDismissValue = ':undo-preview';
+        let onDismiss = ({ value }) => {
+            if (value !== undoDismissValue)
+                this.request.abort({ reason: 'Preview overlay dismissed' });
+        };
+        up.layer.open({
+            ...u.pick(this.renderOptions, [...up.Layer.Overlay.VISUAL_KEYS, 'target']),
+            ...options,
+            content,
+            abort: false,
+            onDismiss
+        });
+        let overlay = up.layer.front;
+        this.undo(() => overlay.dismiss(undoDismissValue, { preventable: false }));
+        return overlay;
+    }
+    _parseMutatorArgs(args, ...specs) {
+        let [element, ...rest] = u.args(args, ...specs);
+        element = up.fragment.get(element, { layer: this.layer, origin: this.origin }) || this.fragment;
+        return [element, ...rest];
+    }
+};
+
+
+/***/ }),
+/* 69 */
 /***/ (() => {
 
 const e = up.element;
 const TRANSITION_DELAY = 300;
 up.ProgressBar = class ProgressBar {
     constructor() {
-        this.step = 0;
-        this.element = e.affix(document.body, 'up-progress-bar');
-        this.element.style.transition = `width ${TRANSITION_DELAY}ms ease-out`;
-        this.moveTo(0);
-        up.element.paint(this.element);
-        this.width = 31;
-        this.nextStep();
+        this._step = 0;
+        this._element = e.affix(document.body, 'up-progress-bar');
+        this._element.style.transition = `width ${TRANSITION_DELAY}ms ease-out`;
+        this._moveTo(0);
+        e.paint(this._element);
+        this._width = 31;
+        this._nextStep();
     }
-    nextStep() {
+    _nextStep() {
         let diff;
-        if (this.width < 80) {
+        if (this._width < 80) {
             if (Math.random() < 0.15) {
                 diff = 7 + (5 * Math.random());
             }
@@ -5670,51 +6529,51 @@ up.ProgressBar = class ProgressBar {
             }
         }
         else {
-            diff = 0.13 * (100 - this.width) * Math.random();
+            diff = 0.13 * (100 - this._width) * Math.random();
         }
-        this.moveTo(this.width + diff);
-        this.step++;
-        const nextStepDelay = TRANSITION_DELAY + (this.step * 40);
-        this.timeout = setTimeout(this.nextStep.bind(this), nextStepDelay);
+        this._moveTo(this._width + diff);
+        this._step++;
+        const nextStepDelay = TRANSITION_DELAY + (this._step * 40);
+        this.timeout = setTimeout(this._nextStep.bind(this), nextStepDelay);
     }
-    moveTo(width) {
-        this.width = width;
-        this.element.style.width = `${width}vw`;
+    _moveTo(width) {
+        this._width = width;
+        this._element.style.width = `${width}vw`;
     }
     destroy() {
         clearTimeout(this.timeout);
-        this.element.remove();
+        this._element.remove();
     }
     conclude() {
         clearTimeout(this.timeout);
-        this.moveTo(100);
+        this._moveTo(100);
         setTimeout(this.destroy.bind(this), TRANSITION_DELAY);
     }
 };
 
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (() => {
 
 const u = up.util;
 up.RenderOptions = (function () {
-    const GLOBAL_DEFAULTS = {
-        useHungry: true,
-        useKeep: true,
-        source: true,
-        saveScroll: true,
-        saveFocus: true,
-        focus: 'keep',
-        abort: 'target',
-        failOptions: true,
-    };
-    const PRELOAD_OVERRIDES = {
-        abort: false,
-        confirm: false,
+    const NO_PREVIEWS = {
+        preview: false,
+        disable: false,
+        placeholder: false,
         feedback: false,
-        cache: true,
-        background: true,
+    };
+    const NO_INPUT_INTERFERENCE = {
+        scroll: false,
+        focus: 'keep',
+        confirm: false,
+    };
+    const NO_MOTION = {
+        transition: false,
+        animation: false,
+        openAnimation: false,
+        closeAnimation: false,
     };
     const PREFLIGHT_KEYS = [
         'url',
@@ -5726,10 +6585,16 @@ up.RenderOptions = (function () {
         'fallback',
         'abort',
         'abortable',
+        'handleAbort',
         'confirm',
         'feedback',
+        'disable',
+        'placeholder',
+        'preview',
         'origin',
+        'originLayer',
         'baseLayer',
+        'navigate',
         'fail',
         'onError',
     ];
@@ -5739,7 +6604,6 @@ up.RenderOptions = (function () {
         'history',
         'source',
         'saveScroll',
-        'navigate',
     ]);
     const CONTENT_KEYS = [
         'url',
@@ -5758,21 +6622,35 @@ up.RenderOptions = (function () {
             return up.fragment.config.navigateOptions;
         }
     }
-    function preloadOverrides(options) {
-        if (options.preload) {
-            return PRELOAD_OVERRIDES;
+    function normalizeURL({ url }) {
+        if (url) {
+            return { url: u.normalizeURL(url) };
         }
+    }
+    function removeUsePrefix(options) {
+        u.renameKey(options, 'useData', 'data');
+        u.renameKey(options, 'useHungry', 'hungry');
+        u.renameKey(options, 'useKeep', 'keep');
     }
     function preprocess(options) {
         up.migrate.preprocessRenderOptions?.(options);
-        const defaults = u.merge(GLOBAL_DEFAULTS, navigateDefaults(options));
-        return u.merge(u.omit(defaults, LATE_KEYS), { defaults }, options, preloadOverrides(options));
+        up.layer.normalizeOptions(options);
+        removeUsePrefix(options);
+        const defaults = u.merge(up.fragment.config.renderOptions, navigateDefaults(options));
+        return u.merge(u.omit(defaults, LATE_KEYS), { defaults }, { inputDevice: up.event.inputDevice }, options, normalizeURL(options), rememberOriginLayer(options));
+    }
+    function rememberOriginLayer({ origin, originLayer }) {
+        if (origin && !originLayer) {
+            return {
+                originLayer: up.layer.get(origin),
+            };
+        }
     }
     function finalize(preprocessedOptions, lateDefaults) {
         return u.merge(preprocessedOptions.defaults, lateDefaults, preprocessedOptions);
     }
     function assertContentGiven(options) {
-        if (!u.some(CONTENT_KEYS, contentKey => u.isGiven(options[contentKey]))) {
+        if (!u.some(CONTENT_KEYS, (contentKey) => u.isGiven(options[contentKey]))) {
             if (options.defaultToEmptyContent) {
                 options.content = '';
             }
@@ -5793,18 +6671,22 @@ up.RenderOptions = (function () {
         return overrides;
     }
     function deriveFailOptions(preprocessedOptions) {
+        let markFailure = { didFail: true };
+        let overrides = failOverrides(preprocessedOptions);
         if (preprocessedOptions.failOptions) {
             return {
                 ...preprocessedOptions.defaults,
                 ...u.pick(preprocessedOptions, SHARED_KEYS),
-                ...failOverrides(preprocessedOptions),
-                ...{ failPrefixForced: true }
+                ...overrides,
+                didForceFailOptions: true,
+                ...markFailure,
             };
         }
         else {
             return {
                 ...preprocessedOptions,
-                ...failOverrides(preprocessedOptions),
+                ...overrides,
+                ...markFailure,
             };
         }
     }
@@ -5813,12 +6695,15 @@ up.RenderOptions = (function () {
         finalize,
         assertContentGiven,
         deriveFailOptions,
+        NO_PREVIEWS,
+        NO_MOTION,
+        NO_INPUT_INTERFERENCE,
     };
 })();
 
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (() => {
 
 up.RenderResult = class RenderResult extends up.Record {
@@ -5827,13 +6712,14 @@ up.RenderResult = class RenderResult extends up.Record {
             'fragments',
             'layer',
             'target',
-            'options',
+            'renderOptions',
             'finished',
         ];
     }
     defaults() {
         return {
             fragments: [],
+            finished: Promise.resolve(),
         };
     }
     get none() {
@@ -5842,36 +6728,32 @@ up.RenderResult = class RenderResult extends up.Record {
     get fragment() {
         return this.fragments[0];
     }
+    get ok() {
+        return !this.renderOptions.didFail;
+    }
+    static both(main, extension, mergeFinished = true) {
+        if (!extension) {
+            return main;
+        }
+        return new this({
+            ...main,
+            fragments: main.fragments.concat(extension.fragments),
+            finished: (mergeFinished && this.mergeFinished(main, extension))
+        });
+    }
+    static async mergeFinished(main, extension) {
+        return this.both(await main.finished, await extension.finished, false);
+    }
 };
 
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (() => {
 
 var _a;
 const u = up.util;
 up.Request = (_a = class Request extends up.Record {
-        constructor(options) {
-            super(options);
-            this.params = new up.Params(this.params);
-            if (this.wrapMethod == null) {
-                this.wrapMethod = up.network.config.wrapMethod;
-            }
-            this.normalize();
-            if ((this.target || this.layer || this.origin) && !options.basic) {
-                const layerLookupOptions = { origin: this.origin };
-                this.layer = up.layer.get(this.layer, layerLookupOptions);
-                this.failLayer = up.layer.get(this.failLayer || this.layer, layerLookupOptions);
-                this.context || (this.context = this.layer.context || {});
-                this.failContext || (this.failContext = this.failLayer.context || {});
-                this.mode || (this.mode = this.layer.mode);
-                this.failMode || (this.failMode = this.failLayer.mode);
-            }
-            this.deferred = u.newDeferred();
-            this.badResponseTime ?? (this.badResponseTime = u.evalOption(up.network.config.badResponseTime, this));
-            this.addAutoHeaders();
-        }
         keys() {
             return [
                 'method',
@@ -5893,69 +6775,106 @@ up.Request = (_a = class Request extends up.Record {
                 'failMode',
                 'failContext',
                 'origin',
-                'fragments',
+                'originLayer',
+                'originMode',
                 'builtAt',
                 'wrapMethod',
                 'contentType',
                 'payload',
-                'onQueued',
                 'onLoading',
                 'fail',
                 'abortable',
-                'badResponseTime',
+                'lateDelay',
+                'previews',
             ];
         }
         defaults() {
+            let config = up.network.config;
             return {
                 state: 'new',
                 abortable: true,
                 headers: {},
-                timeout: up.network.config.timeout,
+                timeout: config.timeout,
                 builtAt: new Date(),
+                previews: [],
+                wrapMethod: config.wrapMethod,
             };
         }
+        constructor(options) {
+            super(options);
+            this.params = new up.Params(this.params);
+            this._normalize();
+            if ((this.target || this.layer || this.origin) && !options.basic) {
+                const layerLookupOptions = { origin: this.origin };
+                this.layer = up.layer.get(this.layer, layerLookupOptions);
+                this.context ||= this.layer.context || {};
+                this.mode ||= this.layer.mode;
+                this.failLayer = up.layer.get(this.failLayer, layerLookupOptions);
+                this.failContext ||= this.failLayer?.context || {};
+                this.failMode ||= this.failLayer?.mode;
+                this.originLayer ||= up.layer.get(this.origin) || up.layer.current;
+                this.originMode ||= this.originLayer?.mode;
+            }
+            this.bindLayer = options.bindLayer || this.layer;
+            this._fragments = options.fragments;
+            this._bindFragments = options.bindFragments;
+            this._deferred = u.newDeferred();
+            this._setAutoHeaders();
+        }
+        get effectiveLateTime() {
+            if (this.background) {
+                return false;
+            }
+            else {
+                return this.lateDelay ?? u.evalOption(up.network.config.lateDelay, this);
+            }
+        }
+        isTimed() {
+            return u.isNumber(this.effectiveLateTime);
+        }
         get xhr() {
-            return this._xhr ?? (this._xhr = new XMLHttpRequest());
+            return this._xhr ??= new XMLHttpRequest();
         }
         get fragments() {
-            if (this._fragments) {
-                return this._fragments;
-            }
-            else if (this.target) {
-                let steps = up.fragment.parseTargetSteps(this.target);
-                let selectors = u.map(steps, 'selector');
-                let lookupOpts = { origin: this.origin, layer: this.layer };
-                return u.compact(u.map(selectors, (selector) => up.fragment.get(selector, lookupOpts)));
-            }
+            return (this._fragments ||= this._findFragments());
         }
-        set fragments(value) {
-            this._fragments = value;
+        _findFragments() {
+            let steps = up.fragment.parseTargetSteps(this.target);
+            let lookupOpts = { origin: this.origin, layer: this.layer };
+            let matches = u.map(steps, (step) => up.fragment.get(step.selector, lookupOpts));
+            return u.compact(matches);
+        }
+        get bindFragments() {
+            return this._bindFragments || this.fragments;
         }
         get fragment() {
             return this.fragments?.[0];
         }
-        normalize() {
+        _normalize() {
             this.method = u.normalizeMethod(this.method);
-            this.extractHashFromURL();
-            this.transferParamsToURL();
+            this._extractHashFromURL();
+            this._transferParamsToURL();
             this.url = u.normalizeURL(this.url);
         }
-        evictExpensiveAttrs() {
+        _evictExpensiveAttrs() {
             u.task(() => {
                 this.layer = undefined;
                 this.failLayer = undefined;
+                this.bindLayer = undefined;
                 this.origin = undefined;
-                this.fragments = undefined;
+                this.originLayer = undefined;
+                this._fragments = undefined;
+                this._bindFragments = undefined;
             });
         }
-        extractHashFromURL() {
+        _extractHashFromURL() {
             let match = this.url?.match(/^([^#]*)(#.+)$/);
             if (match) {
                 this.url = match[1];
                 return this.hash = match[2];
             }
         }
-        transferParamsToURL() {
+        _transferParamsToURL() {
             if (!this.url || this.allowsPayload() || u.isBlank(this.params)) {
                 return;
             }
@@ -5975,22 +6894,21 @@ up.Request = (_a = class Request extends up.Record {
             return u.evalAutoOption(this.cache, up.network.config.autoCache, this);
         }
         runQueuedCallbacks() {
-            u.always(this, () => this.evictExpensiveAttrs());
-            this.onQueued?.(this);
+            u.always(this, () => this._evictExpensiveAttrs());
         }
         load() {
             if (this.state !== 'new')
                 return;
-            if (this.emitLoad()) {
+            if (this._emitLoad()) {
                 this.state = 'loading';
-                this.normalize();
+                this._normalize();
                 this.onLoading?.();
                 this.expired = false;
                 new up.Request.XHRRenderer(this).buildAndSend({
-                    onload: () => this.onXHRLoad(),
-                    onerror: () => this.onXHRError(),
-                    ontimeout: () => this.onXHRTimeout(),
-                    onabort: () => this.onXHRAbort()
+                    onload: () => this._onXHRLoad(),
+                    onerror: () => this._onXHRError(),
+                    ontimeout: () => this._onXHRTimeout(),
+                    onabort: () => this._onXHRAbort()
                 });
                 return true;
             }
@@ -5998,7 +6916,12 @@ up.Request = (_a = class Request extends up.Record {
                 this.abort({ reason: 'Prevented by event listener' });
             }
         }
-        emitLoad() {
+        runPreviews(renderOptions) {
+            if (!this.ended && !this.fromCache) {
+                this._revertPreviews = up.status.runPreviews(this, renderOptions);
+            }
+        }
+        _emitLoad() {
             let event = this.emit('up:request:load', { log: ['Loading %s', this.description] });
             return !event.defaultPrevented;
         }
@@ -6006,56 +6929,67 @@ up.Request = (_a = class Request extends up.Record {
             up.network.abort();
             new up.Request.FormRenderer(this).buildAndSubmit();
         }
-        onXHRLoad() {
-            const response = this.extractResponseFromXHR();
+        _onXHRLoad() {
+            const response = this._extractResponseFromXHR();
             const log = 'Loaded ' + response.description;
             this.emit('up:request:loaded', { request: response.request, response, log });
             this.respondWith(response);
         }
-        onXHRError() {
-            this.setOfflineState('Network error');
+        _onXHRError() {
+            this._setOfflineState('Network error');
         }
-        onXHRTimeout() {
-            this.setOfflineState('Timeout');
+        _onXHRTimeout() {
+            this._setOfflineState('Timeout');
         }
-        onXHRAbort() {
-            this.setAbortedState();
+        _onXHRAbort() {
+            this._setAbortedState();
         }
         abort({ reason } = {}) {
-            if (this.setAbortedState(reason) && this._xhr) {
+            if (this._setAbortedState(reason) && this._xhr) {
                 this._xhr.abort();
             }
         }
-        setAbortedState(reason) {
-            if (this.isSettled())
+        _setAbortedState(reason) {
+            if (this.ended)
                 return;
             let message = 'Aborted request to ' + this.description + (reason ? ': ' + reason : '');
             this.state = 'aborted';
-            this.deferred.reject(new up.Aborted(message));
+            this._reject(new up.Aborted(message));
             this.emit('up:request:aborted', { log: message });
             return true;
         }
-        setOfflineState(reason) {
-            if (this.isSettled())
+        _setOfflineState(reason) {
+            if (this.ended)
                 return;
             let message = 'Cannot load request to ' + this.description + (reason ? ': ' + reason : '');
             this.state = 'offline';
-            this.deferred.reject(new up.Offline(message));
             this.emit('up:request:offline', { log: message });
+            this._reject(new up.Offline(message));
         }
         respondWith(response) {
             this.response = response;
-            if (this.isSettled())
+            if (this.ended)
                 return;
             this.state = 'loaded';
             if (response.ok) {
-                this.deferred.resolve(response);
+                this._resolve(response);
             }
             else {
-                this.deferred.reject(response);
+                this._reject(response);
             }
         }
-        isSettled() {
+        _resolve(response) {
+            this._onSettle();
+            this._deferred.resolve(response);
+        }
+        _reject(responseOrError) {
+            this._onSettle();
+            this._deferred.reject(responseOrError);
+        }
+        _onSettle() {
+            this._revertPreviews?.();
+        }
+        get ended() {
             return (this.state !== 'new') && (this.state !== 'loading') && (this.state !== 'tracking');
         }
         csrfHeader() {
@@ -6072,7 +7006,7 @@ up.Request = (_a = class Request extends up.Record {
         isCrossOrigin() {
             return u.isCrossOrigin(this.url);
         }
-        extractResponseFromXHR() {
+        _extractResponseFromXHR() {
             const responseAttrs = {
                 method: this.method,
                 url: this.url,
@@ -6082,6 +7016,7 @@ up.Request = (_a = class Request extends up.Record {
                 status: this.xhr.status,
                 title: up.protocol.titleFromXHR(this.xhr),
                 target: up.protocol.targetFromXHR(this.xhr),
+                openLayer: up.protocol.openLayerFromXHR(this.xhr),
                 acceptLayer: up.protocol.acceptLayerFromXHR(this.xhr),
                 dismissLayer: up.protocol.dismissLayerFromXHR(this.xhr),
                 eventPlans: up.protocol.eventPlansFromXHR(this.xhr),
@@ -6094,7 +7029,7 @@ up.Request = (_a = class Request extends up.Record {
             let urlFromResponse = up.protocol.locationFromXHR(this.xhr);
             if (urlFromResponse) {
                 if (!u.matchURLs(this.url, urlFromResponse)) {
-                    methodFromResponse || (methodFromResponse = 'GET');
+                    methodFromResponse ||= 'GET';
                 }
                 responseAttrs.url = urlFromResponse;
             }
@@ -6103,30 +7038,30 @@ up.Request = (_a = class Request extends up.Record {
             }
             return new up.Response(responseAttrs);
         }
-        buildEventEmitter(args) {
+        _buildEventEmitter(args) {
             return up.EventEmitter.fromEmitArgs(args, {
-                layer: this.layer,
+                layer: this.bindLayer,
                 request: this,
                 origin: this.origin
             });
         }
         emit(...args) {
-            return this.buildEventEmitter(args).emit();
+            return this._buildEventEmitter(args).emit();
         }
         assertEmitted(...args) {
-            this.buildEventEmitter(args).assertEmitted();
+            this._buildEventEmitter(args).assertEmitted();
         }
         get description() {
             return this.method + ' ' + this.url;
         }
-        isPartOfSubtree(subtreeElements) {
-            if (!this.fragments || !subtreeElements) {
-                return false;
-            }
-            subtreeElements = u.wrapList(subtreeElements);
-            return u.some(this.fragments, function (fragment) {
-                return u.some(subtreeElements, (subtreeElement) => subtreeElement.contains(fragment));
+        isBoundToSubtrees(subtreeRoots) {
+            subtreeRoots = u.wrapList(subtreeRoots);
+            return u.some(this.bindFragments, function (fragment) {
+                return u.some(subtreeRoots, (subtreeElement) => subtreeElement.contains(fragment));
             });
+        }
+        isBoundToLayers(layers) {
+            return u.contains(layers, this.bindLayer);
         }
         get age() {
             return new Date() - this.builtAt;
@@ -6134,17 +7069,20 @@ up.Request = (_a = class Request extends up.Record {
         header(name) {
             return this.headers[name];
         }
-        addAutoHeaders() {
-            for (let key of ['target', 'failTarget', 'mode', 'failMode', 'context', 'failContext']) {
-                this.addAutoHeader(up.protocol.headerize(key), this[key]);
+        _setAutoHeaders() {
+            for (let key of ['target', 'failTarget', 'mode', 'failMode', 'context', 'failContext', 'originMode']) {
+                this._setPropertyHeader(key);
             }
             let csrfHeader, csrfToken;
             if ((csrfHeader = this.csrfHeader()) && (csrfToken = this.csrfToken())) {
-                this.addAutoHeader(csrfHeader, csrfToken);
+                this._setAutoHeader(csrfHeader, csrfToken);
             }
-            this.addAutoHeader(up.protocol.headerize('version'), up.version);
+            this._setAutoHeader(up.protocol.headerize('version'), up.version);
         }
-        addAutoHeader(name, value) {
+        _setPropertyHeader(key) {
+            this._setAutoHeader(up.protocol.headerize(key), this[key]);
+        }
+        _setAutoHeader(name, value) {
             if (u.isMissing(value)) {
                 return;
             }
@@ -6152,6 +7090,16 @@ up.Request = (_a = class Request extends up.Record {
                 value = u.safeStringifyJSON(value);
             }
             this.headers[name] = value;
+        }
+        mergeIfUnsent(trackingRequest) {
+            if (this.state !== 'new')
+                return;
+            if (!this.target || !trackingRequest.target)
+                return;
+            let targetAtoms = up.fragment.splitTarget(this.target + ',' + trackingRequest.target);
+            this.target = u.uniq(targetAtoms).join(', ');
+            this._setPropertyHeader('target');
+            this._fragments = u.uniq([...this.fragments, ...trackingRequest.fragments]);
         }
         static tester(condition, { except } = {}) {
             let testFn;
@@ -6177,101 +7125,105 @@ up.Request = (_a = class Request extends up.Record {
         }
     },
     (() => {
-        u.delegate(_a.prototype, ['then', 'catch', 'finally'], function () { return this.deferred; });
+        u.delegatePromise(_a.prototype, function () { return this._deferred; });
     })(),
     _a);
 
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (() => {
 
 const u = up.util;
+class Route {
+    constructor() {
+        this.varyHeaders = new Set();
+        this.requests = [];
+    }
+    matchBest(newRequest) {
+        let matches = this.requests.filter((cachedRequest) => this.satisfies(cachedRequest, newRequest));
+        return u.last(matches);
+    }
+    delete(request) {
+        u.remove(this.requests, request);
+    }
+    put(request) {
+        this.requests.push(request);
+    }
+    updateVary(response) {
+        for (let headerName of response.varyHeaderNames) {
+            this.varyHeaders.add(headerName);
+        }
+    }
+    satisfies(cachedRequest, newRequest) {
+        if (cachedRequest === newRequest)
+            return true;
+        return u.every(this.varyHeaders, (varyHeader) => {
+            let cachedValue = cachedRequest.header(varyHeader);
+            let newValue = newRequest.header(varyHeader);
+            if (varyHeader === 'X-Up-Target' || varyHeader === 'X-Up-Fail-Target') {
+                if (!cachedValue)
+                    return true;
+                if (!newValue)
+                    return false;
+                let cachedTokens = up.fragment.splitTarget(cachedValue);
+                let newTokens = up.fragment.splitTarget(newValue);
+                return u.containsAll(cachedTokens, newTokens);
+            }
+            else {
+                return cachedValue === newValue;
+            }
+        });
+    }
+}
 up.Request.Cache = class Cache {
     constructor() {
         this.reset();
     }
     reset() {
-        this.varyInfo = {};
-        this.map = new Map();
-    }
-    cacheKey(request) {
-        let influencingHeaders = this.getPreviousInfluencingHeaders(request);
-        let varyPart = u.flatMap(influencingHeaders, (headerName) => [headerName, request.header(headerName)]);
-        return [request.description, ...varyPart].join(':');
-    }
-    getPreviousInfluencingHeaders(request) {
-        var _a, _b;
-        return ((_a = this.varyInfo)[_b = request.description] || (_a[_b] = new Set()));
+        this._routes = {};
+        this._requests = [];
     }
     get(request) {
-        request = this.wrap(request);
-        let cacheKey = this.cacheKey(request);
-        let cachedRequest = this.map.get(cacheKey);
+        request = this._wrap(request);
+        let route = this._getRoute(request);
+        let cachedRequest = route.matchBest(request);
         if (cachedRequest) {
-            if (this.isUsable(cachedRequest)) {
+            if (this._isUsable(cachedRequest)) {
                 return cachedRequest;
             }
             else {
-                this.map.delete(cacheKey);
+                this._delete(request, route);
             }
         }
-    }
-    get capacity() {
-        return up.network.config.cacheSize;
-    }
-    isUsable(request) {
-        return request.age < up.network.config.cacheEvictAge;
     }
     async put(request) {
-        request = this.wrap(request);
-        this.makeRoom();
-        let cacheKey = this.updateCacheKey(request);
-        this.map.set(cacheKey, request);
-    }
-    updateCacheKey(request) {
-        let oldCacheKey = this.cacheKey(request);
+        request = this._wrap(request);
+        let route = this._getRoute(request);
         let { response } = request;
-        if (response) {
-            this.mergePreviousHeaderNames(request, response);
-            let newCacheKey = this.cacheKey(request);
-            this.renameMapKey(oldCacheKey, newCacheKey);
-            return newCacheKey;
+        if (response)
+            route.updateVary(response);
+        let superseded = route.requests.filter((oldRequest) => route.satisfies(request, oldRequest));
+        for (let r of superseded) {
+            this._delete(r);
         }
-        else {
-            return oldCacheKey;
-        }
-    }
-    renameMapKey(oldKey, newKey) {
-        if (oldKey !== newKey && this.map.has(oldKey)) {
-            this.map.set(newKey, this.map.get(oldKey));
-            this.map.delete(oldKey);
-        }
-    }
-    mergePreviousHeaderNames(request, response) {
-        let headersInfluencingResponse = response.ownInfluncingHeaders;
-        if (headersInfluencingResponse.length) {
-            let previousInfluencingHeaders = this.getPreviousInfluencingHeaders(request);
-            for (let headerName of headersInfluencingResponse) {
-                previousInfluencingHeaders.add(headerName);
-            }
-        }
-    }
-    alias(existingCachedRequest, newRequest) {
-        existingCachedRequest = this.get(existingCachedRequest);
-        if (!existingCachedRequest)
-            return;
-        newRequest = this.wrap(newRequest);
-        this.track(existingCachedRequest, newRequest, { force: true });
-        this.put(newRequest);
-        return newRequest;
+        request.cacheRoute = route;
+        route.put(request);
+        this._requests.push(request);
+        this._limitSize();
     }
     async track(existingRequest, newRequest, options = {}) {
         newRequest.trackedRequest = existingRequest;
         newRequest.state = 'tracking';
-        let value = await u.always(existingRequest);
+        let value;
+        if (existingRequest.ended && existingRequest.response) {
+            value = existingRequest.response;
+        }
+        else {
+            value = await u.always(existingRequest);
+        }
         if (value instanceof up.Response) {
-            if (options.force || this.isCacheCompatible(existingRequest, newRequest)) {
+            if (options.force || existingRequest.cacheRoute.satisfies(existingRequest, newRequest)) {
                 newRequest.fromCache = true;
                 value = u.variant(value, { request: newRequest });
                 newRequest.respondWith(value);
@@ -6285,45 +7237,57 @@ up.Request.Cache = class Cache {
         }
         else {
             newRequest.state = existingRequest.state;
-            newRequest.deferred.reject(value);
+            newRequest._reject(value);
         }
     }
     willHaveSameResponse(existingRequest, newRequest) {
         return existingRequest === newRequest || existingRequest === newRequest.trackedRequest;
     }
-    delete(request) {
-        request = this.wrap(request);
-        let cacheKey = this.cacheKey(request);
-        this.map.delete(cacheKey);
-    }
     evict(condition = true, testerOptions) {
-        this.eachMatch(condition, testerOptions, (request) => this.delete(request));
+        this._eachMatch(condition, testerOptions, (request) => this._delete(request));
     }
     expire(condition = true, testerOptions) {
-        this.eachMatch(condition, testerOptions, (request) => request.expired = true);
+        this._eachMatch(condition, testerOptions, (request) => request.expired = true);
     }
-    makeRoom() {
-        while (this.map.size >= this.capacity) {
-            let oldestKey = this.map.keys().next().value;
-            this.map.delete(oldestKey);
+    reindex(request) {
+        this._delete(request);
+        delete request.cacheRoute;
+        this.put(request);
+    }
+    _delete(request) {
+        u.remove(this._requests, request);
+        request.cacheRoute?.delete(request);
+    }
+    _getRoute(request) {
+        return request.cacheRoute || (this._routes[request.description] ||= new Route());
+    }
+    _isUsable(request) {
+        return request.age < up.network.config.cacheEvictAge;
+    }
+    get currentSize() {
+        return this._requests.length;
+    }
+    get _capacity() {
+        return up.network.config.cacheSize;
+    }
+    _limitSize() {
+        for (let i = 0; i < (this.currentSize - this._capacity); i++) {
+            this._delete(this._requests[0]);
         }
     }
-    eachMatch(condition = true, testerOptions, fn) {
+    _eachMatch(condition = true, testerOptions, fn) {
         let tester = up.Request.tester(condition, testerOptions);
-        let results = u.filter(this.map.values(), tester);
+        let results = u.filter(this._requests, tester);
         u.each(results, fn);
     }
-    isCacheCompatible(request1, request2) {
-        return this.cacheKey(request1) === this.cacheKey(request2);
-    }
-    wrap(requestOrOptions) {
+    _wrap(requestOrOptions) {
         return u.wrapValue(up.Request, requestOrOptions);
     }
 };
 
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (() => {
 
 const u = up.util;
@@ -6332,73 +7296,70 @@ up.Request.Queue = class Queue {
         this.reset();
     }
     reset() {
-        this.queuedRequests = [];
-        this.currentRequests = [];
-        this.emittedLate = false;
+        this._queuedRequests = [];
+        this._currentRequests = [];
+        this._emittedLate = false;
     }
     get allRequests() {
-        return this.currentRequests.concat(this.queuedRequests);
+        return this._currentRequests.concat(this._queuedRequests);
     }
     asap(request) {
         request.runQueuedCallbacks();
-        u.always(request, responseOrError => this.onRequestSettled(request, responseOrError));
-        this.scheduleSlowTimer(request);
-        this.queueRequest(request);
-        u.microtask(() => this.poke());
+        u.always(request, () => this._onRequestSettled(request));
+        this._scheduleSlowTimer(request);
+        this._queueRequest(request);
+        queueMicrotask(() => this._poke());
     }
     promoteToForeground(request) {
         if (request.background) {
             request.background = false;
-            this.scheduleSlowTimer(request);
+            this._scheduleSlowTimer(request);
         }
     }
-    scheduleSlowTimer(request) {
-        let timeUntilLate = Math.max(request.badResponseTime - request.age, 0);
-        u.timer(timeUntilLate, () => this.checkLate());
+    _scheduleSlowTimer(request) {
+        if (!request.isTimed())
+            return;
+        let timeUntilLate = Math.max(request.effectiveLateTime - request.age);
+        u.timer(timeUntilLate, () => this._checkForLate());
     }
-    getMaxConcurrency() {
+    _getMaxConcurrency() {
         return u.evalOption(up.network.config.concurrency);
     }
-    hasConcurrencyLeft() {
-        const maxConcurrency = this.getMaxConcurrency();
-        return (maxConcurrency === -1) || (this.currentRequests.length < maxConcurrency);
+    _hasConcurrencyLeft() {
+        const maxConcurrency = this._getMaxConcurrency();
+        return (maxConcurrency === -1) || (this._currentRequests.length < maxConcurrency);
     }
     isBusy() {
-        return this.currentRequests.length > 0 || this.queuedRequests.length > 0;
+        return this._currentRequests.length > 0 || this._queuedRequests.length > 0;
     }
-    queueRequest(request) {
-        this.queuedRequests.push(request);
+    _queueRequest(request) {
+        this._queuedRequests.push(request);
     }
-    pluckNextRequest() {
-        let request = u.find(this.queuedRequests, request => !request.background);
-        request || (request = this.queuedRequests[0]);
-        return u.remove(this.queuedRequests, request);
+    _pluckNextRequest() {
+        let request = u.find(this._queuedRequests, (request) => !request.background);
+        request ||= this._queuedRequests[0];
+        return u.remove(this._queuedRequests, request);
     }
-    sendRequestNow(request) {
+    _sendRequestNow(request) {
         if (request.load()) {
-            this.currentRequests.push(request);
+            this._currentRequests.push(request);
         }
     }
-    onRequestSettled(request, responseOrError) {
-        u.remove(this.currentRequests, request) || u.remove(this.queuedRequests, request);
-        if ((responseOrError instanceof up.Response) && responseOrError.ok) {
-            up.network.registerAliasForRedirect(request, responseOrError);
-        }
-        this.checkLate();
-        u.microtask(() => this.poke());
+    _onRequestSettled(request) {
+        u.remove(this._currentRequests, request) || u.remove(this._queuedRequests, request);
+        queueMicrotask(() => this._poke());
+        u.task(() => this._checkForRecover());
     }
-    poke() {
+    _poke() {
         let request;
-        if (this.hasConcurrencyLeft() && (request = this.pluckNextRequest())) {
-            return this.sendRequestNow(request);
+        if (this._hasConcurrencyLeft() && (request = this._pluckNextRequest())) {
+            return this._sendRequestNow(request);
         }
     }
     abort(...args) {
-        let options = u.extractOptions(args);
-        let { except, reason, logOnce } = options;
-        let conditions = args[0] ?? true;
+        let [conditions = true, { except, reason, logOnce }] = u.args(args, 'val', 'options');
         let tester = up.Request.tester(conditions, { except });
-        for (let list of [this.currentRequests, this.queuedRequests]) {
+        for (let list of [this._currentRequests, this._queuedRequests]) {
             const abortableRequests = u.filter(list, tester);
             for (let abortableRequest of abortableRequests) {
                 if (logOnce) {
@@ -6410,28 +7371,31 @@ up.Request.Queue = class Queue {
             }
         }
     }
-    checkLate() {
-        const currentLate = this.isLate();
-        if (this.emittedLate !== currentLate) {
-            this.emittedLate = currentLate;
-            if (currentLate) {
-                up.emit('up:network:late', { log: 'Server is slow to respond' });
-            }
-            else {
-                up.emit('up:network:recover', { log: 'Slow requests were loaded' });
-            }
+    _checkForLate() {
+        if (!this._emittedLate && this._hasLateTimedRequests()) {
+            this._emittedLate = true;
+            up.emit('up:network:late', { log: 'Server is slow to respond' });
         }
     }
-    isLate() {
-        const allForegroundRequests = u.reject(this.allRequests, 'background');
+    _checkForRecover() {
+        if (this._emittedLate && !this._timedRequests.length) {
+            this._emittedLate = false;
+            up.emit('up:network:recover', { log: 'Slow requests were loaded' });
+        }
+    }
+    get _timedRequests() {
+        return this.allRequests.filter((request) => request.isTimed());
+    }
+    _hasLateTimedRequests() {
         const timerTolerance = 1;
-        return u.some(allForegroundRequests, (request) => request.age >= (request.badResponseTime - timerTolerance));
+        const isLate = (request) => request.age >= (request.effectiveLateTime - timerTolerance);
+        return u.some(this._timedRequests, isLate);
     }
 };
 
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (() => {
 
 const u = up.util;
@@ -6439,38 +7403,38 @@ const e = up.element;
 const HTML_FORM_METHODS = ['GET', 'POST'];
 up.Request.FormRenderer = class FormRenderer {
     constructor(request) {
-        this.request = request;
+        this._request = request;
     }
     buildAndSubmit() {
-        this.params = u.copy(this.request.params);
-        let action = this.request.url;
-        let { method } = this.request;
+        this.params = this._request.params.withoutBinaryEntries();
+        let action = this._request.url;
+        let { method } = this._request;
         const paramsFromQuery = up.Params.fromURL(action);
         this.params.addAll(paramsFromQuery);
         action = up.Params.stripURL(action);
         if (!u.contains(HTML_FORM_METHODS, method)) {
             method = up.protocol.wrapMethod(method, this.params);
         }
-        this.form = e.affix(document.body, 'form.up-request-loader', { method, action });
-        let contentType = this.request.contentType;
+        this._form = e.affix(document.body, 'form.up-request-loader', { method, action });
+        let contentType = this._request.contentType;
         if (contentType) {
-            this.form.setAttribute('enctype', contentType);
+            this._form.setAttribute('enctype', contentType);
         }
         let csrfParam, csrfToken;
-        if ((csrfParam = this.request.csrfParam()) && (csrfToken = this.request.csrfToken())) {
+        if ((csrfParam = this._request.csrfParam()) && (csrfToken = this._request.csrfToken())) {
             this.params.add(csrfParam, csrfToken);
         }
-        u.each(this.params.toArray(), this.addField.bind(this));
-        up.browser.submitForm(this.form);
+        u.each(this.params.toArray(), this._addField.bind(this));
+        up.browser.submitForm(this._form);
     }
-    addField(attrs) {
-        e.affix(this.form, 'input[type=hidden]', attrs);
+    _addField(attrs) {
+        e.affix(this._form, 'input[type=hidden]', attrs);
     }
 };
 
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (() => {
 
 var _a;
@@ -6479,73 +7443,73 @@ const CONTENT_TYPE_FORM_DATA = 'multipart/form-data';
 const u = up.util;
 up.Request.XHRRenderer = (_a = class XHRRenderer {
         constructor(request) {
-            this.request = request;
+            this._request = request;
         }
         buildAndSend(handlers) {
-            const xhr = this.request.xhr;
-            this.params = u.copy(this.request.params);
-            if (this.request.timeout) {
-                xhr.timeout = this.request.timeout;
+            const xhr = this._request.xhr;
+            this._params = u.copy(this._request.params);
+            if (this._request.timeout) {
+                xhr.timeout = this._request.timeout;
             }
-            xhr.open(this.getMethod(), this.request.url);
-            let contentType = this.getContentType();
+            xhr.open(this._getMethod(), this._request.url);
+            let contentType = this._getContentType();
             if (contentType) {
                 xhr.setRequestHeader('Content-Type', contentType);
             }
-            for (let headerName in this.request.headers) {
-                let headerValue = this.request.headers[headerName];
+            for (let headerName in this._request.headers) {
+                let headerValue = this._request.headers[headerName];
                 xhr.setRequestHeader(headerName, headerValue);
             }
             Object.assign(xhr, handlers);
-            xhr.send(this.getPayload());
+            xhr.send(this._getPayload());
         }
-        getMethod() {
-            if (!this.method) {
-                this.method = this.request.method;
-                if (this.request.wrapMethod && !this.request.will302RedirectWithGET()) {
-                    this.method = up.protocol.wrapMethod(this.method, this.params);
-                }
+        _getMethod() {
+            let method = this._request.method;
+            if (this._request.wrapMethod && !this._request.will302RedirectWithGET()) {
+                method = up.protocol.wrapMethod(method, this._params);
             }
-            return this.method;
+            return method;
         }
-        getContentType() {
-            this.finalizePayload();
-            return this.contentType;
+        _getContentType() {
+            this._finalizePayload();
+            return this._contentType;
         }
-        getPayload() {
-            this.finalizePayload();
-            return this.payload;
+        _getPayload() {
+            this._finalizePayload();
+            return this._payload;
         }
-        finalizePayload() {
-            this.payload = this.request.payload;
-            this.contentType = this.request.contentType;
-            if (!this.payload && this.request.allowsPayload()) {
-                if (!this.contentType) {
-                    this.contentType = this.params.hasBinaryValues() ? CONTENT_TYPE_FORM_DATA : CONTENT_TYPE_URL_ENCODED;
+        _finalizePayload() {
+            this._payload = this._request.payload;
+            this._contentType = this._request.contentType;
+            if (!this._payload && this._request.allowsPayload()) {
+                if (!this._contentType) {
+                    this._contentType = this._params.hasBinaryEntries() ? CONTENT_TYPE_FORM_DATA : CONTENT_TYPE_URL_ENCODED;
                 }
-                if (this.contentType === CONTENT_TYPE_FORM_DATA) {
-                    this.contentType = null;
-                    this.payload = this.params.toFormData();
+                if (this._contentType === CONTENT_TYPE_FORM_DATA) {
+                    this._contentType = null;
+                    this._payload = this._params.toFormData();
                 }
                 else {
-                    this.payload = this.params.toQuery().replace(/%20/g, '+');
+                    this._payload = this._params.toQuery().replace(/%20/g, '+');
                 }
             }
         }
     },
     (() => {
-        u.memoizeMethod(_a.prototype, [
-            'finalizePayload',
-        ]);
+        u.memoizeMethod(_a.prototype, {
+            _finalizePayload: true,
+            _getMethod: true,
+        });
     })(),
     _a);
 
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (() => {
 
 const u = up.util;
+const HTML_CONTENT_TYPE = /^(text\/html|application\/xhtml\+xml) *(;|$)/i;
 up.Response = class Response extends up.Record {
     keys() {
         return [
@@ -6557,6 +7521,7 @@ up.Response = class Response extends up.Record {
             'xhr',
             'target',
             'title',
+            'openLayer',
             'acceptLayer',
             'dismissLayer',
             'eventPlans',
@@ -6571,7 +7536,7 @@ up.Response = class Response extends up.Record {
     defaults() {
         return {
             headers: {},
-            loadedAt: new Date()
+            loadedAt: new Date(),
         };
     }
     get ok() {
@@ -6580,21 +7545,22 @@ up.Response = class Response extends up.Record {
     get none() {
         return !this.text;
     }
-    isCacheable() {
-        return this.ok && !this.none;
-    }
     header(name) {
         return this.headers[name] || this.xhr?.getResponseHeader(name);
     }
-    get ownInfluncingHeaders() {
-        let influencingHeaders = up.protocol.influencingHeadersFromResponse(this);
-        return u.filter(influencingHeaders, (headerName) => this.request.header(headerName));
+    get varyHeaderNames() {
+        let varyHeaderValue = this.header('Vary');
+        return u.getSimpleTokens(varyHeaderValue, { separator: ',' });
     }
     get contentType() {
         return this.header('Content-Type');
     }
-    get cspNonces() {
-        return up.protocol.cspNoncesFromHeader(this.header('Content-Security-Policy'));
+    isHTML() {
+        return HTML_CONTENT_TYPE.test(this.contentType);
+    }
+    get cspInfo() {
+        let policy = this.header('Content-Security-Policy') || this.header('Content-Security-Policy-Report-Only');
+        return up.protocol.cspInfoFromHeader(policy);
     }
     get lastModified() {
         let header = this.header('Last-Modified');
@@ -6606,7 +7572,7 @@ up.Response = class Response extends up.Record {
         return this.header('ETag');
     }
     get json() {
-        return this.parsedJSON || (this.parsedJSON = JSON.parse(this.text));
+        return this.parsedJSON ||= JSON.parse(this.text);
     }
     get age() {
         let now = new Date();
@@ -6619,124 +7585,248 @@ up.Response = class Response extends up.Record {
     get description() {
         return `HTTP ${this.status} response to ${this.request.description}`;
     }
+    get redirect() {
+        return (this.url !== this.request.url) || (this.method !== this.request.method);
+    }
+    get redirectRequest() {
+        if (!this.redirect)
+            return;
+        let finalRequest = u.variant(this.request, {
+            method: this.method,
+            url: this.url,
+            cacheRoute: null,
+        });
+        up.cache.track(this.request, finalRequest, { force: true });
+        return finalRequest;
+    }
 };
 
 
 /***/ }),
-/* 75 */
+/* 78 */
 /***/ (() => {
 
 var _a;
 const u = up.util;
 const e = up.element;
 up.ResponseDoc = (_a = class ResponseDoc {
-        constructor(options) {
-            this.root =
-                this.parseDocument(options) ||
-                    this.parseFragment(options) ||
-                    this.parseContent(options);
-            if (!up.fragment.config.runScripts) {
-                this.root.querySelectorAll('script').forEach((e) => e.remove());
-            }
-            this.cspNonces = options.cspNonces;
-            if (options.origin) {
-                let originSelector = up.fragment.tryToTarget(options.origin);
-                if (originSelector) {
-                    this.rediscoveredOrigin = this.select(originSelector);
-                }
-            }
-        }
-        parseDocument(options) {
-            let document = this.parse(options.document, e.createBrokenDocumentFromHTML);
+        constructor({ document, fragment, content, target, origin, data, cspInfo, match }) {
             if (document) {
-                this.scriptishNeedFix = true;
-                return document;
+                this._parseDocument(document, origin, data);
             }
-        }
-        parseContent(options) {
-            let content = options.content || '';
-            let target = options.target || up.fail("must pass a { target } when passing { content }");
-            target = u.map(up.fragment.parseTargetSteps(target), 'selector').join(',');
-            const matchingElement = e.createFromSelector(target);
-            if (u.isString(content)) {
-                matchingElement.innerHTML = content;
+            else if (fragment) {
+                this._parseFragment(fragment, origin, data);
             }
             else {
-                matchingElement.appendChild(content);
+                this._parseContent(content || '', origin, target, data);
             }
-            return matchingElement;
-        }
-        parseFragment(options) {
-            return this.parse(options.fragment);
-        }
-        parse(value, parseFn = e.createFromHTML) {
-            if (u.isString(value)) {
-                value = parseFn(value);
+            this._cspInfo = cspInfo || {};
+            if (origin) {
+                let originSelector = up.fragment.tryToTarget(origin);
+                if (originSelector) {
+                    this._rediscoveredOrigin = this.select(originSelector);
+                }
             }
-            return value;
+            this._match = match;
+        }
+        _parseDocument(value, origin, data) {
+            if (value instanceof Document) {
+                this._document = value;
+                this._isFullDocument = true;
+            }
+            else if (u.isString(value)) {
+                this._isFullDocument = e.isFullDocumentHTML(value);
+                let htmlParser = (html) => [e.createBrokenDocumentFromHTML(html)];
+                let nodes = up.fragment.provideNodes(value, { origin, data, htmlParser });
+                if (nodes[0] instanceof Document) {
+                    this._document = nodes[0];
+                }
+                else {
+                    this._document = this._buildFauxDocument(nodes);
+                }
+            }
+            else {
+                this._document = this._buildFauxDocument(value);
+            }
+        }
+        _parseFragment(value, origin, data) {
+            let element = e.extractSingular(up.fragment.provideNodes(value, { origin, data }));
+            this._document = this._buildFauxDocument(element);
+        }
+        _parseContent(value, origin, target, data) {
+            if (!target)
+                up.fail("must pass a { target } when passing { content }");
+            let simplifiedTarget = u.map(up.fragment.parseTargetSteps(target), 'selector').join();
+            let nodes = up.fragment.provideNodes(value, { origin, data });
+            let matchingElement = e.createFromSelector(simplifiedTarget, { content: nodes });
+            this._document = this._buildFauxDocument(matchingElement);
+        }
+        _buildFauxDocument(nodes) {
+            nodes = u.wrapList(nodes);
+            let fauxDocument = document.createElement('up-document');
+            fauxDocument.append(...nodes);
+            return fauxDocument;
         }
         rootSelector() {
-            return up.fragment.toTarget(this.root);
+            return up.fragment.toTarget(this._document.children[0]);
         }
-        getTitle() {
-            return this.root.querySelector('head title')?.textContent;
+        get title() {
+            return this._fromHead(this._getTitleText);
+        }
+        _getHead() {
+            if (this._isFullDocument) {
+                return this._document.head;
+            }
+        }
+        _fromHead(fn) {
+            let head = this._getHead();
+            return head && fn(head);
+        }
+        get metaTags() {
+            return this._fromHead(up.history.findMetaTags);
+        }
+        get assets() {
+            return this._fromHead((head) => {
+                let assets = up.script.findAssets(head);
+                return u.map(assets, (asset) => {
+                    this._adoptNoncesInSubtree(asset);
+                    let clone = this._reviveElementAsClone(asset);
+                    return clone;
+                });
+            });
+        }
+        get lang() {
+            if (this._isFullDocument) {
+                return up.history.getLang(this._document);
+            }
+        }
+        _getTitleText(head) {
+            return head.querySelector('title')?.textContent;
         }
         select(selector) {
             let finder = new up.FragmentFinder({
                 selector: selector,
-                origin: this.rediscoveredOrigin,
-                externalRoot: this.root,
+                origin: this._rediscoveredOrigin,
+                document: this._document,
+                match: this._match,
             });
             return finder.find();
         }
-        finalizeElement(element) {
-            up.NonceableCallback.adoptNonces(element, this.cspNonces);
-            if (this.scriptishNeedFix) {
-                element.querySelectorAll('noscript, script').forEach(e.fixScriptish);
+        selectSteps(steps) {
+            return steps.filter((step) => {
+                return this._trySelectStep(step) || this._cannotMatchStep(step);
+            });
+        }
+        commitSteps(steps) {
+            return steps.filter((step) => this.commitElement(step.newElement));
+        }
+        _trySelectStep(step) {
+            if (step.newElement) {
+                return true;
             }
+            let newElement = this.select(step.selector);
+            if (!newElement) {
+                return;
+            }
+            let { selectEvent } = step;
+            if (selectEvent) {
+                selectEvent.newFragment = newElement;
+                selectEvent.renderOptions = step.originalRenderOptions;
+                up.emit(step.oldElement, selectEvent, { callback: step.selectCallback });
+                if (selectEvent.defaultPrevented) {
+                    return;
+                }
+            }
+            step.newElement = newElement;
+            return true;
+        }
+        _cannotMatchStep(step) {
+            if (!step.maybe) {
+                throw new up.CannotMatch();
+            }
+        }
+        _disableScriptsInSubtree(element) {
+            let pageNonce = up.protocol.cspNonce();
+            up.script.disableSubtree(element, (script) => !this._isScriptAllowed(script, pageNonce));
+        }
+        _isScriptAllowed(scriptElement, pageNonce) {
+            let strategy = up.fragment.config.runScripts;
+            if (strategy === true && this._cspInfo.declaration?.includes("'strict-dynamic'")) {
+                return pageNonce && (pageNonce === scriptElement.nonce);
+            }
+            else {
+                return u.evalOption(strategy, scriptElement);
+            }
+        }
+        _reviveElementAsClone(element) {
+            return e.revivedClone(element);
+        }
+        _reviveSubtreeInPlace(element) {
+            if (this._document instanceof Document) {
+                for (let brokenElement of e.subtree(element, ':is(noscript, script, audio, video):not(.up-keeping, .up-keeping *)')) {
+                    let clone = this._reviveElementAsClone(brokenElement);
+                    brokenElement.replaceWith(clone);
+                }
+            }
+        }
+        _adoptNoncesInSubtree(element) {
+            up.script.adoptNoncesInSubtree(element, this._cspInfo.nonces);
+        }
+        commitElement(element) {
+            if (this._document.contains(element)) {
+                this._adoptNoncesInSubtree(element);
+                this._disableScriptsInSubtree(element);
+                element.remove();
+                return true;
+            }
+        }
+        finalizeElement(element) {
+            this._reviveSubtreeInPlace(element);
         }
     },
     (() => {
-        u.memoizeMethod(_a.prototype, 'getTitle');
+        u.memoizeMethod(_a.prototype, {
+            _getHead: true,
+        });
     })(),
     _a);
 
 
 /***/ }),
-/* 76 */
+/* 79 */
 /***/ (() => {
 
 const e = up.element;
 const u = up.util;
 up.RevealMotion = class RevealMotion {
     constructor(element, options = {}) {
-        this.element = element;
-        this.options = options;
-        this.viewport = e.get(this.options.viewport) || up.viewport.get(this.element);
-        this.obstructionsLayer = up.layer.get(this.viewport);
+        this._element = element;
+        this._viewport = e.get(options.viewport) || up.viewport.get(this._element);
+        this._obstructionsLayer = up.layer.get(this._viewport);
+        this._behavior = options.scrollBehavior ?? options.behavior ?? 'instant';
         const viewportConfig = up.viewport.config;
-        this.snap = this.options.snap ?? this.options.revealSnap ?? viewportConfig.revealSnap;
-        this.padding = this.options.padding ?? this.options.revealPadding ?? viewportConfig.revealPadding;
-        this.top = this.options.top ?? this.options.revealTop ?? viewportConfig.revealTop;
-        this.max = this.options.max ?? this.options.revealMax ?? viewportConfig.revealMax;
-        this.topObstructions = viewportConfig.fixedTop;
-        this.bottomObstructions = viewportConfig.fixedBottom;
+        this._snap = options.snap ?? options.revealSnap ?? viewportConfig.revealSnap;
+        this._padding = options.padding ?? options.revealPadding ?? viewportConfig.revealPadding;
+        this._top = options.top ?? options.revealTop ?? viewportConfig.revealTop;
+        this._max = options.max ?? options.revealMax ?? viewportConfig.revealMax;
+        this._topObstructionSelector = viewportConfig.selector('fixedTopSelectors');
+        this._bottomObstructionSelector = viewportConfig.selector('fixedBottomSelectors');
     }
     start() {
-        const viewportRect = this.getViewportRect(this.viewport);
-        const elementRect = up.Rect.fromElement(this.element);
-        if (this.max) {
-            const maxPixels = u.evalOption(this.max, this.element);
+        const viewportRect = this._getViewportRect(this._viewport);
+        const elementRect = up.Rect.fromElement(this._element);
+        if (this._max) {
+            const maxPixels = u.evalOption(this._max, this._element);
             elementRect.height = Math.min(elementRect.height, maxPixels);
         }
-        this.addPadding(elementRect);
-        this.substractObstructions(viewportRect);
+        elementRect.grow(this._padding);
+        this._substractObstructions(viewportRect);
         if (viewportRect.height < 0) {
             up.fail('Viewport has no visible area');
         }
-        const originalScrollTop = this.viewport.scrollTop;
+        const originalScrollTop = this._viewport.scrollTop;
         let newScrollTop = originalScrollTop;
-        if (this.top || (elementRect.height > viewportRect.height)) {
+        if (this._top || (elementRect.height > viewportRect.height)) {
             const diff = elementRect.top - viewportRect.top;
             newScrollTop += diff;
         }
@@ -6748,15 +7838,15 @@ up.RevealMotion = class RevealMotion {
         }
         else {
         }
-        if (u.isNumber(this.snap) && (newScrollTop < this.snap) && (elementRect.top < (0.5 * viewportRect.height))) {
+        if (u.isNumber(this._snap) && (newScrollTop < this._snap) && (elementRect.top < (0.5 * viewportRect.height))) {
             newScrollTop = 0;
         }
         if (newScrollTop !== originalScrollTop) {
-            this.viewport.scrollTo({ ...this.options, top: newScrollTop });
+            this._viewport.scrollTo({ top: newScrollTop, behavior: this._behavior });
         }
     }
-    getViewportRect() {
-        if (up.viewport.isRoot(this.viewport)) {
+    _getViewportRect() {
+        if (up.viewport.isRoot(this._viewport)) {
             return new up.Rect({
                 left: 0,
                 top: 0,
@@ -6765,28 +7855,30 @@ up.RevealMotion = class RevealMotion {
             });
         }
         else {
-            return up.Rect.fromElement(this.viewport);
+            return up.Rect.fromElement(this._viewport);
         }
     }
-    addPadding(elementRect) {
-        elementRect.top -= this.padding;
-        elementRect.height += 2 * this.padding;
+    _computeObstructionRects(selector) {
+        let elements = up.fragment.all(selector, { layer: this._obstructionsLayer });
+        elements = u.filter(elements, e.isVisible);
+        return u.map(elements, (element) => {
+            if (e.style(element, 'position') === 'sticky') {
+                return up.Rect.fromElementAsFixed(element);
+            }
+            else {
+                return up.Rect.fromElement(element);
+            }
+        });
     }
-    selectObstructions(selectors) {
-        let elements = up.fragment.all(selectors.join(','), { layer: this.obstructionsLayer });
-        return u.filter(elements, e.isVisible);
-    }
-    substractObstructions(viewportRect) {
-        for (let obstruction of this.selectObstructions(this.topObstructions)) {
-            let obstructionRect = up.Rect.fromElement(obstruction);
+    _substractObstructions(viewportRect) {
+        for (let obstructionRect of this._computeObstructionRects(this._topObstructionSelector)) {
             let diff = obstructionRect.bottom - viewportRect.top;
             if (diff > 0) {
                 viewportRect.top += diff;
                 viewportRect.height -= diff;
             }
         }
-        for (let obstruction of this.selectObstructions(this.bottomObstructions)) {
-            let obstructionRect = up.Rect.fromElement(obstruction);
+        for (let obstructionRect of this._computeObstructionRects(this._bottomObstructionSelector)) {
             let diff = viewportRect.bottom - obstructionRect.top;
             if (diff > 0) {
                 viewportRect.height -= diff;
@@ -6797,48 +7889,76 @@ up.RevealMotion = class RevealMotion {
 
 
 /***/ }),
-/* 77 */
+/* 80 */
 /***/ (() => {
 
 const u = up.util;
+const e = up.element;
 up.Selector = class Selector {
-    constructor(selectors, filters = []) {
-        this.selectors = selectors;
-        this.filters = filters;
-        this.unionSelector = this.selectors.join(',') || 'match-none';
+    constructor(selector, elementOrDocument, options = {}) {
+        this._filters = [];
+        let matchingInExternalDocument = elementOrDocument && !document.contains(elementOrDocument);
+        if (!matchingInExternalDocument && !options.destroying) {
+            this._filters.push(up.fragment.isNotDestroying);
+        }
+        this._ignoreLayers = matchingInExternalDocument || options.layer === 'any' || up.layer.count === 1;
+        let expandTargetLayer;
+        if (this._ignoreLayers) {
+            expandTargetLayer = up.layer.root;
+        }
+        else {
+            options.layer ??= u.presence(elementOrDocument, u.isElement);
+            this._layers = up.layer.getAll(options);
+            if (!this._layers.length)
+                throw new up.CannotMatch(["Unknown layer: %o", options.layer]);
+            this._filters.push((match) => u.some(this._layers, (layer) => layer.contains(match)));
+            expandTargetLayer = this._layers[0];
+        }
+        this._selectors = up.fragment.expandTargets(selector, { ...options, layer: expandTargetLayer });
+        this._unionSelector = this._selectors.join() || 'match-none';
     }
     matches(element) {
-        return element.matches(this.unionSelector) && this.passesFilter(element);
+        return e.elementLikeMatches(element, this._unionSelector) && this._passesFilter(element);
     }
     closest(element) {
-        let parentElement;
-        if (this.matches(element)) {
-            return element;
-        }
-        else if (parentElement = element.parentElement) {
-            return this.closest(parentElement);
-        }
+        return this._filterOne(element.closest(this._unionSelector));
     }
-    passesFilter(element) {
-        return u.every(this.filters, filter => filter(element));
+    descendants(root = document) {
+        return this._filterMany(root.querySelectorAll(this._unionSelector));
     }
-    descendants(root) {
-        const results = u.flatMap(this.selectors, selector => root.querySelectorAll(selector));
-        return u.filter(results, element => this.passesFilter(element));
+    firstDescendant(root) {
+        if (this._ignoreLayers) {
+            root ||= document;
+            return this._firstSelectorMatch((selector) => root.querySelectorAll(selector));
+        }
+        else {
+            return u.findResult(this._layers, (layer) => {
+                return this._firstSelectorMatch((selector) => e.subtree(layer.element, selector));
+            });
+        }
     }
     subtree(root) {
-        const results = [];
-        if (!(root instanceof Document) && this.matches(root)) {
-            results.push(root);
-        }
-        results.push(...this.descendants(root));
-        return results;
+        return this._filterMany(e.subtree(root, this._unionSelector));
+    }
+    _firstSelectorMatch(fn) {
+        return u.findResult(this._selectors, (selector) => {
+            return this._filterMany(fn(selector))[0];
+        });
+    }
+    _passesFilter(element) {
+        return element && u.every(this._filters, (filter) => filter(element));
+    }
+    _filterOne(element) {
+        return u.presence(element, this._passesFilter.bind(this));
+    }
+    _filterMany(elements) {
+        return u.filter(elements, this._passesFilter.bind(this));
     }
 };
 
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (() => {
 
 const u = up.util;
@@ -6846,52 +7966,52 @@ const e = up.element;
 up.Tether = class Tether {
     constructor(options) {
         up.migrate.handleTetherOptions?.(options);
-        this.anchor = options.anchor;
-        this.align = options.align;
-        this.position = options.position;
-        this.alignAxis = (this.position === 'top') || (this.position === 'bottom') ? 'horizontal' : 'vertical';
-        this.viewport = up.viewport.get(this.anchor);
-        this.parent = this.viewport === e.root ? document.body : this.viewport;
-        this.syncOnScroll = !this.viewport.contains(this.anchor.offsetParent);
+        this._anchor = options.anchor;
+        this._align = options.align;
+        this._position = options.position;
+        this._alignAxis = (this._position === 'top') || (this._position === 'bottom') ? 'horizontal' : 'vertical';
+        this._viewport = up.viewport.get(this._anchor);
+        this.parent = this._viewport === e.root ? document.body : this._viewport;
+        this._syncOnScroll = !this._viewport.contains(this._anchor.offsetParent);
     }
     start(element) {
-        this.element = element;
-        this.element.style.position = 'absolute';
-        this.setOffset(0, 0);
+        this._element = element;
+        this._element.style.position = 'absolute';
+        this._setOffset(0, 0);
         this.sync();
-        this.changeEventSubscription('on');
+        this._changeEventSubscription('on');
     }
     stop() {
-        this.changeEventSubscription('off');
+        this._changeEventSubscription('off');
     }
-    changeEventSubscription(fn) {
-        let doScheduleSync = this.scheduleSync.bind(this);
+    _changeEventSubscription(fn) {
+        let doScheduleSync = this._scheduleSync.bind(this);
         up[fn](window, 'resize', doScheduleSync);
-        if (this.syncOnScroll) {
-            up[fn](this.viewport, 'scroll', doScheduleSync);
+        if (this._syncOnScroll) {
+            up[fn](this._viewport, 'scroll', doScheduleSync);
         }
     }
-    scheduleSync() {
+    _scheduleSync() {
         clearTimeout(this.syncTimer);
         return this.syncTimer = u.task(this.sync.bind(this));
     }
     isDetached() {
-        return !this.parent.isConnected || !this.anchor.isConnected;
+        return !this.parent.isConnected || !this._anchor.isConnected;
     }
     sync() {
-        const elementBox = this.element.getBoundingClientRect();
+        const elementBox = this._element.getBoundingClientRect();
         const elementMargin = {
-            top: e.styleNumber(this.element, 'marginTop'),
-            right: e.styleNumber(this.element, 'marginRight'),
-            bottom: e.styleNumber(this.element, 'marginBottom'),
-            left: e.styleNumber(this.element, 'marginLeft')
+            top: e.styleNumber(this._element, 'margin-top'),
+            right: e.styleNumber(this._element, 'margin-right'),
+            bottom: e.styleNumber(this._element, 'margin-bottom'),
+            left: e.styleNumber(this._element, 'margin-left')
         };
-        const anchorBox = this.anchor.getBoundingClientRect();
+        const anchorBox = this._anchor.getBoundingClientRect();
         let left;
         let top;
-        switch (this.alignAxis) {
+        switch (this._alignAxis) {
             case 'horizontal': {
-                switch (this.position) {
+                switch (this._position) {
                     case 'top':
                         top = anchorBox.top - elementMargin.bottom - elementBox.height;
                         break;
@@ -6899,7 +8019,7 @@ up.Tether = class Tether {
                         top = anchorBox.top + anchorBox.height + elementMargin.top;
                         break;
                 }
-                switch (this.align) {
+                switch (this._align) {
                     case 'left':
                         left = anchorBox.left + elementMargin.left;
                         break;
@@ -6913,7 +8033,7 @@ up.Tether = class Tether {
                 break;
             }
             case 'vertical': {
-                switch (this.align) {
+                switch (this._align) {
                     case 'top':
                         top = anchorBox.top + elementMargin.top;
                         break;
@@ -6924,7 +8044,7 @@ up.Tether = class Tether {
                         top = (anchorBox.top + anchorBox.height) - elementBox.height - elementMargin.bottom;
                         break;
                 }
-                switch (this.position) {
+                switch (this._position) {
                     case 'left':
                         left = anchorBox.left - elementMargin.right - elementBox.width;
                         break;
@@ -6936,39 +8056,38 @@ up.Tether = class Tether {
             }
         }
         if (u.isDefined(left) || u.isDefined(top)) {
-            this.moveTo(left, top);
+            this._moveTo(left, top);
         }
         else {
-            up.fail('Invalid tether constraints: %o', this.describeConstraints());
+            up.fail('Invalid tether constraints: %o', this._describeConstraints());
         }
     }
-    describeConstraints() {
-        return { position: this.position, align: this.align };
+    _describeConstraints() {
+        return { position: this._position, align: this._align };
     }
-    moveTo(targetLeft, targetTop) {
-        const elementBox = this.element.getBoundingClientRect();
-        this.setOffset((targetLeft - elementBox.left) + this.offsetLeft, (targetTop - elementBox.top) + this.offsetTop);
+    _moveTo(targetLeft, targetTop) {
+        const elementBox = this._element.getBoundingClientRect();
+        this._setOffset((targetLeft - elementBox.left) + this.offsetLeft, (targetTop - elementBox.top) + this.offsetTop);
     }
-    setOffset(left, top) {
+    _setOffset(left, top) {
         this.offsetLeft = left;
         this.offsetTop = top;
-        e.setStyle(this.element, { left, top });
+        e.setStyle(this._element, { left, top }, 'px');
     }
 };
 
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (() => {
 
 const u = up.util;
 up.URLPattern = class URLPattern {
-    constructor(fullPattern, normalizeURL = u.normalizeURL) {
-        this.normalizeURL = normalizeURL;
-        this.groups = [];
+    constructor(fullPattern) {
+        this._groups = [];
         const positiveList = [];
         const negativeList = [];
-        for (let pattern of u.parseTokens(fullPattern)) {
+        for (let pattern of u.getSimpleTokens(fullPattern)) {
             if (pattern[0] === '-') {
                 negativeList.push(pattern.substring(1));
             }
@@ -6976,33 +8095,27 @@ up.URLPattern = class URLPattern {
                 positiveList.push(pattern);
             }
         }
-        this.positiveRegexp = this.buildRegexp(positiveList, true);
-        this.negativeRegexp = this.buildRegexp(negativeList, false);
+        this._positiveRegexp = this._buildRegexp(positiveList, true);
+        this._negativeRegexp = this._buildRegexp(negativeList, false);
     }
-    buildRegexp(list, capture) {
+    _buildRegexp(list, capture) {
         if (!list.length) {
             return;
         }
-        list = list.map((url) => {
-            if (url[0] === '*') {
-                url = '/' + url;
-            }
-            url = this.normalizeURL(url);
-            url = u.escapeRegExp(url);
-            return url;
-        });
+        list = u.flatMap(list, u.matchableURLPatternAtom);
+        list = list.map(u.escapeRegExp);
         let reCode = list.join('|');
         reCode = reCode.replace(/\\\*/g, '.*?');
         reCode = reCode.replace(/(:|\\\$)([a-z][\w-]*)/ig, (match, type, name) => {
             if (type === '\\$') {
                 if (capture) {
-                    this.groups.push({ name, cast: Number });
+                    this._groups.push({ name, cast: Number });
                 }
                 return '(\\d+)';
             }
             else {
                 if (capture) {
-                    this.groups.push({ name, cast: String });
+                    this._groups.push({ name, cast: String });
                 }
                 return '([^/?#]+)';
             }
@@ -7011,18 +8124,18 @@ up.URLPattern = class URLPattern {
     }
     test(url, doNormalize = true) {
         if (doNormalize) {
-            url = this.normalizeURL(url);
+            url = u.matchableURL(url);
         }
-        return this.positiveRegexp.test(url) && !this.isExcluded(url);
+        return this._positiveRegexp.test(url) && !this._isExcluded(url);
     }
     recognize(url, doNormalize = true) {
         if (doNormalize) {
-            url = this.normalizeURL(url);
+            url = u.matchableURL(url);
         }
-        let match = this.positiveRegexp.exec(url);
-        if (match && !this.isExcluded(url)) {
+        let match = this._positiveRegexp.exec(url);
+        if (match && !this._isExcluded(url)) {
             const resolution = {};
-            this.groups.forEach((group, groupIndex) => {
+            this._groups.forEach((group, groupIndex) => {
                 let value = match[groupIndex + 1];
                 if (value) {
                     return resolution[group.name] = group.cast(value);
@@ -7031,14 +8144,14 @@ up.URLPattern = class URLPattern {
             return resolution;
         }
     }
-    isExcluded(url) {
-        return this.negativeRegexp?.test(url);
+    _isExcluded(url) {
+        return this._negativeRegexp?.test(url);
     }
 };
 
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (() => {
 
 up.framework = (function () {
@@ -7046,7 +8159,7 @@ up.framework = (function () {
     function emitReset() {
         up.emit('up:framework:reset', { log: false });
     }
-    function boot() {
+    function boot({ mode = 'manual' } = {}) {
         if (readyState !== 'configuring') {
             console.error('Unpoly has already booted');
             return;
@@ -7054,20 +8167,19 @@ up.framework = (function () {
         let issue = supportIssue();
         if (!issue) {
             readyState = 'booting';
-            up.emit('up:framework:boot', { log: false });
+            up.emit('up:framework:boot', { mode, log: false });
             readyState = 'booted';
-            up.emit('up:framework:booted', { log: false });
+            up.emit('up:framework:booted', { mode, log: false });
         }
         else {
             console.error("Unpoly cannot boot: %s", issue);
         }
     }
-    function mustBootManually() {
-        let unpolyScript = document.currentScript;
-        if (unpolyScript?.async) {
+    function mustManualBoot() {
+        if (document.currentScript?.async) {
             return true;
         }
-        if (unpolyScript?.getAttribute('up-boot') === 'manual') {
+        if (document.querySelector('[up-boot=manual]:is(html, script)')) {
             return true;
         }
         if (document.readyState === 'complete') {
@@ -7076,11 +8188,11 @@ up.framework = (function () {
     }
     function onEvaled() {
         up.emit('up:framework:evaled', { log: false });
-        if (mustBootManually()) {
+        if (mustManualBoot()) {
             console.debug('Call up.boot() after you have configured Unpoly');
         }
         else {
-            document.addEventListener('DOMContentLoaded', boot);
+            document.addEventListener('DOMContentLoaded', () => boot({ mode: 'auto' }));
         }
         readyState = 'configuring';
     }
@@ -7097,13 +8209,18 @@ up.framework = (function () {
         return !supportIssue();
     }
     function supportIssue() {
-        for (let feature of ['URL', 'Proxy', 'Promise', 'DOMParser', 'FormData']) {
+        for (let feature of ['Promise', 'DOMParser', 'FormData', 'reportError']) {
             if (!window[feature]) {
                 return `Browser doesn't support the ${feature} API`;
             }
         }
         if (document.compatMode === 'BackCompat') {
             return 'Browser is in quirks mode (missing DOCTYPE?)';
+        }
+        for (let selector of [':is(*)', ':has(*)']) {
+            if (!CSS.supports(`selector(${selector})`)) {
+                return `Browser doesn't support the ${selector} selector`;
+            }
         }
     }
     return {
@@ -7122,7 +8239,7 @@ up.boot = up.framework.boot;
 
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (() => {
 
 up.event = (function () {
@@ -7138,6 +8255,12 @@ up.event = (function () {
     function on(...args) {
         return buildListenerGroup(args).bind();
     }
+    function onAncestor(fragment, eventType, callback) {
+        let guard = (event) => event.target.contains(fragment);
+        let unsubscribe = up.on(eventType, { guard }, callback);
+        up.destructor(fragment, unsubscribe);
+        return unsubscribe;
+    }
     function off(...args) {
         return buildListenerGroup(args).unbind();
     }
@@ -7152,9 +8275,8 @@ up.event = (function () {
     }
     function build(...args) {
         const props = u.extractOptions(args);
-        const type = args[0] || props.type || up.fail('Expected event type to be passed as string argument or { type } property');
-        const event = document.createEvent('Event');
-        event.initEvent(type, true, true);
+        const type = args[0] || props.type || up.fail('Missing event type');
+        const event = new Event(type, { bubbles: true, cancelable: true });
         Object.assign(event, u.omit(props, ['type', 'target']));
         return event;
     }
@@ -7175,12 +8297,14 @@ up.event = (function () {
         event.preventDefault();
     }
     const keyModifiers = ['metaKey', 'shiftKey', 'ctrlKey', 'altKey'];
-    function isUnmodified(event) {
-        return (u.isUndefined(event.button) || (event.button === 0)) &&
-            !u.some(keyModifiers, modifier => event[modifier]);
+    function isModified(event) {
+        return (event.button > 0) || u.some(keyModifiers, (modifier) => event[modifier]);
+    }
+    function isSyntheticClick(event) {
+        return u.isMissing(event.clientX);
     }
     function fork(originalEvent, newType, copyKeys = []) {
-        const newEvent = up.event.build(newType, u.pick(originalEvent, copyKeys));
+        const newEvent = build(newType, u.pick(originalEvent, copyKeys));
         newEvent.originalEvent = originalEvent;
         ['stopPropagation', 'stopImmediatePropagation', 'preventDefault'].forEach(function (key) {
             const originalMethod = newEvent[key];
@@ -7195,7 +8319,7 @@ up.event = (function () {
         return newEvent;
     }
     function executeEmitAttr(event, element) {
-        if (!isUnmodified(event)) {
+        if (isModified(event)) {
             return;
         }
         const eventType = e.attr(element, 'up-emit');
@@ -7204,19 +8328,32 @@ up.event = (function () {
         Object.assign(forkedEvent, eventProps);
         up.emit(element, forkedEvent);
     }
-    on('up:click', 'a[up-emit]', executeEmitAttr);
+    on('up:click', '[up-emit]', executeEmitAttr);
+    let inputDevices = ['unknown'];
+    function getInputDevice() {
+        return u.last(inputDevices);
+    }
+    function observeInputDevice(newModality) {
+        inputDevices.push(newModality);
+        setTimeout(() => inputDevices.pop());
+    }
+    on('keydown keyup', { capture: true }, () => observeInputDevice('key'));
+    on('pointerdown pointerup', { capture: true }, () => observeInputDevice('pointer'));
     on('up:framework:reset', reset);
     return {
         on,
+        onAncestor,
         off,
         build,
         emit,
         assertEmitted,
         onEscape,
         halt,
-        isUnmodified,
+        isModified,
+        isSyntheticClick,
         fork,
         keyModifiers,
+        get inputDevice() { return getInputDevice(); }
     };
 })();
 up.on = up.event.on;
@@ -7225,14 +8362,14 @@ up.emit = up.event.emit;
 
 
 /***/ }),
-/* 82 */
+/* 85 */
 /***/ (() => {
 
 up.protocol = (function () {
     const u = up.util;
     const e = up.element;
     const headerize = function (camel) {
-        const header = camel.replace(/(^.|[A-Z])/g, char => '-' + char.toUpperCase());
+        const header = camel.replace(/(^.|[A-Z])/g, (char) => '-' + char.toUpperCase());
         return 'X-Up' + header;
     };
     const extractHeader = function (xhr, shortHeader, parseFn = u.identity) {
@@ -7259,32 +8396,34 @@ up.protocol = (function () {
         return extractHeader(xhr, 'expireCache') || up.migrate.clearCacheFromXHR?.(xhr);
     }
     function contextFromXHR(xhr) {
-        return extractHeader(xhr, 'context', JSON.parse);
+        return extractHeader(xhr, 'context', u.parseRelaxedJSON);
     }
     function methodFromXHR(xhr) {
         return extractHeader(xhr, 'method', u.normalizeMethod);
     }
     function titleFromXHR(xhr) {
-        return up.migrate.titleFromXHR?.(xhr) ?? extractHeader(xhr, 'title', JSON.parse);
+        return up.migrate.titleFromXHR?.(xhr) ?? extractHeader(xhr, 'title', u.parseRelaxedJSON);
     }
     function eventPlansFromXHR(xhr) {
-        return extractHeader(xhr, 'events', JSON.parse);
+        return extractHeader(xhr, 'events', u.parseRelaxedJSON);
+    }
+    function openLayerFromXHR(xhr) {
+        return extractHeader(xhr, 'openLayer', u.parseRelaxedJSON);
     }
     function acceptLayerFromXHR(xhr) {
-        return extractHeader(xhr, 'acceptLayer', JSON.parse);
+        return extractHeader(xhr, 'acceptLayer', u.parseRelaxedJSON);
     }
     function dismissLayerFromXHR(xhr) {
-        return extractHeader(xhr, 'dismissLayer', JSON.parse);
+        return extractHeader(xhr, 'dismissLayer', u.parseRelaxedJSON);
     }
     const initialRequestMethod = u.memoize(function () {
         return u.normalizeMethod(up.browser.popCookie('_up_method'));
     });
     function locationFromXHR(xhr) {
-        return extractHeader(xhr, 'location') || xhr.responseURL;
-    }
-    function influencingHeadersFromResponse(response) {
-        let varyHeaderValue = response.header('Vary');
-        return u.parseTokens(varyHeaderValue, { separator: 'comma' });
+        let location = extractHeader(xhr, 'location') || xhr.responseURL;
+        if (location) {
+            return u.normalizeURL(location);
+        }
     }
     const config = new up.Config(() => ({
         methodParam: '_method',
@@ -7292,16 +8431,7 @@ up.protocol = (function () {
         csrfToken() { return e.metaContent('csrf-token'); },
         cspNonce() { return e.metaContent('csp-nonce'); },
         csrfHeader: 'X-CSRF-Token',
-        nonceableAttributes: [
-            'up-watch',
-            'up-on-accepted',
-            'up-on-dismissed',
-            'up-on-loaded',
-            'up-on-rendered',
-            'up-on-finished',
-            'up-on-error',
-            'up-on-offlne',
-        ],
+        maxHeaderSize: 2048,
     }));
     function csrfHeader() {
         return u.evalOption(config.csrfHeader);
@@ -7315,37 +8445,38 @@ up.protocol = (function () {
     function cspNonce() {
         return u.evalOption(config.cspNonce);
     }
-    function cspNoncesFromHeader(cspHeader) {
-        let nonces = [];
+    const NONCE_PATTERN = /'nonce-([^']+)'/g;
+    function findNonces(cspPart) {
+        let matches = cspPart.matchAll(NONCE_PATTERN);
+        return u.map(matches, '1');
+    }
+    function cspInfoFromHeader(cspHeader) {
+        let results = {};
         if (cspHeader) {
-            let parts = cspHeader.split(/\s*;\s*/);
-            for (let part of parts) {
-                if (part.indexOf('script-src') === 0) {
-                    let noncePattern = /'nonce-([^']+)'/g;
-                    let match;
-                    while (match = noncePattern.exec(part)) {
-                        nonces.push(match[1]);
-                    }
+            let declarations = cspHeader.split(/\s*;\s*/);
+            for (let declaration of declarations) {
+                let directive = declaration.match(/^(script|default)-src\s/)?.[1];
+                if (directive) {
+                    results[directive] = {
+                        declaration: declaration,
+                        nonces: findNonces(declaration)
+                    };
                 }
             }
         }
-        return nonces;
+        return results.script || results.default || {};
     }
     function wrapMethod(method, params) {
         params.add(config.methodParam, method);
         return 'POST';
     }
-    function reset() {
-        config.reset();
-    }
-    up.on('up:framework:reset', reset);
     return {
         config,
-        reset,
         locationFromXHR,
         titleFromXHR,
         targetFromXHR,
         methodFromXHR,
+        openLayerFromXHR,
         acceptLayerFromXHR,
         contextFromXHR,
         dismissLayerFromXHR,
@@ -7359,22 +8490,18 @@ up.protocol = (function () {
         initialRequestMethod,
         headerize,
         wrapMethod,
-        cspNoncesFromHeader,
-        influencingHeadersFromResponse,
+        cspInfoFromHeader,
     };
 })();
 
 
 /***/ }),
-/* 83 */
+/* 86 */
 /***/ (() => {
 
 up.log = (function () {
     const u = up.util;
     const config = new up.LogConfig();
-    function reset() {
-        config.reset();
-    }
     function printToStandard(...args) {
         if (config.enabled) {
             printToStream('log', ...args);
@@ -7382,24 +8509,26 @@ up.log = (function () {
     }
     const printToWarn = (...args) => printToStream('warn', ...args);
     const printToError = (...args) => printToStream('error', ...args);
-    function printToStream(stream, trace, message, ...args) {
-        printToStreamStyled(stream, trace, '', message, ...args);
+    function printToStream(stream, prefix, message, ...args) {
+        printToStreamStyled(stream, prefix, '', message, ...args);
     }
-    function printToStreamStyled(stream, trace, customStyles, message, ...args) {
+    function printToStreamStyled(stream, prefix, customStyles, message, ...args) {
         if (message) {
             if (config.format) {
-                console[stream](`%c${trace}%c ${message}`, 'color: #666666; padding: 1px 3px; border: 1px solid #bbbbbb; border-radius: 2px; font-size: 90%; display: inline-block;' + customStyles, '', ...args);
+                console[stream](`%c${prefix}%c ${message}`, 'color: #666666; padding: 1px 3px; border: 1px solid #bbbbbb; border-radius: 2px; font-size: 90%; display: inline-block;' + customStyles, '', ...args);
             }
             else {
-                console[stream](`[${trace}] ${u.sprintf(message, ...args)}`);
+                console[stream](`[${prefix}] ${u.sprintf(message, ...args)}`);
             }
         }
     }
+    let lastPrintedUserEvent;
     function printUserEvent(event) {
-        if (config.enabled) {
-            event = event.originalEvent || event;
+        if (config.enabled && lastPrintedUserEvent !== event) {
+            lastPrintedUserEvent = event;
+            let originalEvent = event.originalEvent || event;
             let color = '#5566cc';
-            printToStreamStyled('log', event.type, `color: white; border-color: ${color}; background-color: ${color}`, 'Interaction on %o', event.target);
+            printToStreamStyled('log', originalEvent.type, `color: white; border-color: ${color}; background-color: ${color}`, 'Interaction on %o', originalEvent.target);
         }
     }
     function printBanner() {
@@ -7412,7 +8541,7 @@ up.log = (function () {
             "        / /            / /\n\n";
         let text = "";
         if (!up.migrate.loaded) {
-            text += "Load unpoly-migrate.js to enable deprecated APIs.\n\n";
+            text += "Load unpoly-migrate.js to polyfill deprecated APIs.\n\n";
         }
         if (config.enabled) {
             text += "Call `up.log.disable()` to disable logging for this session.";
@@ -7429,7 +8558,6 @@ up.log = (function () {
         }
     }
     up.on('up:framework:boot', printBanner);
-    up.on('up:framework:reset', reset);
     function enable() {
         config.enabled = true;
     }
@@ -7451,65 +8579,117 @@ up.warn = up.log.warn;
 
 
 /***/ }),
-/* 84 */
+/* 87 */
 /***/ (() => {
 
-up.syntax = (function () {
+up.script = (function () {
     const u = up.util;
+    const e = up.element;
+    const config = new up.Config(() => ({
+        assetSelectors: [
+            'link[rel=stylesheet]',
+            'script[src]',
+            '[up-asset]'
+        ],
+        noAssetSelectors: [
+            '[up-asset=false]',
+        ],
+        nonceableAttributes: [
+            'up-watch',
+            'up-on-keep',
+            'up-on-hungry',
+            'up-on-opened',
+            'up-on-accepted',
+            'up-on-dismissed',
+            'up-on-loaded',
+            'up-on-rendered',
+            'up-on-finished',
+            'up-on-error',
+            'up-on-offline',
+        ],
+        scriptSelectors: [
+            'script:not([type])',
+            'script[type="text/javascript"]',
+            'script[type="module"]',
+            'script[type="importmap"]',
+        ],
+        noScriptSelectors: [
+            'script[type="application/ld+json"]'
+        ]
+    }));
     const SYSTEM_MACRO_PRIORITIES = {
         '[up-back]': -100,
-        '[up-content]': -200,
+        '[up-clickable]': -200,
         '[up-drawer]': -200,
         '[up-modal]': -200,
         '[up-cover]': -200,
         '[up-popup]': -200,
         '[up-tooltip]': -200,
         '[up-dash]': -200,
+        '[up-flashes]': -200,
         '[up-expand]': -300,
         '[data-method]': -400,
         '[data-confirm]': -400,
+        '[up-keep]': 9999999999,
     };
     let registeredCompilers = [];
     let registeredMacros = [];
     function registerCompiler(...args) {
-        const compiler = buildCompiler(args);
-        return insertCompiler(registeredCompilers, compiler);
+        registerProcessor(args);
     }
     function registerMacro(...args) {
-        const macro = buildCompiler(args);
-        if (up.framework.evaling) {
-            macro.priority || (macro.priority = detectSystemMacroPriority(macro.selector) ||
-                up.fail('Unregistered priority for system macro %o', macro.selector));
-        }
-        return insertCompiler(registeredMacros, macro);
+        registerProcessor(args, { macro: true });
+    }
+    function registerAttrCompiler(...args) {
+        let [attr, options, valueCallback] = parseProcessorArgs(args);
+        let selector = `[${attr}]`;
+        let { defaultValue } = options;
+        let callback = (element) => {
+            let value = e.booleanOrStringAttr(element, attr);
+            if (value === false)
+                return;
+            if (u.isDefined(defaultValue) && value === true)
+                value = defaultValue;
+            return valueCallback(element, value);
+        };
+        registerProcessor([selector, options, callback]);
     }
     function detectSystemMacroPriority(macroSelector) {
         macroSelector = u.evalOption(macroSelector);
         for (let substr in SYSTEM_MACRO_PRIORITIES) {
-            const priority = SYSTEM_MACRO_PRIORITIES[substr];
             if (macroSelector.indexOf(substr) >= 0) {
-                return priority;
+                return SYSTEM_MACRO_PRIORITIES[substr];
             }
         }
+        up.fail('Unregistered priority for system macro %o', macroSelector);
     }
-    const parseCompilerArgs = function (args) {
-        const defaults = u.extractOptions(args);
-        const selector = args.shift();
-        const callback = args.pop();
-        const options = { ...defaults, ...u.extractOptions(args) };
-        return [selector, options, callback];
+    function registerProcessor(args, overrides = {}) {
+        let processor = buildProcessor(args, overrides);
+        if (processor.macro) {
+            if (up.framework.evaling) {
+                processor.priority ||= detectSystemMacroPriority(processor.selector);
+            }
+            insertProcessor(registeredMacros, processor);
+        }
+        else {
+            insertProcessor(registeredCompilers, processor);
+        }
+    }
+    const parseProcessorArgs = function (args) {
+        return u.args(args, 'val', 'options', 'callback');
     };
-    function buildCompiler(args) {
-        let [selector, options, callback] = parseCompilerArgs(args);
+    function buildProcessor(args, overrides) {
+        let [selector, options, callback] = parseProcessorArgs(args);
         options = u.options(options, {
             selector,
             isDefault: up.framework.evaling,
             priority: 0,
             batch: false,
+            rerun: false,
         });
-        return Object.assign(callback, options);
+        return Object.assign(callback, options, overrides);
     }
-    function insertCompiler(queue, newCompiler) {
+    function insertProcessor(queue, newCompiler) {
         let existingCompiler;
         let index = 0;
         while ((existingCompiler = queue[index]) && (existingCompiler.priority >= newCompiler.priority)) {
@@ -7529,29 +8709,38 @@ up.syntax = (function () {
         return newCompiler;
     }
     function compile(fragment, options) {
+        up.emit(fragment, 'up:fragment:compile', { log: false });
         let compilers = options.compilers || registeredMacros.concat(registeredCompilers);
         const pass = new up.CompilerPass(fragment, compilers, options);
-        pass.run();
+        return pass.run();
     }
-    function registerDestructor(element, destructor) {
-        let destructors = element.upDestructors;
-        if (!destructors) {
-            destructors = [];
-            element.upDestructors = destructors;
-            element.classList.add('up-can-clean');
-        }
-        if (u.isArray(destructor)) {
-            destructors.push(...destructor);
+    function registerDestructor(element, value) {
+        let fns = u.scanFunctions(value);
+        if (!fns.length)
+            return;
+        if (element.isConnected) {
+            let registry = (element.upDestructors ||= buildDestructorRegistry(element));
+            registry.guard(fns);
         }
         else {
-            destructors.push(destructor);
+            up.puts('up.destructor()', 'Immediately calling destructor for detached element (%o)', element);
+            for (let fn of fns)
+                up.error.guard(fn, element);
         }
     }
-    function hello(element, options = {}) {
+    function buildDestructorRegistry(element) {
+        let registry = u.cleaner();
+        registry(e.addClassTemp(element, 'up-can-clean'));
+        return registry;
+    }
+    async function hello(element, options = {}) {
         element = up.fragment.get(element, options);
         up.puts('up.hello()', "Compiling fragment %o", element);
-        compile(element, options);
-        up.fragment.emitInserted(element);
+        await up.fragment.mutate(async () => {
+            let compilePromise = compile(element, options);
+            up.fragment.emitInserted(element);
+            await compilePromise;
+        });
         return element;
     }
     function clean(fragment, options = {}) {
@@ -7559,25 +8748,65 @@ up.syntax = (function () {
     }
     function readData(element) {
         element = up.fragment.get(element);
-        return element.upData || (element.upData = buildData(element));
+        return element.upData ||= buildData(element);
     }
     function buildData(element) {
-        if (!element.getAttribute) {
-            return {};
-        }
-        let rawJSON = element.getAttribute('up-data');
-        let parsedJSON;
-        if (rawJSON) {
-            parsedJSON = JSON.parse(rawJSON);
-            if (!u.isOptions(parsedJSON)) {
-                return parsedJSON;
-            }
+        let parsedJSON = e.jsonAttr(element, 'up-data') ?? {};
+        if (!u.isOptions(parsedJSON)) {
+            return parsedJSON;
         }
         return {
+            ...element.upTemplateData,
             ...element.dataset,
             ...parsedJSON,
             ...element.upCompileData,
         };
+    }
+    function findAssets(head = document.head) {
+        return head.querySelectorAll(config.selector('assetSelectors'));
+    }
+    function assertAssetsOK(newAssets, renderOptions) {
+        let oldAssets = findAssets();
+        let oldHTML = u.map(oldAssets, 'outerHTML').join();
+        let newHTML = u.map(newAssets, 'outerHTML').join();
+        if (oldHTML !== newHTML) {
+            up.event.assertEmitted('up:assets:changed', { oldAssets, newAssets, renderOptions });
+        }
+    }
+    function disableScriptsInSubtree(root, guard = () => true) {
+        for (let script of findScripts(root)) {
+            if (guard(script)) {
+                script.type = 'up-disabled-script';
+            }
+        }
+    }
+    function findScripts(root, selectorSuffix = '') {
+        let selector = config.selector('scriptSelectors') + selectorSuffix;
+        return e.subtree(root, selector);
+    }
+    function isScript(value) {
+        return config.matches(value, 'scriptSelectors');
+    }
+    function adoptNoncesInSubtree(root, responseNonces) {
+        let pageNonce = up.protocol.cspNonce();
+        if (!responseNonces?.length || !pageNonce)
+            return;
+        for (let script of findScripts(root, '[nonce]')) {
+            if (responseNonces.includes(script.nonce)) {
+                script.nonce = pageNonce;
+            }
+        }
+        for (let attribute of config.nonceableAttributes) {
+            let matches = e.subtree(root, `[${attribute}^="nonce-"]`);
+            for (let match of matches) {
+                let attributeValue = match.getAttribute(attribute);
+                let callback = up.NonceableCallback.fromString(attributeValue);
+                if (responseNonces.includes(callback.nonce)) {
+                    callback.nonce = pageNonce;
+                    match.setAttribute(attribute, callback.toString());
+                }
+            }
+        }
     }
     function reset() {
         registeredCompilers = u.filter(registeredCompilers, 'isDefault');
@@ -7585,23 +8814,31 @@ up.syntax = (function () {
     }
     up.on('up:framework:reset', reset);
     return {
+        config,
         compiler: registerCompiler,
         macro: registerMacro,
+        attrCompiler: registerAttrCompiler,
         destructor: registerDestructor,
         hello,
         clean,
         data: readData,
+        findAssets,
+        assertAssetsOK,
+        disableSubtree: disableScriptsInSubtree,
+        adoptNoncesInSubtree,
+        isScript,
     };
 })();
-up.compiler = up.syntax.compiler;
-up.destructor = up.syntax.destructor;
-up.macro = up.syntax.macro;
-up.data = up.syntax.data;
-up.hello = up.syntax.hello;
+up.compiler = up.script.compiler;
+up.destructor = up.script.destructor;
+up.macro = up.script.macro;
+up.data = up.script.data;
+up.hello = up.script.hello;
+up.attribute = up.script.attrCompiler;
 
 
 /***/ }),
-/* 85 */
+/* 88 */
 /***/ (() => {
 
 up.history = (function () {
@@ -7609,75 +8846,127 @@ up.history = (function () {
     const e = up.element;
     const config = new up.Config(() => ({
         enabled: true,
-        restoreTargets: ['body']
+        updateMetaTags: true,
+        restoreTargets: ['body'],
+        metaTagSelectors: [
+            'meta',
+            'link[rel=alternate]',
+            'link[rel=canonical]',
+            'link[rel=icon]',
+            '[up-meta]',
+            'script[type="application/ld+json"]',
+        ],
+        noMetaTagSelectors: [
+            'meta[http-equiv]',
+            '[up-meta=false]',
+            'meta[name=csp-nonce]',
+        ],
     }));
     let previousLocation;
     let nextPreviousLocation;
+    let nextTrackOptions;
+    let adoptedBases = new up.FIFOCache({ capacity: 100, normalizeKey: getBase });
     function reset() {
-        config.reset();
         previousLocation = undefined;
         nextPreviousLocation = undefined;
-        trackCurrentLocation();
+        nextTrackOptions = undefined;
+        adoptedBases.clear();
+        trackCurrentLocation({ reason: null, alreadyHandled: true });
+        adoptBase();
     }
-    const DEFAULT_NORMALIZE_OPTIONS = { hash: true };
-    function normalizeURL(url, options) {
-        options = u.merge(DEFAULT_NORMALIZE_OPTIONS, options);
-        return u.normalizeURL(url, options);
+    function currentLocation() {
+        return u.normalizeURL(location.href);
     }
-    function currentLocation(normalizeOptions) {
-        return normalizeURL(location.href, normalizeOptions);
-    }
-    function trackCurrentLocation() {
-        const url = currentLocation();
-        if (nextPreviousLocation !== url) {
-            previousLocation = nextPreviousLocation;
-            nextPreviousLocation = url;
+    function withTrackOptions(trackOptions, fn) {
+        try {
+            nextTrackOptions = trackOptions;
+            fn();
+        }
+        finally {
+            nextTrackOptions = undefined;
         }
     }
-    trackCurrentLocation();
-    const ADDITIONAL_NORMALIZE_OPTIONS_FOR_COMPARISON = { trailingSlash: false };
-    function isLocation(url, options) {
-        options = u.merge(ADDITIONAL_NORMALIZE_OPTIONS_FOR_COMPARISON, options);
-        return normalizeURL(url, options) === currentLocation(options);
-    }
-    function replace(location, options = {}) {
-        location = normalizeURL(location);
-        if (manipulate('replaceState', location) && (options.event !== false)) {
-            emitLocationChanged({ location, reason: 'replace', log: `Replaced state for ${location}` });
-        }
-    }
-    function push(location) {
-        location = normalizeURL(location);
-        if (!isLocation(location) && manipulate('pushState', location)) {
-            emitLocationChanged({ location, reason: 'push', log: `Advanced to location ${location}` });
-        }
-    }
-    function emitLocationChanged(props) {
-        let event = up.event.build('up:location:changed', props);
-        up.migrate?.renamedProperty?.(event, 'url', 'location');
-        up.emit(event);
-    }
-    function manipulate(method, url) {
-        if (config.enabled) {
-            const state = buildState();
-            window.history[method](state, '', url);
-            trackCurrentLocation();
-            return true;
-        }
-    }
-    function buildState() {
-        return { up: {} };
-    }
-    function restoreStateOnPop(state) {
-        if (!state?.up) {
-            up.puts('popstate', 'Ignoring a history state not owned by Unpoly');
+    function trackCurrentLocation(trackOptions) {
+        let { reason, alreadyHandled, pauseTracking } = nextTrackOptions || trackOptions;
+        if (pauseTracking)
             return;
-        }
         let location = currentLocation();
-        if (up.emit('up:location:restore', { location, log: `Restoring location ${location}` }).defaultPrevented) {
-            return;
+        if (isAdoptedState()) {
+            adoptBase(location);
         }
-        up.render({
+        else if (isAdoptedBase(location)) {
+            adoptState();
+        }
+        if (nextPreviousLocation !== location) {
+            previousLocation = nextPreviousLocation;
+            nextPreviousLocation = location;
+            if (reason === 'detect') {
+                reason = (getBase(location) === getBase(previousLocation)) ? 'hash' : 'pop';
+            }
+            let willHandle = !alreadyHandled && isAdoptedBase(location);
+            let locationChangedEvent = up.event.build('up:location:changed', {
+                reason,
+                location,
+                previousLocation,
+                alreadyHandled,
+                willHandle,
+                log: `New location is ${location}`
+            });
+            up.migrate.prepareLocationChangedEvent?.(locationChangedEvent);
+            if (reason) {
+                up.emit(locationChangedEvent);
+                reactToChange(locationChangedEvent);
+            }
+        }
+    }
+    function splitLocation(location) {
+        return location?.split(/(?=#)/) || [];
+    }
+    function getBase(location) {
+        return splitLocation(location)[0];
+    }
+    function isLocation(url, options) {
+        return u.matchURLs(url, location.href, { hash: true, ...options });
+    }
+    function replace(location, trackOptions) {
+        placeAdoptedHistoryEntry('replaceState', location, trackOptions);
+    }
+    function push(location, trackOptions) {
+        if (isLocation(location))
+            return;
+        placeAdoptedHistoryEntry('pushState', location, trackOptions);
+    }
+    function placeAdoptedHistoryEntry(method, location, trackOptions) {
+        adoptBase(location);
+        if (config.enabled) {
+            withTrackOptions(trackOptions, function () {
+                history[method](null, { up: true }, location);
+            });
+        }
+    }
+    function isAdoptedBase(location) {
+        return !!adoptedBases.get(location);
+    }
+    function adoptBase(location = currentLocation()) {
+        location = u.normalizeURL(location);
+        adoptedBases.set(location, true);
+    }
+    function isAdoptedState() {
+        return history.state?.up;
+    }
+    function adoptState() {
+        let { state } = history;
+        if (isAdoptedState())
+            return;
+        if (u.isBlank(state) || u.isObject(state)) {
+            withTrackOptions({ pauseTracking: true }, function () {
+                history.replaceState({ ...state, up: true }, '');
+            });
+        }
+    }
+    function restoreLocation(location) {
+        up.error.muteUncriticalRejection(up.render({
+            guardEvent: up.event.build('up:location:restore', { location, log: `Restoring location ${location}` }),
             url: location,
             target: config.restoreTargets,
             fail: false,
@@ -7685,35 +8974,109 @@ up.history = (function () {
             location,
             peel: true,
             layer: 'root',
-            cache: true,
+            cache: 'auto',
+            revalidate: 'auto',
             saveScroll: false,
             scroll: ['restore', 'auto'],
             saveFocus: false,
             focus: ['restore', 'auto'],
-        });
+        }));
     }
-    function onPop(event) {
-        trackCurrentLocation();
-        emitLocationChanged({ location, reason: 'pop', log: `Navigated to history entry ${location}` });
-        up.viewport.saveFocus({ location: previousLocation });
-        up.viewport.saveScroll({ location: previousLocation });
-        restoreStateOnPop(event.state);
+    function reactToChange(event) {
+        if (event.alreadyHandled) {
+            return;
+        }
+        if (!event.willHandle) {
+            up.puts('up.history', 'Ignoring history entry owned by foreign script');
+            return;
+        }
+        if (event.reason === 'pop') {
+            up.viewport.saveFocus({ location: event.previousLocation });
+            up.viewport.saveScroll({ location: event.previousLocation });
+            restoreLocation(event.location);
+        }
+        else if (event.reason === 'hash') {
+            up.viewport.revealHash(location.hash, { strong: true });
+        }
     }
-    function register() {
-        window.addEventListener('popstate', onPop);
+    function findMetaTags(head = document.head) {
+        return head.querySelectorAll(config.selector('metaTagSelectors'));
+    }
+    function updateMetaTags(newMetaTags) {
+        let oldMetaTags = findMetaTags();
+        for (let oldMetaTag of oldMetaTags) {
+            oldMetaTag.remove();
+        }
+        for (let newMetaTag of newMetaTags) {
+            document.head.append(newMetaTag);
+        }
+    }
+    function getLang(doc = document) {
+        let { documentElement } = doc;
+        if (documentElement.matches('html')) {
+            return doc.documentElement.lang;
+        }
+    }
+    function updateLang(newLang) {
+        e.setAttrPresence(e.root, 'lang', newLang, !!newLang);
+    }
+    function patchHistoryAPI() {
+        const originalPushState = history.pushState;
+        history.pushState = function (...args) {
+            originalPushState.apply(this, args);
+            trackCurrentLocation({ reason: 'push', alreadyHandled: true });
+        };
+        const originalReplaceState = history.replaceState;
+        history.replaceState = function (...args) {
+            originalReplaceState.apply(this, args);
+            trackCurrentLocation({ reason: 'replace', alreadyHandled: true });
+        };
+    }
+    function adoptInitialHistoryEntry() {
         if (up.protocol.initialRequestMethod() === 'GET') {
-            replace(currentLocation(), { event: false });
+            adoptState();
+            adoptBase();
         }
     }
-    up.on('up:framework:boot', function () {
-        if ('jasmine' in window) {
-            register();
-        }
-        else {
-            setTimeout(register, 100);
+    up.on('up:framework:boot', function ({ mode }) {
+        trackCurrentLocation({ reason: null, alreadyHandled: true });
+        patchHistoryAPI();
+        adoptInitialHistoryEntry();
+        if (mode === 'auto') {
+            up.viewport.revealHash(location.hash, { strong: true });
         }
     });
-    up.macro('a[up-back], [up-href][up-back]', function (link) {
+    up.on(window, 'hashchange, popstate', () => {
+        trackCurrentLocation({ reason: 'detect', alreadyHandled: false });
+    });
+    function onJumpLinkClicked(event, link) {
+        if (event.defaultPrevented)
+            return;
+        if (up.event.isModified(event))
+            return;
+        let [currentBase, currentHash] = splitLocation(up.layer.current.location);
+        let [linkBase, linkHash] = splitLocation(u.normalizeURL(link));
+        let verbatimHREF = link.getAttribute('href');
+        let isJumpLink = (currentBase === linkBase) || verbatimHREF.startsWith('#');
+        if (!isJumpLink)
+            return;
+        let behavior = link.getAttribute('up-scroll-behavior') ?? 'auto';
+        let layer = up.layer.get(link);
+        let revealFn = up.viewport.revealHashFn(linkHash, { layer, behavior });
+        if (revealFn) {
+            up.event.halt(event);
+            up.log.putsEvent(event);
+            if (linkHash !== currentHash && layer.showsLiveHistory()) {
+                let newHREF = currentBase + linkHash;
+                push(newHREF, { reason: 'hash', alreadyHandled: true });
+            }
+            revealFn();
+        }
+        else {
+        }
+    }
+    up.on('up:click', 'a[href*="#"]', onJumpLinkClicked);
+    up.macro('[up-back]', function (link) {
         if (previousLocation) {
             e.setMissingAttrs(link, {
                 'up-href': previousLocation,
@@ -7730,17 +9093,20 @@ up.history = (function () {
         replace,
         get location() { return currentLocation(); },
         get previousLocation() { return previousLocation; },
-        normalizeURL,
-        isLocation
+        isLocation,
+        findMetaTags,
+        updateMetaTags,
+        getLang,
+        updateLang,
     };
 })();
 
 
 /***/ }),
-/* 86 */
+/* 89 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(87);
+__webpack_require__(90);
 const u = up.util;
 const e = up.element;
 up.fragment = (function () {
@@ -7750,14 +9116,18 @@ up.fragment = (function () {
             return tagName;
         }
     }
+    const STRONG_TARGET_DERIVERS = [
+        '[up-id]',
+        '[id]',
+        'html',
+        'head',
+        'body',
+    ];
     const config = new up.Config(() => ({
         badTargetClasses: [/^up-/],
+        strongTargetDerivers: STRONG_TARGET_DERIVERS,
         targetDerivers: [
-            '[up-id]',
-            '[id]',
-            'html',
-            'head',
-            'body',
+            ...STRONG_TARGET_DERIVERS,
             'main',
             '[up-main]',
             upTagName,
@@ -7771,37 +9141,50 @@ up.fragment = (function () {
             'form[action]',
             'a[href]',
             '[class]',
+            '[up-flashes]',
             'form',
         ],
         verifyDerivedTarget: true,
+        renderOptions: {
+            hungry: true,
+            keep: true,
+            saveScroll: true,
+            saveFocus: true,
+            focus: 'keep',
+            focusVisible: 'auto',
+            abort: 'target',
+            failOptions: true,
+            feedback: true,
+        },
         navigateOptions: {
             cache: 'auto',
             revalidate: 'auto',
-            feedback: true,
             fallback: true,
             focus: 'auto',
             scroll: 'auto',
             history: 'auto',
             peel: true,
         },
-        matchAroundOrigin: true,
-        runScripts: true,
+        match: 'region',
+        runScripts: false,
         autoHistoryTargets: [':main'],
         autoFocus: ['hash', 'autofocus', 'main-if-main', 'keep', 'target-if-lost'],
         autoScroll: ['hash', 'layer-if-main'],
         autoRevalidate: (response) => response.expired,
-        skipResponse: defaultSkipResponse
+        skipResponse: defaultSkipResponse,
+        renderableResponse: (response) => response.isHTML(),
+        normalizeKeepHTML: defaultNormalizeKeepHTML
     }));
     u.delegate(config, ['mainTargets'], () => up.layer.config.any);
-    function reset() {
-        config.reset();
-    }
     function defaultSkipResponse({ response, expiredResponse }) {
         return !response.text || response.text === expiredResponse?.text;
     }
     function sourceOf(element, options = {}) {
         element = getSmart(element, options);
         return e.closestAttr(element, 'up-source');
+    }
+    function normalizeSource(source) {
+        return u.normalizeURL(source, { hash: false });
     }
     function timeOf(element) {
         let value = e.closestAttr(element, 'up-time');
@@ -7820,29 +9203,90 @@ up.fragment = (function () {
     }
     const render = up.mockable((...args) => {
         let options = parseTargetAndOptions(args);
-        return new up.RenderJob(options);
+        return new up.RenderJob(options).execute();
     });
     const navigate = up.mockable((...args) => {
         const options = parseTargetAndOptions(args);
         return render({ ...options, navigate: true });
     });
+    function emitFragmentKeep({ oldElement, newElement: newFragment, newData, renderOptions }) {
+        const log = ['Keeping fragment %o', oldElement];
+        const callback = e.callbackAttr(oldElement, 'up-on-keep', { exposedKeys: ['newFragment', 'newData'] });
+        return up.emit(oldElement, 'up:fragment:keep', { log, callback, newFragment, newData, renderOptions });
+    }
+    function emitFragmentKept({ oldElement, newElement: newFragment, newData }) {
+        return up.emit(oldElement, 'up:fragment:kept', { log: true, newFragment, newData });
+    }
+    function findKeepPlan(options) {
+        if (options.keep === false)
+            return;
+        const { oldElement, newElement } = options;
+        let oldElementMode = keepMode(oldElement);
+        if (!oldElementMode) {
+            return;
+        }
+        let partner;
+        let partnerSelector = up.fragment.toTarget(oldElement);
+        const lookupOpts = { layer: options.layer };
+        if (options.descendantsOnly) {
+            partner = up.fragment.get(newElement, partnerSelector, lookupOpts);
+        }
+        else {
+            partner = e.subtreeFirst(newElement, partnerSelector, lookupOpts);
+        }
+        if (!partner)
+            return;
+        let partnerMode = keepMode(partner);
+        if (partnerMode === false)
+            return;
+        let oldIdentity = keepIdentity(oldElement, oldElementMode);
+        let partnerIdentity = keepIdentity(partner, oldElementMode);
+        if (!u.isEqual(oldIdentity, partnerIdentity))
+            return;
+        const plan = {
+            oldElement,
+            newElement: partner,
+            newData: up.script.data(partner),
+            renderOptions: options,
+        };
+        if (emitFragmentKeep(plan).defaultPrevented)
+            return;
+        return plan;
+    }
+    function keepIdentity(element, mode = keepMode(element)) {
+        return element.upKeepIdentity ??= u.copy(buildKeepIdentity(element, mode));
+    }
+    function defaultNormalizeKeepHTML(html) {
+        let tagPattern = /<[^<]+>/g;
+        let attrs = ['up-etag', 'up-source', 'up-time', 'nonce', ...up.script.config.nonceableAttributes];
+        let attrPattern = new RegExp(`\\s+(${attrs.join('|')})="[^"]*"`, 'g');
+        let cleanTag = (match) => match.replace(attrPattern, '');
+        html = html.replace(tagPattern, cleanTag);
+        html = html.replace(/^[ \t]+/mg, '');
+        return html;
+    }
+    function buildKeepIdentity(element, mode) {
+        if (mode === 'same-html') {
+            return config.normalizeKeepHTML(element.outerHTML);
+        }
+        else if (mode === 'same-data') {
+            return up.data(element);
+        }
+        else {
+            return true;
+        }
+    }
+    up.macro('[up-keep]', (element) => keepIdentity(element));
+    function keepMode(element) {
+        return e.booleanOrStringAttr(element, 'up-keep');
+    }
     function emitFragmentInserted(element) {
+        if (element.upInserted)
+            return;
+        element.upInserted = true;
         return up.emit(element, 'up:fragment:inserted', {
             log: ['Inserted fragment %o', element],
         });
-    }
-    function emitFragmentKeep(keepPlan) {
-        const log = ['Keeping fragment %o', keepPlan.oldElement];
-        const callback = e.callbackAttr(keepPlan.oldElement, 'up-on-keep', { exposedKeys: ['newFragment', 'newData'] });
-        return emitFromKeepPlan(keepPlan, 'up:fragment:keep', { log, callback });
-    }
-    function emitFromKeepPlan(keepPlan, eventType, emitDetails) {
-        const keepable = keepPlan.oldElement;
-        const event = up.event.build(eventType, {
-            newFragment: keepPlan.newElement,
-            newData: keepPlan.newData
-        });
-        return up.emit(keepable, event, emitDetails);
     }
     function emitFragmentDestroyed(fragment, options) {
         const log = options.log ?? ['Destroyed fragment %o', fragment];
@@ -7856,73 +9300,75 @@ up.fragment = (function () {
         return fragment.isConnected && isNotDestroying(fragment);
     }
     function getSmart(...args) {
-        const options = u.extractOptions(args);
-        const selector = args.pop();
-        const root = args[0];
-        if (u.isElementish(selector)) {
+        let [root, selector, options] = parseGetArgs(args);
+        if (u.isElementLike(selector)) {
             return e.get(selector);
         }
         if (root) {
-            return getDumb(root, selector, options);
+            return getFirstDescendant(root, selector, options);
         }
         return new up.FragmentFinder({
             selector,
-            origin: options.origin,
-            layer: options.layer
+            ...u.pick(options, ['layer', 'match', 'origin', 'destroying']),
         }).find();
     }
-    function getDumb(...args) {
-        return getAll(...args)[0];
+    function getFirstDescendant(...args) {
+        let [root, selectorString, options] = parseGetArgs(args);
+        let selector = new up.Selector(selectorString, root, options);
+        return selector.firstDescendant(root);
     }
-    const CSS_HAS_SUFFIX_PATTERN = /:has\(([^)]+)\)$/;
+    function parseGetArgs(args) {
+        return u.args(args, 'val', 'val', 'options');
+    }
     function getAll(...args) {
-        const options = u.extractOptions(args);
-        let selectorString = args.pop();
-        const root = args[0];
+        let [root, selectorString, options] = parseGetArgs(args);
         if (u.isElement(selectorString)) {
             return [selectorString];
         }
         if (u.isList(selectorString)) {
             return selectorString;
         }
-        let selector = buildSelector(selectorString, root, options);
-        return selector.descendants(root || document);
+        let selector = new up.Selector(selectorString, root, options);
+        return selector.descendants(root);
     }
     function getSubtree(element, selector, options = {}) {
-        selector = buildSelector(selector, element, options);
-        return selector.subtree(element);
+        return new up.Selector(selector, element, options).subtree(element);
     }
-    function contains(element, selector) {
-        return getSubtree(element, selector).length > 0;
+    function contains(root, selectorOrElement) {
+        if (u.isElement(selectorOrElement)) {
+            return e.contains(root, selectorOrElement) && up.layer.get(root).contains(selectorOrElement);
+        }
+        else {
+            return getSubtree(root, selectorOrElement).length > 0;
+        }
     }
     function closest(element, selector, options) {
-        element = e.get(element);
-        selector = buildSelector(selector, element, options);
-        return selector.closest(element);
+        return new up.Selector(selector, element, options).closest(element);
     }
     function destroy(...args) {
         const options = parseTargetAndOptions(args);
-        if (options.element = getSmart(options.target, options)) {
-            new up.Change.DestroyFragment(options).execute();
+        const element = getSmart(options.target, options);
+        if (element) {
+            new up.Change.DestroyFragment({ ...options, element }).execute();
         }
         return up.migrate.formerlyAsync?.('up.destroy()');
     }
     function parseTargetAndOptions(args) {
         const options = u.parseArgIntoOptions(args, 'target');
         if (u.isElement(options.target)) {
-            options.origin || (options.origin = options.target);
+            options.origin ||= options.target;
         }
         return options;
     }
     function markFragmentAsDestroying(element) {
         element.classList.add('up-destroying');
-        element.setAttribute('aria-hidden', 'true');
+        element.setAttribute('inert', '');
     }
     function reload(...args) {
         const options = parseTargetAndOptions(args);
-        options.target || (options.target = ':main');
+        options.target ||= ':main';
         const element = getSmart(options.target, options);
-        options.url || (options.url = sourceOf(element));
+        options.url ||= sourceOf(element);
         options.headers = u.merge(options.headers, conditionalHeaders(element));
         if (options.keepData || e.booleanAttr(element, 'up-keep-data')) {
             options.data = up.data(element);
@@ -7973,8 +9419,8 @@ up.fragment = (function () {
     function toTarget(element, options) {
         return u.presence(element, u.isString) || tryToTarget(element, options) || cannotTarget(element);
     }
-    function isTargetable(element) {
-        return !!tryToTarget(element);
+    function isTargetable(element, options) {
+        return !!tryToTarget(element, options);
     }
     function untargetableMessage(element) {
         return `Cannot derive good target selector from a <${e.tagName(element)}> element without identifying attributes. Try setting an [id] or configure up.fragment.config.targetDerivers.`;
@@ -7982,8 +9428,9 @@ up.fragment = (function () {
     function cannotTarget(element) {
         throw new up.CannotTarget(untargetableMessage(element));
     }
-    function tryToTarget(element, options) {
-        return u.findResult(config.targetDerivers, function (deriver) {
+    function tryToTarget(element, options = {}) {
+        let derivers = options.strong ? config.strongTargetDerivers : config.targetDerivers;
+        return u.findResult(derivers, function (deriver) {
             let target = deriveTarget(element, deriver);
             if (target && isGoodTarget(target, element, options)) {
                 return target;
@@ -8009,7 +9456,7 @@ up.fragment = (function () {
         }
     }
     function deriveTargetFromPattern(element, deriver) {
-        let { includePath, excludeRaw } = up.element.parseSelector(deriver);
+        let { includePath, excludeRaw } = e.parseSelector(deriver);
         if (includePath.length !== 1) {
             throw new up.CannotParse(deriver);
         }
@@ -8047,7 +9494,8 @@ up.fragment = (function () {
         return result;
     }
     function isGoodTarget(target, element, options = {}) {
-        return !element.isConnected || !config.verifyDerivedTarget || up.fragment.get(target, { layer: element, ...options }) === element;
+        let verify = options.verify ?? config.verifyDerivedTarget;
+        return !isAlive(element) || !verify || up.fragment.get(target, { layer: element, ...options }) === element;
     }
     function matchesPattern(pattern, str) {
         if (u.isRegExp(pattern)) {
@@ -8061,18 +9509,11 @@ up.fragment = (function () {
         let isGood = (klass) => !u.some(config.badTargetClasses, (badTargetClass) => matchesPattern(badTargetClass, klass));
         return u.filter(element.classList, isGood);
     }
-    function modernResolveOrigin(target, { origin } = {}) {
-        return target.replace(/:origin\b/, function (match) {
-            if (origin) {
-                return toTarget(origin);
-            }
-            else {
-                up.fail('Missing { origin } element to resolve "%s" reference (found in %s)', match, target);
-            }
-        });
-    }
-    function resolveOrigin(...args) {
-        return (up.migrate.resolveOrigin || modernResolveOrigin)(...args);
+    const MAIN_PSEUDO = /:main\b/;
+    const LAYER_PSEUDO = /:layer\b/;
+    const ORIGIN_PSEUDO = /:origin\b/;
+    function containsMainPseudo(target) {
+        return MAIN_PSEUDO.test(target);
     }
     function expandTargets(targets, options = {}) {
         const { layer } = options;
@@ -8082,66 +9523,66 @@ up.fragment = (function () {
         targets = u.copy(u.wrapList(targets));
         const expanded = [];
         while (targets.length) {
-            const target = targets.shift();
-            if (target === ':main' || target === true) {
-                const mode = layer === 'new' ? options.mode : layer.mode;
-                targets.unshift(...up.layer.mainTargets(mode));
+            let target = targets.shift();
+            if (target === true)
+                target = ':main';
+            if (containsMainPseudo(target)) {
+                let mode = resolveMode(options);
+                let replaced = up.layer.mainTargets(mode).map((mainTarget) => target.replace(MAIN_PSEUDO, mainTarget));
+                targets.unshift(...replaced);
             }
-            else if (target === ':layer') {
-                if (layer !== 'new' && !layer.opening) {
-                    targets.unshift(layer.getFirstSwappableElement());
-                }
+            else if (LAYER_PSEUDO.test(target)) {
+                if (layer === 'new' || layer.state === 'opening')
+                    continue;
+                let firstSwappableTarget = toTarget(layer.getFirstSwappableElement(), options);
+                targets.unshift(target.replace(LAYER_PSEUDO, firstSwappableTarget));
             }
-            else if (u.isElementish(target)) {
+            else if (u.isElementLike(target)) {
                 expanded.push(toTarget(target, options));
             }
             else if (u.isString(target)) {
                 expanded.push(resolveOrigin(target, options));
             }
-            else {
-            }
         }
         return u.uniq(expanded);
     }
-    function buildSelector(selector, element, options = {}) {
-        const filters = [];
-        if (!options.destroying) {
-            filters.push(isNotDestroying);
-        }
-        let elementOutsideDocumentGiven = element && !document.contains(element);
-        let expandTargetLayer;
-        if (elementOutsideDocumentGiven || options.layer === 'any') {
-            expandTargetLayer = up.layer.root;
+    function resolveMode({ layer, mode }) {
+        if (layer === 'new') {
+            return mode || up.fail('Must pass a { mode } option together with { layer: "new" }');
         }
         else {
-            options.layer ?? (options.layer = element);
-            const layers = up.layer.getAll(options);
-            filters.push(match => u.some(layers, layer => layer.contains(match)));
-            expandTargetLayer = layers[0];
+            return layer.mode;
         }
-        let expandedTargets = up.fragment.expandTargets(selector, { ...options, layer: expandTargetLayer });
-        expandedTargets = expandedTargets.map(function (target) {
-            target = target.replace(CSS_HAS_SUFFIX_PATTERN, function (match, descendantSelector) {
-                filters.push(element => element.querySelector(descendantSelector));
-                return '';
-            });
-            return target || '*';
+    }
+    function modernResolveOrigin(target, { origin } = {}) {
+        return target.replace(ORIGIN_PSEUDO, function (match) {
+            if (origin) {
+                return toTarget(origin);
+            }
+            else {
+                up.fail('Missing { origin } element to resolve "%s" reference (found in %s)', match, target);
+            }
         });
-        return new up.Selector(expandedTargets, filters);
+    }
+    function resolveOrigin(target, options) {
+        if (!u.isString(target))
+            return target;
+        return (up.migrate.resolveOrigin || modernResolveOrigin)(target, options);
     }
     function splitTarget(target) {
-        return u.parseTokens(target, { separator: 'comma' });
+        return u.getComplexTokens(target);
     }
     function parseTargetSteps(target, options = {}) {
         let defaultPlacement = options.defaultPlacement || 'swap';
+        let defaultMaybe = options.defaultMaybe ?? false;
         let steps = [];
         let simpleSelectors = splitTarget(target);
         for (let selector of simpleSelectors) {
             if (selector === ':none')
                 continue;
             let placement = defaultPlacement;
-            let maybe = false;
-            selector = selector.replace(/\b::?(before|after)\b/, (_match, customPlacement) => {
+            let maybe = defaultMaybe;
+            selector = selector.replace(/\b::?(before|after|content)\b/, (_match, customPlacement) => {
                 placement = customPlacement;
                 return '';
             });
@@ -8153,20 +9594,22 @@ up.fragment = (function () {
                 ...options,
                 selector,
                 placement,
-                maybe
+                maybe,
+                originalRenderOptions: options,
             };
             steps.push(step);
         }
         return steps;
     }
-    function hasAutoHistory(fragment) {
-        if (contains(fragment, config.autoHistoryTargets)) {
-            return true;
+    function hasAutoHistory(newFragments, layer) {
+        let vanillaSelector = expandTargets(config.autoHistoryTargets, { layer }).join();
+        for (let newFragment of newFragments) {
+            if (e.subtree(newFragment, vanillaSelector).length) {
+                return true;
+            }
         }
-        else {
-            up.puts('up.render()', "Will not auto-update history because fragment doesn't contain a selector from up.fragment.config.autoHistoryTargets");
-            return false;
-        }
+        up.puts('up.render()', "Will not auto-update history because fragment doesn't contain a selector from up.fragment.config.autoHistoryTargets");
+        return false;
     }
     function matches(element, selector, options = {}) {
         element = e.get(element);
@@ -8175,52 +9618,158 @@ up.fragment = (function () {
             return target && element.matches(target);
         }
         else {
-            selector = buildSelector(selector, element, options);
-            return selector.matches(element);
+            return new up.Selector(selector, element, options).matches(element);
         }
     }
     function shouldRevalidate(request, response, options = {}) {
         return request.fromCache && u.evalAutoOption(options.revalidate, config.autoRevalidate, response);
     }
+    function targetForSteps(steps) {
+        let bestSteps = steps.filter((step) => !step.maybe || step.oldElement?.isConnected);
+        let selectors = u.map(bestSteps, 'selector');
+        return selectors.join(', ') || ':none';
+    }
+    function isContainedByRivalStep(steps, candidateStep) {
+        return u.some(steps, function (rivalStep) {
+            return (rivalStep !== candidateStep) &&
+                ((rivalStep.placement === 'swap') || (rivalStep.placement === 'content')) &&
+                rivalStep.oldElement.contains(candidateStep.oldElement);
+        });
+    }
+    function compressNestedSteps(steps) {
+        if (steps.length < 2)
+            return steps;
+        let compressed = u.uniqBy(steps, 'oldElement');
+        compressed = u.reject(compressed, (step) => isContainedByRivalStep(compressed, step));
+        return compressed;
+    }
     function abort(...args) {
         let options = parseTargetAndOptions(args);
         let testFn;
-        let { reason } = options;
+        let { reason, newLayer, jid } = options;
         let elements;
         if (options.target) {
             elements = getAll(options.target, options);
-            testFn = (request) => request.isPartOfSubtree(elements);
-            reason || (reason = 'Aborting requests within fragment');
+            testFn = (request) => request.isBoundToSubtrees(elements);
+            reason ||= 'Aborting requests within fragment';
         }
         else {
             let layers = up.layer.getAll(options);
             elements = u.map(layers, 'element');
-            testFn = (request) => u.contains(layers, request.layer);
-            reason || (reason = 'Aborting requests within ' + layers.join(', '));
+            testFn = (request) => request.isBoundToLayers(layers);
+            reason ||= 'Aborting requests within ' + layers.join(', ');
         }
         let testFnWithAbortable = (request) => request.abortable && testFn(request);
         up.network.abort(testFnWithAbortable, { ...options, reason });
         for (let element of elements) {
-            up.emit(element, 'up:fragment:aborted', { log: false });
+            up.emit(element, 'up:fragment:aborted', { reason, newLayer, jid, log: reason });
         }
     }
-    function onAborted(fragment, ...args) {
-        let callback = u.extractCallback(args);
-        let options = u.extractOptions(args);
-        let guard = (event) => event.target.contains(fragment) || (options.around && fragment.contains(event.target));
-        let unsubscribe = up.on('up:fragment:aborted', { guard }, callback);
-        up.destructor(fragment, unsubscribe);
-        return unsubscribe;
+    function onAborted(fragment, callback) {
+        return up.event.onAncestor(fragment, 'up:fragment:aborted', callback);
+    }
+    function onKept(fragment, callback) {
+        return up.event.onAncestor(fragment, 'up:fragment:kept', callback);
+    }
+    function onFirstIntersect(element, callback, { margin = 0 } = {}) {
+        if (e.isIntersectingWindow(element, { margin })) {
+            callback();
+            return;
+        }
+        function processIntersectEntries(entries) {
+            for (let entry of entries) {
+                if (entry.isIntersecting) {
+                    disconnect();
+                    callback();
+                    return;
+                }
+            }
+        }
+        let observer = new IntersectionObserver(processIntersectEntries, { rootMargin: `${margin}px` });
+        let disconnect = () => observer.disconnect();
+        observer.observe(element);
+        up.destructor(element, disconnect);
+    }
+    const STARTS_WITH_SELECTOR = /^([\w-]+|\*)?(#|\.|[:[][a-z-]{3,})/;
+    function provideNodes(value, { origin, originLayer, data, htmlParser = e.createNodesFromHTML } = {}) {
+        if (u.isString(value) && STARTS_WITH_SELECTOR.test(value)) {
+            let [parsedValue, parsedData] = u.parseScalarJSONPairs(value)[0];
+            data = { ...data, ...parsedData };
+            value = up.fragment.get(parsedValue, { layer: 'closest', origin, originLayer }) || up.fail(`Cannot find template "%s"`, value);
+        }
+        if (u.isString(value)) {
+            value = htmlParser(value);
+        }
+        if (isTemplate(value)) {
+            value = cloneTemplate(value, data, { htmlParser });
+        }
+        return u.wrapList(value);
+    }
+    function isTemplate(value) {
+        return u.isElement(value) && value.matches('template, script[type]') && !up.script.isScript(value);
+    }
+    function cloneTemplate(templateOrSelector, data = {}, { origin, htmlParser } = {}) {
+        let template = getSmart(templateOrSelector, { origin }) || up.fail('Template not found: %o', templateOrSelector);
+        let event = up.emit(template, 'up:template:clone', { data, nodes: null, log: ["Using template %o", templateOrSelector] });
+        let nodes = event.nodes ?? defaultTemplateNodes(template, htmlParser);
+        for (let node of nodes) {
+            node.upTemplateData = data;
+        }
+        return nodes;
+    }
+    function defaultTemplateNodes(template, htmlParser = e.createNodesFromHTML) {
+        let templateText = template.innerHTML;
+        return htmlParser(templateText);
+    }
+    function insertTemp(...args) {
+        let [reference, position = 'beforeend', tempValue] = u.args(args, 'val', u.isAdjacentPosition, 'val');
+        let tempNodes = provideNodes(tempValue, { origin: reference });
+        let tempElement = e.wrapIfRequired(tempNodes);
+        let oldPosition = document.contains(tempElement) && e.documentPosition(tempElement);
+        reference.insertAdjacentElement(position, tempElement);
+        if (oldPosition) {
+            return () => {
+                oldPosition[0].insertAdjacentElement(oldPosition[1], tempElement);
+            };
+        }
+        else {
+            up.hello(tempElement);
+            return () => up.destroy(tempElement);
+        }
+    }
+    function trackSelector(...args) {
+        let parsedArgs = u.args(args, 'val', 'options', 'callback');
+        let tracker = new up.SelectorTracker(...parsedArgs);
+        return tracker.start();
+    }
+    let mutateLevel = 0;
+    let afterMutateCleaner = u.cleaner('fifo');
+    function mutate(callback) {
+        try {
+            mutateLevel++;
+            return callback();
+        }
+        finally {
+            if (--mutateLevel === 0)
+                afterMutateCleaner.clean();
+        }
+    }
+    function afterMutate(callback) {
+        if (mutateLevel === 0) {
+            callback();
+        }
+        else {
+            afterMutateCleaner(callback);
+        }
     }
     up.on('up:framework:boot', function () {
         const { documentElement } = document;
-        documentElement.setAttribute('up-source', u.normalizeURL(location.href, { hash: false }));
         up.hello(documentElement);
+        documentElement.setAttribute('up-source', normalizeSource(location.href));
         if (!up.browser.canPushState()) {
-            return up.warn('Cannot push history changes. Next fragment update will load in a new page.');
+            return up.warn('Cannot push history changes. Next render pass with history will load a full page.');
         }
     });
-    up.on('up:framework:reset', reset);
     return {
         config,
         reload,
@@ -8228,17 +9777,21 @@ up.fragment = (function () {
         render,
         navigate,
         get: getSmart,
-        getDumb,
+        getFirstDescendant,
         all: getAll,
         subtree: getSubtree,
         contains,
         closest,
         source: sourceOf,
+        normalizeSource,
         visit,
         markAsDestroying: markFragmentAsDestroying,
         emitInserted: emitFragmentInserted,
         emitDestroyed: emitFragmentDestroyed,
         emitKeep: emitFragmentKeep,
+        emitKept: emitFragmentKept,
+        keepPlan: findKeepPlan,
+        defaultNormalizeKeepHTML,
         successKey,
         failKey,
         expandTargets,
@@ -8253,9 +9806,21 @@ up.fragment = (function () {
         shouldRevalidate,
         abort,
         onAborted,
+        onKept,
+        onFirstIntersect,
         splitTarget,
         parseTargetSteps,
         isAlive,
+        isNotDestroying,
+        targetForSteps,
+        compressNestedSteps,
+        containsMainPseudo,
+        insertTemp,
+        provideNodes,
+        cloneTemplate,
+        trackSelector,
+        mutate,
+        afterMutate,
     };
 })();
 up.reload = up.fragment.reload;
@@ -8263,11 +9828,12 @@ up.destroy = up.fragment.destroy;
 up.render = up.fragment.render;
 up.navigate = up.fragment.navigate;
 up.visit = up.fragment.visit;
+up.template = { clone: up.fragment.cloneTemplate };
 u.delegate(up, ['context'], () => up.layer.current);
 
 
 /***/ }),
-/* 87 */
+/* 90 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8276,32 +9842,30 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 88 */
+/* 91 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(89);
+__webpack_require__(92);
 up.viewport = (function () {
     const u = up.util;
     const e = up.element;
     const f = up.fragment;
     const config = new up.Config(() => ({
         viewportSelectors: ['[up-viewport]', '[up-fixed]'],
-        fixedTop: ['[up-fixed~=top]'],
-        fixedBottom: ['[up-fixed~=bottom]'],
-        anchoredRight: ['[up-anchored~=right]', '[up-fixed~=top]', '[up-fixed~=bottom]', '[up-fixed~=right]'],
+        fixedTopSelectors: ['[up-fixed~=top]'],
+        fixedBottomSelectors: ['[up-fixed~=bottom]'],
+        anchoredRightSelectors: ['[up-anchored~=right]', '[up-fixed~=top]', '[up-fixed~=bottom]', '[up-fixed~=right]'],
         revealSnap: 200,
         revealPadding: 0,
         revealTop: false,
         revealMax() { return 0.5 * window.innerHeight; },
+        autoFocusVisible({ element, inputDevice }) { return inputDevice === 'key' || up.form.isField(element); }
     }));
-    function reset() {
-        config.reset();
-    }
-    function anchoredRight() {
-        const selector = config.anchoredRight.join(',');
-        return f.all(selector, { layer: 'root' });
-    }
-    function reveal(element, options) {
+    const bodyShifter = new up.BodyShifter();
+    up.compiler(config.selectorFn('anchoredRightSelectors'), function (element) {
+        return bodyShifter.onAnchoredElementInserted(element);
+    });
+    const reveal = up.mockable(function (element, options) {
         options = u.options(options);
         element = f.get(element, options);
         if (!(options.layer = up.layer.get(element))) {
@@ -8313,34 +9877,59 @@ up.viewport = (function () {
         const motion = new up.RevealMotion(element, options);
         motion.start();
         return up.migrate.formerlyAsync?.('up.reveal()') || true;
-    }
-    function doFocus(element, options = {}) {
-        if (options.force) {
-            makeFocusable(element);
+    });
+    function doFocus(element, { preventScroll, force, inputDevice, focusVisible } = {}) {
+        if (force) {
+            if (!element.hasAttribute('tabindex') && element.tabIndex === -1) {
+                element.setAttribute('tabindex', '-1');
+            }
         }
-        element.focus({ preventScroll: true });
-        if (!options.preventScroll) {
+        inputDevice ??= up.event.inputDevice;
+        focusVisible ??= 'auto';
+        focusVisible = u.evalAutoOption(focusVisible, config.autoFocusVisible, { element, inputDevice });
+        element.focus({
+            preventScroll: true,
+            focusVisible,
+        });
+        removeFocusClasses(element);
+        element.classList.add(focusVisible ? 'up-focus-visible' : 'up-focus-hidden');
+        if (!preventScroll) {
             return reveal(element);
         }
     }
+    function removeFocusClasses(element) {
+        element?.classList.remove('up-focus-hidden', 'up-focus-visible');
+    }
+    up.on('focusin', function ({ relatedTarget }) {
+        removeFocusClasses(relatedTarget);
+    });
     function tryFocus(element, options) {
         doFocus(element, options);
         return element === document.activeElement;
     }
-    function makeFocusable(element) {
-        if (!element.hasAttribute('tabindex') && element.tabIndex === -1) {
-            element.setAttribute('tabindex', '-1');
-            element.classList.add('up-focusable-content');
-        }
+    function revealHash(...args) {
+        return revealHashFn(...args)?.();
     }
-    function revealHash(hash = location.hash, options) {
-        let match = firstHashTarget(hash, options);
+    function revealHashFn(hash, { strong, layer, origin, behavior = 'instant' } = {}) {
+        if (!hash)
+            return;
+        let match = firstHashTarget(hash, { layer, origin });
         if (match) {
-            return up.reveal(match, { top: true });
+            return () => {
+                let doReveal = () => reveal(match, { top: true, behavior });
+                if (strong)
+                    u.fastTask(doReveal);
+                return doReveal();
+            };
+        }
+        else if (hash === '#top') {
+            return () => {
+                return scrollTo(0, { behavior });
+            };
         }
     }
     function allSelector() {
-        return [rootSelector(), ...config.viewportSelectors].join(',');
+        return [rootSelector(), ...config.viewportSelectors].join();
     }
     function closest(target, options = {}) {
         const element = f.get(target, options);
@@ -8372,39 +9961,15 @@ up.viewport = (function () {
     function isRoot(element) {
         return element === getRoot();
     }
-    function rootHasReducedWidthFromScrollbar() {
-        return window.innerWidth > document.documentElement.offsetWidth;
+    function rootScrollbarWidth() {
+        return window.innerWidth - rootWidth();
     }
-    function rootOverflowElement() {
-        const { body } = document;
-        const html = document.documentElement;
-        const element = u.find([html, body], wasChosenAsOverflowingElement);
-        return element || getRoot();
-    }
-    function wasChosenAsOverflowingElement(element) {
-        const overflowY = e.style(element, 'overflow-y');
-        return overflowY === 'auto' || overflowY === 'scroll';
-    }
-    const scrollbarWidth = u.memoize(function () {
-        const outerStyle = {
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100px',
-            height: '100px',
-            overflowY: 'scroll'
-        };
-        const outer = up.element.affix(document.body, '[up-viewport]', { style: outerStyle });
-        const width = outer.offsetWidth - outer.clientWidth;
-        outer.remove();
-        return width;
-    });
     function scrollTopKey(viewport) {
         return up.fragment.tryToTarget(viewport);
     }
     function fixedElements(root = document) {
-        const queryParts = ['[up-fixed]'].concat(config.fixedTop).concat(config.fixedBottom);
-        return root.querySelectorAll(queryParts.join(','));
+        const queryParts = ['[up-fixed]'].concat(config.fixedTopSelectors).concat(config.fixedBottomSelectors);
+        return root.querySelectorAll(queryParts.join());
     }
     function saveScroll(...args) {
         const [viewports, options] = parseOptions(args);
@@ -8432,7 +9997,7 @@ up.viewport = (function () {
         const { location } = options.layer;
         const locationScrollTops = options.layer.lastScrollTops.get(location);
         if (locationScrollTops) {
-            setScrollTops(viewports, locationScrollTops);
+            setScrollPositions(viewports, locationScrollTops, 0);
             up.puts('up.viewport.restoreScroll()', 'Restored scroll positions to %o', locationScrollTops);
             return true;
         }
@@ -8461,14 +10026,14 @@ up.viewport = (function () {
         }
     }
     function newStateCache() {
-        return new up.FIFOCache({ capacity: 30, normalizeKey: up.history.normalizeURL });
+        return new up.FIFOCache({ capacity: 30, normalizeKey: u.matchableURL });
     }
     function parseOptions(args) {
-        const options = u.copy(u.extractOptions(args));
+        const [reference, options] = u.args(args, 'val', 'options');
         options.layer = up.layer.get(options);
         let viewports;
-        if (args[0]) {
-            viewports = [closest(args[0], options)];
+        if (reference) {
+            viewports = [closest(reference, options)];
         }
         else if (options.around) {
             viewports = getAround(options.around, options);
@@ -8478,14 +10043,16 @@ up.viewport = (function () {
         }
         return [viewports, options];
     }
-    function resetScroll(...args) {
-        const [viewports, _options] = parseOptions(args);
-        setScrollTops(viewports, {});
+    function scrollTo(position, ...args) {
+        const [viewports, options] = parseOptions(args);
+        setScrollPositions(viewports, {}, position, options.behavior);
+        return true;
     }
-    function setScrollTops(viewports, tops) {
+    function setScrollPositions(viewports, tops, defaultTop, behavior = 'instant') {
         for (let viewport of viewports) {
             const key = scrollTopKey(viewport);
-            viewport.scrollTop = tops[key] || 0;
+            const top = tops[key] || defaultTop;
+            viewport.scrollTo({ top, behavior });
         }
     }
     function absolutize(element, options = {}) {
@@ -8514,7 +10081,7 @@ up.viewport = (function () {
         const moveBounds = function (diffX, diffY) {
             boundsRect.left += diffX;
             boundsRect.top += diffY;
-            return e.setStyle(bounds, boundsRect);
+            return e.setStyle(bounds, boundsRect, 'px');
         };
         moveBounds(0, 0);
         const newElementRect = element.getBoundingClientRect();
@@ -8526,11 +10093,12 @@ up.viewport = (function () {
         };
     }
     function firstHashTarget(hash, options = {}) {
-        if (hash = pureHash(hash)) {
+        hash = pureHash(hash);
+        if (hash) {
             const selector = [
-                e.attrSelector('id', hash),
+                e.idSelector(hash),
                 'a' + e.attrSelector('name', hash)
-            ].join(',');
+            ].join();
             return f.get(selector, options);
         }
     }
@@ -8539,7 +10107,7 @@ up.viewport = (function () {
     }
     function focusedElementWithin(scopeElement) {
         const focusedElement = document.activeElement;
-        if (e.isInSubtree(scopeElement, focusedElement)) {
+        if (up.fragment.contains(scopeElement, focusedElement)) {
             return focusedElement;
         }
     }
@@ -8554,20 +10122,10 @@ up.viewport = (function () {
         }
         return to;
     }
-    let userScrolled = false;
-    up.on('scroll', { once: true, beforeBoot: true }, () => userScrolled = true);
-    up.on('up:framework:boot', function () {
-        u.task(function () {
-            if (!userScrolled) {
-                return revealHash();
-            }
-        });
-    });
-    up.on(window, 'hashchange', () => revealHash());
-    up.on('up:framework:reset', reset);
     return {
         reveal,
         revealHash,
+        revealHashFn,
         firstHashTarget,
         config,
         get: closest,
@@ -8576,22 +10134,20 @@ up.viewport = (function () {
         get root() { return getRoot(); },
         rootWidth,
         rootHeight,
-        rootHasReducedWidthFromScrollbar,
-        rootOverflowElement,
         isRoot,
-        scrollbarWidth,
+        rootScrollbarWidth,
         saveScroll,
         restoreScroll,
-        resetScroll,
+        scrollTo,
         saveFocus,
         restoreFocus,
-        anchoredRight,
         absolutize,
         focus: doFocus,
         tryFocus,
         newStateCache,
         focusedElementWithin,
-        copyCursorProps
+        copyCursorProps,
+        bodyShifter,
     };
 })();
 up.focus = up.viewport.focus;
@@ -8599,7 +10155,7 @@ up.reveal = up.viewport.reveal;
 
 
 /***/ }),
-/* 89 */
+/* 92 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8608,28 +10164,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 90 */
+/* 93 */
 /***/ (() => {
 
 up.motion = (function () {
     const u = up.util;
     const e = up.element;
-    let namedAnimations = {};
-    let namedTransitions = {};
     const motionController = new up.MotionController('motion');
     const config = new up.Config(() => ({
         duration: 175,
         easing: 'ease',
         enabled: !matchMedia('(prefers-reduced-motion: reduce)').matches
     }));
-    function pickDefault(registry) {
-        return u.pickBy(registry, value => value.isDefault);
-    }
+    let namedAnimations = new up.Registry('animation', findAnimationFn);
+    let namedTransitions = new up.Registry('transition', findTransitionFn);
     function reset() {
         motionController.reset();
-        namedAnimations = pickDefault(namedAnimations);
-        namedTransitions = pickDefault(namedTransitions);
-        config.reset();
     }
     function isEnabled() {
         return config.enabled;
@@ -8637,8 +10187,9 @@ up.motion = (function () {
     function animate(element, animation, options) {
         element = up.fragment.get(element);
         options = u.options(options);
-        const animationFn = findAnimationFn(animation);
+        let animationFn = findAnimationFn(animation);
         const willRun = willAnimate(element, animation, options);
+        animationFn = up.error.guardFn(animationFn);
         if (willRun) {
             const runNow = () => animationFn(element, options);
             return motionController.startFunction(element, runNow, options);
@@ -8658,16 +10209,15 @@ up.motion = (function () {
         return Promise.resolve();
     }
     function animateNow(element, lastFrame, options) {
+        if (up.migrate.loaded)
+            lastFrame = up.migrate.fixSetStyleProps(lastFrame);
         options = { ...options, finishEvent: motionController.finishEvent };
         const cssTransition = new up.CSSTransition(element, lastFrame, options);
         return cssTransition.start();
     }
     function applyConfig(options) {
-        options.easing || (options.easing = config.easing);
-        options.duration || (options.duration = config.duration);
-    }
-    function findNamedAnimation(name) {
-        return namedAnimations[name] || up.fail("Unknown animation %o", name);
+        options.easing ??= config.easing;
+        options.duration ??= config.duration;
     }
     function finish(element) {
         return motionController.finish(element);
@@ -8677,8 +10227,9 @@ up.motion = (function () {
         applyConfig(options);
         oldElement = up.fragment.get(oldElement);
         newElement = up.fragment.get(newElement);
-        const transitionFn = findTransitionFn(transitionObject);
+        let transitionFn = findTransitionFn(transitionObject);
         const willMorph = willAnimate(oldElement, transitionFn, options);
+        transitionFn = up.error.guardFn(transitionFn);
         const beforeStart = u.pluckKey(options, 'beforeStart') || u.noop;
         const afterInsert = u.pluckKey(options, 'afterInsert') || u.noop;
         const beforeDetach = u.pluckKey(options, 'beforeDetach') || u.noop;
@@ -8689,7 +10240,7 @@ up.motion = (function () {
             if (motionController.isActive(oldElement) && (options.trackMotion === false)) {
                 return transitionFn(oldElement, newElement, options);
             }
-            up.puts('up.morph()', 'Morphing %o to %o with transition %O', oldElement, newElement, transitionObject);
+            up.puts('up.morph()', 'Morphing %o to %o with transition %O over %d ms', oldElement, newElement, transitionObject, options.duration);
             const viewport = up.viewport.get(oldElement);
             const scrollTopBeforeReveal = viewport.scrollTop;
             const oldRemote = up.viewport.absolutize(oldElement, {
@@ -8718,27 +10269,21 @@ up.motion = (function () {
             return Promise.resolve();
         }
     }
-    function findTransitionFn(object) {
-        if (isNone(object)) {
+    function findTransitionFn(value) {
+        if (isNone(value)) {
             return undefined;
         }
-        else if (u.isFunction(object)) {
-            return object;
+        else if (u.isFunction(value)) {
+            return value;
         }
-        else if (u.isArray(object)) {
-            return composeTransitionFn(...object);
+        else if (u.isArray(value)) {
+            return composeTransitionFn(...value);
         }
-        else if (u.isString(object)) {
-            let namedTransition;
-            if (object.indexOf('/') >= 0) {
-                return composeTransitionFn(...object.split('/'));
-            }
-            else if (namedTransition = namedTransitions[object]) {
-                return findTransitionFn(namedTransition);
-            }
+        else if (u.isString(value) && value.includes('/')) {
+            return composeTransitionFn(...value.split('/'));
         }
         else {
-            return up.fail("Unknown transition %o", object);
+            return namedTransitions.get(value);
         }
     }
     function composeTransitionFn(oldAnimation, newAnimation) {
@@ -8751,35 +10296,31 @@ up.motion = (function () {
             ]);
         }
     }
-    function findAnimationFn(object) {
-        if (isNone(object)) {
+    function findAnimationFn(value) {
+        if (isNone(value)) {
             return undefined;
         }
-        else if (u.isFunction(object)) {
-            return object;
+        else if (u.isFunction(value)) {
+            return value;
         }
-        else if (u.isString(object)) {
-            return findNamedAnimation(object);
-        }
-        else if (u.isOptions(object)) {
-            return (element, options) => animateNow(element, object, options);
+        else if (u.isOptions(value)) {
+            return (element, options) => animateNow(element, value, options);
         }
         else {
-            return up.fail('Unknown animation %o', object);
+            return namedAnimations.get(value);
         }
     }
     const swapElementsDirectly = up.mockable(function (oldElement, newElement) {
         oldElement.replaceWith(newElement);
     });
-    function registerTransition(name, transition) {
-        const fn = findTransitionFn(transition);
-        fn.isDefault = up.framework.evaling;
-        namedTransitions[name] = fn;
-    }
-    function registerAnimation(name, animation) {
-        const fn = findAnimationFn(animation);
-        fn.isDefault = up.framework.evaling;
-        namedAnimations[name] = fn;
+    function motionOptions(element, options, parserOptions) {
+        options = u.options(options);
+        let parser = new up.OptionsParser(element, options, parserOptions);
+        parser.booleanOrString('animation');
+        parser.booleanOrString('transition');
+        parser.string('easing');
+        parser.number('duration');
+        return options;
     }
     up.on('up:framework:boot', function () {
         if (!isEnabled()) {
@@ -8790,9 +10331,8 @@ up.motion = (function () {
         return !animationOrTransition || animationOrTransition === 'none';
     }
     function registerOpacityAnimation(name, from, to) {
-        registerAnimation(name, function (element, options) {
-            element.style.opacity = 0;
-            e.setStyle(element, { opacity: from });
+        namedAnimations.put(name, function (element, options) {
+            element.style.opacity = from;
             return animateNow(element, { opacity: to }, options);
         });
     }
@@ -8801,23 +10341,26 @@ up.motion = (function () {
     function translateCSS(dx, dy) {
         return { transform: `translate(${dx}px, ${dy}px)` };
     }
+    function noTranslateCSS() {
+        return { transform: '' };
+    }
     function untranslatedBox(element) {
-        e.setStyle(element, translateCSS(0, 0));
+        e.setStyle(element, noTranslateCSS());
         return element.getBoundingClientRect();
     }
     function registerMoveAnimations(direction, boxToTransform) {
         const animationToName = `move-to-${direction}`;
         const animationFromName = `move-from-${direction}`;
-        registerAnimation(animationToName, function (element, options) {
+        namedAnimations.put(animationToName, function (element, options) {
             const box = untranslatedBox(element);
             const transform = boxToTransform(box);
             return animateNow(element, transform, options);
         });
-        registerAnimation(animationFromName, function (element, options) {
+        namedAnimations.put(animationFromName, function (element, options) {
             const box = untranslatedBox(element);
             const transform = boxToTransform(box);
             e.setStyle(element, transform);
-            return animateNow(element, translateCSS(0, 0), options);
+            return animateNow(element, noTranslateCSS(), options);
         });
     }
     registerMoveAnimations('top', function (box) {
@@ -8836,24 +10379,25 @@ up.motion = (function () {
         const travelDistance = up.viewport.rootWidth() - box.left;
         return translateCSS(travelDistance, 0);
     });
-    registerTransition('cross-fade', ['fade-out', 'fade-in']);
-    registerTransition('move-left', ['move-to-left', 'move-from-right']);
-    registerTransition('move-right', ['move-to-right', 'move-from-left']);
-    registerTransition('move-up', ['move-to-top', 'move-from-bottom']);
-    registerTransition('move-down', ['move-to-bottom', 'move-from-top']);
+    namedTransitions.put('cross-fade', ['fade-out', 'fade-in']);
+    namedTransitions.put('move-left', ['move-to-left', 'move-from-right']);
+    namedTransitions.put('move-right', ['move-to-right', 'move-from-left']);
+    namedTransitions.put('move-up', ['move-to-top', 'move-from-bottom']);
+    namedTransitions.put('move-down', ['move-to-bottom', 'move-from-top']);
     up.on('up:framework:reset', reset);
     return {
         morph,
         animate,
         finish,
         finishCount() { return motionController.finishCount; },
-        transition: registerTransition,
-        animation: registerAnimation,
+        transition: namedTransitions.put,
+        animation: namedAnimations.put,
         config,
         isEnabled,
         isNone,
         willAnimate,
-        swapElementsDirectly
+        swapElementsDirectly,
+        motionOptions,
     };
 })();
 up.transition = up.motion.transition;
@@ -8863,24 +10407,22 @@ up.animate = up.motion.animate;
 
 
 /***/ }),
-/* 91 */
+/* 94 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(92);
+__webpack_require__(95);
 const u = up.util;
 up.network = (function () {
     const config = new up.Config(() => ({
-        concurrency() { return shouldReduceRequests() ? 3 : 6; },
+        concurrency: 6,
         wrapMethod: true,
         cacheSize: 70,
         cacheExpireAge: 15 * 1000,
         cacheEvictAge: 90 * 60 * 1000,
-        badDownlink: 0.6,
-        badRTT: 750,
-        badResponseTime: 400,
+        lateDelay: 400,
         fail(response) { return (response.status < 200 || response.status > 299) && response.status !== 304; },
         autoCache(request) { return request.isSafe(); },
-        expireCache(request, _response) { return !request.isSafe(); },
+        expireCache(request) { return !request.isSafe(); },
         evictCache: false,
         progressBar: true,
         timeout: 90000,
@@ -8891,7 +10433,6 @@ up.network = (function () {
     function reset() {
         abortRequests();
         queue.reset();
-        config.reset();
         cache.reset();
         progressBar?.destroy();
         progressBar = null;
@@ -8903,14 +10444,13 @@ up.network = (function () {
         return request;
     }
     function parseRequestOptions(args) {
-        const options = u.extractOptions(args);
-        if (!options.url) {
-            options.url = args[0];
-        }
+        let options = u.parseArgIntoOptions(args, 'url');
         up.migrate.handleRequestOptions?.(options);
         return options;
     }
     function processRequest(request) {
+        cache.expire(request.expireCache ?? u.evalOption(config.expireCache, request) ?? false);
+        cache.evict(request.evictCache ?? u.evalOption(config.evictCache, request) ?? false);
         useCachedRequest(request) || queueRequest(request);
     }
     function useCachedRequest(newRequest) {
@@ -8920,6 +10460,7 @@ up.network = (function () {
             if (!newRequest.background) {
                 queue.promoteToForeground(cachedRequest);
             }
+            cachedRequest.mergeIfUnsent(newRequest);
             cache.track(cachedRequest, newRequest, { onIncompatible: processRequest });
             return true;
         }
@@ -8932,22 +10473,30 @@ up.network = (function () {
     function handleCaching(request) {
         if (request.willCache()) {
             cache.put(request);
-            request.onLoading = () => cache.put(request);
+            request.onLoading = () => cache.reindex(request);
         }
         u.always(request, function (responseOrError) {
-            let expireCache = responseOrError.expireCache ?? request.expireCache ?? u.evalOption(config.expireCache, request, responseOrError);
-            if (expireCache) {
-                cache.expire(expireCache, { except: request });
+            cache.expire(responseOrError.expireCache ?? false, { except: request });
+            cache.evict(responseOrError.evictCache ?? false, { except: request });
+            let isResponse = responseOrError instanceof up.Response;
+            let isNetworkError = !isResponse;
+            let isSuccessResponse = isResponse && responseOrError.ok;
+            let isErrorResponse = isResponse && !responseOrError.ok;
+            let isEmptyResponse = isResponse && responseOrError.none;
+            let redirectRequest = isResponse && responseOrError.redirectRequest;
+            if (isErrorResponse) {
+                cache.evict(request.url);
             }
-            let evictCache = responseOrError.evictCache ?? request.evictCache ?? u.evalOption(config.evictCache, request, responseOrError);
-            if (evictCache) {
-                cache.evict(evictCache, { except: request });
-            }
-            if (cache.get(request)) {
-                cache.put(request);
-            }
-            if (!responseOrError.isCacheable?.()) {
+            else if (isNetworkError || isEmptyResponse) {
                 cache.evict(request);
+            }
+            else if (isSuccessResponse) {
+                if (cache.get(request)) {
+                    cache.put(request);
+                }
+                if (redirectRequest && (redirectRequest.willCache() || cache.get(redirectRequest))) {
+                    cache.put(redirectRequest);
+                }
             }
         });
     }
@@ -8957,25 +10506,9 @@ up.network = (function () {
     function loadPage(requestsAttrs) {
         new up.Request(requestsAttrs).loadPage();
     }
-    function shouldReduceRequests() {
-        let netInfo = navigator.connection;
-        if (netInfo) {
-            return (netInfo.rtt && (netInfo.rtt > config.badRTT)) ||
-                (netInfo.downlink && (netInfo.downlink < config.badDownlink));
-        }
-    }
     function abortRequests(...args) {
         up.migrate.preprocessAbortArgs?.(args);
         queue.abort(...args);
-    }
-    function registerAliasForRedirect(request, response) {
-        if (request.cache && response.url && request.url !== response.url) {
-            const newRequest = u.variant(request, {
-                method: response.method,
-                url: response.url
-            });
-            cache.alias(request, newRequest);
-        }
     }
     function isSafeMethod(method) {
         return u.contains(['GET', 'OPTIONS', 'HEAD'], u.normalizeMethod(method));
@@ -8998,9 +10531,7 @@ up.network = (function () {
         isSafeMethod,
         config,
         abort: abortRequests,
-        registerAliasForRedirect,
         queue,
-        shouldReduceRequests,
         loadPage,
     };
 })();
@@ -9009,7 +10540,7 @@ up.cache = up.network.cache;
 
 
 /***/ }),
-/* 92 */
+/* 95 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9018,10 +10549,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 93 */
+/* 96 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(94);
+__webpack_require__(97);
 const u = up.util;
 const e = up.element;
 up.layer = (function () {
@@ -9051,9 +10582,10 @@ up.layer = (function () {
                 openAnimation: 'fade-in',
                 closeAnimation: 'fade-out',
                 dismissLabel: '×',
-                dismissAriaLabel: 'Dismiss dialog',
+                dismissARIALabel: 'Dismiss dialog',
                 dismissable: true,
-                history: 'auto'
+                history: 'auto',
+                trapFocus: true,
             },
             cover: {
                 mainTargets: ['[up-main~=cover]']
@@ -9086,7 +10618,8 @@ up.layer = (function () {
                 position: 'bottom',
                 size: 'medium',
                 align: 'left',
-                dismissable: 'outside key'
+                dismissable: 'outside key',
+                trapFocus: false,
             },
             foreignOverlaySelectors: ['dialog']
         };
@@ -9108,7 +10641,9 @@ up.layer = (function () {
             return [config[mode], config.overlay, config.any];
         }
     }
-    function normalizeOptions(options) {
+    function normalizeLayerOption(options) {
+        if (options.layer instanceof up.Layer)
+            return;
         up.migrate.handleLayerOptions?.(options);
         if (u.isGiven(options.layer)) {
             let match = String(options.layer).match(/^(new|shatter|swap)( (\w+))?/);
@@ -9116,7 +10651,7 @@ up.layer = (function () {
                 options.layer = 'new';
                 const openMethod = match[1];
                 const shorthandMode = match[3];
-                options.mode || (options.mode = shorthandMode || config.mode);
+                options.mode ||= shorthandMode || config.mode;
                 if (openMethod === 'swap') {
                     if (up.layer.isOverlay()) {
                         options.baseLayer = 'parent';
@@ -9127,24 +10662,25 @@ up.layer = (function () {
                 }
             }
         }
+        else if (u.isElementLike(options.target)) {
+            options.layer = stack.get(options.target, { normalizeLayerOptions: false });
+        }
+        else if (options.origin) {
+            options.layer = 'origin';
+        }
         else {
-            if (options.mode) {
-                options.layer = 'new';
-            }
-            else if (u.isElementish(options.target)) {
-                options.layer = stack.get(options.target, { normalizeLayerOptions: false });
-            }
-            else if (options.origin) {
-                options.layer = 'origin';
-            }
-            else {
-                options.layer = 'current';
-            }
+            options.layer = 'current';
         }
-        if (!options.context) {
-            options.context = {};
-        }
+    }
+    function setBaseLayerOption(options) {
+        if (options.baseLayer instanceof up.Layer)
+            return;
         options.baseLayer = stack.get('current', { ...options, normalizeLayerOptions: false });
+    }
+    function normalizeOptions(options) {
+        normalizeLayerOption(options);
+        options.context ??= {};
+        setBaseLayerOption(options);
     }
     function build(options, beforeNew) {
         const { mode } = options;
@@ -9154,7 +10690,7 @@ up.layer = (function () {
         if (handleDeprecatedConfig) {
             configs.forEach(handleDeprecatedConfig);
         }
-        options.openAnimation ?? (options.openAnimation = u.pluckKey(options, 'animation'));
+        options.openAnimation ??= u.pluckKey(options, 'animation');
         options = u.mergeDefined(...configs, { mode, stack }, options);
         if (beforeNew) {
             options = beforeNew(options);
@@ -9168,7 +10704,6 @@ up.layer = (function () {
         return e.callbackAttr(link, attr, { exposedKeys: ['layer', 'value', 'response'] });
     }
     function reset() {
-        config.reset();
         stack.reset();
         handlers = u.filter(handlers, 'isDefault');
     }
@@ -9192,7 +10727,7 @@ up.layer = (function () {
         });
     }
     function anySelector() {
-        return u.map(LAYER_CLASSES, Class => Class.selector()).join(',');
+        return u.map(LAYER_CLASSES, (Class) => Class.selector()).join();
     }
     function optionToString(option) {
         if (u.isString(option)) {
@@ -9203,7 +10738,7 @@ up.layer = (function () {
         }
     }
     function isWithinForeignOverlay(element) {
-        let selector = config.foreignOverlaySelectors.join(',');
+        let selector = config.selector('foreignOverlaySelectors');
         return !!(selector && element.closest(selector));
     }
     up.on('up:fragment:destroyed', function () {
@@ -9224,7 +10759,7 @@ up.layer = (function () {
         closeCallbackAttr,
         anySelector,
         optionToString,
-        get stack() { return stack; },
+        get stack() { return stack.layers; },
         isWithinForeignOverlay
     };
     u.delegate(api, [
@@ -9262,7 +10797,7 @@ up.layer = (function () {
 
 
 /***/ }),
-/* 94 */
+/* 97 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9271,52 +10806,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(96);
+__webpack_require__(99);
 up.link = (function () {
     const u = up.util;
     const e = up.element;
-    const linkPreloader = new up.LinkPreloader();
+    let lastTouchstartTarget = null;
     let lastMousedownTarget = null;
-    const LINKS_WITH_LOCAL_HTML = ['a[up-content]', 'a[up-fragment]', 'a[up-document]'];
-    const LINKS_WITH_REMOTE_HTML = ['a[href]', '[up-href]'];
-    const ATTRIBUTES_SUGGESTING_FOLLOW = ['[up-follow]', '[up-target]', '[up-layer]', '[up-transition]', '[up-preload]', '[up-instant]', '[up-href]'];
-    function combineFollowableSelectors(elementSelectors, attributeSelectors) {
-        return u.flatMap(elementSelectors, elementSelector => attributeSelectors.map(attrSelector => elementSelector + attrSelector));
-    }
+    let lastInstantTarget = null;
+    const ATTRS_WITH_LOCAL_HTML = '[up-content], [up-fragment], [up-document]';
+    const ATTRS_SUGGESTING_FOLLOW = `${ATTRS_WITH_LOCAL_HTML}, [up-target], [up-layer], [up-transition], [up-preload]`;
+    const DEFAULT_INTERACTIVE_ELEMENT = 'a[href], button';
     const config = new up.Config(() => ({
-        followSelectors: combineFollowableSelectors(LINKS_WITH_REMOTE_HTML, ATTRIBUTES_SUGGESTING_FOLLOW).concat(LINKS_WITH_LOCAL_HTML),
-        noFollowSelectors: ['[up-follow=false]', 'a[download]', 'a[target]', 'a[href^="#"]:not([up-content]):not([up-fragment]):not([up-document])', 'a[href^="javascript:"]'],
+        followSelectors: ['[up-follow]', `a:is(${ATTRS_SUGGESTING_FOLLOW})`],
+        noFollowSelectors: ['[up-follow=false]', 'a[download]', 'a[target]', 'a[href^="javascript:"]', 'a[href^="mailto:"]', 'a[href^="tel:"]', `a[href^="#"]:not(${ATTRS_WITH_LOCAL_HTML})`, e.crossOriginSelector('href'), e.crossOriginSelector('up-href')],
         instantSelectors: ['[up-instant]'],
         noInstantSelectors: ['[up-instant=false]', '[onclick]'],
-        preloadSelectors: combineFollowableSelectors(LINKS_WITH_REMOTE_HTML, ['[up-preload]']),
+        preloadSelectors: ['[up-preload]'],
         noPreloadSelectors: ['[up-preload=false]'],
-        clickableSelectors: LINKS_WITH_LOCAL_HTML.concat(['[up-emit]', '[up-accept]', '[up-dismiss]', '[up-clickable]']),
+        clickableSelectors: ['[up-clickable]', '[up-follow]', '[up-emit]', '[up-accept]', '[up-dismiss]', `a:is(${ATTRS_SUGGESTING_FOLLOW})`],
+        noClickableSelectors: ['[up-clickable=false]', DEFAULT_INTERACTIVE_ELEMENT],
         preloadDelay: 90,
-        preloadEnabled: 'auto'
     }));
-    function fullFollowSelector() {
-        return config.followSelectors.join(',');
-    }
-    function fullPreloadSelector() {
-        return config.preloadSelectors.join(',');
-    }
-    function fullInstantSelector() {
-        return config.instantSelectors.join(',');
-    }
-    function fullClickableSelector() {
-        return config.clickableSelectors.join(',');
-    }
-    function isFollowDisabled(link) {
-        return link.matches(config.noFollowSelectors.join(',')) || u.isCrossOrigin(link);
-    }
     function isPreloadDisabled(link) {
-        return !up.browser.canPushState() ||
-            link.matches(config.noPreloadSelectors.join(',')) ||
-            isFollowDisabled(link) ||
-            !willCache(link);
+        return !up.browser.canPushState() || !isFollowable(link) || !willCache(link);
     }
     function willCache(link) {
         const options = parseRequestOptions(link);
@@ -9329,20 +10844,17 @@ up.link = (function () {
             return request.willCache();
         }
     }
-    function isInstantDisabled(link) {
-        return link.matches(config.noInstantSelectors.join(',')) || isFollowDisabled(link);
-    }
     function reset() {
+        lastTouchstartTarget = null;
         lastMousedownTarget = null;
-        config.reset();
-        linkPreloader.reset();
+        lastInstantTarget = null;
     }
-    const follow = up.mockable(function (link, options) {
-        return up.render(followOptions(link, options));
+    const follow = up.mockable(function (link, options, parserOptions) {
+        return up.render(followOptions(link, options, parserOptions));
     });
     function parseRequestOptions(link, options, parserOptions) {
         options = u.options(options);
-        const parser = new up.OptionsParser(link, options, parserOptions);
+        const parser = new up.OptionsParser(link, options, { ...parserOptions, fail: false });
         options.url = followURL(link, options);
         options.method = followMethod(link, options);
         parser.json('headers');
@@ -9355,26 +10867,28 @@ up.link = (function () {
         parser.boolean('abortable');
         parser.boolean('background');
         parser.string('contentType');
-        parser.number('badResponseTime');
+        parser.booleanOrNumber('lateDelay');
         parser.number('timeout');
+        parser.booleanOrString('fail');
         return options;
     }
     function followOptions(link, options, parserOptions) {
         link = up.fragment.get(link);
-        options = parseRequestOptions(link, options, parserOptions);
+        options = u.options(options);
         const parser = new up.OptionsParser(link, options, { fail: true, ...parserOptions });
-        parser.boolean('feedback');
-        parser.boolean('fail');
-        options.origin || (options.origin = link);
+        parser.include(parseRequestOptions);
+        options.origin ||= link;
         parser.boolean('navigate', { default: true });
         parser.string('confirm', { attr: ['up-confirm', 'data-confirm'] });
         parser.string('target');
         parser.booleanOrString('fallback');
-        parser.string('content');
-        parser.string('fragment');
+        parser.string('match');
         parser.string('document');
-        parser.boolean('useKeep');
-        parser.boolean('useHungry');
+        parser.string('fragment');
+        parser.string('content');
+        parser.boolean('keep', { attr: 'up-use-keep' });
+        parser.boolean('hungry', { attr: 'up-use-hungry' });
+        parser.json('data', { attr: 'up-use-data' });
         parser.callback('onLoaded');
         parser.callback('onRendered', { mainKey: 'result' });
         parser.callback('onFinished', { mainKey: 'result' });
@@ -9397,8 +10911,12 @@ up.link = (function () {
         parser.string('dismissEvent');
         parser.string('acceptLocation');
         parser.string('dismissLocation');
-        parser.booleanOrString('history');
+        parser.booleanOrString('closeAnimation');
+        parser.string('closeEasing');
+        parser.number('closeDuration');
+        parser.include(up.status.statusOptions);
         parser.booleanOrString('focus');
+        parser.booleanOrString('focusVisible');
         parser.boolean('saveScroll');
         parser.boolean('saveFocus');
         parser.booleanOrString('scroll');
@@ -9410,13 +10928,10 @@ up.link = (function () {
         parser.booleanOrString('history');
         parser.booleanOrString('location');
         parser.booleanOrString('title');
-        parser.booleanOrString('animation');
-        parser.booleanOrString('transition');
-        parser.string('easing');
-        parser.number('duration');
-        if (!options.guardEvent) {
-            options.guardEvent = up.event.build('up:link:follow', { log: 'Following link' });
-        }
+        parser.boolean('metaTags');
+        parser.booleanOrString('lang');
+        parser.include(up.motion.motionOptions);
+        options.guardEvent ??= up.event.build('up:link:follow', { log: ['Following link %o', link] });
         return options;
     }
     function preload(link, options) {
@@ -9427,21 +10942,22 @@ up.link = (function () {
         }
         const guardEvent = up.event.build('up:link:preload', { log: ['Preloading link %o', link] });
         return follow(link, {
+            abort: false,
             abortable: false,
+            background: true,
+            cache: true,
             ...options,
+            ...up.RenderOptions.NO_INPUT_INTERFERENCE,
+            ...up.RenderOptions.NO_PREVIEWS,
             guardEvent,
-            preload: true
+            preload: true,
         });
     }
     function preloadIssue(link) {
-        if (!u.evalAutoOption(config.preloadEnabled, autoPreloadEnabled, link)) {
-            return 'Preloading is disabled';
-        }
-        else if (!isSafe(link)) {
+        if (!isSafe(link)) {
             return 'Will not preload an unsafe link';
         }
     }
-    const autoPreloadEnabled = u.negate(up.network.shouldReduceRequests);
     function followMethod(link, options = {}) {
         return u.normalizeMethod(options.method || link.getAttribute('up-method') || link.getAttribute('data-method'));
     }
@@ -9453,63 +10969,74 @@ up.link = (function () {
     }
     function isFollowable(link) {
         link = up.fragment.get(link);
-        return link.matches(fullFollowSelector()) && !isFollowDisabled(link);
+        return config.matches(link, 'followSelectors');
     }
     function makeFollowable(link) {
         if (!isFollowable(link)) {
             link.setAttribute('up-follow', '');
         }
     }
-    function makeClickable(link) {
-        if (link.matches('a[href], button')) {
-            return;
-        }
-        e.setMissingAttrs(link, {
+    function makeClickable(element) {
+        let role = element.matches('a, [up-follow]') ? 'link' : 'button';
+        e.setMissingAttrs(element, {
             tabindex: '0',
-            role: 'link',
+            role,
             'up-clickable': ''
         });
-        link.addEventListener('keydown', function (event) {
-            if ((event.key === 'Enter') || (event.key === 'Space')) {
+        element.addEventListener('keydown', function (event) {
+            if ((event.key === 'Enter') || (element.role === 'button' && event.key === 'Space')) {
                 return forkEventAsUpClick(event);
             }
         });
     }
-    up.macro(fullClickableSelector, makeClickable);
+    up.macro(config.selectorFn('clickableSelectors'), makeClickable);
     function shouldFollowEvent(event, link) {
-        if (event.defaultPrevented || isFollowDisabled(link)) {
+        if (event.defaultPrevented) {
             return false;
         }
-        const betterTargetSelector = `a, [up-href], ${up.form.fieldSelector()}`;
+        const betterTargetSelector = `a, [up-follow], ${up.form.fieldSelector()}`;
         const betterTarget = event.target.closest(betterTargetSelector);
         return !betterTarget || (betterTarget === link);
     }
     function isInstant(linkOrDescendant) {
-        const element = linkOrDescendant.closest(fullInstantSelector());
+        const element = linkOrDescendant.closest(config.selector('instantSelectors'));
         return element && !isInstantDisabled(element);
+    }
+    function isInstantDisabled(link) {
+        return config.matches(link, 'noInstantSelectors') || config.matches(link, 'noFollowSelectors');
     }
     function convertClicks(layer) {
         layer.on('click', function (event, element) {
-            if (!up.event.isUnmodified(event)) {
+            if (up.event.isModified(event)) {
                 return;
             }
-            if (isInstant(element) && lastMousedownTarget) {
+            if (isInstant(element) && lastInstantTarget === element) {
                 up.event.halt(event);
             }
-            else if (layer.wasHitByMouseEvent(event) && !didUserDragAway(event)) {
+            else if (up.event.inputDevice === 'key' || up.event.isSyntheticClick(event) || (layer.wasHitByMouseEvent(event) && !didUserDragAway(event))) {
                 forkEventAsUpClick(event);
             }
-            return lastMousedownTarget = null;
+            lastMousedownTarget = null;
+            lastInstantTarget = null;
+        });
+        layer.on('touchstart', { passive: true }, function (event, element) {
+            lastTouchstartTarget = element;
         });
         layer.on('mousedown', function (event, element) {
-            if (!up.event.isUnmodified(event)) {
+            if (up.event.isModified(event)) {
                 return;
             }
-            lastMousedownTarget = event.target;
-            if (isInstant(element)) {
+            lastMousedownTarget = element;
+            if (isInstant(element) && !isLongPressPossible(event)) {
+                lastInstantTarget = element;
                 forkEventAsUpClick(event);
             }
+            lastTouchstartTarget = null;
         });
+    }
+    function isLongPressPossible(mousedownEvent) {
+        let mousedownTarget = mousedownEvent.target;
+        return (lastTouchstartTarget === mousedownTarget) && mousedownTarget.closest('[href]');
     }
     function didUserDragAway(clickEvent) {
         return lastMousedownTarget && (lastMousedownTarget !== clickEvent.target);
@@ -9523,53 +11050,91 @@ up.link = (function () {
         const method = followMethod(link);
         return up.network.isSafeMethod(method);
     }
-    up.on('up:click', fullFollowSelector, function (event, link) {
+    function onLoadCondition(condition, link, callback) {
+        switch (condition) {
+            case 'insert':
+                callback();
+                break;
+            case 'reveal': {
+                let margin = e.numberAttr(link, 'up-intersect-margin');
+                up.fragment.onFirstIntersect(link, callback, { margin });
+                break;
+            }
+            case 'hover':
+                new up.LinkFollowIntent(link, callback);
+                break;
+            case 'manual':
+                break;
+        }
+    }
+    function loadDeferred(link, options) {
+        let guardEvent = up.event.build('up:deferred:load', { log: ['Loading deferred %o', link] });
+        let forcedOptions = {
+            navigate: false,
+            guardEvent,
+            ...options,
+        };
+        let defaults = {
+            target: ':origin',
+            cache: 'auto',
+            revalidate: 'auto',
+            feedback: true,
+        };
+        return follow(link, forcedOptions, { defaults });
+    }
+    up.attribute('up-defer', { defaultValue: 'insert' }, function (link, condition) {
+        let doLoad = (options) => up.error.muteUncriticalRejection(loadDeferred(link, options));
+        onLoadCondition(condition, link, doLoad);
+    });
+    up.on('up:click', config.selectorFn('followSelectors'), function (event, link) {
         if (shouldFollowEvent(event, link)) {
             up.event.halt(event, { log: true });
             up.focus(link, { preventScroll: true });
             up.error.muteUncriticalRejection(follow(link));
         }
     });
-    up.macro('[up-expand]', function (area) {
-        const selector = area.getAttribute('up-expand') || 'a, [up-href]';
-        let childLink = e.get(area, selector);
+    up.attribute('up-expand', { defaultValue: 'a, [up-href]', macro: true }, function (area, childLinkSelector) {
+        let childLink = e.get(area, childLinkSelector);
         if (childLink) {
-            const areaAttrs = e.upAttrs(childLink);
-            if (!areaAttrs['up-href']) {
-                areaAttrs['up-href'] = childLink.getAttribute('href');
-            }
-            e.setMissingAttrs(area, areaAttrs);
+            e.setMissingAttrs(area, {
+                'up-href': e.attr(childLink, 'href'),
+                ...e.upAttrs(childLink)
+            });
+            childLink.upExpandedPair = area.upExpandedPair = [area, childLink];
+            e.addClasses(area, e.upClasses(childLink));
             makeFollowable(area);
         }
     });
-    up.compiler(fullPreloadSelector, function (link) {
+    up.compiler(config.selectorFn('preloadSelectors'), function (link) {
         if (!isPreloadDisabled(link)) {
-            linkPreloader.watchLink(link);
+            let doPreload = (options) => up.error.muteUncriticalRejection(preload(link, options));
+            let condition = e.booleanOrStringAttr(link, 'up-preload');
+            if (condition === true || u.isUndefined(condition))
+                condition = 'hover';
+            onLoadCondition(condition, link, doPreload);
         }
     });
     up.on('up:framework:reset', reset);
     return {
         follow,
         followOptions,
+        requestOptions: parseRequestOptions,
         preload,
         makeFollowable,
-        makeClickable,
         isSafe,
         isFollowable,
         shouldFollowEvent,
-        followMethod,
         convertClicks,
         config,
-        combineFollowableSelectors,
-        preloadSelector: fullPreloadSelector,
-        followSelector: fullFollowSelector,
+        loadDeferred,
     };
 })();
 up.follow = up.link.follow;
+up.deferred = { load: up.link.loadDeferred };
 
 
 /***/ }),
-/* 96 */
+/* 99 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9578,31 +11143,28 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 97 */
+/* 100 */
 /***/ (() => {
 
 up.form = (function () {
     const u = up.util;
     const e = up.element;
-    const ATTRIBUTES_SUGGESTING_SUBMIT = ['[up-submit]', '[up-target]', '[up-layer]', '[up-transition]'];
     const config = new up.Config(() => ({
         groupSelectors: ['[up-form-group]', 'fieldset', 'label', 'form'],
-        fieldSelectors: ['select', 'input:not([type=submit]):not([type=image])', 'button[type]:not([type=submit])', 'textarea'],
-        submitSelectors: up.link.combineFollowableSelectors(['form'], ATTRIBUTES_SUGGESTING_SUBMIT),
-        noSubmitSelectors: ['[up-submit=false]', '[target]'],
+        fieldSelectors: ['select', 'input:not([type=submit], [type=image], [type=button])', 'button[type]:not([type=submit], [type=button])', 'textarea'],
+        submitSelectors: ['form:is([up-submit], [up-target], [up-layer], [up-transition])'],
+        noSubmitSelectors: ['[up-submit=false]', '[target]', e.crossOriginSelector('action')],
         submitButtonSelectors: ['input[type=submit]', 'input[type=image]', 'button[type=submit]', 'button:not([type])'],
+        genericButtonSelectors: ['input[type=button]', 'button[type=button]'],
+        validateBatch: true,
         watchInputEvents: ['input', 'change'],
         watchInputDelay: 0,
         watchChangeEvents: ['change'],
+        watchableEvents: ['input', 'change'],
+        arrayParam: (name) => name.endsWith('[]'),
     }));
-    function fullSubmitSelector() {
-        return config.submitSelectors.join(',');
-    }
-    function reset() {
-        config.reset();
-    }
     function fieldSelector(suffix = '') {
-        return config.fieldSelectors.map(field => field + suffix).join(',');
+        return config.fieldSelectors.map((field) => field + suffix).join();
     }
     function isField(element) {
         return element.matches(fieldSelector());
@@ -9613,136 +11175,152 @@ up.form = (function () {
         if (root.matches('form[id]')) {
             const outsideFieldSelector = fieldSelector(e.attrSelector('form', root.getAttribute('id')));
             const outsideFields = up.fragment.all(outsideFieldSelector, { layer: root });
-            fields.push(...outsideFields);
-            fields = u.uniq(fields);
+            fields = u.uniq([...fields, ...outsideFields]);
         }
         return fields;
+    }
+    function findFieldsAndButtons(container) {
+        return [
+            ...findFields(container),
+            ...findSubmitButtons(container),
+            ...findGenericButtons(container),
+        ];
     }
     function findSubmitButtons(root) {
         return e.subtree(root, submitButtonSelector());
     }
-    function submittingButton(form) {
-        const selector = submitButtonSelector();
-        const focusedElement = up.viewport.focusedElementWithin(form);
-        if (focusedElement && focusedElement.matches(selector)) {
-            return focusedElement;
-        }
-        else {
-            return e.get(form, selector);
-        }
+    function findGenericButtons(root) {
+        return e.subtree(root, config.selector('genericButtonSelectors'));
+    }
+    function isSubmitButton(element) {
+        return element?.matches(submitButtonSelector());
     }
     function submitButtonSelector() {
-        return config.submitButtonSelectors.join(',');
+        return config.selector('submitButtonSelectors');
     }
     const submit = up.mockable((form, options) => {
         return up.render(submitOptions(form, options));
     });
     function submitOptions(form, options, parserOptions) {
+        form = up.fragment.get(form);
         form = getForm(form);
-        options = destinationOptions(form, options, parserOptions);
+        options = u.options(options);
         let parser = new up.OptionsParser(form, options, parserOptions);
+        parser.include(destinationOptions);
         parser.string('failTarget', { default: up.fragment.tryToTarget(form) });
-        parser.booleanOrString('disable');
-        options.guardEvent || (options.guardEvent = up.event.build('up:form:submit', {
+        options.guardEvent ||= up.event.build('up:form:submit', {
             submitButton: options.submitButton,
             log: 'Submitting form',
-            params: options.params
-        }));
-        options.origin || (options.origin = up.viewport.focusedElementWithin(form) || options.submitButton || form);
-        Object.assign(options, up.link.followOptions(form, options, parserOptions));
+            params: options.params,
+            form,
+        });
+        options.origin ||= up.viewport.focusedElementWithin(form) || options.submitButton || form;
+        options.activeElements = u.uniq([options.origin, options.submitButton, form].filter(u.isElement));
+        parser.include(up.link.followOptions);
+        Object.assign(options, submitButtonOverrides(options.submitButton));
         return options;
     }
     function watchOptions(field, options, parserOptions = {}) {
         options = u.options(options);
-        let parser = new up.OptionsParser(field, options, { ...parserOptions, closest: true, attrPrefix: 'up-watch-' });
-        parser.boolean('feedback');
-        parser.booleanOrString('disable');
+        parserOptions.closest ??= true;
+        parserOptions.attrPrefix ??= 'up-watch-';
+        let parser = new up.OptionsParser(field, options, parserOptions);
+        parser.include(up.status.statusOptions, parserOptions);
         parser.string('event');
         parser.number('delay');
         let config = up.form.config;
         if (options.event === 'input') {
             options.event = u.evalOption(config.watchInputEvents, field);
-            options.delay ?? (options.delay = config.watchInputDelay);
+            options.delay ??= config.watchInputDelay;
         }
         else if (options.event === 'change') {
             options.event = u.evalOption(config.watchChangeEvents, field);
         }
-        options.origin || (options.origin = field);
+        options.origin ||= field;
         return options;
     }
-    function disableContainer(container) {
-        let focusedElement = document.activeElement;
+    function validateOptions(field, options, parserOptions = {}) {
+        options = u.options(options);
+        let parser = new up.OptionsParser(field, options, { ...parserOptions, closest: true, attrPrefix: 'up-validate-' });
+        parser.string('url');
+        parser.string('method', { normalize: u.normalizeMethod });
+        parser.boolean('batch', { default: config.validateBatch });
+        parser.json('params');
+        parser.json('headers');
+        parser.include(watchOptions, { defaults: { event: 'change' } });
+        return options;
+    }
+    function disableContainerTemp(container) {
+        let controls = findFieldsAndButtons(container);
+        return u.sequence(u.map(controls, disableControlTemp));
+    }
+    function disableControlTemp(control) {
+        if (control.disabled)
+            return;
         let focusFallback;
-        let controls = [...findFields(container), ...findSubmitButtons(container)];
-        for (let control of controls) {
-            if (control === focusedElement) {
-                focusFallback = findGroup(focusedElement);
-            }
-            raiseDisableStack(control);
-        }
-        if (focusFallback) {
+        if (document.activeElement === control) {
+            focusFallback = findGroup(control);
+            control.disabled = true;
             up.focus(focusFallback, { force: true, preventScroll: true });
         }
-        return function () {
-            controls.forEach(lowerDisableStack);
-        };
-    }
-    function raiseDisableStack(control) {
-        if (!control.upDisableCount) {
-            control.upDisableCount || (control.upDisableCount = 0);
-            control.upOriginalDisabled = control.disabled;
+        else {
+            control.disabled = true;
         }
-        control.upDisableCount++;
-        control.disabled = true;
+        return () => { control.disabled = false; };
     }
-    function lowerDisableStack(control) {
-        if (control.upDisableCount) {
-            if (!control.disabled) {
-                control.upDisableCount = 0;
-            }
-            else {
-                control.upDisableCount--;
-                if (!control.upDisableCount) {
-                    control.disabled = control.upOriginalDisabled;
-                }
-            }
-        }
-    }
-    function disableWhile(promise, options) {
-        let undoDisable = handleDisableOption(options);
-        u.always(promise, undoDisable);
-    }
-    function handleDisableOption({ disable, origin }) {
-        if (!disable)
-            return u.noop;
-        let missingOption = (key) => { up.fail("Cannot process { disable: '%s' } option without { %s }", disable, key); };
-        let getOrigin = () => origin || missingOption('origin');
-        let getOriginForm = () => getContainer(getOrigin());
-        let containers;
+    function getDisableContainers(disable, origin) {
+        let originScope = () => getRegion(origin);
         if (disable === true) {
-            containers = [getOriginForm()];
+            return [originScope()];
+        }
+        else if (u.isElement(disable)) {
+            return [disable];
         }
         else if (u.isString(disable)) {
-            containers = up.fragment.subtree(getOriginForm(), disable, { origin });
+            return up.fragment.subtree(originScope(), disable, { origin });
         }
-        return u.sequence(containers.map(disableContainer));
+        else if (u.isArray(disable)) {
+            return u.flatMap(disable, (d) => getDisableContainers(d, origin));
+        }
+        else {
+            return [];
+        }
+    }
+    function getDisablePreviewFn(disable, origin) {
+        return function (preview) {
+            let containers = getDisableContainers(disable, origin);
+            for (let container of containers) {
+                preview.disable(container);
+            }
+        };
+    }
+    function setContainerDisabled(container, disabled) {
+        for (let control of findFieldsAndButtons(container)) {
+            control.disabled = disabled;
+        }
     }
     function destinationOptions(form, options, parserOptions) {
         options = u.options(options);
         form = getForm(form);
         const parser = new up.OptionsParser(form, options, parserOptions);
-        parser.string('contentType', { attr: ['enctype', 'up-content-type'] });
+        parser.string('contentType', { attr: 'enctype' });
         parser.json('headers');
-        const params = up.Params.fromForm(form);
-        const submitButton = submittingButton(form);
+        const paramParts = [
+            up.Params.fromForm(form),
+            e.jsonAttr(form, 'up-params'),
+        ];
+        const headerParts = [
+            e.jsonAttr(form, 'up-headers'),
+        ];
+        const submitButton = (options.submitButton ??= findSubmitButtons(form)[0]);
         if (submitButton) {
-            options.submitButton = submitButton;
-            params.addField(submitButton);
-            options.method || (options.method = submitButton.getAttribute('formmethod'));
-            options.url || (options.url = submitButton.getAttribute('formaction'));
+            paramParts.push(up.Params.fromFields(submitButton), e.jsonAttr(submitButton, 'up-params'));
+            headerParts.push(e.jsonAttr(submitButton, 'up-headers'));
+            options.method ||= submitButton.getAttribute('formmethod');
+            options.url ||= submitButton.getAttribute('formaction');
         }
-        params.addAll(options.params);
-        options.params = params;
+        options.params = up.Params.merge(...paramParts, options.params);
+        options.headers = u.merge(...headerParts, options.headers);
         parser.string('url', { attr: 'action', default: up.fragment.source(form) });
         parser.string('method', {
             attr: ['up-method', 'data-method', 'method'],
@@ -9754,33 +11332,28 @@ up.form = (function () {
         }
         return options;
     }
-    up.on('up:click', submitButtonSelector, function (event, button) {
-        const form = getForm(button);
-        if (form && isSubmittable(form)) {
-            button.focus();
-        }
-    });
-    function watch(container, ...args) {
-        let form = getForm(container);
-        const fields = findFields(container);
-        const unnamedFields = u.reject(fields, 'name');
-        if (unnamedFields.length) {
-            up.puts('up.watch()', 'Will not watch fields without a [name]: %o', unnamedFields);
-        }
-        const callback = u.extractCallback(args) || watchCallbackFromElement(container) || up.fail('No callback given for up.watch()');
-        let options = u.extractOptions(args);
-        const watch = new up.FieldWatcher(form, fields, options, callback);
-        watch.start();
-        return () => watch.stop();
+    function submitButtonOverrides(submitButton) {
+        if (!submitButton)
+            return {};
+        let followOptions = up.link.followOptions(submitButton, {}, { defaults: false });
+        return u.omit(followOptions, ['method', 'url', 'guardEvent', 'origin', 'params', 'headers']);
+    }
+    function watch(...args) {
+        let [root, options, callback] = u.args(args, 'val', 'options', 'callback');
+        root = up.element.get(root);
+        callback ||= watchCallbackFromElement(root) || up.fail('No callback given for up.watch()');
+        const watcher = new up.FieldWatcher(root, options, callback);
+        return watcher.start();
     }
     function watchCallbackFromElement(element) {
         let rawCallback = element.getAttribute('up-watch');
         if (rawCallback) {
-            return up.NonceableCallback.fromString(rawCallback).toFunction('value', 'name').bind(element);
+            return up.NonceableCallback.fromString(rawCallback).toFunction('value', 'name', 'options').bind(element);
         }
     }
-    function autosubmit(target, options) {
-        return watch(target, options, (_value, _name, renderOptions) => submit(target, renderOptions));
+    function autosubmit(target, options = {}) {
+        const onChange = (_diff, renderOptions) => submit(target, renderOptions);
+        return watch(target, { logPrefix: 'up.autosubmit()', ...options, batch: true }, onChange);
     }
     function getGroupSelectors() {
         return up.migrate.migratedFormGroupSelectors?.() || config.groupSelectors;
@@ -9792,10 +11365,10 @@ up.form = (function () {
         return u.findResult(getGroupSelectors(), function (groupSelector) {
             let group = field.closest(groupSelector);
             if (group) {
-                let goodDerivedGroupTarget = up.fragment.tryToTarget(group);
+                let strongDerivedGroupTarget = up.fragment.tryToTarget(group, { strong: true });
                 let goodDerivedFieldTarget = up.fragment.tryToTarget(field);
                 let groupHasFieldTarget = goodDerivedFieldTarget && (group !== field) && `${groupSelector}:has(${goodDerivedFieldTarget})`;
-                let target = goodDerivedGroupTarget || groupHasFieldTarget;
+                let target = strongDerivedGroupTarget || groupHasFieldTarget;
                 if (target) {
                     return {
                         target,
@@ -9808,161 +11381,118 @@ up.form = (function () {
     }
     function validate(...args) {
         let options = parseValidateArgs(...args);
-        let validator = up.FormValidator.forElement(options.origin);
+        let form = getForm(options.origin);
+        let validator = getFormValidator(form);
         return validator.validate(options);
     }
     function parseValidateArgs(originOrTarget, ...args) {
         const options = u.extractOptions(args);
         if (options.origin) {
-            options.target || (options.target = up.fragment.toTarget(originOrTarget));
+            options.target ||= up.fragment.toTarget(originOrTarget);
         }
         else {
-            options.origin || (options.origin = up.fragment.get(originOrTarget));
+            options.origin ||= up.fragment.get(originOrTarget);
         }
         return options;
     }
-    function switcherValues(field) {
-        let value;
-        let meta;
-        if (field.matches('input[type=checkbox]')) {
-            if (field.checked) {
-                value = field.value;
-                meta = ':checked';
-            }
-            else {
-                meta = ':unchecked';
-            }
-        }
-        else if (field.matches('input[type=radio]')) {
-            const form = getContainer(field);
-            const groupName = field.getAttribute('name');
-            const checkedButton = form.querySelector(`input[type=radio]${e.attrSelector('name', groupName)}:checked`);
-            if (checkedButton) {
-                meta = ':checked';
-                value = checkedButton.value;
-            }
-            else {
-                meta = ':unchecked';
-            }
-        }
-        else {
-            value = field.value;
-        }
-        const values = [];
-        if (u.isPresent(value)) {
-            values.push(value);
-            values.push(':present');
-        }
-        else {
-            values.push(':blank');
-        }
-        if (u.isPresent(meta)) {
-            values.push(meta);
-        }
-        return values;
+    function getForm(element) {
+        return getLiteralForm(element) || getClosestForm(element) || getAssociatedForm(element);
     }
-    function switchTargets(switcher, options = {}) {
-        const targetSelector = options.target || options.target || switcher.getAttribute('up-switch');
-        const form = getContainer(switcher);
-        targetSelector || up.fail("No switch target given for %o", switcher);
-        const fieldValues = switcherValues(switcher);
-        for (let target of up.fragment.all(form, targetSelector)) {
-            switchTarget(target, fieldValues);
+    function getLiteralForm(element) {
+        if (element instanceof HTMLFormElement)
+            return element;
+    }
+    function getClosestForm(element) {
+        return element.closest('form');
+    }
+    function getAssociatedForm(element) {
+        let formID = element.getAttribute('form');
+        if (formID) {
+            let selector = 'form' + e.idSelector(formID);
+            return up.fragment.get(selector, { layer: element });
         }
     }
-    const switchTarget = up.mockable(function (target, fieldValues) {
-        let show;
-        fieldValues || (fieldValues = switcherValues(findSwitcherForTarget(target)));
-        let hideValues = target.getAttribute('up-hide-for');
-        if (hideValues) {
-            hideValues = parseSwitchTokens(hideValues);
-            show = u.intersect(fieldValues, hideValues).length === 0;
+    function getFormValidator(form) {
+        return form.upFormValidator ||= setupFormValidator(form);
+    }
+    function setupFormValidator(form) {
+        const validator = new up.FormValidator(form);
+        const stop = validator.start();
+        up.destructor(form, stop);
+        return validator;
+    }
+    function getRegion(origin) {
+        return getOriginRegion(origin) || up.layer.current.element;
+    }
+    function getOriginRegion(origin) {
+        if (origin) {
+            return getForm(origin) || up.layer.get(origin)?.element;
         }
-        else {
-            let showValues = target.getAttribute('up-show-for');
-            showValues = showValues ? parseSwitchTokens(showValues) : [':present', ':checked'];
-            show = u.intersect(fieldValues, showValues).length > 0;
-        }
-        e.toggle(target, show);
-        target.classList.add('up-switched');
+    }
+    const trackFields = up.mockable(function (...args) {
+        let [root, { guard }, callback] = u.args(args, 'val', 'options', 'callback');
+        let filter = function (fields) {
+            let region = getRegion(root);
+            return u.filter(fields, function (field) {
+                return (root === region || root.contains(field))
+                    && (getRegion(field) === region)
+                    && (!guard || guard(field));
+            });
+        };
+        return up.fragment.trackSelector(fieldSelector(), { filter }, callback);
     });
-    function parseSwitchTokens(str) {
-        return u.parseTokens(str, { json: true });
-    }
-    function findSwitcherForTarget(target) {
-        const form = getContainer(target);
-        const switchers = form.querySelectorAll('[up-switch]');
-        const switcher = u.find(switchers, function (switcher) {
-            const targetSelector = switcher.getAttribute('up-switch');
-            return target.matches(targetSelector);
-        });
-        return switcher || up.fail('Could not find [up-switch] field for %o', target);
-    }
-    function getForm(elementOrSelector, options = {}) {
-        const element = up.fragment.get(elementOrSelector, options);
-        return element.form || element.closest('form');
-    }
-    function getContainer(element, options) {
-        return getForm(element, options) || up.layer.get(element).element;
-    }
     function focusedField() {
         return u.presence(document.activeElement, isField);
     }
     function isSubmittable(form) {
         form = up.fragment.get(form);
-        return form.matches(fullSubmitSelector()) && !isSubmitDisabled(form);
+        return config.matches(form, 'submitSelectors');
     }
-    function isSubmitDisabled(form) {
-        return form.matches(config.noSubmitSelectors.join(','));
-    }
-    up.on('submit', fullSubmitSelector, function (event, form) {
-        if (event.defaultPrevented || isSubmitDisabled(form)) {
+    up.on('submit', config.selectorFn('submitSelectors'), function (event, form) {
+        const submitButton = u.presence(event.submitter, isSubmitButton);
+        if (submitButton?.getAttribute('up-submit') === 'false')
             return;
-        }
+        if (event.defaultPrevented)
+            return;
         up.event.halt(event, { log: true });
-        up.error.muteUncriticalRejection(submit(form));
+        up.error.muteUncriticalRejection(submit(form, { submitButton }));
     });
-    up.compiler(validatingFieldSelector, function (fieldOrForm) {
-        let validator = up.FormValidator.forElement(fieldOrForm);
-        validator.watchContainer(fieldOrForm);
+    up.compiler('[up-validate]', { rerun: true }, function (element) {
+        let form = getForm(element);
+        if (form)
+            getFormValidator(form);
     });
-    function validatingFieldSelector() {
-        return config.fieldSelectors.map((selector) => `${selector}[up-validate], [up-validate] ${selector}`).join(', ');
-    }
     up.compiler('[up-switch]', (switcher) => {
-        switchTargets(switcher);
+        return new up.Switcher(switcher).start();
     });
-    up.on('change', '[up-switch]', (_event, switcher) => {
-        switchTargets(switcher);
-    });
-    up.compiler('[up-show-for]:not(.up-switched), [up-hide-for]:not(.up-switched)', (element) => {
-        switchTarget(element);
-    });
-    up.compiler('[up-watch]', (formOrField) => watch(formOrField));
-    up.compiler('[up-autosubmit]', (formOrField) => autosubmit(formOrField));
-    up.on('up:framework:reset', reset);
+    up.attribute('up-watch', (formOrField) => watch(formOrField));
+    up.attribute('up-autosubmit', (formOrField) => autosubmit(formOrField, { logPrefix: '[up-autosubmit]' }));
     return {
         config,
         submit,
         submitOptions,
         destinationOptions,
+        submitButtonOverrides,
         watchOptions,
+        validateOptions,
         isSubmittable,
         watch,
         validate,
         autosubmit,
         fieldSelector,
         fields: findFields,
+        trackFields,
         isField,
         submitButtons: findSubmitButtons,
         focusedField,
-        switchTarget,
-        disableWhile,
-        disable: disableContainer,
+        disableTemp: disableContainerTemp,
+        setDisabled: setContainerDisabled,
+        getDisablePreviewFn,
         group: findGroup,
         groupSolution: findGroupSolution,
         groupSelectors: getGroupSelectors,
         get: getForm,
+        getRegion,
     };
 })();
 up.submit = up.form.submit;
@@ -9972,157 +11502,205 @@ up.validate = up.form.validate;
 
 
 /***/ }),
-/* 98 */
+/* 101 */
 /***/ (() => {
 
-up.feedback = (function () {
+up.status = (function () {
     const u = up.util;
     const e = up.element;
     const config = new up.Config(() => ({
         currentClasses: ['up-current'],
+        activeClasses: ['up-active'],
+        loadingClasses: ['up-loading'],
         navSelectors: ['[up-nav]', 'nav'],
+        noNavSelectors: ['[up-nav=false]'],
     }));
-    function reset() {
-        config.reset();
-        up.layer.root.feedbackLocation = null;
-    }
-    const CLASS_ACTIVE = 'up-active';
-    const CLASS_LOADING = 'up-loading';
+    let namedPreviewFns = new up.Registry('preview');
     const SELECTOR_LINK = 'a, [up-href]';
-    function navSelector() {
-        return config.navSelectors.join(',');
+    function linkCurrentURLs(link) {
+        return link.upCurrentURLs ||= new up.LinkCurrentURLs(link);
     }
-    function normalizeURL(url) {
-        if (url) {
-            return u.normalizeURL(url, { trailingSlash: false, hash: false });
-        }
+    function getNavLocations(nav) {
+        let layerRef = e.attr(nav, 'up-layer') || 'origin';
+        let layers = up.layer.getAll(layerRef, { origin: nav });
+        return u.compact(layers.map(getMatchableLayerLocation));
     }
-    function linkURLs(link) {
-        return link.upFeedbackURLs || (link.upFeedbackURLs = new up.LinkFeedbackURLs(link));
-    }
-    function updateFragment(fragment) {
-        const layerOption = { layer: up.layer.get(fragment) };
-        if (up.fragment.closest(fragment, navSelector(), layerOption)) {
-            const links = up.fragment.subtree(fragment, SELECTOR_LINK, layerOption);
-            updateLinks(links, layerOption);
-        }
-        else {
-            updateLinksWithinNavs(fragment, layerOption);
-        }
-    }
-    function updateLinksWithinNavs(fragment, options) {
-        const navs = up.fragment.subtree(fragment, navSelector(), options);
-        const links = u.flatMap(navs, nav => e.subtree(nav, SELECTOR_LINK));
-        updateLinks(links, options);
-    }
-    function getNormalizedLayerLocation(layer) {
-        return layer.feedbackLocation || normalizeURL(layer.location);
-    }
-    function updateLinks(links, options = {}) {
-        if (!links.length) {
-            return;
-        }
-        const layer = options.layer || up.layer.get(links[0]);
-        let layerLocation = getNormalizedLayerLocation(layer);
-        if (layerLocation) {
+    function updateNav(nav, links, { newLinks, anyLocationChanged }) {
+        let currentLocations = (!anyLocationChanged && nav.upNavLocations) || getNavLocations(nav);
+        if (newLinks || !u.isEqual(nav.upNavLocations, currentLocations)) {
             for (let link of links) {
-                const isCurrent = linkURLs(link).isCurrent(layerLocation);
+                const isCurrent = linkCurrentURLs(link).isAnyCurrent(currentLocations);
                 for (let currentClass of config.currentClasses) {
                     link.classList.toggle(currentClass, isCurrent);
                 }
-                e.toggleAttr(link, 'aria-current', 'page', isCurrent);
+                e.setAttrPresence(link, 'aria-current', 'page', isCurrent);
             }
+            nav.upNavLocations = currentLocations;
         }
     }
-    function findActivatableArea(element) {
-        return e.ancestor(element, SELECTOR_LINK) || element;
+    function updateNavsAround(root, opts) {
+        const navSelector = config.selector('navSelectors');
+        const fullNavs = e.around(root, navSelector);
+        for (let fullNav of fullNavs) {
+            let links = e.subtree(fullNav, SELECTOR_LINK);
+            updateNav(fullNav, links, opts);
+        }
     }
-    function showAroundRequest(request, options) {
-        if (!options.feedback) {
+    function getMatchableLayerLocation(layer) {
+        return u.matchableURL(layer.location);
+    }
+    function findActivatableAreas(element) {
+        return element.upExpandedPair || [element];
+    }
+    function runPreviews(request, renderOptions) {
+        let { bindLayer } = request;
+        let focusCapsule = up.FocusCapsule.preserve(bindLayer);
+        let applyPreviews = () => doRunPreviews(request, renderOptions);
+        let revertPreviews = bindLayer.asCurrent(applyPreviews);
+        focusCapsule?.autoVoid();
+        return () => {
+            bindLayer.asCurrent(revertPreviews);
+            focusCapsule?.restore(bindLayer, { preventScroll: true });
+        };
+    }
+    function doRunPreviews(request, renderOptions) {
+        let { fragment, fragments, origin } = request;
+        let cleaner = u.cleaner();
+        let previewForFragment = (fragment) => new up.Preview({ fragment, request, renderOptions, cleaner });
+        let singlePreview = previewForFragment(fragment);
+        singlePreview.run(resolvePreviewFns(renderOptions.preview));
+        singlePreview.run(getPlaceholderPreviewFn(renderOptions.placeholder));
+        singlePreview.run(getFeedbackClassesPreviewFn(renderOptions.feedback, fragments));
+        singlePreview.run(up.form.getDisablePreviewFn(renderOptions.disable, origin));
+        for (let fragment of fragments) {
+            let eachPreview = previewForFragment(fragment);
+            eachPreview.run(e.matchSelectorMap(renderOptions.previewMap, fragment));
+            eachPreview.run(e.matchSelectorMap(renderOptions.placeholderMap, fragment).flatMap(getPlaceholderPreviewFn));
+        }
+        return cleaner.clean;
+    }
+    function getPlaceholderPreviewFn(placeholder) {
+        if (!placeholder)
             return;
+        return function (preview) {
+            preview.showPlaceholder(placeholder);
+        };
+    }
+    function resolvePreviewFns(value) {
+        if (u.isFunction(value)) {
+            return [value];
         }
-        let clean = (fn) => u.always(request, fn);
-        let activeElement = getActiveElementFromRenderOptions(request);
-        if (activeElement) {
-            clean(e.addTemporaryClass(activeElement, CLASS_ACTIVE));
+        else if (u.isString(value)) {
+            return resolvePreviewString(value);
         }
-        for (let fragment of request.fragments) {
-            clean(e.addTemporaryClass(fragment, CLASS_LOADING));
+        else if (u.isArray(value)) {
+            return value.flatMap(resolvePreviewFns);
+        }
+        else {
+            return [];
         }
     }
-    function getActiveElementFromRenderOptions(request) {
-        let activeElement = request.origin;
-        if (activeElement) {
-            return findActivatableArea(activeElement);
-        }
+    function resolvePreviewString(str) {
+        return u.map(u.parseScalarJSONPairs(str), ([name, parsedOptions]) => {
+            let previewFn = namedPreviewFns.get(name);
+            return function (preview, runOptions) {
+                up.puts('[up-preview]', 'Showing preview %o', name);
+                return previewFn(preview, parsedOptions || runOptions);
+            };
+        });
     }
-    function updateLayerIfLocationChanged(layer) {
-        const processedLocation = layer.feedbackLocation;
-        const layerLocation = getNormalizedLayerLocation(layer.location);
-        if (!processedLocation || (processedLocation !== layerLocation)) {
-            layer.feedbackLocation = layerLocation;
-            updateLinksWithinNavs(layer.element, { layer });
-        }
+    function getActiveElements({ origin, activeElements }) {
+        activeElements ||= u.wrapList(origin);
+        return u.flatMap(activeElements, findActivatableAreas);
     }
-    function onBrowserLocationChanged() {
-        const frontLayer = up.layer.front;
-        if (frontLayer.showsLiveHistory()) {
-            updateLayerIfLocationChanged(frontLayer);
-        }
+    function getFeedbackClassesPreviewFn(feedbackOption, fragments) {
+        if (!feedbackOption)
+            return;
+        return function (preview) {
+            preview.addClassBatch(getActiveElements(preview.renderOptions), config.activeClasses);
+            preview.addClassBatch(fragments, config.loadingClasses);
+        };
     }
-    up.on('up:location:changed', (_event) => {
-        onBrowserLocationChanged();
+    function statusOptions(element, options, parserOptions) {
+        options = u.options(options);
+        const parser = new up.OptionsParser(element, options, parserOptions);
+        parser.booleanOrString('disable');
+        parser.boolean('feedback');
+        parser.string('preview');
+        parser.booleanOrString('revalidatePreview');
+        parser.string('placeholder');
+        return options;
+    }
+    up.on('up:fragment:compile', (_event, newFragment) => {
+        updateNavsAround(newFragment, { newLinks: true, anyLocationChanged: false });
     });
-    up.on('up:fragment:inserted', (_event, newFragment) => {
-        updateFragment(newFragment);
+    up.on('up:layer:location:changed up:layer:opened up:layer:dismissed up:layer:accepted', () => {
+        updateNavsAround(document.body, { newLinks: false, anyLocationChanged: true });
     });
-    up.on('up:layer:location:changed', (event) => {
-        updateLayerIfLocationChanged(event.layer);
-    });
-    up.on('up:framework:reset', reset);
     return {
         config,
-        showAroundRequest,
-        normalizeURL,
+        preview: namedPreviewFns.put,
+        resolvePreviewFns,
+        runPreviews,
+        statusOptions,
     };
 })();
+up.preview = up.status.preview;
 
 
 /***/ }),
-/* 99 */
+/* 102 */
 /***/ (() => {
 
 up.radio = (function () {
-    const u = up.util;
     const e = up.element;
     const config = new up.Config(() => ({
         hungrySelectors: ['[up-hungry]'],
+        noHungrySelectors: ['[up-hungry=false]'],
         pollInterval: 30000,
-        stretchPollInterval: (interval) => interval * (up.network.shouldReduceRequests() ? 2 : 1),
-        pollEnabled: 'auto',
     }));
-    function reset() {
-        config.reset();
-    }
-    function hungrySolutions({ layer, history, origin }) {
-        let hungrySelector = config.hungrySelectors.join(', ');
-        let hungries = up.fragment.all(hungrySelector, { layer: 'any' });
-        return u.filterMap(hungries, (element) => {
-            let target = up.fragment.tryToTarget(element, { origin });
-            if (!target) {
-                up.warn('[up-hungry]', 'Ignoring untargetable fragment %o', element);
-                return;
+    function hungrySteps(renderOptions) {
+        let { hungry, origin, layer: renderLayer, meta } = renderOptions;
+        let steps = { current: [], other: [] };
+        if (!hungry)
+            return steps;
+        let hungrySelector = config.selector('hungrySelectors');
+        const layerPreference = [renderLayer, ...renderLayer.ancestors, ...renderLayer.descendants];
+        for (let elementLayer of layerPreference) {
+            let hungries = up.fragment.all(elementLayer.element, hungrySelector, { layer: elementLayer });
+            for (let element of hungries) {
+                let selector = up.fragment.tryToTarget(element, { origin });
+                if (!selector) {
+                    up.warn('[up-hungry]', 'Ignoring untargetable fragment %o', element);
+                    continue;
+                }
+                let ifLayer = e.attr(element, 'up-if-layer');
+                let applicableLayers = ifLayer ? up.layer.getAll(ifLayer, { baseLayer: elementLayer }) : [elementLayer];
+                let motionOptions = up.motion.motionOptions(element);
+                let selectEvent = up.event.build('up:fragment:hungry', { log: false });
+                let selectCallback = e.callbackAttr(element, 'up-on-hungry', { exposedKeys: ['newFragment', 'renderOptions'] });
+                let step = {
+                    selector,
+                    oldElement: element,
+                    layer: elementLayer,
+                    origin,
+                    ...motionOptions,
+                    placement: 'swap',
+                    keep: true,
+                    maybe: true,
+                    meta,
+                    selectEvent,
+                    selectCallback,
+                    originalRenderOptions: renderOptions,
+                };
+                if (applicableLayers.includes(renderLayer)) {
+                    let list = renderLayer === elementLayer ? steps.current : steps.other;
+                    list.push(step);
+                }
             }
-            let ifHistory = e.booleanAttr(element, 'up-if-history');
-            if (ifHistory && !history) {
-                return;
-            }
-            let ifLayer = e.attr(element, 'up-if-layer');
-            if (ifLayer !== 'any' && layer !== up.layer.get(element)) {
-                return;
-            }
-            return { target, element };
-        });
+        }
+        steps.other = up.fragment.compressNestedSteps(steps.other);
+        return steps;
     }
     function startPolling(fragment, options = {}) {
         up.FragmentPolling.forFragment(fragment).forceStart(options);
@@ -10130,43 +11708,42 @@ up.radio = (function () {
     function stopPolling(element) {
         up.FragmentPolling.forFragment(element).forceStop();
     }
-    function pollIssue(fragment) {
-        let enabled = config.pollEnabled;
-        if (enabled === false) {
-            return 'User has disabled polling';
-        }
-        if (enabled === 'auto') {
-            if (document.hidden) {
-                return 'Tab is hidden';
-            }
-            if (!up.layer.get(fragment)?.isFront?.()) {
-                return 'Fragment is on a background layer';
-            }
-        }
-        if (up.emit(fragment, 'up:fragment:poll', { log: ['Polling fragment', fragment] }).defaultPrevented) {
-            return 'User prevented up:fragment:poll event';
-        }
+    function pollOptions(fragment, options = {}) {
+        const defaults = { background: true };
+        const parser = new up.OptionsParser(fragment, options, { defaults });
+        parser.number('interval', { default: config.pollInterval });
+        parser.string('ifLayer', { default: 'front' });
+        parser.include(up.link.requestOptions);
+        parser.include(up.status.statusOptions);
+        return options;
     }
-    up.compiler('[up-poll]', function (fragment) {
-        if (!up.fragment.isTargetable(fragment)) {
-            up.warn('[up-poll]', 'Ignoring untargetable fragment %o', fragment);
-            return;
-        }
+    up.attribute('up-poll', function (fragment) {
         up.FragmentPolling.forFragment(fragment).onPollAttributeObserved();
     });
-    up.on('up:framework:reset', reset);
+    up.macro('[up-flashes]', function (fragment) {
+        e.setMissingAttrs(fragment, {
+            'up-hungry': '',
+            'up-if-layer': 'subtree',
+            'up-keep': '',
+            'role': 'alert',
+        });
+        fragment.addEventListener('up:fragment:keep', function (event) {
+            if (!e.isEmpty(event.newFragment))
+                event.preventDefault();
+        });
+    });
     return {
         config,
-        hungrySolutions,
+        hungrySteps,
         startPolling,
         stopPolling,
-        pollIssue,
+        pollOptions,
     };
 })();
 
 
 /***/ }),
-/* 100 */
+/* 103 */
 /***/ (() => {
 
 (function () {
@@ -10229,7 +11806,7 @@ up.radio = (function () {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 __webpack_require__(1);
 __webpack_require__(2);
@@ -10316,15 +11893,18 @@ __webpack_require__(83);
 __webpack_require__(84);
 __webpack_require__(85);
 __webpack_require__(86);
+__webpack_require__(87);
 __webpack_require__(88);
-__webpack_require__(90);
+__webpack_require__(89);
 __webpack_require__(91);
 __webpack_require__(93);
-__webpack_require__(95);
-__webpack_require__(97);
+__webpack_require__(94);
+__webpack_require__(96);
 __webpack_require__(98);
-__webpack_require__(99);
 __webpack_require__(100);
+__webpack_require__(101);
+__webpack_require__(102);
+__webpack_require__(103);
 up.framework.onEvaled();
 
 })();

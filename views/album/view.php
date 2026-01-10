@@ -118,12 +118,11 @@ $this->params['breadcrumbs'][] = $model->title;
         ],
         'tags' => $model->tags,
     ]); ?>
-
-    <?= Rating::widget(["tableName" => "album", "tableId" => $model->id]) ?>
-
-    <?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
-
 </div>
+
+<?= Rating::widget(["tableName" => "album", "tableId" => $model->id]) ?>
+
+<?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
 
 <?= Comments::widget(["tableName" => "album", "tableId" => $model->id]) ?>
 
