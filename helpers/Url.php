@@ -27,10 +27,15 @@ final class Url extends \yii\helpers\Url
      */
     public static function toAmazonProduct(string $asin): string
     {
-        return sprintf(
-            'https://www.amazon.de/dp/%s?tag=%s&linkCode=ogi&th=1&psc=1',
-            $asin,
-            ($_ENV['AMAZON_PAAPI5_PARTNER_TAG'] ?? '')
+        # https://www.amazon.de/dp/%s?tag=%s&linkCode=ogi&th=1&psc=1 (alter LInk)
+
+        $link = strtr(
+            'https://www.amazon.de/dp/{asin}/ref=nosim?tag={tag}',
+            [
+                '{asin}' => $asin,
+                '{tag}' => $_ENV['AMAZON_PAAPI5_PARTNER_TAG'] ?? '',
+            ]
         );
+        return $link;
     }
 }
