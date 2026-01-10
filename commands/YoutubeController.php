@@ -76,7 +76,7 @@ final class YoutubeController extends Controller
         }
     }
 
-    private function getDataByPageToken(string $playlistId, string $pageToken = null): array
+    private function getDataByPageToken(string $playlistId, ?string $pageToken = null): array
     {
         $ApiKey = $_ENV['YOUTUBE_API_KEY'] ?? '';
 
