@@ -161,9 +161,9 @@ final class CatalogController extends Controller
     protected function getListTitle(string $category): string
     {
         $categories = [
-            'lehrbuecher' => 'Lehrbücher mit CDs für E-Bass',
-            'buecher' => 'Allgemeine Bücher für Bassisten',
-            'dvds' => 'Lehrbücher mit DVDs für E-Bass'
+            'lehrbuecher' => 'E-Bass Lehrbücher mit CDs',
+            'buecher' => 'Allgemeine Bücher zum Thema Bass',
+            'dvds' => 'E-Bass Lehrbücher mit DVDs'
         ];
         return $categories[$category] ?? 'Alle';
     }

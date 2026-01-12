@@ -157,6 +157,13 @@ final class Album extends ActiveRecord
     public function getProductInfos(): array
     {
         $infos = [];
+
+        $infos[] = [
+            'key' => 'art',
+            'label' => 'Art',
+            'value' => 'Bass Album',
+        ];
+
         if (!empty($this->publisher)) {
             $infos[] = [
                 'key' => 'publisher',

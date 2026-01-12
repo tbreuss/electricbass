@@ -160,6 +160,17 @@ final class Catalog extends ActiveRecord
     public function getProductInfos(): array
     {
         $infos = [];
+
+        $infos[] = [
+            'key' => 'art',
+            'label' => 'Art',
+            'value' => match($this->category) {
+                'lehrbuecher' => 'Bass Lehrbuch (mit CD)',
+                'buecher' => 'Buch zum Thema Bass',
+                'dvds' => 'Bass Lehrbuch (mit DVD)',
+            },
+        ];
+
         if (!empty($this->publisher)) {
             $infos[] = [
                 'key' => 'publisher',
