@@ -165,9 +165,9 @@ final class Catalog extends ActiveRecord
             'key' => 'art',
             'label' => 'Art',
             'value' => match($this->category) {
-                'lehrbuecher' => 'Bass Lehrbuch (mit CD)',
                 'buecher' => 'Buch zum Thema Bass',
                 'dvds' => 'Bass Lehrbuch (mit DVD)',
+                default => 'Bass Lehrbuch (mit CD)',
             },
         ];
 
