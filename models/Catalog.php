@@ -164,7 +164,7 @@ final class Catalog extends ActiveRecord
         $infos[] = [
             'key' => 'art',
             'label' => 'Art',
-            'value' => match($this->category) {
+            'value' => match ($this->category) {
                 'buecher' => 'Buch zum Thema Bass',
                 'dvds' => 'Bass Lehrbuch (mit DVD)',
                 default => 'Bass Lehrbuch (mit CD)',
