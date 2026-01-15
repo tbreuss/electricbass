@@ -2,22 +2,31 @@
 
 namespace app\controllers;
 
+use app\helpers\Url;
 use app\models\Comment;
 use Yii;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 final class CommentController extends Controller
 {
-    public function actionIndex(string $name, int $id, string $url, string $title): string
+    public function actionIndex(string $name, int $id): string
     {
         $request = Yii::$app->request;
+        $queryParams = array_diff_key($request->getQueryParams(), ['id' => 0, 'name' => '']);
         $referrer = $request->getReferrer();
         $hostInfo = $request->getHostInfo();
+
+        if (!empty($queryParams)) {
+            throw new NotFoundHttpException();
+        }
 
         if (is_string($referrer) && is_string($hostInfo) && !str_starts_with($referrer, $hostInfo)) {
             throw new NotFoundHttpException();
         }
+
+        [$title, $url] = $this->fetchTitleAndUrlFromParentTable($name, $id);
 
         $model = new Comment();
         $model->tableName = $name;
@@ -95,5 +104,29 @@ final class CommentController extends Controller
         return Yii::$app->db->createCommand($sql)
             ->bindValue(':id', $id)
             ->execute();
+    }
+
+    private function fetchTitleAndUrlFromParentTable(string $table, int $id): array
+    {
+        if (!in_array($table, ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'joke', 'lesson', 'page', 'quote', 'video', 'website'])) {
+            throw new BadRequestHttpException();
+        }
+
+        if ($id < 1) {
+            return match ($table) {
+                'joke' => ['Bassistenwitze', Url::to(['/joke/index'])],
+                'quote' => ['Zitate von Bassisten', Url::to(['/quote/index'])],
+                default => throw new BadRequestHttpException(),
+            };
+        }
+
+        $sql = sprintf('SELECT url, title FROM {{%s}} WHERE id=:id', $table);
+        $row = Yii::$app->db->createCommand($sql, ['id' => $id])->queryOne();
+
+        if (is_array($row)) {
+            return [$row['title'], $row['url']];
+        }
+
+        throw new NotFoundHttpException();
     }
 }

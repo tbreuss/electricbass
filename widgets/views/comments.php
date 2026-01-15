@@ -17,7 +17,7 @@ use app\helpers\Html;
         </svg>
         <?= $count ?> <?= $count == 1 ? 'Kommentar.' : 'Kommentare.' ?>
         <?php $linkText = empty($count) ? 'Schreib den ersten Kommentar!' : 'Diskutiere mit!' ?>
-        <?= app\helpers\Html::a($linkText, ['/comment/index', 'name' => $tableName, 'id' => $tableId, 'url' => app\helpers\Url::current(), 'title' => $this->title], ['up-layer' => 'new', 'up-size' => 'large', 'rel' => 'nofollow']) ?>
+        <?= app\helpers\Html::a($linkText, ['/comment/index', 'name' => $tableName, 'id' => $tableId], ['up-layer' => 'new', 'up-size' => 'large', 'rel' => 'nofollow']) ?>
     </h2>
     <?php foreach ($models as $i => $model): ?>
         <div class="comments__item">
