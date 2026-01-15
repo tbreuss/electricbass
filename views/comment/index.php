@@ -33,7 +33,7 @@ $this->title = 'Kommentar zum Artikel';
         </div>
     <?php endif; */ ?>
 
-    <?= Html::beginForm(['/comment/index', 'name' => $model->tableName, 'id' => $model->tableId, 'url' => $url, 'title' => $title], 'post', ['up-layer' => 'current', 'id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
+    <?= Html::beginForm(['/comment/index', 'name' => $model->tableName, 'id' => $model->tableId], 'post', ['up-layer' => 'current', 'id' => 'form', 'class' => 'form', 'novalidate' => true]) ?>
 
     <div class="row">
         <div class="col-12 form__row">
