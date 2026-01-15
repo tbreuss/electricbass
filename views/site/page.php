@@ -5,6 +5,7 @@
  * @var app\models\Page $page
  */
 
+use app\widgets\Parser;
 use yii\helpers\Markdown;
 use app\widgets\Comments;
 use app\widgets\Hits;
@@ -18,7 +19,8 @@ $this->title = $page->title;
 ?>
 
 <h1><?= $page->title ?></h1>
-<div class="markdown"><?= Markdown::process($page->content) ?></div>
+
+<?= Parser::widget(["model" => $page, "attribute" => "content"]) ?>
 
 <?= Rating::widget(["tableName" => "page", "tableId" => $page->id]) ?>
 

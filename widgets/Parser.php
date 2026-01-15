@@ -435,6 +435,22 @@ final class Parser extends Widget
         ]);
     }
 
+    /**
+     * @phpstan-param array{"id": int, "uid": string} $options
+     */
+    public static function playAlong(array $options, string $content): string
+    {
+        $options = array_merge([
+            'id' => 0,
+            'uid' => ''
+        ], $options);
+
+        return self::renderPartial('play-along', [
+            'id' => $options['id'],
+            'uid' => $options['uid'],
+        ]);
+    }
+
     protected static function addWebAlias(string $html): string
     {
         $html = str_replace('"/media/', '"' . Yii::getAlias('@web') . '/media/', $html);

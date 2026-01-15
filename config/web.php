@@ -60,6 +60,7 @@ $config = [
                 'vimeo' => ['app\widgets\Parser', 'vimeo'],
                 'websites' => ['app\widgets\Parser', 'websites'],
                 'youtube' => ['app\widgets\Parser', 'youtube'],
+                'play-along' => ['app\widgets\Parser', 'playAlong'],
             ],
         ],
         'i18n' => [
