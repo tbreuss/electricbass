@@ -10,7 +10,6 @@
 ?>
 <?php app\assets\Abcjs::register($this); ?>
 <div class="play-along">
-    <h2 class="play-along__title"><?= $title ?></h2>
     <div class="play-along__notation" id="play-along-<?= $uniqid ?>"></div>
 </div>
 <script>
@@ -24,6 +23,5 @@
     });
 </script>
 <style>
-.play-along__title { margin-bottom: 0; }
 .play-along__notation { margin-bottom: 2rem; }
 </style>
