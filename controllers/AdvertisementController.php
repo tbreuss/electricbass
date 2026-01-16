@@ -9,6 +9,7 @@ use app\models\AdvertisementEmailForm;
 use Yii;
 use yii\db\Expression;
 use yii\web\Controller;
+use yii\web\GoneHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -71,7 +72,7 @@ final class AdvertisementController extends Controller
 
         if (!empty($model->spam)) {
             // if the ad was spam show the default not found error
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         // Umleitung bei Aufruf über ID, falls URL-Segment definiert ist

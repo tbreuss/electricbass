@@ -427,6 +427,7 @@ final class Advertisement extends ActiveRecord
         if (is_null($advertisement)) {
             throw new NotFoundHttpException();
         }
+
         return $advertisement;
     }
 
