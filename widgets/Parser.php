@@ -40,11 +40,17 @@ final class Parser extends Widget
     /**
      * @phpstan-param array<string, mixed> $options
      */
-    public static function alphatab($options, string $content): string
+    public static function alphatab(array|string $options, string $content): string
     {
-        // todo: $options['title']
+        $options = array_merge([
+            'id' => 0,
+            'uid' => ''
+        ], is_string($options) ? [] : $options);
+
         return self::renderPartial('alphatab', [
-            'alphatab' => $content
+            'id' => $options['id'],
+            'uid' => $options['uid'],
+            'content' => $content
         ]);
     }
 

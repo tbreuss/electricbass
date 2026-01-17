@@ -14,12 +14,6 @@ final class AlphaTabAsset extends AssetBundle
 
     /** @var string[] */
     public $js = [
-        'JavaScript/AlphaTab.js',
-        'JavaScript/jquery.alphaTab.js'
-    ];
-
-    /** @var string[] */
-    public $depends = [
-        'yii\web\JqueryAsset'
+        'alphaTab@1.8.0.min.js',
     ];
 }
