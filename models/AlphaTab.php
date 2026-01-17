@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
  * @property ?string $subtitle
  * @property string $notation
  * @property ?array $options
+ * @property ?int $bars_per_row
  * @property ?string $tablature
  */
 final class AlphaTab extends ActiveRecord
