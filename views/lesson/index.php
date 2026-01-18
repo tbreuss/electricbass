@@ -28,7 +28,16 @@ CanonicalLink::widget(['keepParams' => ['path']]);
         <div class="widget widget-parser">
             <?= Parser::widget(["model" => $model, "attribute" => "text"]) ?>
         </div>
-
+        <?php if ($model->hasChanges()): ?>
+            <div class="changes">
+                <h3 class="changes__title">Änderungen</h3>
+                <ul class="changes__list">
+                    <?php foreach ($model->getChanges() as $change): ?>
+                        <li class="changes__listItem"><?= $change['date'] ?> <?= $change['text'] ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
         <?= $this->render('//_partials/meta', [
             'categories' => $breadcrumbs,
             'tags' => $model->tags,

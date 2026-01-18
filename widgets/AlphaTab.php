@@ -3,6 +3,7 @@
 namespace app\widgets;
 
 use app\models\AlphaTab as AlphaTabModel;
+use Yii;
 use yii\base\Widget;
 
 final class AlphaTab extends Widget
@@ -23,11 +24,14 @@ final class AlphaTab extends Widget
      */
     public function run()
     {
+        $isDebug = (bool)Yii::$app->request->getQueryParam('debug', 0);
+
         if ($this->content !== '') {
             return $this->render('alpha-tab', [
-                'options' => $this->options(null, null), //$this->options($model->options, $model->tablature),
+                'options' => $this->options(null, null, $isDebug),
                 'notation' => $this->notation($this->content),
-                'uniqid' => bin2hex(random_bytes(4)),
+                'uniqid' => uniqid(),
+                'isDebug' => $isDebug,
             ]);
         }
 
@@ -44,9 +48,10 @@ final class AlphaTab extends Widget
         }
 
         return $this->render('alpha-tab', [
-            'options' => $this->options($model->options, $model->bars_per_row),
+            'options' => $this->options($model->options, $model->bars_per_row, $isDebug),
             'notation' => $this->notation($model->notation, $model->title, $model->subtitle),
-            'uniqid' => bin2hex(random_bytes(4)),
+            'uniqid' => uniqid(),
+            'isDebug' => $isDebug,
         ]);
     }
 
@@ -76,7 +81,7 @@ final class AlphaTab extends Widget
     /**
      * @param string[][]|null $options
      */
-    private function options(?array $options, ?int $barsPerRow): string
+    private function options(?array $options, ?int $barsPerRow, bool $isDebug): string
     {
         $options = array_merge_recursive([
             'tex' => true,
@@ -88,6 +93,6 @@ final class AlphaTab extends Widget
             ]
         ], $options ?? []);
 
-        return json_encode($options) ?: '';
+        return json_encode($options, $isDebug ? JSON_PRETTY_PRINT : 0) ?: '';
     }
 }

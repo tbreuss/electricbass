@@ -4,6 +4,7 @@
  * @var string $notation
  * @var string $options
  * @var string $uniqid
+ * @var bool $isDebug
  */
 ?>
 <?php app\assets\AlphaTabAsset::register($this) ?>
@@ -14,6 +15,16 @@
 <div class="alpha-tab">
     <div class="alpha-tab__notation" id="alphaTab<?= $uniqid ?>"><?= $notation ?></div>
 </div>
+<?php if ($isDebug): ?>
+    <details>
+        <summary>Notation</summary>
+        <pre><?= $notation ?></pre>
+    </details>
+    <details>
+        <summary>Options</summary>
+        <pre><?= $options ?></pre>
+    </details>
+<?php endif ?>
 <script>
     window.addEventListener("DOMContentLoaded", () => {
         const element = document.getElementById('alphaTab<?= $uniqid ?>');

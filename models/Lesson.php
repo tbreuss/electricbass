@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\components\ActiveRecord;
 use app\traits\SimilarModelsByTags;
+use app\traits\WithChanges;
 use Yii;
 
 /**
@@ -16,6 +17,7 @@ use Yii;
 final class Lesson extends ActiveRecord
 {
     use SimilarModelsByTags;
+    use WithChanges;
 
     /**
      * @return Lesson[]
