@@ -22,7 +22,7 @@ if (!empty($this->params['metaDescription'])) {
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= Yii::$app->language ?>" style="scroll-behavior: auto !important;">
 <head>
     <?php if (!YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2624727-1"></script>
