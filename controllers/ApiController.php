@@ -8,17 +8,21 @@ use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\rest\Controller;
-use yii\web\HttpException;
+use yii\web\MethodNotAllowedHttpException;
 use yii\web\ServerErrorHttpException;
 
 final class ApiController extends Controller
 {
+    /**
+     * @throws MethodNotAllowedHttpException
+     * @throws \yii\db\Exception
+     */
     public function actionHits(): bool
     {
         Yii::$app->response->headers->add('X-Robots-Tag', 'noindex');
 
         if (!Yii::$app->request->isPost) {
-            return false;
+            throw new MethodNotAllowedHttpException();
         }
 
         $json = json_decode(Yii::$app->request->getRawBody(), true);
@@ -35,7 +39,7 @@ final class ApiController extends Controller
 
     /**
      * @phpstan-return array{"ratingCount": int, "ratingAverage": string, "yourRating": string}
-     * @throws HttpException
+     * @throws MethodNotAllowedHttpException
      * @throws ServerErrorHttpException
      */
     public function actionRate(): array
@@ -45,7 +49,7 @@ final class ApiController extends Controller
         $request = Yii::$app->request;
 
         if (!$request->isPost) {
-            throw new HttpException(400);
+            throw new MethodNotAllowedHttpException();
         }
 
         try {
