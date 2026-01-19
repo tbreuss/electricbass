@@ -24,7 +24,7 @@ final class AlphaTab extends Widget
      */
     public function run()
     {
-        $isDebug = (bool)Yii::$app->request->getQueryParam('debug', 0);
+        $isDebug = Yii::$app->request->getQueryParam('debug') !== null;
 
         if ($this->content !== '') {
             return $this->render('alpha-tab', [
