@@ -90,7 +90,10 @@ final class AlphaTab extends Widget
             'layoutMode' => 'Page',
             'display' => [
                 'justifyLastSystem' => true,
-            ]
+            ],
+            'player' => [
+                'scrollMode' => 'Off',
+            ],
         ], $options ?? []);
 
         return json_encode($options, $isDebug ? JSON_PRETTY_PRINT : 0) ?: '';
