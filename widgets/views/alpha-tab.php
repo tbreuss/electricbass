@@ -1,6 +1,7 @@
 <?php
 /**
  * @var \yii\web\View $this
+ * @var ?string $uid
  * @var string $notation
  * @var string $options
  * @var string $uniqid
@@ -13,7 +14,7 @@
     .at-surface div:last-of-type { display: none !important; }
 </style>
 <div class="alpha-tab">
-    <div class="alpha-tab__notation" id="alphaTab<?= $uniqid ?>"><?= $notation ?></div>
+    <a href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $uid]) ?>"><div class="alpha-tab__notation" id="alphaTab<?= $uniqid ?>"><?= $notation ?></div></a>
 </div>
 <?php if ($isDebug): ?>
     <details>

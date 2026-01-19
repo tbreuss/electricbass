@@ -48,6 +48,7 @@ final class AlphaTab extends Widget
         }
 
         return $this->render('alpha-tab', [
+            'uid' => $model->uid,
             'options' => $this->options($model->options, $model->bars_per_row, $isDebug),
             'notation' => $this->notation($model->notation, $model->title, $model->subtitle),
             'uniqid' => uniqid(),

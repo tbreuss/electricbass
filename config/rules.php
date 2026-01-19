@@ -74,6 +74,7 @@ return [
     'manufacturer/data' => 'manufacturer/data',
     'manufacturer/visit' => 'manufacturer/visit',
     'site/captcha' => 'site/captcha',
+    'alpha-tab/view' => 'alpha-tab/view',
     'alpha-tab/editor' => 'alpha-tab/editor',
     // Admin
     'admin/<controller>/<action>' => 'admin/<controller>/<action>',
