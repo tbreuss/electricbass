@@ -5,6 +5,7 @@
  */
 ?>
 
+<?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
 <?php app\assets\AlphaTabAsset::register($this) ?>
 
 <script src="https://kit.fontawesome.com/b43f0e512e.js"></script>

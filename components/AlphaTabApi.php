@@ -28,13 +28,10 @@ class AlphaTabApi
     {
         $nl = "\n";
 
-        $options = [
-            '\bracketextendmode noBrackets' . $nl,
-            '\hideDynamics' . $nl, // always hide dynamics
-        ];
-
         $defaults = match ($this->instrument) {
             self::INSTRUMENT_FOUR_STRING_BASS => [
+                '\bracketextendmode' => 'noBrackets',
+                '\hideDynamics' => '', // always hide dynamics
                 '\clef' => 'bass',
                 '\instrument' => '"Electric Bass Finger"',
                 '\tuning' => 'G2 D2 A1 E1 { hide }',
@@ -42,6 +39,7 @@ class AlphaTabApi
             default => [],
         };
 
+        $options = [];
         foreach ($defaults as $k => $v) {
             if (!str_contains($this->notation, $k)) {
                 $options[] = $k . ' ' . $v . $nl;
@@ -49,6 +47,11 @@ class AlphaTabApi
         }
 
         return join('', $options) . ltrim($this->notation);
+    }
+
+    public function instrument(): string
+    {
+        return $this->instrument;
     }
 
     public function arrayOptions(): array

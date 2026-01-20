@@ -44,9 +44,17 @@ final class AlphaTabController extends Controller
     public function actionEditor(): string
     {
         $this->layout = 'empty';
-        $content = \Yii::$app->request->getBodyParam('content', '\title Test');
+        $notation = \Yii::$app->request->getBodyParam('content', '\title Test');
+        $instrument = \Yii::$app->request->getBodyParam('instrument', 'NONE');
+        $isDebug = \Yii::$app->request->getQueryParam('debug') !== null;
         return $this->render('editor', [
-            'content' => $content,
+            'alphaTab' => new AlphaTabApi(
+                notation: $notation,
+                instrument: $instrument,
+                debug: $isDebug,
+            ),
+            'instrument' => $instrument,
+            'notation' => $notation,
         ]);
     }
 }
