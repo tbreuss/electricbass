@@ -1,4 +1,9 @@
-<?php /** @var yii\web\View $this */ ?>
+<?php
+/**
+ * @var \yii\web\View $this
+ * @var \app\components\AlphaTabApi $alphaTab
+ */
+?>
 
 <?php app\assets\AlphaTabAsset::register($this) ?>
 
@@ -248,7 +253,7 @@
             </div>
         </div>
         <div class="at-viewport">
-            <div class="at-main"><?= $model->notation ?></div>
+            <div class="at-main"><?= $alphaTab->notation() ?></div>
         </div>
     </div>
     <div class="at-controls">
@@ -313,6 +318,17 @@
         </div>
     </div>
 </template>
+
+<?php if ($alphaTab->isDebug()): ?>
+    <details>
+        <summary>Notation</summary>
+        <pre><?= $alphaTab->notation() ?></pre>
+    </details>
+    <details>
+        <summary>Options</summary>
+        <pre><?= $alphaTab->options() ?></pre>
+    </details>
+<?php endif ?>
 
 <script type="text/javascript">
     window.addEventListener("DOMContentLoaded", () => {

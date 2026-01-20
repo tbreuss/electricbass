@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\components\AlphaTabApi;
 use app\models\AlphaTab;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -30,7 +32,12 @@ final class AlphaTabController extends Controller
 
         $this->layout = 'empty';
         return $this->render('view', [
-           'model' => $model,
+           'alphaTab' => new AlphaTabApi(
+               notation: $model->notation,
+               options: $model->options,
+               instrument: $model->instrument,
+               debug: Yii::$app->request->getQueryParam('debug') !== null,
+           ),
         ]);
     }
 

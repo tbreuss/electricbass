@@ -2,6 +2,7 @@
 
 namespace app\widgets;
 
+use app\components\AlphaTabApi;
 use app\models\AlphaTab as AlphaTabModel;
 use Yii;
 use yii\base\Widget;
@@ -28,10 +29,11 @@ final class AlphaTab extends Widget
 
         if ($this->content !== '') {
             return $this->render('alpha-tab', [
-                'options' => $this->options(null, null, $isDebug),
-                'notation' => $this->notation($this->content),
-                'uniqid' => uniqid(),
-                'isDebug' => $isDebug,
+                'alphaTab' => new AlphaTabApi(
+                    notation: $this->content,
+                    instrument: AlphaTabApi::INSTRUMENT_FOUR_STRING_BASS,
+                    debug: $isDebug,
+                ),
             ]);
         }
 
@@ -48,55 +50,13 @@ final class AlphaTab extends Widget
         }
 
         return $this->render('alpha-tab', [
-            'uid' => $model->uid,
-            'options' => $this->options($model->options, $model->bars_per_row, $isDebug),
-            'notation' => $this->notation($model->notation, $model->title, $model->subtitle),
-            'uniqid' => uniqid(),
-            'isDebug' => $isDebug,
+            'alphaTab' => new AlphaTabApi(
+                notation: $model->notation,
+                options: $model->options,
+                instrument: $model->instrument,
+                uid: $model->uid,
+                debug: $isDebug,
+            ),
         ]);
-    }
-
-    private function notation(string $notation, ?string $title = null, ?string $subtitle = null): string
-    {
-        $nl = "\n";
-        $options = [];
-
-        $defaults = [
-            '\clef' => 'bass',
-            '\bracketextendmode' => 'noBrackets',
-            '\tuning' => 'G2 D2 A1 E1 { hide }',
-            '\instrument' => '33',
-        ];
-
-        $options[] = '\hideDynamics' . $nl; // always hide dynamics
-
-        foreach ($defaults as $k => $v) {
-            if (!str_contains($notation, $k)) {
-                $options[] = $k . ' ' . $v . $nl;
-            }
-        }
-
-        return join('', $options) . ltrim($notation);
-    }
-
-    /**
-     * @param string[][]|null $options
-     */
-    private function options(?array $options, ?int $barsPerRow, bool $isDebug): string
-    {
-        $options = array_merge_recursive([
-            'tex' => true,
-            'padding' => [0, 0, 0, 0],
-            'barsPerRow' => $barsPerRow ?? -1,
-            'layoutMode' => 'Page',
-            'display' => [
-                'justifyLastSystem' => true,
-            ],
-            'player' => [
-                'scrollMode' => 'Off',
-            ],
-        ], $options ?? []);
-
-        return json_encode($options, $isDebug ? JSON_PRETTY_PRINT : 0) ?: '';
     }
 }
