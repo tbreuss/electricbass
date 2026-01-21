@@ -28,11 +28,6 @@ final class SiteController extends Controller
                 'class' => 'app\filters\RedirectFilter',
                 'except' => [],
             ],
-            [
-                'class' => 'yii\filters\PageCache',
-                'only' => ['index'],
-                'duration' => 60,
-            ]
         ];
     }
 
