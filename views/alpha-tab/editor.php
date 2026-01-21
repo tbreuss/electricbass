@@ -37,6 +37,11 @@
         api.postRenderFinished.on(() => {
             element.style.visibility = 'visible';
         });
+        api.scoreLoaded.on((score) => {
+            score.tracks.forEach((track) => {
+                api.renderTracks([track]);
+            });
+        });
     });
 </script>
 

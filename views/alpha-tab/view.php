@@ -6,7 +6,7 @@
 ?>
 
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
-<?php app\assets\AlphaTabAsset::register($this) ?>
+<?php $asset = app\assets\AlphaTabAsset::register($this) ?>
 
 <script src="https://kit.fontawesome.com/b43f0e512e.js"></script>
 
@@ -339,9 +339,9 @@
         // initialize alphatab
         const settings = {
             tex: true,
-            //file: "https://www.alphatab.net/files/canon.gp",
             player: {
                 enablePlayer: true,
+                //soundFont: "<?= $asset->baseUrl ?>/sf2/sonivox.sf2",
                 soundFont: "https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2",
                 scrollElement: wrapper.querySelector('.at-viewport')
             },
