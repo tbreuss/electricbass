@@ -37,6 +37,8 @@ final class AlphaTabController extends Controller
                optionGroup: $model->option_group,
                options: $model->options,
                instrument: $model->instrument,
+               title: $model->title,
+               subtitle: $model->subtitle,
                debug: Yii::$app->request->getQueryParam('debug') !== null,
            ),
         ]);

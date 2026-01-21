@@ -17,6 +17,8 @@ class AlphaTabApi
         private ?array $options = null,
         private string $instrument = self::INSTRUMENT_NONE,
         private ?string $uid = null,
+        private ?string $title = null,
+        private ?string $subtitle = null,
         private bool $debug = false,
     ) {
         $this->uniqueId = uniqid();
@@ -31,14 +33,22 @@ class AlphaTabApi
     {
         $nl = "\n";
 
+        $titles = [];
+        if ($this->title) {
+            $titles['\title'] = '"' . $this->title . '"';
+        }
+        if ($this->subtitle) {
+            $titles['\subtitle'] = '"' . $this->subtitle . '"';
+        }
+
         $defaults = match ($this->instrument) {
-            self::INSTRUMENT_FOUR_STRING_BASS => [
+            self::INSTRUMENT_FOUR_STRING_BASS => array_merge($titles, [
                 '\bracketextendmode' => 'noBrackets',
                 '\hideDynamics' => '', // always hide dynamics
                 '\clef' => 'bass',
                 '\instrument' => '"Electric Bass Finger"',
                 '\tuning' => 'G2 D2 A1 E1 { hide }',
-            ],
+            ]),
             default => [],
         };
 

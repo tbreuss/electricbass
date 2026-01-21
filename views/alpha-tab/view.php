@@ -267,8 +267,7 @@
             </a>
             <span class="at-player-progress">0%</span>
             <div class="at-song-info">
-                <span class="at-song-title"></span> -
-                <span class="at-song-artist"></span>
+                <span class="at-song-title"></span>
             </div>
             <div class="at-song-position">00:00 / 00:00</div>
         </div>
@@ -400,7 +399,6 @@
         /** Controls **/
         api.scoreLoaded.on((score) => {
             wrapper.querySelector(".at-song-title").innerText = score.title;
-            wrapper.querySelector(".at-song-artist").innerText = score.artist;
         });
 
         const countIn = wrapper.querySelector('.at-controls .at-count-in');
