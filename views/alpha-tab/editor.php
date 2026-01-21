@@ -3,6 +3,7 @@
  * @var yii\web\View $this
  * @var \app\components\AlphaTabApi $alphaTab
  * @var string $instrument
+ * @var string $optionGroup
  * @var string $notation
  */
 ?>
@@ -41,6 +42,7 @@
 
 <?= app\helpers\Html::beginForm() ?>
 <?= app\helpers\Html::dropDownList('instrument', $instrument, ['NONE' => '', 'FOUR_STRING_BASS' => 'Bass 4-String']) ?>
+<?= app\helpers\Html::dropDownList('optionGroup', $optionGroup, ['NONE' => '', 'DEFAULT' => 'Default']) ?>
 <?= app\helpers\Html::textarea('content', $notation, ['style' => 'width: 100%; height: 10rem']) ?>
 <?= app\helpers\Html::submitButton('Do') ?>
-<?= app\helpers\Html::endForm();
+<?= app\helpers\Html::endForm() ?>

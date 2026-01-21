@@ -6,11 +6,14 @@ class AlphaTabApi
 {
     const INSTRUMENT_NONE = 'NONE';
     const INSTRUMENT_FOUR_STRING_BASS = 'FOUR_STRING_BASS';
+    const OPTION_GROUP_NONE = 'NONE';
+    const OPTION_GROUP_DEFAULT = 'DEFAULT';
 
     private string $uniqueId;
 
     public function __construct(
         private string $notation,
+        private string $optionGroup,
         private ?array $options = null,
         private string $instrument = self::INSTRUMENT_NONE,
         private ?string $uid = null,
@@ -56,22 +59,32 @@ class AlphaTabApi
 
     public function arrayOptions(): array
     {
-        $display = array_merge([
-            'justifyLastSystem' => true,
-        ], $this->options['display'] ?? []);
+        if ($this->optionGroup === self::OPTION_GROUP_NONE) {
+            return [
+                'tex' => true,
+            ];
+        }
 
-        $player = array_merge([
-            'scrollMode' => 'Off',
-        ], $this->options['player'] ?? []);
+        if ($this->optionGroup === self::OPTION_GROUP_DEFAULT) {
+            $display = array_merge([
+                'justifyLastSystem' => true,
+            ], $this->options['display'] ?? []);
 
-        return array_merge([
-            'tex' => true,
-            'padding' => [0, 0, 0, 0],
-            'barsPerRow' => $this->options['barsPerRow'] ?? -1,
-            'layoutMode' => $this->options['Page'] ?? 'Page',
-            'display' => $display,
-            'player' => $player,
-        ], $this->options ?? []);
+            $player = array_merge([
+                'scrollMode' => 'Off',
+            ], $this->options['player'] ?? []);
+
+            return array_merge([
+                'tex' => true,
+                'padding' => [0, 0, 0, 0],
+                'barsPerRow' => $this->options['barsPerRow'] ?? -1,
+                'layoutMode' => $this->options['Page'] ?? 'Page',
+                'display' => $display,
+                'player' => $player,
+            ], $this->options ?? []);
+        }
+
+        return [];
     }
 
     public function options(): string

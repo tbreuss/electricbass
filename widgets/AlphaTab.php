@@ -31,6 +31,7 @@ final class AlphaTab extends Widget
             return $this->render('alpha-tab', [
                 'alphaTab' => new AlphaTabApi(
                     notation: $this->content,
+                    optionGroup: AlphaTabApi::OPTION_GROUP_DEFAULT,
                     instrument: AlphaTabApi::INSTRUMENT_FOUR_STRING_BASS,
                     debug: $isDebug,
                 ),
@@ -52,6 +53,7 @@ final class AlphaTab extends Widget
         return $this->render('alpha-tab', [
             'alphaTab' => new AlphaTabApi(
                 notation: $model->notation,
+                optionGroup: $model->option_group,
                 options: $model->options,
                 instrument: $model->instrument,
                 uid: $model->uid,

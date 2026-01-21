@@ -34,6 +34,7 @@ final class AlphaTabController extends Controller
         return $this->render('view', [
            'alphaTab' => new AlphaTabApi(
                notation: $model->notation,
+               optionGroup: $model->option_group,
                options: $model->options,
                instrument: $model->instrument,
                debug: Yii::$app->request->getQueryParam('debug') !== null,
@@ -46,14 +47,17 @@ final class AlphaTabController extends Controller
         $this->layout = 'empty';
         $notation = \Yii::$app->request->getBodyParam('content', '\title Test');
         $instrument = \Yii::$app->request->getBodyParam('instrument', 'NONE');
+        $optionGroup = \Yii::$app->request->getBodyParam('optionGroup', 'NONE');
         $isDebug = \Yii::$app->request->getQueryParam('debug') !== null;
         return $this->render('editor', [
             'alphaTab' => new AlphaTabApi(
                 notation: $notation,
+                optionGroup: $optionGroup,
                 instrument: $instrument,
                 debug: $isDebug,
             ),
             'instrument' => $instrument,
+            'optionGroup' => $optionGroup,
             'notation' => $notation,
         ]);
     }
