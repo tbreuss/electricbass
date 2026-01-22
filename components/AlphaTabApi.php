@@ -2,6 +2,9 @@
 
 namespace app\components;
 
+use app\models\AlphaDrums;
+use app\models\AlphaTab;
+
 class AlphaTabApi
 {
     const INSTRUMENT_NONE = 'NONE';
@@ -19,9 +22,32 @@ class AlphaTabApi
         private ?string $uid = null,
         private ?string $title = null,
         private ?string $subtitle = null,
+        private ?int $timeSignatureNumerator = null,
+        private ?int $timeSignatureDenominator = null,
+        private ?int $barCount = null,
+        private ?AlphaDrums $drums = null,
         private bool $debug = false,
     ) {
         $this->uniqueId = uniqid();
+    }
+
+    public static function fromModels(AlphaTab $tab, ?AlphaDrums $drums, bool $debug = false): AlphaTabApi
+    {
+        [$tsNumerator, $tsDenominator] = $tab->timeSignature();
+
+        return new self(
+            notation: $tab->notation,
+            optionGroup: $tab->option_group,
+            options: $tab->options,
+            instrument: $tab->instrument,
+            title: $tab->title,
+            subtitle: $tab->subtitle,
+            timeSignatureNumerator: $tsNumerator,
+            timeSignatureDenominator: $tsDenominator,
+            barCount: $tab->bar_count,
+            drums: $drums,
+            debug: $debug,
+        );
     }
 
     public function uid(): ?string
@@ -43,7 +69,9 @@ class AlphaTabApi
 
         $defaults = match ($this->instrument) {
             self::INSTRUMENT_FOUR_STRING_BASS => array_merge($titles, [
+                '\track' => '"Bass"',
                 '\bracketextendmode' => 'noBrackets',
+                '\singleTrackTrackNamePolicy' => 'hidden',
                 '\hideDynamics' => '', // always hide dynamics
                 '\clef' => 'bass',
                 '\instrument' => '"Electric Bass Finger"',
@@ -59,7 +87,55 @@ class AlphaTabApi
             }
         }
 
-        return join('', $options) . ltrim($this->notation);
+        $notation = join('', $options) . ltrim($this->notation);
+
+        if ($this->drums) {
+            $notation = $this->addDrumsNotation($notation, $this->drums);
+        }
+
+        return $notation;
+    }
+
+    private function addDrumsNotation(string $notation, AlphaDrums $drums): string
+    {
+        [$drumsTsNumerator, $drumsTsDenominator] = $drums->timeSignature();
+
+        $invalidTimeSignatures = $this->timeSignatureNumerator === null
+            || $this->timeSignatureDenominator === null
+            || $drumsTsNumerator === null
+            || $drumsTsDenominator === null
+            || $drumsTsNumerator <> $this->timeSignatureNumerator
+            || $drumsTsDenominator <> $this->timeSignatureDenominator;
+
+        if ($invalidTimeSignatures) {
+            return $notation;
+        }
+
+        [$drumsConfig, $pattern] = explode(".\n", $drums->notation);
+
+        $bars = array_map('trim', array_filter(explode('|', trim($pattern))));
+        if ($bars === []) {
+            return $notation;
+        }
+
+        $drumsPattern = [];
+
+        $barIndex = 0;
+        for ($i = 0; $i < $this->barCount; $i++) {
+            if (!isset($bars[$barIndex])) {
+                $barIndex = 0;
+            }
+            $drumsPattern[] = $bars[$barIndex];
+            $barIndex++;
+        }
+
+        return join("\n", [
+            trim($notation),
+            "",
+            trim($drumsConfig),
+            ".",
+            join(" |\n", $drumsPattern),
+        ]);
     }
 
     public function instrument(): string

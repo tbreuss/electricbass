@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\AlphaTabApi;
+use app\models\AlphaDrums;
 use app\models\AlphaTab;
 use Yii;
 use yii\web\Controller;
@@ -30,15 +31,13 @@ final class AlphaTabController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $drums = $model->drums ? (new AlphaDrums)->findByUid($model->drums) : null;
+
         $this->layout = 'empty';
         return $this->render('view', [
-           'alphaTab' => new AlphaTabApi(
-               notation: $model->notation,
-               optionGroup: $model->option_group,
-               options: $model->options,
-               instrument: $model->instrument,
-               title: $model->title,
-               subtitle: $model->subtitle,
+           'alphaTab' => AlphaTabApi::fromModels(
+               tab: $model,
+               drums: $drums,
                debug: Yii::$app->request->getQueryParam('debug') !== null,
            ),
         ]);

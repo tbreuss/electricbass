@@ -13,18 +13,12 @@ use yii\db\ActiveRecord;
  * @property int $instrument
  * @property int $option_group
  * @property ?array $options
- * @property ?string $drums
  * @property string $time_signature
- * @property int bar_count
+ * @property int $bar_count
  */
-final class AlphaTab extends ActiveRecord
+final class AlphaDrums extends ActiveRecord
 {
-    public function findById(int $id): ?AlphaTab
-    {
-        return self::find()->where(['id' => $id, 'deleted' => null])->one();
-    }
-
-    public function findByUid(string $uid): ?AlphaTab
+    public function findByUid(string $uid): ?AlphaDrums
     {
         return self::find()->where(['uid' => $uid, 'deleted' => null])->one();
     }
@@ -38,5 +32,10 @@ final class AlphaTab extends ActiveRecord
             return [null, null];
         }
         return array_map('intval', explode('/', $this->time_signature));
+    }
+
+    public function barCount(): int
+    {
+        return $this->bar_count;
     }
 }

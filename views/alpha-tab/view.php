@@ -9,7 +9,9 @@
 <?php $asset = app\assets\AlphaTabAsset::register($this) ?>
 
 <script src="https://kit.fontawesome.com/b43f0e512e.js"></script>
-
+<style>
+    .at-surface div:last-of-type { display: none !important; }
+</style>
 <style type="text/css">
     .at-wrap {
         width: 100%;
