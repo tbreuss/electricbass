@@ -15,8 +15,8 @@ class AlphaTabApi
     private string $uniqueId;
 
     public function __construct(
-        private string $notation,
-        private string $optionGroup,
+        private string $alphaTex,
+        private string $optionsGroup,
         private ?array $options = null,
         private string $instrument = self::INSTRUMENT_NONE,
         private ?string $uid = null,
@@ -36,8 +36,8 @@ class AlphaTabApi
         [$tsNumerator, $tsDenominator] = $tab->timeSignature();
 
         return new self(
-            notation: $tab->notation,
-            optionGroup: $tab->option_group,
+            alphaTex: $tab->alpha_tex,
+            optionsGroup: $tab->options_group,
             options: $tab->options,
             instrument: $tab->instrument,
             title: $tab->title,
@@ -82,12 +82,12 @@ class AlphaTabApi
 
         $options = [];
         foreach ($defaults as $k => $v) {
-            if (!str_contains($this->notation, $k)) {
+            if (!str_contains($this->alphaTex, $k)) {
                 $options[] = $k . ' ' . $v . $nl;
             }
         }
 
-        $notation = join('', $options) . ltrim($this->notation);
+        $notation = join('', $options) . ltrim($this->alphaTex);
 
         if ($this->drums) {
             $notation = $this->addDrumsNotation($notation, $this->drums);
@@ -111,7 +111,7 @@ class AlphaTabApi
             return $notation;
         }
 
-        [$drumsConfig, $pattern] = explode(".\n", $drums->notation);
+        [$drumsConfig, $pattern] = explode(".\n", $drums->alpha_tex);
 
         $bars = array_map('trim', array_filter(explode('|', trim($pattern))));
         if ($bars === []) {
@@ -145,13 +145,13 @@ class AlphaTabApi
 
     public function arrayOptions(): array
     {
-        if ($this->optionGroup === self::OPTION_GROUP_NONE) {
+        if ($this->optionsGroup === self::OPTION_GROUP_NONE) {
             return [
                 'tex' => true,
             ];
         }
 
-        if ($this->optionGroup === self::OPTION_GROUP_DEFAULT) {
+        if ($this->optionsGroup === self::OPTION_GROUP_DEFAULT) {
             $display = array_merge([
                 'justifyLastSystem' => true,
             ], $this->options['display'] ?? []);
@@ -186,5 +186,10 @@ class AlphaTabApi
     public function uniqueId(): string
     {
         return $this->uniqueId;
+    }
+
+    public function title(): string
+    {
+        return $this->title;
     }
 }

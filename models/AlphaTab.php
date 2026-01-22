@@ -9,16 +9,21 @@ use yii\db\ActiveRecord;
  * @property string $uid
  * @property string $title
  * @property ?string $subtitle
- * @property string $notation
+ * @property string $alpha_tex
  * @property int $instrument
- * @property int $option_group
+ * @property int $options_group
  * @property ?array $options
- * @property ?string $drums
+ * @property ?AlphaDrums $drums
  * @property string $time_signature
  * @property int bar_count
  */
 final class AlphaTab extends ActiveRecord
 {
+    public function getDrums()
+    {
+        return $this->hasOne(AlphaDrums::class, ['id' => 'alpha_drums_id']);
+    }
+
     public function findById(int $id): ?AlphaTab
     {
         return self::find()->where(['id' => $id, 'deleted' => null])->one();

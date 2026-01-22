@@ -5,6 +5,7 @@
  */
 ?>
 
+<?php $this->title = $alphaTab->title() . ' | Play | ' ?>
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
 <?php $asset = app\assets\AlphaTabAsset::register($this) ?>
 
@@ -22,6 +23,12 @@
         flex-direction: column;
         overflow: hidden;
         position: relative;
+    }
+
+    .at-song-info {
+        background-color: #436d9d;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
     }
 
     .at-content {
@@ -249,6 +256,10 @@
             Music sheet is loading
         </div>
     </div>
+    <div class="at-song-info">
+        <span class="at-song-title"></span>
+        <span class="at-song-subtitle"></span>
+    </div>
     <div class="at-content">
         <div class="at-sidebar">
             <div class="at-sidebar-content">
@@ -268,9 +279,6 @@
                 <i class="fas fa-play"></i>
             </a>
             <span class="at-player-progress">0%</span>
-            <div class="at-song-info">
-                <span class="at-song-title"></span>
-            </div>
             <div class="at-song-position">00:00 / 00:00</div>
         </div>
         <div class="at-controls-right">
@@ -401,6 +409,7 @@
         /** Controls **/
         api.scoreLoaded.on((score) => {
             wrapper.querySelector(".at-song-title").innerText = score.title;
+            wrapper.querySelector(".at-song-subtitle").innerText = score.subTitle ? ' - ' + score.subTitle : '';
         });
 
         const countIn = wrapper.querySelector('.at-controls .at-count-in');

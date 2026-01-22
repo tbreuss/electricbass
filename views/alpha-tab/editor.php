@@ -8,6 +8,7 @@
  */
 ?>
 
+<?php $this->title = 'Editor | ' ?>
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
 <?php app\assets\AlphaTabAsset::register($this) ?>
 

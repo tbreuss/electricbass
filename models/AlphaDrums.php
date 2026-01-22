@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
  * @property string $uid
  * @property string $title
  * @property ?string $subtitle
- * @property string $notation
+ * @property string $alpha_tex
  * @property int $instrument
  * @property int $option_group
  * @property ?array $options

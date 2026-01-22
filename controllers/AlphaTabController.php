@@ -31,13 +31,11 @@ final class AlphaTabController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $drums = $model->drums ? (new AlphaDrums)->findByUid($model->drums) : null;
-
         $this->layout = 'empty';
         return $this->render('view', [
            'alphaTab' => AlphaTabApi::fromModels(
                tab: $model,
-               drums: $drums,
+               drums: $model->drums,
                debug: Yii::$app->request->getQueryParam('debug') !== null,
            ),
         ]);
@@ -52,8 +50,8 @@ final class AlphaTabController extends Controller
         $isDebug = \Yii::$app->request->getQueryParam('debug') !== null;
         return $this->render('editor', [
             'alphaTab' => new AlphaTabApi(
-                notation: $notation,
-                optionGroup: $optionGroup,
+                alphaTex: $notation,
+                optionsGroup: $optionGroup,
                 instrument: $instrument,
                 debug: $isDebug,
             ),
