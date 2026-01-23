@@ -115,7 +115,7 @@
     .at-track {
         display: flex;
         position: relative;
-        padding: 5px;
+        padding: 5px 0;
         transition: background 0.2s;
         cursor: pointer;
     }
@@ -143,8 +143,8 @@
     }
 
     .at-track-name {
-        font-weight: bold;
-        margin-bottom: 5px;
+        font-weight: 500;
+        min-width: 140px;
     }
 
     .at-track:hover > .at-track-icon {
@@ -158,10 +158,6 @@
     .at-track.active > .at-track-icon {
         color: #4972a1;
         opacity: 1;
-    }
-
-    .at-track > .at-track-name {
-        font-weight: 500;
     }
 
     /** Footer **/
