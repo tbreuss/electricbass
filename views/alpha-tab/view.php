@@ -5,7 +5,7 @@
  */
 ?>
 
-<?php $this->title = $alphaTab->title() . ' | Play | ' ?>
+<?php $this->title = $alphaTab->title() . ' | Play' ?>
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
 <?php $asset = app\assets\AlphaTabAsset::register($this) ?>
 
@@ -25,10 +25,17 @@
         position: relative;
     }
 
-    .at-song-info {
+    .at-header {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: space-between;
         background-color: #436d9d;
         color: #ffffff;
         padding: 0.5rem 1rem;
+    }
+
+    .at-back-link a {
+        color: white;
     }
 
     .at-content {
@@ -256,9 +263,18 @@
             Music sheet is loading
         </div>
     </div>
-    <div class="at-song-info">
-        <span class="at-song-title"></span>
-        <span class="at-song-subtitle"></span>
+    <div class="at-header">
+        <div class="at-song-info">
+            <span class="at-song-title"></span>
+            <span class="at-song-subtitle"></span>
+        </div>
+        <div class="at-back-link">
+            <?php if (str_contains((string)Yii::$app->request->referrer, (string)Yii::$app->request->hostName)): ?>
+                <?= app\helpers\Html::a('Zurück', app\helpers\Url::to((string)Yii::$app->request->referrer)) ?>
+            <?php else: ?>
+                <?= app\helpers\Html::a('Zur Startseite', app\helpers\Url::to(['/site/index'])) ?>
+            <?php endif ?>
+        </div>
     </div>
     <div class="at-content">
         <div class="at-sidebar">
@@ -355,6 +371,13 @@
                 soundFont: "https://cdn.jsdelivr.net/npm/@coderline/alphatab@latest/dist/soundfont/sonivox.sf2",
                 scrollElement: wrapper.querySelector('.at-viewport')
             },
+            notation: {
+                elements: {
+                    scoreTitle: false,
+                    scoreSubTitle: false,
+                    scoreArtist: false
+                }
+            }
         };
         const api = new alphaTab.AlphaTabApi(main, settings);
 

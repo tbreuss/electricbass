@@ -6,16 +6,45 @@
 ?>
 <?php app\assets\AlphaTabAsset::register($this) ?>
 <style>
-    .alpha-tab__notation { visibility: hidden; }
-    .at-surface div:last-of-type { display: none !important; }
+    .alpha-tab {
+        position: relative;
+    }
+    .alpha-tab--clickable .at-surface * {
+        cursor: pointer;
+    }
+    .alpha-tab-play {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1000;
+        width: 68px;
+        height: 48px;
+        margin-left: -34px;
+        margin-top: -24px;
+        display: none;
+    }
+    .alpha-tab:hover .alpha-tab-play {
+        display: block;
+    }
+    .alpha-tab__notation {
+        visibility: hidden;
+    }
+    .at-surface div:last-of-type {
+        display: none !important;
+    }
 </style>
-<div class="alpha-tab">
-    <?php if ($alphaTab->uid() !== null): ?>
-        <a href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>"><div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div></a>
-    <?php else: ?>
+
+<?php if ($alphaTab->uid() !== null): ?>
+    <div class="alpha-tab alpha-tab--clickable" onclick="window.location='<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>';">
+        <a class="alpha-tab-play" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>"><img src="/img/play-blue.svg" width="68" alt="Play"></a>
         <div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
-    <?php endif ?>
-</div>
+    </div>
+<?php else: ?>
+    <div class="alpha-tab">
+        <div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
+    </div>
+<?php endif ?>
+
 <?php if ($alphaTab->isDebug()): ?>
     <details>
         <summary>Notation</summary>
