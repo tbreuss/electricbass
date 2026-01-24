@@ -2,39 +2,23 @@
 
 namespace app\controllers;
 
-use app\widgets\Hits;
 use app\widgets\Rating;
 use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\rest\Controller;
+use yii\web\GoneHttpException;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\ServerErrorHttpException;
 
 final class ApiController extends Controller
 {
     /**
-     * @throws MethodNotAllowedHttpException
-     * @throws \yii\db\Exception
+     * @throws GoneHttpException
      */
-    public function actionHits(): bool
+    public function actionHits(): void
     {
-        Yii::$app->response->headers->add('X-Robots-Tag', 'noindex');
-
-        if (!Yii::$app->request->isPost) {
-            throw new MethodNotAllowedHttpException();
-        }
-
-        $json = json_decode(Yii::$app->request->getRawBody(), true);
-
-        $tableName = trim($json['tableName'] ?? '');
-        $tableId = intval($json['tableId'] ?? 0);
-
-        $widget = new Hits();
-        $widget->tableName = $tableName;
-        $widget->tableId = $tableId;
-
-        return $widget->increaseHits();
+        throw new GoneHttpException();
     }
 
     /**
