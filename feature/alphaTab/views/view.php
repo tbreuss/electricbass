@@ -18,7 +18,6 @@
         width: 100%;
         height: 80vh;
         margin: 0 auto;
-        border: 1px solid rgba(0, 0, 0, 0.12);
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -42,6 +41,8 @@
         position: relative;
         overflow: hidden;
         flex: 1 1 auto;
+        border-left: 1px solid rgba(0, 0, 0, 0.12);
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
     }
 
     /** Sidebar **/
@@ -146,7 +147,10 @@
         font-weight: 500;
         min-width: 140px;
     }
-
+    .at-track-volume {
+        margin-right: 1rem;
+        accent-color: #436d9d;
+    }
     .at-track:hover > .at-track-icon {
         opacity: 0.8;
     }
@@ -256,7 +260,7 @@
 <div class="at-wrap">
     <div class="at-overlay">
         <div class="at-overlay-content">
-            Music sheet is loading
+            Notenblatt wird geladen
         </div>
     </div>
     <div class="at-header">
@@ -337,6 +341,7 @@
         </div>
         <div class="at-track-details">
             <div class="at-track-name"></div>
+            <input class="at-track-volume" type="range" min="0" max="1" value="0.85" step="0.05" />
         </div>
     </div>
 </template>
@@ -391,12 +396,25 @@
             const trackItem = document
                 .querySelector("#at-track-template")
                 .content.cloneNode(true).firstElementChild;
+
             trackItem.querySelector(".at-track-name").innerText = track.name;
             trackItem.track = track;
             trackItem.onclick = (e) => {
+                if (e.target.classList.contains('at-track-volume')) {
+                    return;
+                }
                 e.stopPropagation();
                 api.renderTracks([track]);
             };
+
+            const trackVolume = trackItem.querySelector(".at-track-volume");
+            trackVolume.value = localStorageGetTrackVolume(track.index);
+            trackVolume.oninput = (e) => {
+                e.stopPropagation();
+                api.changeTrackVolume([track], e.target.value);
+                localStorageSetTrackVolume(track.index, e.target.value);
+            }
+
             return trackItem;
         }
         const trackList = wrapper.querySelector(".at-track-list");
@@ -504,6 +522,12 @@
             if (e.target.classList.contains("disabled")) {
                 return;
             }
+
+            // seems to be the only place to adjust the track volume
+            api.score.tracks.forEach((track) => {
+                api.changeTrackVolume([track], localStorageGetTrackVolume(track.index));
+            });
+
             api.playPause();
         };
         stop.onclick = (e) => {
@@ -551,5 +575,13 @@
             songPosition.innerText =
                 formatDuration(e.currentTime) + " / " + formatDuration(e.endTime);
         });
+
+        function localStorageGetTrackVolume(trackIndex) {
+            return localStorage.getItem("volumeTrack" + trackIndex) || 0.85;
+        }
+
+        function localStorageSetTrackVolume(trackIndex, volume) {
+            return localStorage.setItem("volumeTrack" + trackIndex, volume);
+        }
     });
 </script>
