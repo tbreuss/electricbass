@@ -50,7 +50,7 @@ final class LessonUrlRule extends BaseObject implements UrlRuleInterface
             return false;
         }
 
-        $preview = $request->getQueryParam('preview');
+        $preview = $request->getQueryParam('preview') !== null;
 
         if (empty($lesson->deleted) || !empty($preview)) {
             return ['lesson/index', ['path' => $lesson->url]];
