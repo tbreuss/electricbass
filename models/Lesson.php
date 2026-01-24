@@ -19,6 +19,13 @@ final class Lesson extends ActiveRecord
     use SimilarModelsByTags;
     use WithChanges;
 
+    public static function findByUrl(string $url): ?self
+    {
+        return self::find()
+            ->where(['url' => $url])
+            ->one();
+    }
+
     /**
      * @return Lesson[]
      */

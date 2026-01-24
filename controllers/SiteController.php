@@ -28,11 +28,6 @@ final class SiteController extends Controller
                 'class' => 'app\filters\RedirectFilter',
                 'except' => [],
             ],
-            [
-                'class' => 'yii\filters\PageCache',
-                'only' => ['index'],
-                'duration' => 60,
-            ]
         ];
     }
 
@@ -127,13 +122,6 @@ final class SiteController extends Controller
     public function actionFeed(): Response
     {
         return $this->redirect(['feed/rss'], 301);
-    }
-
-    public function actionPage(Page $page): string
-    {
-        return $this->render('page', [
-            'page' => $page,
-        ]);
     }
 
     public function actionError(): Response|string

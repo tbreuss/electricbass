@@ -42,8 +42,8 @@ final class Joke extends ActiveRecord
         return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSizeLimit' => [1, 200],
-                'defaultPageSize' => 200,
+                'pageSizeLimit' => [1, 1000],
+                'defaultPageSize' => 1000,
             ],
             'sort' => $sort,
         ]);
