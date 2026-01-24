@@ -4,7 +4,6 @@ namespace app\widgets;
 
 use Yii;
 use yii\base\Widget;
-use yii\helpers\Url;
 
 final class Hits extends Widget
 {
@@ -13,21 +12,12 @@ final class Hits extends Widget
     public string $tableName = '';
     public int $tableId = 0;
 
-    public function run(): string
+    /**
+     * @throws \yii\db\Exception
+     */
+    public function run(): void
     {
-        if ($this->isNotAllowed() || $this->hasSessionEntry()) {
-            return '';
-        }
-        return $this->render('hits', [
-            'tableName' => $this->tableName,
-            'tableId' => $this->tableId,
-            'url' => $this->getUrl(),
-        ]);
-    }
-
-    protected function getUrl(): string
-    {
-        return Url::toRoute(['/api/hits']);
+        $this->increaseHits();
     }
 
     protected function isNotAllowed(): bool
