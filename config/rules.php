@@ -1,10 +1,6 @@
 <?php
 
 return [
-    // Lektionen
-    [
-        'class' => 'app\components\LessonUrlRule',
-    ],
     // Bassistenwitze
     'bassistenwitze' => 'joke/index',
     // Blog
@@ -79,10 +75,10 @@ return [
     'admin/<controller>/<action>' => 'admin/<controller>/<action>',
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
-    // Pages
-    [
-        'class' => 'app\components\PageUrlRule',
-    ],
     'test' => 'site/test',
+    // Lektionen
+    [
+        'class' => 'app\components\LessonUrlRule',
+    ],
     '' => 'site/index',
 ];

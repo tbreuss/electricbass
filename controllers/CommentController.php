@@ -108,7 +108,7 @@ final class CommentController extends Controller
 
     private function fetchTitleAndUrlFromParentTable(string $table, int $id): array
     {
-        if (!in_array($table, ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'joke', 'lesson', 'page', 'quote', 'video', 'website'])) {
+        if (!in_array($table, ['advertisement', 'album', 'blog', 'catalog', 'fingering', 'glossar', 'joke', 'lesson', 'quote', 'video', 'website'])) {
             throw new BadRequestHttpException();
         }
 

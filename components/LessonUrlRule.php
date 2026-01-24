@@ -2,6 +2,8 @@
 
 namespace app\components;
 
+use app\models\Lesson;
+use app\models\Page;
 use yii\base\BaseObject;
 use yii\web\Request;
 use yii\web\UrlManager;
@@ -37,15 +39,23 @@ final class LessonUrlRule extends BaseObject implements UrlRuleInterface
     public function parseRequest($manager, $request)
     {
         $pathInfo = $request->getPathInfo();
-        $path = null;
-        if ($pathInfo == 'lektionen') {
-            $path = '';
-        } elseif (strpos($pathInfo, 'lektionen/') === 0) {
-            $path = substr($pathInfo, 10);
+
+        if ($pathInfo === '') {
+            return false;
         }
-        if (!is_null($path)) {
-            return ['lesson/index', ['path' => $path]];
+
+        $lesson = Lesson::findByUrl('/' . $pathInfo);
+
+        if (is_null($lesson)) {
+            return false;
         }
-        return false;  // this rule does not apply
+
+        $preview = $request->getQueryParam('preview');
+
+        if (empty($lesson->deleted) || !empty($preview)) {
+            return ['lesson/index', ['path' => $lesson->url]];
+        }
+
+        return false;
     }
 }

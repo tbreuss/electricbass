@@ -23,7 +23,6 @@ final class Rating extends ActiveRecord
         'fingering',
         'glossar',
         'lesson',
-        'page',
         'website',
         'video',
         'joke',

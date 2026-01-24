@@ -21,14 +21,11 @@ final class LessonController extends Controller
     }
 
     /**
-     * @param string $path
-     * @return string
      * @throws NotFoundHttpException
      */
-    public function actionIndex($path = ''): string
+    public function actionIndex(string $path): string
     {
-        $url = rtrim('/lektionen/' . $path, '/');
-        $model = Lesson::find()->where('deleted = 0 AND url = :url', [':url' => $url])->one();
+        $model = Lesson::find()->where('deleted = 0 AND url = :url', [':url' => $path])->one();
 
         if (is_null($model)) {
             throw new NotFoundHttpException();

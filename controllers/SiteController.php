@@ -124,13 +124,6 @@ final class SiteController extends Controller
         return $this->redirect(['feed/rss'], 301);
     }
 
-    public function actionPage(Page $page): string
-    {
-        return $this->render('page', [
-            'page' => $page,
-        ]);
-    }
-
     public function actionError(): Response|string
     {
         try {
