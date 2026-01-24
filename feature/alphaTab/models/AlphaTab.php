@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\alphaTab\models;
 
 use yii\db\ActiveRecord;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace app\components;
+namespace app\feature\alphaTab\components;
 
-use app\models\AlphaDrums;
-use app\models\AlphaTab;
+use app\feature\alphaTab\models\AlphaDrums;
+use app\feature\alphaTab\models\AlphaTab;
 
-class AlphaTabApi
+final class AlphaTabApi
 {
     const INSTRUMENT_NONE = 'NONE';
     const INSTRUMENT_FOUR_STRING_BASS = 'FOUR_STRING_BASS';

@@ -1,16 +1,13 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\alphaTab;
 
-use app\components\AlphaTabApi;
-use app\helpers\Url;
-use app\models\AlphaDrums;
-use app\models\AlphaTab;
-use Yii;
+use app\feature\alphaTab\components\AlphaTabApi;
+use app\feature\alphaTab\models\AlphaTab;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-final class AlphaTabController extends Controller
+final class WebController extends Controller
 {
     /**
      * @phpstan-return array<array>
@@ -33,11 +30,11 @@ final class AlphaTabController extends Controller
         }
 
         $this->layout = 'empty';
-        return $this->render('view', [
+        return $this->render('@app/feature/alphaTab/views/view', [
            'alphaTab' => AlphaTabApi::fromModels(
                tab: $model,
                drums: $model->drums,
-               debug: Yii::$app->request->getQueryParam('debug') !== null,
+               debug: \Yii::$app->request->getQueryParam('debug') !== null,
            ),
         ]);
     }
@@ -49,7 +46,7 @@ final class AlphaTabController extends Controller
         $instrument = \Yii::$app->request->getBodyParam('instrument', 'NONE');
         $optionGroup = \Yii::$app->request->getBodyParam('optionGroup', 'NONE');
         $isDebug = \Yii::$app->request->getQueryParam('debug') !== null;
-        return $this->render('editor', [
+        return $this->render('@app/feature/alphaTab/views/editor', [
             'alphaTab' => new AlphaTabApi(
                 alphaTex: $notation,
                 optionsGroup: $optionGroup,

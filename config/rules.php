@@ -71,7 +71,7 @@ return [
     'manufacturer/visit' => 'manufacturer/visit',
     'site/captcha' => 'site/captcha',
     [
-        'class' => 'app\components\AlphaTabUrlRule',
+        'class' => 'app\feature\alphaTab\components\UrlRule',
     ],
     'alpha-tab/editor' => 'alpha-tab/editor',
     // Admin

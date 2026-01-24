@@ -1,13 +1,13 @@
 <?php
 
-namespace app\assets;
+namespace app\feature\alphaTab;
 
 use yii\web\AssetBundle;
 
-final class AlphaTabAsset extends AssetBundle
+final class WebAsset extends AssetBundle
 {
     /** @var string */
-    public $sourcePath = '@app/assets/alphaTab';
+    public $sourcePath = '@app/feature/alphaTab/assets';
 
     /** @var string */
     public $baseUrl = '@web';

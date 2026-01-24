@@ -1,10 +1,10 @@
 <?php
 /**
  * @var \yii\web\View $this
- * @var \app\components\AlphaTabApi $alphaTab
+ * @var \app\feature\alphaTab\components\AlphaTabApi $alphaTab
  */
 ?>
-<?php app\assets\AlphaTabAsset::register($this) ?>
+<?php \app\feature\alphaTab\WebAsset::register($this) ?>
 <style>
     .alpha-tab {
         position: relative;

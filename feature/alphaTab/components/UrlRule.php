@@ -1,13 +1,13 @@
 <?php
 
-namespace app\components;
+namespace app\feature\alphaTab\components;
 
 use yii\base\BaseObject;
 use yii\web\Request;
 use yii\web\UrlManager;
 use yii\web\UrlRuleInterface;
 
-final class AlphaTabUrlRule extends BaseObject implements UrlRuleInterface
+final class UrlRule extends BaseObject implements UrlRuleInterface
 {
     /**
      * @param UrlManager $manager

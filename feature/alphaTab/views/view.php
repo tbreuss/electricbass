@@ -1,13 +1,13 @@
 <?php
 /**
  * @var \yii\web\View $this
- * @var \app\components\AlphaTabApi $alphaTab
+ * @var \app\feature\alphaTab\components\AlphaTabApi $alphaTab
  */
 ?>
 
 <?php $this->title = $alphaTab->title() . ' | Play' ?>
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
-<?php $asset = app\assets\AlphaTabAsset::register($this) ?>
+<?php $asset = \app\feature\alphaTab\WebAsset::register($this) ?>
 
 <script src="https://kit.fontawesome.com/b43f0e512e.js"></script>
 <style>

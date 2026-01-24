@@ -8,5 +8,5 @@
 
 ?>
 <div class="shortcode shortcode--alpha-tab">
-    <?= app\widgets\AlphaTab::widget(['id' => $id, 'uid' => $uid, 'content' => $content]) ?>
+    <?= \app\feature\alphaTab\ListWidget::widget(['id' => $id, 'uid' => $uid, 'content' => $content]) ?>
 </div>

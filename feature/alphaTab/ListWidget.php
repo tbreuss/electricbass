@@ -1,20 +1,20 @@
 <?php
 
-namespace app\widgets;
+namespace app\feature\alphaTab;
 
-use app\components\AlphaTabApi;
-use app\models\AlphaTab as AlphaTabModel;
+use app\feature\alphaTab\components\AlphaTabApi;
+use app\feature\alphaTab\models\AlphaTab;
 use Yii;
 use yii\base\Widget;
 
-final class AlphaTab extends Widget
+final class ListWidget extends Widget
 {
     public int $id = 0;
     public string $uid = '';
     public string $content = '';
 
     public function __construct(
-        private AlphaTabModel $model,
+        private AlphaTab $model,
         array $config = [],
     ) {
         parent::__construct($config);
@@ -28,7 +28,7 @@ final class AlphaTab extends Widget
         $isDebug = Yii::$app->request->getQueryParam('debug') !== null;
 
         if ($this->content !== '') {
-            return $this->render('alpha-tab', [
+            return $this->render('list-widget', [
                 'alphaTab' => new AlphaTabApi(
                     alphaTex: $this->content,
                     optionsGroup: AlphaTabApi::OPTION_GROUP_DEFAULT,
@@ -50,7 +50,7 @@ final class AlphaTab extends Widget
             return;
         }
 
-        return $this->render('alpha-tab', [
+        return $this->render('list-widget', [
             'alphaTab' => new AlphaTabApi(
                 alphaTex: $model->alpha_tex,
                 optionsGroup: $model->options_group,
