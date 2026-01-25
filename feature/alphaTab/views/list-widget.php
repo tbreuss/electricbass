@@ -5,6 +5,7 @@
  */
 ?>
 <?php \app\feature\alphaTab\WebAsset::register($this) ?>
+
 <style>
     .alpha-tab {
         position: relative;
@@ -34,27 +35,28 @@
     }
 </style>
 
-<?php if ($alphaTab->uid() !== null): ?>
-    <div class="alpha-tab alpha-tab--clickable" onclick="window.location='<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>';">
-        <a class="alpha-tab-play" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>"><img src="/img/play-blue.svg" width="68" alt="Play"></a>
-        <div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
-    </div>
-<?php else: ?>
-    <div class="alpha-tab">
-        <div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
-    </div>
+<?php if ($alphaTab->uid() !== null): // no indentation due to markdown parsing ?>
+<div class="alpha-tab alpha-tab--clickable" onclick="window.location='<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>';">
+    <a class="alpha-tab-play" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>"><img src="/img/play-blue.svg" width="68" alt="Play"></a>
+    <div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
+</div>
+<?php else: // no indentation due to markdown parsing ?>
+<div class="alpha-tab">
+    <div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
+</div>
 <?php endif ?>
 
-<?php if ($alphaTab->isDebug()): ?>
-    <details>
-        <summary>Notation</summary>
-        <pre><?= $alphaTab->notation() ?></pre>
-    </details>
-    <details>
-        <summary>Options</summary>
-        <pre><?= $alphaTab->options() ?></pre>
-    </details>
+<?php if ($alphaTab->isDebug()): // no indentation due to markdown parsing ?>
+<details>
+    <summary>Notation</summary>
+    <pre><?= $alphaTab->notation() ?></pre>
+</details>
+<details>
+    <summary>Options</summary>
+    <pre><?= $alphaTab->options() ?></pre>
+</details>
 <?php endif ?>
+
 <script>
     window.addEventListener("DOMContentLoaded", () => {
         const element = document.getElementById('alphaTab<?= $alphaTab->uniqueId() ?>');
