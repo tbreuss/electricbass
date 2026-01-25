@@ -9,7 +9,6 @@
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
 <?php $asset = \app\feature\alphaTab\WebAsset::register($this) ?>
 
-<script src="https://kit.fontawesome.com/b43f0e512e.js"></script>
 <style>
     .at-surface div:last-of-type { display: none !important; }
 </style>
@@ -202,6 +201,9 @@
         cursor: progress;
         opacity: 0.5;
     }
+    .at-controls .btn.hidden {
+        display: none;
+    }
 
     .at-controls a.active {
         background: #5588c7;
@@ -288,30 +290,52 @@
     </div>
     <div class="at-controls">
         <div class="at-controls-left">
-            <a class="btn at-player-stop disabled">
-                <i class="fas fa-step-backward"></i>
+            <a class="btn at-player-stop">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-skip-start-fill" viewBox="0 0 16 16">
+                    <path d="M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0z"/>
+                </svg>
             </a>
-            <a class="btn at-player-play-pause disabled">
-                <i class="fas fa-play"></i>
+            <a class="btn at-player-play">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                </svg>
+            </a>
+            <a class="btn at-player-pause hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-pause-fill" viewBox="0 0 16 16">
+                    <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5m5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5"/>
+                </svg>
             </a>
             <span class="at-player-progress">0%</span>
             <div class="at-song-position">00:00 / 00:00</div>
         </div>
         <div class="at-controls-right">
             <a class="btn toggle at-count-in">
-                <i class="fas fa-hourglass-half"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-hourglass-top" viewBox="0 0 16 16">
+                    <path d="M2 14.5a.5.5 0 0 0 .5.5h11a.5.5 0 1 0 0-1h-1v-1a4.5 4.5 0 0 0-2.557-4.06c-.29-.139-.443-.377-.443-.59v-.7c0-.213.154-.451.443-.59A4.5 4.5 0 0 0 12.5 3V2h1a.5.5 0 0 0 0-1h-11a.5.5 0 0 0 0 1h1v1a4.5 4.5 0 0 0 2.557 4.06c.29.139.443.377.443.59v.7c0 .213-.154.451-.443.59A4.5 4.5 0 0 0 3.5 13v1h-1a.5.5 0 0 0-.5.5m2.5-.5v-1a3.5 3.5 0 0 1 1.989-3.158c.533-.256 1.011-.79 1.011-1.491v-.702s.18.101.5.101.5-.1.5-.1v.7c0 .701.478 1.236 1.011 1.492A3.5 3.5 0 0 1 11.5 13v1z"/>
+                </svg>
             </a>
             <a class="btn at-metronome">
-                <i class="fas fa-edit"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
+                </svg>
             </a>
             <a class="btn at-loop">
-                <i class="fas fa-retweet"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+                </svg>
             </a>
             <a class="btn at-print">
-                <i class="fas fa-print"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z"/>
+                </svg>
             </a>
             <div class="at-zoom">
-                <i class="fas fa-search"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-zoom-in" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/>
+                    <path d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z"/>
+                    <path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
                 <select>
                     <option value="25">25%</option>
                     <option value="50">50%</option>
@@ -337,7 +361,7 @@
 <template id="at-track-template">
     <div class="at-track">
         <div class="at-track-icon">
-            <i class="fas fa-guitar"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-music"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
         </div>
         <div class="at-track-details">
             <div class="at-track-name"></div>
@@ -551,40 +575,40 @@
         });
 
         // main player controls
-        const playPause = wrapper.querySelector(
-            ".at-controls .at-player-play-pause"
-        );
+        const play = wrapper.querySelector(".at-controls .at-player-play");
+        const pause = wrapper.querySelector(".at-controls .at-player-pause");
         const stop = wrapper.querySelector(".at-controls .at-player-stop");
-        playPause.onclick = (e) => {
-            if (e.target.classList.contains("disabled")) {
-                return;
-            }
-
+        play.onclick = () => {
             // seems to be the only place to adjust the track volume
             api.score.tracks.forEach((track) => {
                 api.changeTrackVolume([track], localStorageGetTrackVolume(track.index));
             });
-
             api.playPause();
+            play.classList.add("hidden");
+            pause.classList.remove("hidden");
         };
-        stop.onclick = (e) => {
-            if (e.target.classList.contains("disabled")) {
-                return;
-            }
+
+        pause.onclick = () => {
+            api.playPause();
+            play.classList.remove("hidden");
+            pause.classList.add("hidden");
+        };
+
+        stop.onclick = () => {
             api.stop();
+            play.classList.remove("hidden");
+            pause.classList.add("hidden");
         };
+
         api.playerReady.on(() => {
-            playPause.classList.remove("disabled");
+            play.classList.remove("disabled");
             stop.classList.remove("disabled");
         });
+
         api.playerStateChanged.on((e) => {
-            const icon = playPause.querySelector("i.fas");
-            if (e.state === alphaTab.synth.PlayerState.Playing) {
-                icon.classList.remove("fa-play");
-                icon.classList.add("fa-pause");
-            } else {
-                icon.classList.remove("fa-pause");
-                icon.classList.add("fa-play");
+            if (e.state !== alphaTab.synth.PlayerState.Playing) {
+                play.classList.remove("hidden");
+                pause.classList.add("hidden");
             }
         });
 
