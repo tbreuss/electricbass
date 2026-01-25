@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'path')->textInput(['maxlength' => true]) ?>
+    <?php // $form->field($model, 'path')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'autosort')->textInput() ?>
 

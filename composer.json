@@ -28,7 +28,8 @@
     "mobiledetect/mobiledetectlib": "^2.8",
     "yiisoft/yii2-bootstrap": "^2.0",
     "mtdowling/jmespath.php": "^2.8",
-    "tebe/tonal": "@dev"
+    "tebe/tonal": "@dev",
+    "league/commonmark": "^2.8"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "^2.1",

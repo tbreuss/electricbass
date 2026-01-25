@@ -17,8 +17,8 @@ final class LessonSearch extends Lesson
     public function rules(): array
     {
         return [
-            [['id', 'autosort', 'hideFoto', 'comments', 'ratings', 'hits', 'featured', 'deleted'], 'integer'],
-            [['path', 'navtitle', 'title', 'url', 'abstract', 'text', 'tags', 'renderer', 'fotos', 'created', 'modified'], 'safe'],
+            [['id', 'autosort', /*'hideFoto',*/ 'comments', 'ratings', 'hits', /*'featured',*/ 'deleted'], 'integer'],
+            [[/*'path',*/ 'navtitle', 'title', 'url', 'abstract', 'text', 'tags', 'renderer', /*'fotos',*/ 'created', 'modified'], 'safe'],
             [['ratingAvg'], 'number'],
         ];
     }
@@ -57,26 +57,27 @@ final class LessonSearch extends Lesson
         $query->andFilterWhere([
             'id' => $this->id,
             'autosort' => $this->autosort,
-            'hideFoto' => $this->hideFoto,
+            //'hideFoto' => $this->hideFoto,
             'comments' => $this->comments,
             'ratings' => $this->ratings,
             'ratingAvg' => $this->ratingAvg,
             'hits' => $this->hits,
-            'featured' => $this->featured,
+            //'featured' => $this->featured,
             'deleted' => $this->deleted,
             'created' => $this->created,
             'modified' => $this->modified,
         ]);
 
-        $query->andFilterWhere(['like', 'path', $this->path])
+        $query/*->andFilterWhere(['like', 'path', $this->path])*/
             ->andFilterWhere(['like', 'navtitle', $this->navtitle])
             ->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'url', $this->url])
             ->andFilterWhere(['like', 'abstract', $this->abstract])
             ->andFilterWhere(['like', 'text', $this->text])
             ->andFilterWhere(['like', 'tags', $this->tags])
-            ->andFilterWhere(['like', 'renderer', $this->renderer])
-            ->andFilterWhere(['like', 'fotos', $this->fotos]);
+            //->andFilterWhere(['like', 'renderer', $this->renderer])
+            //->andFilterWhere(['like', 'fotos', $this->fotos])
+        ;
 
         $query->orderBy('id DESC');
 

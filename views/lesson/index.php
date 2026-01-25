@@ -26,7 +26,7 @@ CanonicalLink::widget(['keepParams' => ['path']]);
     <h1><?= $model->title ?></h1>
     <?php if (!empty($model->text)): ?>
         <div class="widget widget-parser">
-            <?= Parser::widget(["model" => $model, "attribute" => "text"]) ?>
+            <?= Parser::widget(["model" => $model, "attribute" => "text", "tableOfContents" => $model->tableOfContents > 0, "headingPermalink" => $model->headingPermalink > 0]) ?>
         </div>
         <?php if ($model->hasChanges()): ?>
             <div class="changes">
