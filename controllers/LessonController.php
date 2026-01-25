@@ -26,7 +26,7 @@ final class LessonController extends Controller
      */
     public function actionIndex(string $path, ?string $preview = null): string
     {
-        $model = Lesson::find()->where('url = :url', [':url' => $path])->one();
+        $model = Lesson::find()->where('url = :url', [':url' => '/' . $path])->one();
 
         if (is_null($model) || ($model->deleted === 1 && is_null($preview))) {
             throw new NotFoundHttpException();
