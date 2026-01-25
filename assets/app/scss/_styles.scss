@@ -308,3 +308,35 @@ up-modal-content .top {
 .blockquote-footer::before {
   content: "— ";
 }
+
+/* Table of contents */
+.table-of-contents {
+  list-style-type: none;
+  font-size: 90%;
+  padding-left: 1rem;
+  border-left: 0.125rem solid #999999;
+}
+.table-of-contents:before {
+  content: "Inhaltsverzeichnis";
+  font-weight: bold;
+}
+.table-of-contents a {
+  color: #5F5C52;
+}
+
+/* Heading Permalinks */
+.heading-permalink {
+  color: #aaaaaa;
+  margin-left: 0.25rem;
+  display: none;
+}
+.heading-permalink:hover {
+  color: #777777;
+}
+h2:hover .heading-permalink,
+h3:hover .heading-permalink,
+h4:hover .heading-permalink,
+h5:hover .heading-permalink,
+h6:hover .heading-permalink {
+  display: inline;
+}

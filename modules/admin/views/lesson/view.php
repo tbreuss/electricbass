@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'tags',
             'renderer',
             'fotos:ntext',
-            'hideFoto',
+            //'hideFoto',
             'comments',
             'ratings',
             'ratingAvg',

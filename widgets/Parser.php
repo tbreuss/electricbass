@@ -4,9 +4,14 @@ namespace app\widgets;
 
 use app\models\Lesson;
 use app\models\Website;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
+use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkRenderer;
+use League\CommonMark\Extension\TableOfContents\TableOfContentsExtension;
+use League\CommonMark\MarkdownConverter;
 use Yii;
 use yii\base\Widget;
-use yii\helpers\Markdown;
 
 final class Parser extends Widget
 {
@@ -16,6 +21,8 @@ final class Parser extends Widget
     public $model;
     /** @var string */
     public $attribute;
+    public bool $tableOfContents = false;
+    public bool $headingPermalink = false;
 
     public function run(): string
     {
@@ -25,16 +32,49 @@ final class Parser extends Widget
         $parsed = str_replace('@web/', Yii::getAlias('@web') . '/', $this->model->{$this->attribute});
         $parsed = Yii::$app->shortcode->parse($parsed);
 
-        // remove self-closing br tags
-        $parsed = str_replace('<br/>', '<br>', $parsed);
+        $config = [];
 
-        // check if we have more of such elements
-        if (strpos($parsed, '/>') !== false) {
-            // TODO Log markdown parse error
+        if ($this->tableOfContents || $this->headingPermalink) {
+            $config['heading_permalink'] = [
+                'html_class' => 'heading-permalink',
+                'id_prefix' => '',
+                'apply_id_to_heading' => true,
+                'heading_class' => '',
+                'fragment_prefix' => '',
+                'insert' => 'after',
+                'min_heading_level' => 2,
+                'max_heading_level' => 6,
+                'title' => 'Permalink',
+                'symbol' => HeadingPermalinkRenderer::DEFAULT_SYMBOL,
+                'aria_hidden' => true,
+            ];
         }
 
-        $parsed = Markdown::process($parsed, 'gfm');
-        return $parsed;
+        if ($this->tableOfContents) {
+            $config['table_of_contents'] = [
+                'html_class' => 'table-of-contents',
+                'position' => 'top',
+                'style' => 'bullet',
+                'min_heading_level' => 2,
+                'max_heading_level' => 6,
+                'normalize' => 'relative',
+                'placeholder' => null,
+            ];
+        }
+
+        $environment = new Environment($config);
+        $environment->addExtension(new CommonMarkCoreExtension());
+
+        if ($this->tableOfContents || $this->headingPermalink) {
+            $environment->addExtension(new HeadingPermalinkExtension());
+        }
+
+        if ($this->tableOfContents) {
+            $environment->addExtension(new TableOfContentsExtension());
+        }
+
+        $converter = new MarkdownConverter($environment);
+        return $converter->convert($parsed);
     }
 
     /**
