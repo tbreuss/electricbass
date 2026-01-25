@@ -449,30 +449,49 @@
             wrapper.querySelector(".at-song-subtitle").innerText = score.subTitle ? ' - ' + score.subTitle : '';
         });
 
+        function toggleElement(element, metronomeVolume) {
+            if (metronomeVolume > 0) {
+                if (!element.classList.contains("active")) {
+                    element.classList.add("active")
+                }
+            } else {
+                element.classList.remove("active")
+            }
+        }
+
+        // Count in
         const countIn = wrapper.querySelector('.at-controls .at-count-in');
+
+        api.countInVolume = parseInt(localStorage.getItem('at.countInVolume') || '0');
+        toggleElement(countIn, api.countInVolume);
+
         countIn.onclick = () => {
-            countIn.classList.toggle('active');
-            if (countIn.classList.contains('active')) {
-                api.countInVolume = 1;
-            } else {
-                api.countInVolume = 0;
-            }
+            api.countInVolume = api.countInVolume === 0 ? 1 : 0;
+            localStorage.setItem('at.countInVolume', api.countInVolume.toString());
+            toggleElement(countIn, api.countInVolume);
         };
 
+        // Metronome
         const metronome = wrapper.querySelector(".at-controls .at-metronome");
+
+        api.metronomeVolume = parseInt(localStorage.getItem('at.metronomeVolume') || '0');
+        toggleElement(metronome, api.metronomeVolume);
+
         metronome.onclick = () => {
-            metronome.classList.toggle("active");
-            if (metronome.classList.contains("active")) {
-                api.metronomeVolume = 1;
-            } else {
-                api.metronomeVolume = 0;
-            }
+            api.metronomeVolume = api.metronomeVolume === 0 ? 1 : 0;
+            localStorage.setItem('at.metronomeVolume', api.metronomeVolume.toString());
+            toggleElement(metronome, api.metronomeVolume);
         };
 
+        // Loop
         const loop = wrapper.querySelector(".at-controls .at-loop");
+        api.isLooping = parseInt(localStorage.getItem('at.isLooping') || '0');
+        toggleElement(loop, api.isLooping);
+
         loop.onclick = () => {
-            loop.classList.toggle("active");
-            api.isLooping = loop.classList.contains("active");
+            api.isLooping = api.isLooping === 0 ? 1 : 0;
+            localStorage.setItem('at.isLooping', api.isLooping.toString());
+            toggleElement(loop, api.isLooping);
         };
 
         wrapper.querySelector(".at-controls .at-print").onclick = () => {
@@ -486,6 +505,24 @@
             api.updateSettings();
             api.render();
         };
+
+        /*
+        // Zoom
+        const zoom = wrapper.querySelector(".at-controls .at-zoom select");
+        zoom.onchange = () => {
+            api.settings.display.scale = parseInt(zoom.value) / 100;
+            api.updateSettings();
+            api.render();
+            localStorage.setItem('at.zoom', zoom.value.toString());
+        };
+        zoom.value = parseInt(localStorage.getItem('at.zoom') || '100');
+        zoom.value !== 100 && zoom.dispatchEvent(new Event('change'));
+        */
+
+        function updateSelectElement(element, selected) {
+            element.value = selected;
+            console.log(element, selected);
+        }
 
         const layout = wrapper.querySelector(".at-controls .at-layout select");
         layout.onchange = () => {
@@ -576,12 +613,33 @@
                 formatDuration(e.currentTime) + " / " + formatDuration(e.endTime);
         });
 
+        /*
+        const layout = wrapper.querySelector(".at-controls .at-layout select");
+        api.settings.display.layoutMode = localStorage.getItem('at.layoutMode') || 'page';
+        updateSelectElement(layout, api.settings.display.layoutMode);
+
+        layout.onchange = () => {
+            switch (layout.value) {
+                case "horizontal":
+                    api.settings.display.layoutMode = alphaTab.LayoutMode.Horizontal;
+                    break;
+                case "page":
+                    api.settings.display.layoutMode = alphaTab.LayoutMode.Page;
+                    break;
+            }
+            api.updateSettings();
+            api.render();
+            localStorage.setItem("at.layoutMode", layout.value);
+        };
+        layout.dispatchEvent(new Event('change'));
+        */
+
         function localStorageGetTrackVolume(trackIndex) {
-            return localStorage.getItem("volumeTrack" + trackIndex) || 0.85;
+            return localStorage.getItem("at.volumeTrack" + trackIndex) || 0.85;
         }
 
         function localStorageSetTrackVolume(trackIndex, volume) {
-            return localStorage.setItem("volumeTrack" + trackIndex, volume);
+            return localStorage.setItem("at.volumeTrack" + trackIndex, volume);
         }
     });
 </script>
