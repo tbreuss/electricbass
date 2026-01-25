@@ -17,6 +17,10 @@ final class UrlRule extends BaseObject implements UrlRuleInterface
      */
     public function createUrl($manager, $route, $params)
     {
+        if ($route === 'alpha-tab/editor') {
+            return 'alpha-tab/editor';
+        }
+
         if ($route === 'alpha-tab/view') {
             $url = 'play';
             if (!empty($params['uid'])) {
@@ -24,7 +28,8 @@ final class UrlRule extends BaseObject implements UrlRuleInterface
             }
             return $url;
         }
-        return false;  // this rule does not apply
+
+        return false;
     }
 
     /**
@@ -37,15 +42,18 @@ final class UrlRule extends BaseObject implements UrlRuleInterface
     public function parseRequest($manager, $request)
     {
         $pathInfo = $request->getPathInfo();
-        $uid = null;
-        if ($pathInfo == 'play') {
-            $uid = '';
-        } elseif (strpos($pathInfo, 'play/') === 0) {
+
+        if ($pathInfo === 'alpha-tab/editor') {
+            return ['alpha-tab/editor', []];
+        }
+
+        if (str_starts_with($pathInfo, 'play/')) {
             $uid = substr($pathInfo, 5);
+            if ($uid !== '') {
+                return ['alpha-tab/view', ['uid' => $uid]];
+            }
         }
-        if (!is_null($uid)) {
-            return ['alpha-tab/view', ['uid' => $uid]];
-        }
-        return false;  // this rule does not apply
+
+        return false;
     }
 }

@@ -73,7 +73,6 @@ return [
     [
         'class' => 'app\feature\alphaTab\components\UrlRule',
     ],
-    'alpha-tab/editor' => 'alpha-tab/editor',
     // Admin
     'admin/<controller>/<action>' => 'admin/<controller>/<action>',
     'admin/<controller>' => 'admin/<controller>/index',
