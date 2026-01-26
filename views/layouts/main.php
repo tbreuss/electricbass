@@ -29,3 +29,14 @@ use yii\helpers\ArrayHelper;
         </div>
     </div>
 <?php $this->endContent(); ?>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // move table of contents to sidebar
+        const tableOfContents = document.querySelector(".table-of-contents");
+        const sidebar = document.querySelector(".sidebar__inner");
+        if (tableOfContents && sidebar) {
+            sidebar.prepend(tableOfContents);
+        }
+    });
+</script>

@@ -21,13 +21,11 @@ $this->params['breadcrumbs'] = $breadcrumbs;
 $this->title = $model->title . ' | Lektionen';
 CanonicalLink::widget(['keepParams' => ['path']]);
 ?>
-
+<?php $content = Parser::widget(["model" => $model, "attribute" => "text", "tableOfContents" => $model->tableOfContents > 0, "headingPermalink" => $model->headingPermalink > 0]) ?>
 <div class="content">
     <h1><?= $model->title ?></h1>
     <?php if (!empty($model->text)): ?>
-        <div class="widget widget-parser">
-            <?= Parser::widget(["model" => $model, "attribute" => "text", "tableOfContents" => $model->tableOfContents > 0, "headingPermalink" => $model->headingPermalink > 0]) ?>
-        </div>
+        <div class="widget widget-parser"><?= $content ?></div>
         <?php if ($model->hasChanges()): ?>
             <div class="changes">
                 <h3 class="changes__title">Änderungen</h3>
@@ -57,32 +55,34 @@ CanonicalLink::widget(['keepParams' => ['path']]);
 
 <?= Hits::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
 
-<?php $this->beginBlock('sidebar') ?>
-<div class="sidebarWidget">
-    <?php if (!empty($similars)): ?>
-        <h3 class="sidebarWidget__title">Ähnliche Lektionen</h3>
-        <ul class="sidebarWidget__list">
-            <?php foreach ($similars as $model): ?>
-                <li class="sidebarWidget__item">
-                    <a class="sidebarWidget__link" href="<?= $model->url ?>">
-                        <strong><?= $model->title ?></strong><br>
-                        <span class="text-muted"><?= join(', ', $model->getTagsAsArray(['Bass-Lektion'])) ?></span>
-                    </a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <h3 class="sidebarWidget__title">Die neuesten Lektionen</h3>
-        <ul class="sidebarWidget__list">
-            <?php foreach ($latest as $model): ?>
-                <li class="sidebarWidget__item">
-                    <a class="sidebarWidget__link" href="<?= $model->url ?>">
-                        <strong><?= $model->title ?></strong><br>
-                        <span class="text-muted"><?= join(', ', $model->getTagsAsArray(['Bass-Lektion'])) ?></span>
-                    </a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
-</div>
-<?php $this->endBlock() ?>
+<?php if (!str_contains($content, '<ul class="table-of-contents">')): ?>
+    <?php $this->beginBlock('sidebar') ?>
+    <div class="sidebarWidget">
+        <?php if (!empty($similars)): ?>
+            <h3 class="sidebarWidget__title">Ähnliche Lektionen</h3>
+            <ul class="sidebarWidget__list">
+                <?php foreach ($similars as $model): ?>
+                    <li class="sidebarWidget__item">
+                        <a class="sidebarWidget__link" href="<?= $model->url ?>">
+                            <strong><?= $model->title ?></strong><br>
+                            <span class="text-muted"><?= join(', ', $model->getTagsAsArray(['Bass-Lektion'])) ?></span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <h3 class="sidebarWidget__title">Die neuesten Lektionen</h3>
+            <ul class="sidebarWidget__list">
+                <?php foreach ($latest as $model): ?>
+                    <li class="sidebarWidget__item">
+                        <a class="sidebarWidget__link" href="<?= $model->url ?>">
+                            <strong><?= $model->title ?></strong><br>
+                            <span class="text-muted"><?= join(', ', $model->getTagsAsArray(['Bass-Lektion'])) ?></span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+    <?php $this->endBlock() ?>
+<?php endif ?>

@@ -4977,14 +4977,22 @@ up-modal-content .top {
 /* Table of contents */
 .table-of-contents {
   list-style-type: none;
-  font-size: 90%;
-  padding-left: 1rem;
-  border-left: 0.125rem solid #999999;
+  padding-left: 0;
 }
 
 .table-of-contents:before {
-  content: "Inhaltsverzeichnis";
-  font-weight: bold;
+    display: block;
+    content: "Inhaltsverzeichnis";
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.table-of-contents li {
+    line-height: 1.2;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #ddd;
 }
 
 .table-of-contents a {
