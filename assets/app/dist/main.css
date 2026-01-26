@@ -4981,18 +4981,18 @@ up-modal-content .top {
 }
 
 .table-of-contents:before {
-    display: block;
-    content: "Inhaltsverzeichnis";
-    font-weight: 600;
-    font-size: 1.05rem;
-    line-height: 1.5;
-    margin-bottom: 0.75rem;
+  display: block;
+  content: "Inhaltsverzeichnis";
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
 }
 
 .table-of-contents li {
-    line-height: 1.2;
-    padding: 0.25rem 0;
-    border-bottom: 1px solid #ddd;
+  line-height: 1.2;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #ddd;
 }
 
 .table-of-contents a {
