@@ -13,6 +13,8 @@ use Yii;
  * @property string $abstract
  * @property string $url
  * @property string $menuTitle
+ * @property int $tableOfContents
+ * @property int $headingPermalink
  */
 final class Lesson extends ActiveRecord
 {
