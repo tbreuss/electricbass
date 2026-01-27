@@ -246,5 +246,36 @@ if (!empty($this->params['metaDescription'])) {
 </footer>
 <?php $this->endBody() ?>
 </body>
+<script>
+    // Handle filter changes
+    function applyFilters(filters) {
+        // Update URL with fragment
+        window.history.pushState({}, '', `#${filters}`);
+
+        // Fetch filtered products via AJAX
+        const data = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "_csrf=<?=\Yii::$app->request->csrfToken?>",
+        };
+        fetch(`/blog?${filters}`, data)
+            .then(response => response.text())
+            .then(text => {
+                document.querySelector('.content-wrap').innerHTML = text;
+            });
+    }
+
+    // Handle URL changes
+    window.addEventListener('popstate', function() {
+        const fragment = window.location.hash.substring(1);
+        if (fragment !== '') {
+            applyFilters(fragment);
+        }
+        console.log(fragment);
+    });
+</script>
+
 </html>
 <?php $this->endPage() ?>

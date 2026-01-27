@@ -31,14 +31,21 @@ final class BlogController extends Controller
         $provider = Blog::getActiveDataProvider();
         $latest = Blog::findLatest(5);
         $popular = Blog::findPopular(5);
-        return $this->render('index', [
+
+        $params = [
             'dataProvider' => $provider,
             'blogs' => $provider->getModels(),
             'pagination' => $provider->getPagination(),
             'sort' => $provider->getSort(),
             'latest' => $latest,
             'popular' => $popular
-        ]);
+        ];
+
+        if (\Yii::$app->request->isPost) {
+            return $this->renderPartial('index', $params);
+        }
+
+        return $this->render('index', $params);
     }
 
     /**

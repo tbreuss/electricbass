@@ -25,6 +25,24 @@ CanonicalLink::widget(['isPaginated' => true]);
 
     <h1>Blog für E-Bass und Bassisten</h1>
 
+    <div class="col-6 widgetListSummary__sorter">
+        <div class="dropdown">
+            <a href="#" class="dropdown__button" type="button">
+                Sortiert nach<span class="caret"></span>: Änderungsdatum↓
+            </a>
+            <div class="dropdown__content">
+                <ul class="dropdown__list">
+                    <li class="dropdown__item"><a class="dropdown__link" href="#sort=-rating" data-sort="-rating">Bewertung</a></li>
+                    <li class="dropdown__item"><a class="dropdown__link" href="#sort=title" data-sort="title">Blogpost-Titel</a></li>
+                    <li class="dropdown__item"><a class="dropdown__link" href="#sort=-publication" data-sort="-publication">Veröffentlichung</a></li>
+                    <li class="dropdown__item"><a class="dropdown__link" href="#sort=-created" data-sort="-created">Erstellungsdatum</a></li>
+                    <li class="dropdown__item"><a class="dropdown__link desc" href="#sort=modified" data-sort="modified">Änderungsdatum</a></li>
+                    <li class="dropdown__item"><a class="dropdown__link" href="#sort=-comments" data-sort="-comments">Kommentare</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <?= ListSummary::widget(['pagination' => $pagination, 'sort' => $sort]) ?>
 
     <?= ListView::widget(["ratingStyle" => "none", "ratingContext" => "blog", "models" => $blogs]) ?>

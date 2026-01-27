@@ -4,7 +4,7 @@ return [
     // Bassistenwitze
     'bassistenwitze' => 'joke/index',
     // Blog
-    'blog' => 'blog/index',
+    'GET,POST blog' => 'blog/index',
     'blog/<id:[A-Za-z0-9-]+>' => 'blog/view',
     // Fingersätze
     'tools/fingersaetze' => 'fingering/index',
