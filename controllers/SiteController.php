@@ -13,7 +13,6 @@ use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use app\models\ContactForm;
 use app\models\Search;
-use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 final class SiteController extends Controller
@@ -150,7 +149,7 @@ final class SiteController extends Controller
                 #}
                 $model = Search::find()->where(['id' => $pathInfo])->one();
                 if ($model) {
-                    return $this->redirect($model->url, 301)->send();
+                    return $this->redirect($model->url, 301);
                 }
             }
 
@@ -162,7 +161,7 @@ final class SiteController extends Controller
             if ($id > 0) {
                 $model = Search::find()->where(['id' => $id])->one();
                 if ($model) {
-                    return $this->redirect($model->url, 301)->send();
+                    return $this->redirect($model->url, 301);
                 }
             }
 
