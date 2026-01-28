@@ -14,6 +14,9 @@ final class AlphaTabApi
 
     private string $uniqueId;
 
+    /**
+     * @param string[][]|null $options
+     */
     public function __construct(
         private string $alphaTex,
         private string $optionsGroup,
@@ -188,7 +191,7 @@ final class AlphaTabApi
         return $this->uniqueId;
     }
 
-    public function title(): string
+    public function title(): ?string
     {
         return $this->title;
     }

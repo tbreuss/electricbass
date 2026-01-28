@@ -15,6 +15,7 @@ use Yii;
  * @property string $menuTitle
  * @property int $tableOfContents
  * @property int $headingPermalink
+ * @property int $deleted
  */
 final class Lesson extends ActiveRecord
 {

@@ -17,6 +17,7 @@ parameters:
 		- config
 		- controllers
 		- entities
+		- feature
 		- filters
 		- helpers
 		- mail

@@ -2,6 +2,7 @@
 
 namespace app\feature\alphaTab\models;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -10,16 +11,16 @@ use yii\db\ActiveRecord;
  * @property string $title
  * @property ?string $subtitle
  * @property string $alpha_tex
- * @property int $instrument
- * @property int $options_group
+ * @property string $instrument
+ * @property string $options_group
  * @property ?array $options
  * @property ?AlphaDrums $drums
  * @property string $time_signature
- * @property int bar_count
+ * @property int $bar_count
  */
 final class AlphaTab extends ActiveRecord
 {
-    public function getDrums()
+    public function getDrums(): ActiveQuery
     {
         return $this->hasOne(AlphaDrums::class, ['id' => 'alpha_drums_id']);
     }
