@@ -1,23 +1,18 @@
 <?php
 
 return [
-    // Bassistenwitze
+    '' => 'site/index',
     'bassistenwitze' => 'joke/index',
-    // Blog
     'blog' => 'blog/index',
     'blog/<id:[A-Za-z0-9-]+>' => 'blog/view',
-    // Fingersätze
     'tools/fingersaetze' => 'fingering/index',
     'tools/fingersaetze/<id:[A-Za-z0-9-]+>' => 'fingering/view',
     'tools/metronom' => 'tool/metronome',
-    // Glossar
     'glossar/reorder' => 'glossar/reorder',
     'glossar/<category>/<id>' => 'glossar/view',
     'glossar/<category>' => 'glossar/index',
     'glossar' => 'glossar/index',
-    // Impressum
     'impressum' => 'site/impressum',
-    // Katalog
     'katalog/hersteller' => 'manufacturer/index',
     'katalog/alben/index' => 'album/all',
     'katalog/alben/<id>' => 'album/view',
@@ -26,7 +21,6 @@ return [
     'katalog/<category>/<id>' => 'catalog/view',
     'katalog/<category>' => 'catalog/index',
     'katalog' => 'catalog/overview',
-    // Kleinanzeigen
     'kleinanzeigen/' => 'advertisement/index',
     'kleinanzeigen/hinzufuegen' => 'advertisement/add',
     'kleinanzeigen/verwalten' => 'advertisement/manage',
@@ -37,18 +31,13 @@ return [
     'advertisement/update' => 'advertisement/update',
     'kommentar/<name>-<id>' => 'comment/index',
     'kommentar/regeln' => 'comment/rules',
-    // Kontakt
     'kontakt' => 'site/contact',
-    // Suche
     'suche' => 'search/index',
-    // Tools
     'tools' => 'tool/index',
     'tools/notenpapier' => 'tool/musicpaper',
-    // Websites
     'websites/index' => 'website/all',
     'websites/<id:[A-Za-z0-9-]+>' => 'website/view',
     'websites' => 'website/index',
-    // Videos
     'videos/<segment:isolierter-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
     'videos/<segment:isolierter-bass>' => 'youtube-playlist/index',
     'videos/<segment:klassische-musik>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
@@ -57,28 +46,28 @@ return [
     'videos/<segment:solo-bass>' => 'youtube-playlist/index',
     'videos' => 'video/index',
     'videos/<eid:[A-Za-z0-9-]+>' => 'video/view',
-    // Sitemap
     'sitemap' => 'sitemap/index',
     'sitemap/google' => 'sitemap/google',
-    // Zitate
     'zitate' => 'quote/index',
-    // RSS
     'feed/rss' => 'feed/rss',
-    // API
     'api/hits' => 'api/hits',
     'api/rate' => 'api/rate',
     'manufacturer/data' => 'manufacturer/data',
     'manufacturer/visit' => 'manufacturer/visit',
     'site/captcha' => 'site/captcha',
-    'alpha-tab/editor' => 'alpha-tab/editor',
-    // Admin
     'admin/<controller>/<action>' => 'admin/<controller>/<action>',
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
     'test' => 'site/test',
-    // Lektionen
+    'alpha-tab/editor' => 'alpha-tab/editor',
     [
-        'class' => 'app\components\LessonUrlRule',
+        'pattern' => 'play/<uid:.+>',
+        'route' => 'alpha-tab/view',
+        'encodeParams' => false,
     ],
-    '' => 'site/index',
+    [
+        'pattern' => '<path:.+>',
+        'route' => 'lesson/index',
+        'encodeParams' => false,
+    ],
 ];

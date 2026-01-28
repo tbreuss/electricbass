@@ -74,7 +74,7 @@ final class Parser extends Widget
         }
 
         $converter = new MarkdownConverter($environment);
-        return $converter->convert($parsed);
+        return $converter->convert($parsed)->getContent();
     }
 
     /**

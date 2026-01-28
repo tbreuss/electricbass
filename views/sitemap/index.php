@@ -14,16 +14,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1 class="sitemap__title">Sitemap</h1>
     <h2 class="sitemap__section"><?= Html::a('Homepage', ['/'], ['class' => 'sitemap__link']) ?></h2>
     <h2 class="sitemap__section"><?= Html::a('Blog für E-Bass und Bassisten', ['/blog'], ['class' => 'sitemap__link']) ?></h2>
-    <h2 class="sitemap__section"><?= Html::a('Lektionen, Übungen und Ideen für Bassisten', ['/lesson/index'], ['class' => 'sitemap__link']) ?></h2>
+    <h2 class="sitemap__section"><?= Html::a('Lektionen, Übungen und Ideen für Bassisten', ['/lesson/index', 'path' => 'lektionen'], ['class' => 'sitemap__link']) ?></h2>
     <ul class="sitemap__links">
-        <li><?= Html::a('Fitnessübungen für E-Bassisten', ['/lesson/index', 'path' => 'fitness'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Tonleiterübungen für den E-Bass', ['/lesson/index', 'path' => 'tonleiter'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Bass-Riffs aller Stilrichtungen', ['/lesson/index', 'path' => 'bassriff'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Rhythmikübungen für Bassisten', ['/lesson/index', 'path' => 'rhythmik'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Arpeggios für den E-Bass', ['/lesson/index', 'path' => 'arpeggio'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Blues-Übungen für Bassisten', ['/lesson/index', 'path' => 'blues'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Harmonielehre und Musiktheorie für E-Bass', ['/lesson/index', 'path' => 'harmonielehre'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Walking Bass Übungen für E- und Kontrabass', ['/lesson/index', 'path' => 'walking-bass'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Fitnessübungen für E-Bassisten', ['/lesson/index', 'path' => 'lektionen/fitness'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Tonleiterübungen für den E-Bass', ['/lesson/index', 'path' => 'lektionen/tonleiter'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Bass-Riffs aller Stilrichtungen', ['/lesson/index', 'path' => 'lektionen/bassriff'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Rhythmikübungen für Bassisten', ['/lesson/index', 'path' => 'lektionen/rhythmik'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Arpeggios für den E-Bass', ['/lesson/index', 'path' => 'lektionen/arpeggio'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Blues-Übungen für Bassisten', ['/lesson/index', 'path' => 'lektionen/blues'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Harmonielehre und Musiktheorie für E-Bass', ['/lesson/index', 'path' => 'lektionen/harmonielehre'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Walking Bass Übungen für E- und Kontrabass', ['/lesson/index', 'path' => 'lektionen/walking-bass'], ['class' => 'sitemap__link']) ?></li>
     </ul>
     <h2 class="sitemap__section"><?= Html::a('Tools', ['/tools'], ['class' => 'sitemap__link']) ?></h2>
     <ul class="sitemap__links">

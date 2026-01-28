@@ -72,14 +72,14 @@ if (!empty($this->params['metaDescription'])) {
                 <li class="navbar__menu-item navbar-dropdown">
                     <a class="navbar__menu-link navbar-dropdown__button" href="#">Lektionen</a>
                     <ul class="navbar-dropdown__content">
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'fitness']) ?>">Fitness</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'tonleiter']) ?>">Tonleitern</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'bassriff']) ?>">Bass-Riffs</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'rhythmik']) ?>">Rhythmik</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'arpeggio']) ?>">Arpeggios</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'blues']) ?>">Blues</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'harmonielehre']) ?>">Harmonielehre</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'walking-bass']) ?>">Walking Bass</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/fitness']) ?>">Fitness</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/tonleiter']) ?>">Tonleitern</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/bassriff']) ?>">Bass-Riffs</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/rhythmik']) ?>">Rhythmik</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/arpeggio']) ?>">Arpeggios</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/blues']) ?>">Blues</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/harmonielehre']) ?>">Harmonielehre</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/walking-bass']) ?>">Walking Bass</a></li>
                     </ul>
                 </li>
                 <li class="navbar__menu-item navbar-dropdown">
@@ -190,14 +190,14 @@ if (!empty($this->params['metaDescription'])) {
             <div class="col-12 col-md-4">
                 <h5 class="footer__title">Lektionen, Übungen & Ideen</h5>
                 <ul class="footer__list">
-                    <li><?= Html::a('Fitnessübungen für E-Bassisten', ['/lesson/index', 'path' => 'fitness']) ?></li>
-                    <li><?= Html::a('Tonleiterübungen für den E-Bass', ['/lesson/index', 'path' => 'tonleiter']) ?></li>
-                    <li><?= Html::a('Bass-Riffs aller Stilrichtungen', ['/lesson/index', 'path' => 'bassriff']) ?></li>
-                    <li><?= Html::a('Rhythmikübungen für Bassisten', ['/lesson/index', 'path' => 'rhythmik']) ?></li>
-                    <li><?= Html::a('Arpeggios für den E-Bass', ['/lesson/index', 'path' => 'arpeggio']) ?></li>
-                    <li><?= Html::a('Blues-Übungen für Bassisten', ['/lesson/index', 'path' => 'blues']) ?></li>
-                    <li><?= Html::a('Harmonielehre und Musiktheorie für E-Bass', ['/lesson/index', 'path' => 'harmonielehre']) ?></li>
-                    <li><?= Html::a('Walking Bass Übungen für E- und Kontrabass', ['/lesson/index', 'path' => 'walking-bass']) ?></li>
+                    <li><?= Html::a('Fitnessübungen für E-Bassisten', ['/lesson/index', 'path' => 'lektionen/fitness']) ?></li>
+                    <li><?= Html::a('Tonleiterübungen für den E-Bass', ['/lesson/index', 'path' => 'lektionen/tonleiter']) ?></li>
+                    <li><?= Html::a('Bass-Riffs aller Stilrichtungen', ['/lesson/index', 'path' => 'lektionen/bassriff']) ?></li>
+                    <li><?= Html::a('Rhythmikübungen für Bassisten', ['/lesson/index', 'path' => 'lektionen/rhythmik']) ?></li>
+                    <li><?= Html::a('Arpeggios für den E-Bass', ['/lesson/index', 'path' => 'lektionen/arpeggio']) ?></li>
+                    <li><?= Html::a('Blues-Übungen für Bassisten', ['/lesson/index', 'path' => 'lektionen/blues']) ?></li>
+                    <li><?= Html::a('Harmonielehre und Musiktheorie für E-Bass', ['/lesson/index', 'path' => 'lektionen/harmonielehre']) ?></li>
+                    <li><?= Html::a('Walking Bass Übungen für E- und Kontrabass', ['/lesson/index', 'path' => 'lektionen/walking-bass']) ?></li>
                 </ul>
             </div>
             <div class="col-12 col-md-4">

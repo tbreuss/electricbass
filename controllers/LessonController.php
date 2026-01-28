@@ -21,13 +21,14 @@ final class LessonController extends Controller
     }
 
     /**
-     * @throws NotFoundHttpException
+     * @throws \yii\db\Exception
+     * @throws \yii\web\NotFoundHttpException
      */
-    public function actionIndex(string $path): string
+    public function actionIndex(string $path, ?string $preview = null): string
     {
-        $model = Lesson::find()->where('deleted = 0 AND url = :url', [':url' => $path])->one();
+        $model = Lesson::find()->where('url = :url', [':url' => '/' . $path])->one();
 
-        if (is_null($model)) {
+        if (is_null($model) || ($model->deleted === 1 && is_null($preview))) {
             throw new NotFoundHttpException();
         }
 
