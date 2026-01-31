@@ -76,6 +76,23 @@
         padding-right: 20px;
     }
 
+    .at-attribution {
+        position: absolute;
+        display: inline-block;
+        right: 1rem;
+        bottom: 0;
+        padding: 0.25rem 0.25rem;
+        z-index: 2000;
+        background-color: #ffffff;
+    }
+    .at-attribution a {
+        font-family: Arial, sans-serif;
+        color: #999999;
+        font-size: 0.9rem;
+    }
+    .at-attribution a:hover {
+        color: #000000;
+    }
     .at-footer {
         flex: 0 0 auto;
         background: #436d9d;
@@ -287,6 +304,7 @@
         <div class="at-viewport">
             <div class="at-main"><?= $alphaTab->notation() ?></div>
         </div>
+        <div class="at-attribution"><a href="<?= app\helpers\Url::to(['/lesson/index', 'path' => '/danke']) ?>">gerendert von alphaTab</a></div>
     </div>
     <div class="at-controls">
         <div class="at-controls-left">

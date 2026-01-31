@@ -33,6 +33,18 @@
     .at-surface div:last-of-type {
         display: none !important;
     }
+    .alphaTabAttr<?= $alphaTab->uniqueId() ?> {
+        font: normal 12px Arial, sans-serif;
+        text-align: right;
+        z-index: 2000;
+        display: none;
+    }
+    .alphaTabAttr<?= $alphaTab->uniqueId() ?> a {
+        color: #999999;
+    }
+    .alphaTabAttr<?= $alphaTab->uniqueId() ?> a:hover {
+        color: #000000;
+    }
 </style>
 
 <?php if ($alphaTab->uid() !== null): // no indentation due to markdown parsing ?>
@@ -45,6 +57,7 @@
     <div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
 </div>
 <?php endif ?>
+<div class="alphaTabAttr<?= $alphaTab->uniqueId() ?>"><a href="<?= app\helpers\Url::to(['/lesson/index', 'path' => '/danke']) ?>">gerendert von alphaTab</a></div>
 
 <?php if ($alphaTab->isDebug()): // no indentation due to markdown parsing ?>
 <details>
@@ -63,6 +76,7 @@
         const api = new alphaTab.AlphaTabApi(element, <?= $alphaTab->options() ?>);
         api.postRenderFinished.on(() => {
             element.style.visibility = 'visible';
+            document.querySelector('.alphaTabAttr<?= $alphaTab->uniqueId() ?>').style.display = 'block';
         });
     });
 </script>
