@@ -161,6 +161,7 @@
     position: absolute;
     left: 0;
     padding: 0;
+    z-index: 2000;
   }
   .navbar-dropdown__content.navbar-dropdown__content--show {
     background-color: #f5f5f5;
