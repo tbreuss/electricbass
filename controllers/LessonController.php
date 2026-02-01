@@ -43,6 +43,7 @@ final class LessonController extends Controller
 
         return $this->render('index', [
             'model' => $model,
+            'title' => $this->getTitle($model),
             'breadcrumbs' => $this->getBreadcrumbs($model),
             'similars' => $similars,
             'latest' => $latest
@@ -54,18 +55,33 @@ final class LessonController extends Controller
      */
     protected function getBreadcrumbs(Lesson $model): array
     {
-        $parents = Lesson::findParents($model->url);
-        $breadcrumbs = [];
-        foreach ($parents as $parent) {
-            if ($parent->url === $model->url) {
-                continue;
+        static $breadcrumbs;
+        if (!is_array($breadcrumbs)) {
+            $parents = Lesson::findParents($model->url);
+            foreach ($parents as $parent) {
+                if ($parent->url === $model->url) {
+                    continue;
+                }
+                $breadcrumbs[] = [
+                    'label' => $parent->menuTitle,
+                    'url' => $parent->url
+                ];
             }
-            $breadcrumbs[] = [
-                'label' => $parent->menuTitle,
-                'url' => $parent->url
-            ];
+            $breadcrumbs[] = $model->menuTitle;
         }
-        $breadcrumbs[] = $model->menuTitle;
         return $breadcrumbs;
+    }
+
+    protected function getTitle(Lesson $model): string
+    {
+        $segments = [];
+        foreach ($this->getBreadcrumbs($model) as $breadcrumb) {
+            if (is_string($breadcrumb)) {
+                $segments[] = $breadcrumb;
+            } elseif (isset($breadcrumb['label'])) {
+                $segments[] = $breadcrumb['label'];
+            }
+        }
+        return join(' | ', array_reverse($segments));
     }
 }

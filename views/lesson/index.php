@@ -6,6 +6,7 @@
  * @var app\models\Lesson[] $similars
  * @var app\models\Lesson[] $latest
  * @var array $breadcrumbs
+ * @var string $title
  * @phpstan-var array<int, array{"label": string, "url": string}> $breadcrumbs
  */
 
@@ -18,7 +19,7 @@ use app\widgets\RatingReadOnly;
 use app\widgets\SocialBar;
 
 $this->params['breadcrumbs'] = $breadcrumbs;
-$this->title = $model->title . ' | Lektionen';
+$this->title = $title;
 CanonicalLink::widget(['keepParams' => ['path']]);
 ?>
 <?php $content = Parser::widget(["model" => $model, "attribute" => "text", "tableOfContents" => $model->tableOfContents > 0, "headingPermalink" => $model->headingPermalink > 0]) ?>
