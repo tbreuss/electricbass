@@ -303,7 +303,7 @@
         <div class="at-viewport">
             <div class="at-main"><?= $alphaTab->notation() ?></div>
         </div>
-        <div class="at-attribution"><a href="<?= app\helpers\Url::to(['/lesson/index', 'path' => '/credits']) ?>">erstellt mit alphaTab</a></div>
+        <div class="at-attribution"><a href="<?= app\helpers\Url::to(['/lesson/index', 'path' => '/credits']) ?>#alphatab">erstellt mit alphaTab</a></div>
     </div>
     <div class="at-controls">
         <div class="at-controls-left">
