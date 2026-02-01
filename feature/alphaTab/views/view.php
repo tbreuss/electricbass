@@ -83,12 +83,12 @@
         bottom: 0;
         padding: 0.25rem 0.25rem;
         z-index: 2000;
-        background-color: #ffffff;
+        background: rgba(255,255,255, 0.8);
     }
     .at-attribution a {
         font-family: Arial, sans-serif;
         color: #999999;
-        font-size: 0.9rem;
+        font-size: 16px;
     }
     .at-attribution a:hover {
         color: #000000;
@@ -211,7 +211,6 @@
         border-radius: 0;
         height: 40px;
         width: 40px;
-        height: 40px;
         font-size: 16px;
     }
     .at-controls .btn.disabled {
@@ -304,7 +303,7 @@
         <div class="at-viewport">
             <div class="at-main"><?= $alphaTab->notation() ?></div>
         </div>
-        <div class="at-attribution"><a href="<?= app\helpers\Url::to(['/lesson/index', 'path' => '/danke']) ?>">gerendert von alphaTab</a></div>
+        <div class="at-attribution"><a href="<?= app\helpers\Url::to(['/lesson/index', 'path' => '/credits']) ?>">erstellt mit alphaTab</a></div>
     </div>
     <div class="at-controls">
         <div class="at-controls-left">

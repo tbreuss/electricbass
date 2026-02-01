@@ -57,7 +57,7 @@
     <div class="alpha-tab__notation" id="alphaTab<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
 </div>
 <?php endif ?>
-<div class="alphaTabAttr<?= $alphaTab->uniqueId() ?>"><a href="<?= app\helpers\Url::to(['/lesson/index', 'path' => '/danke']) ?>">gerendert von alphaTab</a></div>
+<div class="alphaTabAttr<?= $alphaTab->uniqueId() ?>"><a href="<?= app\helpers\Url::to(['/lesson/index', 'path' => '/credits']) ?>">erstellt mit alphaTab</a></div>
 
 <?php if ($alphaTab->isDebug()): // no indentation due to markdown parsing ?>
 <details>
