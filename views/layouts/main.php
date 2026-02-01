@@ -38,5 +38,15 @@ use yii\helpers\ArrayHelper;
         if (tableOfContents && sidebar) {
             sidebar.prepend(tableOfContents);
         }
+
+        // open all external links in a new tab or window
+        const currentHost = window.location.hostname;
+        const links = document.querySelectorAll("a");
+        links.forEach(link => {
+            if (link.hostname && link.hostname !== currentHost) {
+                link.setAttribute("target", "_blank");
+                link.setAttribute("rel", "noopener noreferrer");
+            }
+        });
     });
 </script>
