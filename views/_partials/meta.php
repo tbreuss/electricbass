@@ -1,3 +1,4 @@
+<?php if ((!empty($categories) && count($categories) > 1) || !empty($tags)) : ?>
 <div class="meta">
     <?php if (!empty($categories)): ?>
     <div class="meta_category">Gepostet in:
@@ -30,3 +31,4 @@
     </div>
     <?php endif; ?>
 </div>
+<?php endif ?>
