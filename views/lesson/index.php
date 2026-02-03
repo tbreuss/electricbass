@@ -16,7 +16,7 @@
 <?php $withToc = str_contains($content, '<ul class="table-of-contents">') ?>
 
 <?php if ($withToc): ?>
-    <?php $this->context->layout = 'empty' ?>
+    <?php /* @phpstan-ignore-line */ $this->context->layout = 'empty' ?>
     <div class="row">
         <div class="col-12 d-block d-md-none">
             <h1><?= $model->title ?></h1>
