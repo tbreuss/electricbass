@@ -14,6 +14,6 @@ final class WebAsset extends AssetBundle
 
     /** @var string[] */
     public $js = [
-        'alphaTab@1.8.0.min.js',
+        'alphaTab@1.8.1.min.js',
     ];
 }
