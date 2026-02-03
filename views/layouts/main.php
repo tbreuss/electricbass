@@ -29,24 +29,3 @@ use yii\helpers\ArrayHelper;
         </div>
     </div>
 <?php $this->endContent(); ?>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // move table of contents to sidebar
-        const tableOfContents = document.querySelector(".table-of-contents");
-        const sidebar = document.querySelector(".sidebar__inner");
-        if (tableOfContents && sidebar) {
-            sidebar.prepend(tableOfContents);
-        }
-
-        // open all external links in a new tab or window
-        const currentHost = window.location.hostname;
-        const links = document.querySelectorAll("a");
-        links.forEach(link => {
-            if (link.hostname && link.hostname !== currentHost) {
-                link.setAttribute("target", "_blank");
-                link.setAttribute("rel", "noopener noreferrer");
-            }
-        });
-    });
-</script>

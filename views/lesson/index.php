@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @var yii\web\View $this
  * @var app\models\Lesson $model
@@ -9,54 +8,30 @@
  * @var string $title
  * @phpstan-var array<int, array{"label": string, "url": string}> $breadcrumbs
  */
-
-use app\widgets\CanonicalLink;
-use app\widgets\Comments;
-use app\widgets\Hits;
-use app\widgets\Parser;
-use app\widgets\Rating;
-use app\widgets\RatingReadOnly;
-use app\widgets\SocialBar;
-
-$this->params['breadcrumbs'] = $breadcrumbs;
-$this->title = $title;
-CanonicalLink::widget(['keepParams' => ['path']]);
 ?>
-<?php $content = Parser::widget(["model" => $model, "attribute" => "text", "tableOfContents" => $model->tableOfContents > 0, "headingPermalink" => $model->headingPermalink > 0]) ?>
-<div class="content">
-    <h1><?= $model->title ?></h1>
-    <?php if (!empty($model->text)): ?>
-        <div class="widget widget-parser"><?= $content ?></div>
-        <?php if ($model->hasChanges()): ?>
-            <div class="changes">
-                <h3 class="changes__title">Änderungen</h3>
-                <ul class="changes__list">
-                    <?php foreach ($model->getChanges() as $change): ?>
-                        <li class="changes__listItem"><?= $change['date'] ?> <?= $change['text'] ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
-        <?= $this->render('//_partials/meta', [
-            'categories' => $breadcrumbs,
-            'tags' => $model->tags,
-        ]); ?>
-    <?php endif; ?>
-</div>
+<?php $this->params['breadcrumbs'] = $breadcrumbs ?>
+<?php $this->title = $title ?>
+<?php app\widgets\CanonicalLink::widget(['keepParams' => ['path']]) ?>
+<?php $content = app\widgets\Parser::widget(["model" => $model, "attribute" => "text", "tableOfContents" => $model->tableOfContents > 0, "headingPermalink" => $model->headingPermalink > 0]) ?>
+<?php $withToc = str_contains($content, '<ul class="table-of-contents">') ?>
 
-<?php if (!empty($model->text)): ?>
-    <?= Rating::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
+<?php if ($withToc): ?>
+    <?php $this->context->layout = 'empty' ?>
+    <div class="row">
+        <div class="col-12 d-block d-md-none">
+            <h1><?= $model->title ?></h1>
+        </div>
+        <div class="col-md-8 content-wrap order-2 order-md-1">
+            <h1 class="d-none d-md-block"><?= $model->title ?></h1>
+            <?= $this->render('_content', ['model' => $model, 'content' => $content, 'breadcrumbs' => $breadcrumbs]) ?>
+        </div>
+        <div class="col-md-4 content-wrap order-1 order-md-2 sidebar">
+            <div class="sidebar__inner"><!-- filled by javascript --></div>
+        </div>
+    </div>
 <?php else: ?>
-    <?= RatingReadOnly::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
-<?php endif; ?>
-
-<?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
-
-<?= Comments::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
-
-<?= Hits::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
-
-<?php if (!str_contains($content, '<ul class="table-of-contents">')): ?>
+    <h1><?= $model->title ?></h1>
+    <?= $this->render('_content', ['model' => $model, 'content' => $content, 'breadcrumbs' => $breadcrumbs]) ?>
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
         <?php if (!empty($similars)): ?>
