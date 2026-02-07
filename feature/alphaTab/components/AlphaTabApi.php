@@ -161,6 +161,7 @@ final class AlphaTabApi
 
             $player = array_merge([
                 'scrollMode' => 'Off',
+                'playTripletFeel' => true,
             ], $this->options['player'] ?? []);
 
             return array_merge([
