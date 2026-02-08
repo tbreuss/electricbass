@@ -29,7 +29,7 @@
     </style>
     <div class="alpha-tab alpha-tab--clickable" onclick="window.location='<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>';">
         <a class="alpha-tab-play" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>"><img src="/img/play-blue.svg" width="68" alt="Play"></a>
-        <img src="<?= $previewImage ?>" alt="<?= $alphaTab->title() ?>" width="100%">
+        <img src="<?= $previewImage ?>" alt="<?= $alphaTab->previewImageAltText() ?>" width="100%">
     </div>
 <?php else: ?>
     <?php \app\feature\alphaTab\WebAsset::register($this) ?>

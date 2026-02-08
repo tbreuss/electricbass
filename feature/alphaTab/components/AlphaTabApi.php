@@ -31,6 +31,7 @@ final class AlphaTabApi
         private ?AlphaDrums $drums = null,
         private ?string $previewImagePath = null,
         private ?string $previewImageUrl = null,
+        private ?string $previewImageAltText = null,
         private bool $debug = false,
     ) {
         $this->uniqueId = uniqid();
@@ -52,6 +53,8 @@ final class AlphaTabApi
             barCount: $tab->bar_count,
             drums: $drums,
             previewImagePath: null,
+            previewImageUrl: null,
+            previewImageAltText: null,
             debug: $debug,
         );
     }
@@ -73,17 +76,30 @@ final class AlphaTabApi
         return is_file($imagePath) ? $imageUrl : null;
     }
 
+    public function previewImageAltText(): string
+    {
+        return $this->previewImageAltText ?? '';
+    }
+
     public function notation(): string
     {
         $nl = "\n";
 
+        $titles = [];
+        if ($this->title) {
+            $titles['\title'] = '"' . $this->title . '"';
+        }
+        if ($this->subtitle) {
+            $titles['\subtitle'] = '"' . $this->subtitle . '"';
+        }
+
         $defaults = match ($this->instrument) {
-            self::INSTRUMENT_NONE => [
+            self::INSTRUMENT_NONE => array_merge($titles, [
                 '\bracketextendmode' => 'noBrackets',
                 '\singleTrackTrackNamePolicy' => 'hidden',
                 '\hideDynamics' => '', // always hide dynamics
-            ],
-            self::INSTRUMENT_FOUR_STRING_BASS => [
+            ]),
+            self::INSTRUMENT_FOUR_STRING_BASS => array_merge($titles, [
                 '\track' => '"Bass"',
                 '\bracketextendmode' => 'noBrackets',
                 '\singleTrackTrackNamePolicy' => 'hidden',
@@ -91,7 +107,7 @@ final class AlphaTabApi
                 '\clef' => 'bass',
                 '\instrument' => '"Electric Bass Finger"',
                 '\tuning' => 'G2 D2 A1 E1 { hide }',
-            ],
+            ]),
             default => [],
         };
 

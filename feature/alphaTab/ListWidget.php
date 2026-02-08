@@ -57,9 +57,9 @@ final class ListWidget extends Widget
                 options: $model->options,
                 instrument: $model->instrument,
                 uid: $model->uid,
-                title: $model->title,
                 previewImagePath: (string)Yii::getAlias('@webroot/media/scores'),
                 previewImageUrl: (string)Yii::getAlias('@web/media/scores'),
+                previewImageAltText: $model->title,
                 debug: $isDebug,
             ),
         ]);
