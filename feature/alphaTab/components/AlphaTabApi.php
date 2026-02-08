@@ -29,6 +29,8 @@ final class AlphaTabApi
         private ?int $timeSignatureDenominator = null,
         private ?int $barCount = null,
         private ?AlphaDrums $drums = null,
+        private ?string $previewImagePath = null,
+        private ?string $previewImageUrl = null,
         private bool $debug = false,
     ) {
         $this->uniqueId = uniqid();
@@ -49,6 +51,7 @@ final class AlphaTabApi
             timeSignatureDenominator: $tsDenominator,
             barCount: $tab->bar_count,
             drums: $drums,
+            previewImagePath: null,
             debug: $debug,
         );
     }
@@ -56,6 +59,18 @@ final class AlphaTabApi
     public function uid(): ?string
     {
         return $this->uid;
+    }
+
+    public function previewImage(): ?string
+    {
+        if ($this->previewImagePath === null) {
+            return null;
+        }
+
+        $imagePath = $this->previewImagePath . '/' . str_replace('/', '-', $this->uid) . '.png';
+        $imageUrl = $this->previewImageUrl . '/' . str_replace('/', '-', $this->uid) . '.png';
+
+        return is_file($imagePath) ? $imageUrl : null;
     }
 
     public function notation(): string
@@ -71,6 +86,11 @@ final class AlphaTabApi
         }
 
         $defaults = match ($this->instrument) {
+            self::INSTRUMENT_NONE => array_merge($titles, [
+                '\bracketextendmode' => 'noBrackets',
+                '\singleTrackTrackNamePolicy' => 'hidden',
+                '\hideDynamics' => '', // always hide dynamics
+            ]),
             self::INSTRUMENT_FOUR_STRING_BASS => array_merge($titles, [
                 '\track' => '"Bass"',
                 '\bracketextendmode' => 'noBrackets',
@@ -151,6 +171,7 @@ final class AlphaTabApi
         if ($this->optionsGroup === self::OPTION_GROUP_NONE) {
             return [
                 'tex' => true,
+                'engine' => 'html5',
             ];
         }
 
@@ -166,6 +187,7 @@ final class AlphaTabApi
 
             return array_merge([
                 'tex' => true,
+                'engine' => 'html5',
                 'padding' => [0, 0, 0, 0],
                 'barsPerRow' => $this->options['barsPerRow'] ?? -1,
                 'layoutMode' => $this->options['Page'] ?? 'Page',
