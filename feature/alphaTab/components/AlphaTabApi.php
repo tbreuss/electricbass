@@ -63,7 +63,7 @@ final class AlphaTabApi
 
     public function previewImage(): ?string
     {
-        if ($this->previewImagePath === null) {
+        if ($this->uid === null || $this->previewImagePath === null || $this->previewImageUrl === null) {
             return null;
         }
 

@@ -58,8 +58,8 @@ final class ListWidget extends Widget
                 instrument: $model->instrument,
                 uid: $model->uid,
                 title: $model->title,
-                previewImagePath: Yii::getAlias('@webroot/media/scores'),
-                previewImageUrl: Yii::getAlias('@web/media/scores'),
+                previewImagePath: (string)Yii::getAlias('@webroot/media/scores'),
+                previewImageUrl: (string)Yii::getAlias('@web/media/scores'),
                 debug: $isDebug,
             ),
         ]);
