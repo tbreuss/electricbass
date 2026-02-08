@@ -77,21 +77,13 @@ final class AlphaTabApi
     {
         $nl = "\n";
 
-        $titles = [];
-        if ($this->title) {
-            $titles['\title'] = '"' . $this->title . '"';
-        }
-        if ($this->subtitle) {
-            $titles['\subtitle'] = '"' . $this->subtitle . '"';
-        }
-
         $defaults = match ($this->instrument) {
-            self::INSTRUMENT_NONE => array_merge($titles, [
+            self::INSTRUMENT_NONE => [
                 '\bracketextendmode' => 'noBrackets',
                 '\singleTrackTrackNamePolicy' => 'hidden',
                 '\hideDynamics' => '', // always hide dynamics
-            ]),
-            self::INSTRUMENT_FOUR_STRING_BASS => array_merge($titles, [
+            ],
+            self::INSTRUMENT_FOUR_STRING_BASS => [
                 '\track' => '"Bass"',
                 '\bracketextendmode' => 'noBrackets',
                 '\singleTrackTrackNamePolicy' => 'hidden',
@@ -99,7 +91,7 @@ final class AlphaTabApi
                 '\clef' => 'bass',
                 '\instrument' => '"Electric Bass Finger"',
                 '\tuning' => 'G2 D2 A1 E1 { hide }',
-            ]),
+            ],
             default => [],
         };
 
@@ -171,7 +163,7 @@ final class AlphaTabApi
         if ($this->optionsGroup === self::OPTION_GROUP_NONE) {
             return [
                 'tex' => true,
-                'engine' => 'html5',
+                'engine' => 'svg',
             ];
         }
 
@@ -187,7 +179,7 @@ final class AlphaTabApi
 
             return array_merge([
                 'tex' => true,
-                'engine' => 'html5',
+                'engine' => 'svg',
                 'padding' => [0, 0, 0, 0],
                 'barsPerRow' => $this->options['barsPerRow'] ?? -1,
                 'layoutMode' => $this->options['Page'] ?? 'Page',

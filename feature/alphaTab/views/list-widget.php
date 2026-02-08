@@ -5,28 +5,28 @@
  */
 ?>
 <?php if ($previewImage = $alphaTab->previewImage()): ?>
-<style>
-    .alpha-tab {
-        position: relative;
-    }
-    .alpha-tab--clickable .at-surface * {
-        cursor: pointer;
-    }
-    .alpha-tab-play {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        z-index: 1000;
-        width: 68px;
-        height: 48px;
-        margin-left: -34px;
-        margin-top: -24px;
-        display: none;
-    }
-    .alpha-tab:hover .alpha-tab-play {
-        display: block;
-    }
-</style>
+    <style>
+        .alpha-tab {
+            position: relative;
+        }
+        .alpha-tab--clickable .at-surface * {
+            cursor: pointer;
+        }
+        .alpha-tab-play {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 1000;
+            width: 68px;
+            height: 48px;
+            margin-left: -34px;
+            margin-top: -24px;
+            display: none;
+        }
+        .alpha-tab:hover .alpha-tab-play {
+            display: block;
+        }
+    </style>
     <div class="alpha-tab alpha-tab--clickable" onclick="window.location='<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>';">
         <a class="alpha-tab-play" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>"><img src="/img/play-blue.svg" width="68" alt="Play"></a>
         <img src="<?= $previewImage ?>" alt="<?= $alphaTab->title() ?>" width="100%">
