@@ -6595,6 +6595,57 @@ li[typeof=ListItem] a:hover {
   font-size: 0.9rem;
 }
 
+.atw {
+  position: relative;
+}
+
+.atw--clickable .at-surface * {
+  cursor: pointer;
+}
+
+.atw-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1000;
+  width: 68px;
+  height: 48px;
+  margin-left: -34px;
+  margin-top: -24px;
+  display: none;
+}
+
+.atw:hover .atw-play {
+  display: block;
+}
+
+.atw-notation {
+  visibility: hidden;
+}
+
+.atw .at-surface {
+  background-color: #ffffff;
+}
+
+.atw .at-surface div:last-of-type {
+  display: none !important;
+}
+
+.atw-attr {
+  font: normal 12px Arial, sans-serif;
+  text-align: right;
+  z-index: 2000;
+  display: none;
+}
+
+.atw-attr a {
+  color: #999999;
+}
+
+.atw-attr a:hover {
+  color: #000000;
+}
+
 up-modal .navbar {
   display: none;
 }
