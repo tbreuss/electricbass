@@ -124,7 +124,7 @@ final class AlphaTabApi
             $notation = $this->addDrumsNotation($notation, $this->drums);
         }
 
-        return str_replace(["\r", "\n"], " ", $notation); // because of markdown issues
+        return implode(PHP_EOL, array_filter(preg_split("/\r\n|\n|\r/", $notation))); // because of markdown issues
     }
 
     private function addDrumsNotation(string $notation, AlphaDrums $drums): string
