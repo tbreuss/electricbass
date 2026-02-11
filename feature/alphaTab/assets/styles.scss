@@ -1,9 +1,285 @@
+/** alphaTab View */
+.atv .at-surface div:last-of-type {
+  display: none !important;
+}
+
+.atv .at-wrap {
+  width: 100%;
+  height: 80vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.atv .at-header {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  background-color: #436d9d;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+}
+
+.atv .at-back-link a {
+  color: white;
+}
+
+.atv .at-content {
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 auto;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/** Sidebar **/
+.atv .at-sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-width: 70px;
+  width: auto;
+  display: flex;
+  align-content: stretch;
+  z-index: 1001;
+  overflow: hidden;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  background: #f7f7f7;
+}
+
+.atv .at-sidebar:hover {
+  max-width: 400px;
+  transition: max-width 0.2s;
+  overflow-y: auto;
+}
+
+.atv .at-viewport {
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 70px;
+  right: 0;
+  bottom: 0;
+  padding-right: 20px;
+}
+
+.atv .at-attribution {
+  position: absolute;
+  display: inline-block;
+  right: 1rem;
+  bottom: 0;
+  padding: 0.25rem 0.25rem;
+  z-index: 2000;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.atv .at-attribution a {
+  font-family: Arial, sans-serif;
+  color: #999999;
+  font-size: 16px;
+}
+
+.atv .at-attribution a:hover {
+  color: #000000;
+}
+
+.atv .at-footer {
+  flex: 0 0 auto;
+  background: #436d9d;
+  color: #fff;
+}
+
+/** Overlay **/
+
+.atv .at-overlay {
+  /** Fill Parent */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1002;
+
+  /* Blurry dark shade */
+  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.5);
+
+  /** center content */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.atv .at-overlay-content {
+  /* white box with drop-shadow */
+  margin-top: 20px;
+  background: #fff;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+}
+
+/** Track selector **/
+.atv .at-track {
+  display: flex;
+  position: relative;
+  padding: 5px 0;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.atv .at-track:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.atv .at-track > .at-track-icon,
+.atv .at-track > .at-track-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.atv .at-track > .at-track-icon {
+  flex-shrink: 0;
+  font-size: 32px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  width: 64px;
+  height: 64px;
+  margin-right: 5px;
+  align-items: center;
+}
+
+.atv .at-track-name {
+  font-weight: 500;
+  min-width: 140px;
+}
+
+.atv .at-track-volume {
+  margin-right: 1rem;
+  accent-color: #436d9d;
+}
+
+.atv .at-track:hover > .at-track-icon {
+  opacity: 0.8;
+}
+
+.atv .at-track.active {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.atv .at-track.active > .at-track-icon {
+  color: #4972a1;
+  opacity: 1;
+}
+
+/** Footer **/
+.atv .at-controls {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  background: #436d9d;
+  color: #fff;
+}
+
+.atv .at-controls > div {
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+}
+
+.atv .at-controls > div > * {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  margin: 0 3px;
+}
+
+.atv .at-controls .btn {
+  color: #fff;
+  border-radius: 0;
+  height: 40px;
+  width: 40px;
+  font-size: 16px;
+}
+
+.atv .at-controls .btn.disabled {
+  cursor: progress;
+  opacity: 0.5;
+}
+
+.atv .at-controls .btn.hidden {
+  display: none;
+}
+
+.atv .at-controls a.active {
+  background: #5588c7;
+  text-decoration: none;
+}
+
+.atv .at-controls .btn i {
+  vertical-align: top;
+}
+
+.atv .at-controls select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  width: 100%;
+  height: 40px;
+  background: #436d9d;
+  padding: 4px 10px;
+  color: #fff;
+  font-size: 16px;
+  text-align-last: center;
+  text-align: center;
+  -ms-text-align-last: center;
+  -moz-text-align-last: center;
+  cursor: pointer;
+}
+
+.atv .at-song-title {
+  font-weight: bold;
+}
+
+.atv .at-cursor-bar {
+  /* Defines the color of the bar background when a bar is played */
+  background: rgba(255, 242, 0, 0.25);
+}
+
+.atv .at-selection div {
+  /* Defines the color of the selection background */
+  background: rgba(64, 64, 255, 0.1);
+}
+
+.atv .at-cursor-beat {
+  /* Defines the beat cursor */
+  background: rgba(64, 64, 255, 0.75);
+  width: 3px;
+}
+
+.atv .at-highlight * {
+  /* Defines the color of the music symbols when they are being played (svg) */
+  fill: #0078ff;
+  stroke: #0078ff;
+}
+
+/** alphaTab ListWidget **/
 .atw {
   position: relative;
 }
+
 .atw--clickable .at-surface * {
   cursor: pointer;
 }
+
 .atw-play {
   position: absolute;
   left: 50%;
@@ -15,27 +291,34 @@
   margin-top: -24px;
   display: none;
 }
+
 .atw:hover .atw-play {
   display: block;
 }
+
 .atw-notation {
   visibility: hidden;
 }
+
 .atw .at-surface {
   background-color: #ffffff;
 }
+
 .atw .at-surface div:last-of-type {
   display: none !important;
 }
+
 .atw-attr {
   font: normal 12px Arial, sans-serif;
   text-align: right;
   z-index: 2000;
   display: none;
 }
+
 .atw-attr a {
   color: #999999;
 }
+
 .atw-attr a:hover {
   color: #000000;
 }
