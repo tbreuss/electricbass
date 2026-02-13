@@ -41,9 +41,7 @@ return [
             'class' => 'yii\log\DbTarget',
             'levels' => ['error', 'warning'],
             'maskVars' => $maskVars,
-            'except' => [
-                'yii\web\HttpException:404',
-            ],
+            'except' => [],
         ],
         [
             'class' => 'yii\log\EmailTarget',
@@ -51,7 +49,7 @@ return [
             'levels' => ['error'],
             'maskVars' => $maskVars,
             'except' => [
-                'yii\web\HttpException:404',
+                'yii\web\HttpException:*',
             ],
             'message' => [
                 'from' => ['noreply@electricbass.ch'],
