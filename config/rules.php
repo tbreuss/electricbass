@@ -59,6 +59,7 @@ return [
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
     'test' => 'site/test',
+    'alpha-tab/debug' => 'alpha-tab/debug',
     'alpha-tab/editor' => 'alpha-tab/editor',
     [
         'pattern' => 'play/<uid:.+>',

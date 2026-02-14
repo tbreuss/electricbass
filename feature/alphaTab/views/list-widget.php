@@ -5,17 +5,17 @@
  */
 ?>
 <?php if ($previewImage = $alphaTab->previewImage()): ?>
-    <div class="atw atw--clickable" onclick="window.location='<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>';">
-        <a class="atw-play" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>"><img src="/img/play-blue.svg" width="68" alt="Play"></a>
+    <a class="atw atw--clickable" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>">
+        <div class="atw-play"><img src="/img/play-blue.svg" width="68" alt="Play"></div>
         <img src="<?= $previewImage ?>" alt="<?= $alphaTab->previewImageAltText() ?>" width="100%">
-    </div>
+    </a>
 <?php else: ?>
     <?php \app\feature\alphaTab\WebAsset::register($this) ?>
     <?php if ($alphaTab->uid() !== null): // no indentation due to markdown parsing ?>
-        <div class="atw atw--clickable" onclick="window.location='<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>';">
-            <a class="atw-play" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>"><img src="/img/play-blue.svg" width="68" alt="Play"></a>
+        <a class="atw atw--clickable" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>">
+            <div class="atw-play"><img src="/img/play-blue.svg" width="68" alt="Play"></div>
             <div class="atw-notation" id="at<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
-        </div>
+        </a>
     <?php else: // no indentation due to markdown parsing ?>
         <div class="atw">
             <div class="atw-notation" id="at<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>

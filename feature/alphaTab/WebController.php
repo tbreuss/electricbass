@@ -6,6 +6,7 @@ use app\feature\alphaTab\components\AlphaTabApi;
 use app\feature\alphaTab\models\AlphaTab;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UnauthorizedHttpException;
 
 final class WebController extends Controller
 {
@@ -56,6 +57,17 @@ final class WebController extends Controller
             'instrument' => $instrument,
             'optionGroup' => $optionGroup,
             'notation' => $notation,
+        ]);
+    }
+
+    public function actionDebug(string $key = ''): string
+    {
+        if ($key !== $_ENV['DEBUG_KEY']) {
+            throw new UnauthorizedHttpException();
+        }
+        $models = AlphaTab::find()->orderBy('uid')->all();
+        return $this->render('@app/feature/alphaTab/views/debug', [
+            'models' => $models,
         ]);
     }
 }
