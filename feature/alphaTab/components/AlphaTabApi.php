@@ -87,10 +87,10 @@ final class AlphaTabApi
 
         $titles = [];
         if ($this->title) {
-            $titles['\title'] = '"' . $this->title . '"';
+            $titles['\title'] = '"' . addcslashes($this->title, '"') . '"';
         }
         if ($this->subtitle) {
-            $titles['\subtitle'] = '"' . $this->subtitle . '"';
+            $titles['\subtitle'] = '"' . addcslashes($this->subtitle, '"') . '"';
         }
 
         $defaults = match ($this->instrument) {
