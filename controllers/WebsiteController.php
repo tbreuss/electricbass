@@ -10,6 +10,9 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
+/**
+ * @deprecated
+ */
 final class WebsiteController extends Controller
 {
     /**

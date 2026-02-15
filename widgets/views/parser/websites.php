@@ -17,12 +17,12 @@ use yii\widgets\Spaceless;
 <?php Spaceless::begin() ?>
 <div class="shortcode shortcode--websites">
 
-<?php $hasArchived = false; ?>    
+<?php $hasArchived = false; ?>
 <?php foreach ($models as $model): ?>
     <?php if (!empty($model->archived)): ?>
         <?php $hasArchived = true; ?>
     <?php else: ?>
-        <h4><?= Html::a($model->title, $model->url) ?></h4>
+        <h4><?= Html::a($model->title, $model->website, ['target' => '_blank', 'rel' => 'nofollow']) ?></h4>
         <?php if (!empty($model->subtitle)): ?>
             <p class="mb-0"><i><?= $model->subtitle ?></i></p>
         <?php endif; ?>
@@ -34,22 +34,24 @@ use yii\widgets\Spaceless;
 
 <?php if ($hasArchived): ?>
     <hr>
-    <h4>Archiv</h4>
+    <h3>Archiv</h3>
     <p>Die folgenden Einträge wurden wegen Geschäftsaufgabe, deaktivierter Website oder anderen Gründen archiviert.</p>
-    <table class="table table-bordered">
+    <table class="table table-bordered table--small">
         <tr>
-            <th>Website</th>
-            <th>Archivdatum</th>
-        </tr>        
+            <th class="ps-0">Website</th>
+            <th>URL</th>
+            <th class="pe-0 text-end">Archiviert</th>
+        </tr>
     <?php foreach ($models as $model): ?>
         <?php if (!empty($model->archived)): ?>
             <tr>
-                <td><?= Html::a($model->title, $model->url) ?></td>
-                <td><?= Yii::$app->formatter->asDate($model->archived, 'long') ?></td>
+                <td class="ps-0"><?= $model->title ?></td>
+                <td><?= $model->website ?></td>
+                <td class="pe-0 text-end"><?= Yii::$app->formatter->asDate($model->archived) ?></td>
             </tr>
         <?php endif; ?>
     <?php endforeach; ?>
-    </table> 
+    </table>
 <?php endif; ?>
 
 </div>

@@ -15,6 +15,7 @@ use yii\data\Sort;
  * @property string $url
  * @property string $website
  * @property string $modified
+ * @deprecated
  */
 final class Website extends ActiveRecord
 {
