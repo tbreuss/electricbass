@@ -119,8 +119,8 @@ final class Search extends ActiveRecord
                 return Url::to(['/glossar/index', 'category' => strtolower($this->category)], $scheme);
             case 'lesson':
                 return Url::to(['/lesson/index', 'path' => $this->category], $scheme);
-            case 'website':
-                return Url::to(['/website/index'], $scheme);
+            //case 'website':
+            //    return Url::to(['/website/index'], $scheme);
             case 'video':
                 return Url::to(['/video/index'], $scheme);
         }

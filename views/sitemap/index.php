@@ -38,8 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <li><?= Html::a('Bücher zum Thema Bass', ['/catalog/index', 'category' => 'buecher'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Musikalben von E-Bassisten', ['/catalog/index', 'category' => 'alben'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Videos von und für E-Bassisten', ['/video/index'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('Websites zum Thema E-Bass', ['/website/index'], ['class' => 'sitemap__link']) ?></li>
-        <li><?= Html::a('E-Bass Hersteller und Marken', ['/manufacturer/index'], ['class' => 'sitemap__link']) ?></li>
+        <li><?= Html::a('Linkverzeichnis zum Thema E-Bass', ['/lesson', 'path' => 'links'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Witze über Bassisten', ['/joke/index'], ['class' => 'sitemap__link']) ?></li>
         <li><?= Html::a('Zitate berühmter Bassisten', ['/quote/index'], ['class' => 'sitemap__link']) ?></li>
     </ul>

@@ -53,6 +53,7 @@ $config = [
                 'htmlphp' => ['app\widgets\Parser', 'htmlphp'],
                 'img' => ['app\widgets\Parser', 'image'],
                 'imgtext' => ['app\widgets\Parser', 'imgtext'],
+                'links' => ['app\feature\links\Shortcode', 'render'],
                 'jsongallery' => ['app\widgets\Parser', 'jsongallery'],
                 'jsonlinks' => ['app\widgets\Parser', 'jsonlinks'],
                 'lessonnav' => ['app\widgets\Parser', 'lessonnav'],

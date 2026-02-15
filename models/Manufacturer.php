@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
  * @property int $amps
  * @property int $gear
  * @property int $strings
+ * @deprecated
  */
 final class Manufacturer extends ActiveRecord
 {

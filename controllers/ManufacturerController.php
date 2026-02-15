@@ -8,6 +8,9 @@ use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\Response;
 
+/**
+ * @deprecated
+ */
 final class ManufacturerController extends Controller
 {
     /**

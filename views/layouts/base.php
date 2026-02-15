@@ -98,8 +98,7 @@ if (!empty($this->params['metaDescription'])) {
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/catalog/index', 'category' => 'buecher']) ?>">Bücher zum Thema Bass</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/catalog/index', 'category' => 'alben']) ?>">Bass-Alben</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/video/index']) ?>">Bass-Videos</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/website/index']) ?>">Bass-Websites</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/manufacturer/index']) ?>">Bass-Hersteller</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson', 'path' => 'links']) ?>">Linkverzeichnis</a></li>
                     </ul>
                 </li>
                 <li class="navbar__menu-item">
@@ -208,8 +207,7 @@ if (!empty($this->params['metaDescription'])) {
                     <li><?= Html::a('Bücher zum Thema Bass', ['/catalog/index', 'category' => 'buecher']) ?></li>
                     <li><?= Html::a('Musikalben von E-Bassisten', ['/catalog/index', 'category' => 'alben']) ?></li>
                     <li><?= Html::a('Videos von und für E-Bassisten', ['/video/index']) ?></li>
-                    <li><?= Html::a('Websites zum Thema E-Bass', ['/website/index']) ?></li>
-                    <li><?= Html::a('E-Bass Hersteller und Marken', ['/manufacturer/index']) ?></li>
+                    <li><?= Html::a('Linkverzeichnis zum Thema E-Bass', ['/lesson', 'path' => 'links']) ?></li>
                     <li><?= Html::a('Witze über Bassisten', ['/joke/index']) ?></li>
                     <li><?= Html::a('Zitate berühmter Bassisten', ['/quote/index']) ?></li>
                 </ul>
@@ -259,8 +257,12 @@ if (!empty($this->params['metaDescription'])) {
         const links = document.querySelectorAll("a");
         links.forEach(link => {
             if (link.hostname && link.hostname !== currentHost) {
-                link.setAttribute("target", "_blank");
-                link.setAttribute("rel", "noopener noreferrer");
+                if (link.getAttribute("target") === null) {
+                    link.setAttribute("target", "_blank");
+                }
+                if (link.getAttribute("rel") === null) {
+                    link.setAttribute("rel", "noopener noreferrer");
+                }
             }
         });
     });
