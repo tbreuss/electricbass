@@ -32,9 +32,7 @@
     <table class="table">
     <?php foreach ($links as $link): ?>
     <tr>
-        <td>
-            <a rel="nofollow" href="<?= $link->website ?>"><?= $link->title ?></a><br>
-        </td>
+        <td><a rel="nofollow" href="<?= $link->website ?>"><?= $link->title ?></a></td>
         <td><img src="/media/flags/<?= $link->countryCode ?>.svg" alt="<?= $link->countryCode ?>" height="16"></td>
     </tr>
     <?php endforeach ?>
