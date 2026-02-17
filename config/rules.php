@@ -45,7 +45,6 @@ return [
     'videos/<segment:solo-bass>' => 'youtube-playlist/index',
     'videos' => 'video/index',
     'videos/<eid:[A-Za-z0-9-]+>' => 'video/view',
-    'sitemap' => 'sitemap/index',
     'sitemap/google' => 'sitemap/google',
     'zitate' => 'quote/index',
     'feed/rss' => 'feed/rss',
