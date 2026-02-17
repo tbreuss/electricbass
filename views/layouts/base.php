@@ -165,9 +165,9 @@ if (!empty($this->params['metaDescription'])) {
                 <?= Menu::widget([
                     'options' => ['class' => 'footer__list'],
                     'items' => [
-                        ['label' => 'Impressum', 'url' => ['/site/impressum']],
+                        ['label' => 'Impressum', 'url' => ['/lesson/index', 'path' => 'impressum']],
                         ['label' => 'Kontakt', 'url' => ['/site/contact']],
-                        ['label' => 'Sitemap', 'url' => ['/sitemap/index']],
+                        ['label' => 'Sitemap', 'url' => ['/lesson/index', 'path' => 'sitemap']],
                         ['label' => 'Facebook', 'url' => 'https://www.facebook.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],
                         ['label' => 'Twitter', 'url' => 'https://twitter.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],
                     ]]); ?>
