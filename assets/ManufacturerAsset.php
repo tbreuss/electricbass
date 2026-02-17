@@ -4,6 +4,9 @@ namespace app\assets;
 
 use yii\web\AssetBundle;
 
+/**
+ * @deprecated
+ */
 final class ManufacturerAsset extends AssetBundle
 {
     /** @var string */
