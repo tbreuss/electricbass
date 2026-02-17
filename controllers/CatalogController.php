@@ -93,6 +93,11 @@ final class CatalogController extends Controller
         }
 
         $provider = Catalog::getActiveDataProvider($category, $filter);
+
+        if ($provider->getModels() === []) {
+            throw new NotFoundHttpException();
+        }
+
         $latest = Catalog::findLatest($category, 10);
         $popular = Catalog::findPopular($category, 10);
 

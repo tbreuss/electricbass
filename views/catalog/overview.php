@@ -54,17 +54,9 @@ $this->params['breadcrumbs'][] = 'Katalog';
         <hr>
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="title"><?= Html::a('Websites zum Thema E-Bass', ['website/index']) ?></h3>
-                <p>Neben Websites von Herstellern und Marken für E-Bass findet man hier auch immer wieder mal interessante Websites von Bassisten oder Links zu einer Website mit bassrelevantem Inhalt.</p>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-sm-12">
-                <h3 class="title"><?= Html::a('E-Bass Hersteller und Marken', ['manufacturer/index']) ?></h3>
-                <p>Hier geht es zu einer durchsuch- und filterbaren Liste mit Herstellern und Marken von E-Bässen, Akustikbässen, SUBs, Tonabnehmern, Lautsprechern, Verstärkern, Effekten und sonstigem Zubehör.</p>
+                <h3 class="title"><?= Html::a('Linkverzeichnis zum Thema E-Bass', ['/lesson/index', 'path' => 'links']) ?></h3>
+                <p>Neben Links zu Herstellern und Marken für E-Bass findet man hier auch immer wieder mal interessante Websites von Bassisten oder Links zu einer Website mit bassrelevantem Inhalt.</p>
             </div>
         </div>
     </div>
-
 </div>
