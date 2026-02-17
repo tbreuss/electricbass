@@ -12,7 +12,6 @@ return [
     'glossar/<category>/<id>' => 'glossar/view',
     'glossar/<category>' => 'glossar/index',
     'glossar' => 'glossar/index',
-    'impressum' => 'site/impressum',
     //'katalog/hersteller' => 'manufacturer/index',
     'katalog/alben/index' => 'album/all',
     'katalog/alben/<id>' => 'album/view',

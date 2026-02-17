@@ -112,12 +112,6 @@ final class SiteController extends Controller
         ]);
     }
 
-    public function actionImpressum(): string
-    {
-        $this->layout = 'onecol';
-        return $this->render('impressum');
-    }
-
     public function actionFeed(): Response
     {
         return $this->redirect(['feed/rss'], 301);
