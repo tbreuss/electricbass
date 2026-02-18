@@ -81,7 +81,10 @@ $config = [
         ],
         'assetManager' => [
             'class' => 'yii\web\AssetManager',
-            'appendTimestamp' => true
+            'appendTimestamp' => true,
+            'hashCallback' => function ($path) {
+                return ltrim($path, '/');
+            }
         ],
         'formatter' => [
             'sizeFormatBase' => 1000,

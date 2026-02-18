@@ -14,7 +14,7 @@ final class Abcjs extends AssetBundle
 
     /** @var string[] */
     public $js = [
-        'abcjs-basic@6.6.0.min.js',
+        'abcjs-basic.min.js',
     ];
 
     /** @var string[] */
