@@ -11,5 +11,5 @@ final class FretboardAsset extends AssetBundle
     /** @var string[] */
     public $css = ['main.css'];
     /** @var string[] */
-    public $js = ['main.js'];
+    public $js = [];
 }
