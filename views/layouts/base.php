@@ -24,7 +24,8 @@ if (!empty($this->params['metaDescription'])) {
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" style="scroll-behavior: auto !important;">
 <head>
-    <base href="https://www.electricbass.test/">
+    <?php /* @phpstan-ignore-next-line */ ?>
+    <base href="<?= YII_ENV_DEV ? 'https://www.electricbass.test/' : 'https://www.electricbass.ch/' ?>">
     <?php if (!YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2624727-1"></script>
         <script>
