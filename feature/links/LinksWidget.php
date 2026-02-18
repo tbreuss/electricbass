@@ -28,12 +28,12 @@ final class LinksWidget extends Widget
               WHEN 'pickup' THEN 2
               WHEN 'strings' THEN 3
               WHEN 'amplifier/speaker' THEN 4
+              WHEN 'accessories' THEN 5
               WHEN 'website' THEN 6
               WHEN 'magazine' THEN 7
-              WHEN 'accessories' THEN 8
-              WHEN 'publisher' THEN 9
-              WHEN 'bassist' THEN 10
-              ELSE 11
+              WHEN 'publisher' THEN 8
+              WHEN 'bassist' THEN 9
+              ELSE 10
             END, title
         ";
         $links = Links::findBySql($sql)->all();
@@ -51,15 +51,15 @@ final class LinksWidget extends Widget
     private function translateCategory(string $category): string
     {
         return match ($category) {
-            'instrument', 'luthier' => Yii::t('app', 'E-Bässe & Kontrabässe'),
-            'website' => Yii::t('app', 'Websites'),
-            'amplifier/speaker' => Yii::t('app', 'Verstärker & Boxen'),
-            'magazine' => Yii::t('app', 'Magazin'),
             'accessories' => Yii::t('app', 'Zubehör'),
+            'amplifier/speaker' => Yii::t('app', 'Audio / Verstärker / Boxen'),
+            'bassist' => Yii::t('app', 'Bassisten / Bands'),
+            'instrument', 'luthier' => Yii::t('app', 'E-Bässe / Akustikbässe'),
+            'magazine' => Yii::t('app', 'Magazine'),
             'pickup' => Yii::t('app', 'Tonabnehmer'),
-            'strings' => Yii::t('app', 'Saiten'),
             'publisher' => Yii::t('app', 'Verlage'),
-            'bassist' => Yii::t('app', 'Berühmte Bassisten'),
+            'strings' => Yii::t('app', 'Saiten'),
+            'website' => Yii::t('app', 'Blogs / Websites'),
             default => $category,
         };
     }
