@@ -7,7 +7,6 @@ use app\models\Log404;
 use app\models\Page;
 use app\models\Rating;
 use app\models\Redirect;
-use app\models\Website;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\web\Controller;
@@ -67,7 +66,6 @@ final class SiteController extends Controller
         ];
 
         $latests = Search::findLatestGroupedBy($contexts);
-        $latestWebsites = Website::findLatest(6);
 
         $latestComments = Comment::findLatestComments(5);
         $latestRatings = Rating::findLatestRatings(5);
@@ -83,7 +81,6 @@ final class SiteController extends Controller
             'latestLessons' => $latests['lesson'] ?? [],
             'latestLehrbuecher' => $latests['lehrbuch'] ?? [],
             'latestBuecher' => $latests['buch'] ?? [],
-            'latestWebsites' => $latestWebsites,
         ]);
     }
 

@@ -128,24 +128,6 @@ CanonicalLink::widget();
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($latestWebsites)): ?>
-        <div class="row websites">
-            <div class="col-12"><h2>Websites zum Thema E-Bass</h2></div>
-            <?php foreach ($latestWebsites as $website): ?>
-                <div class="col-6 col-sm-4 col-md-6 col-lg-4 websites__cell">
-                    <a href="<?= $website->url ?>" class="websites__link">
-                        <?php if ($website->getDefaultImage()): ?>
-                            <?= Html::cachedCropedImage($website->getDefaultImage(), 400, 300, ["class" => "img-fluid websites__cover", "alt" => $website->title]) ?>
-                        <?php else: ?>
-                            <?= Html::cachedCropedImage('/img/bg.png', 400, 300, ["class" => "img-fluid websites__cover", "alt" => $website->title]) ?>
-                        <?php endif; ?>
-                        <div class="websites__title"><?= $website->title ?></div>
-                    </a>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
     <div class="row">
         <div class="col-sm-12">
 
