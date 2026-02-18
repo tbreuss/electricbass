@@ -11,6 +11,18 @@ use yii\web\NotFoundHttpException;
 
 final class CommentController extends Controller
 {
+    /**
+     * @phpstan-return array<array>
+     */
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => 'app\filters\RedirectFilter'
+            ],
+        ];
+    }
+
     public function actionIndex(string $name, int $id): string
     {
         $request = Yii::$app->request;

@@ -24,6 +24,7 @@ if (!empty($this->params['metaDescription'])) {
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" style="scroll-behavior: auto !important;">
 <head>
+    <base href="https://www.electricbass.test/">
     <?php if (!YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2624727-1"></script>
         <script>
@@ -251,17 +252,19 @@ if (!empty($this->params['metaDescription'])) {
         if (tableOfContents && sidebar) {
             sidebar.prepend(tableOfContents);
         }
-
         // open all external links in a new tab or window
-        const currentHost = window.location.hostname;
+        const currentHost = window.location.hostname.replace('https://', '').replace('http://', ''). replace('www.', '');
         const links = document.querySelectorAll("a");
         links.forEach(link => {
-            if (link.hostname && link.hostname !== currentHost) {
-                if (link.getAttribute("target") === null) {
-                    link.setAttribute("target", "_blank");
-                }
-                if (link.getAttribute("rel") === null) {
-                    link.setAttribute("rel", "noopener noreferrer");
+            if (link.hostname) {
+                const linkHostname = link.hostname.replace('https://', '').replace('http://', ''). replace('www.', '');
+                if (linkHostname !== currentHost) {
+                    if (link.getAttribute("target") === null) {
+                        link.setAttribute("target", "_blank");
+                    }
+                    if (link.getAttribute("rel") === null) {
+                        link.setAttribute("rel", "noopener noreferrer");
+                    }
                 }
             }
         });

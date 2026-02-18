@@ -31,9 +31,10 @@ class CanonicalLink extends Widget
         }
 
         if (Yii::$app->request->url !== Url::to($url)) {
+            $absUrl = str_replace(['https://', 'http://', 'www.'], '', Url::to($url, 'https'));
             Yii::$app->view->registerLinkTag([
                 'rel' => 'canonical',
-                'href' => Url::to($url, true),
+                'href' => 'https://www.' . $absUrl,
             ]);
         }
     }
