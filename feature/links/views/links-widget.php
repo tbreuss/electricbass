@@ -33,7 +33,7 @@
     <?php foreach ($links as $link): ?>
     <tr>
         <td><a rel="nofollow" href="<?= $link->website ?>"><?= $link->title ?></a></td>
-        <td><img src="/media/flags/<?= $link->countryCode ?>.svg" alt="<?= $link->countryCode ?>" height="16"></td>
+        <td><?php if ($link->countryCode !== ''): ?><img src="/media/flags/<?= $link->countryCode ?>.svg" alt="<?= $link->countryCode ?>" height="16"><?php endif ?></td>
     </tr>
     <?php endforeach ?>
     </table>
