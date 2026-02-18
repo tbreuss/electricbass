@@ -83,7 +83,7 @@ $config = [
             'class' => 'yii\web\AssetManager',
             'appendTimestamp' => true,
             'hashCallback' => function ($path) {
-                $prefix = Yii::getAlias('@app/');
+                $prefix = (string)Yii::getAlias('@app/');
                 if (str_starts_with($path, $prefix)) {
                     $path = substr($path, strlen($prefix));
                 }
