@@ -213,6 +213,9 @@ final class AlphaTabApi
         return [];
     }
 
+    /**
+     * @param array<string, mixed> $override
+     */
     public function options(array $override = []): string
     {
         $options = array_merge($this->arrayOptions(), $override);
