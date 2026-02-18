@@ -184,6 +184,7 @@ final class AlphaTabApi
             return [
                 'tex' => true,
                 'engine' => 'svg',
+                'scale' => 1.0,
             ];
         }
 
@@ -205,15 +206,17 @@ final class AlphaTabApi
                 'layoutMode' => $this->options['Page'] ?? 'Page',
                 'display' => $display,
                 'player' => $player,
+                'scale' => 1.0,
             ], $this->options ?? []);
         }
 
         return [];
     }
 
-    public function options(): string
+    public function options(array $override = []): string
     {
-        return json_encode($this->arrayOptions(), $this->isDebug() ? JSON_PRETTY_PRINT : 0) ?: '';
+        $options = array_merge($this->arrayOptions(), $override);
+        return json_encode($options, $this->isDebug() ? JSON_PRETTY_PRINT : 0) ?: '';
     }
 
     public function isDebug(): bool

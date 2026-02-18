@@ -155,7 +155,8 @@
                     scoreSubTitle: false,
                     scoreArtist: false
                 }
-            }
+            },
+            scale: 1.1,
         };
         const api = new alphaTab.AlphaTabApi(main, settings);
 
