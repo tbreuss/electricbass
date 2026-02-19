@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = 'Metronom';
 
 <h2 style="margin-top:3em">Metronom zum Üben verwenden</h2>
 
-<p>Ein Metronom kann auf verschiedene Arten beim Üben verwendet werden, um dein Timing, deine Rhythmik und deine musikalische Genauigkeit zu verbessern.</p>    
+<p>Ein Metronom kann auf verschiedene Arten beim Üben verwendet werden, um dein Timing, dein Rhythmusgefül und deine rhythmische Genauigkeit zu verbessern.</p>
 
 <p>Hier sind einige Tipps, wie du ein Metronom effektiv nutzen kannst:</p>
 

@@ -75,7 +75,7 @@ if (!empty($this->params['metaDescription'])) {
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/fitness']) ?>">Fitness</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/tonleiter']) ?>">Tonleitern</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/bassriff']) ?>">Bass-Riffs</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/rhythmik']) ?>">Rhythmik</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/rhythmik']) ?>">Rhythmus</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/arpeggio']) ?>">Arpeggios</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/blues']) ?>">Blues</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/harmonielehre']) ?>">Harmonielehre</a></li>
@@ -192,7 +192,7 @@ if (!empty($this->params['metaDescription'])) {
                     <li><?= Html::a('Fitnessübungen für E-Bassisten', ['/lesson/index', 'path' => 'lektionen/fitness']) ?></li>
                     <li><?= Html::a('Tonleiterübungen für den E-Bass', ['/lesson/index', 'path' => 'lektionen/tonleiter']) ?></li>
                     <li><?= Html::a('Bass-Riffs aller Stilrichtungen', ['/lesson/index', 'path' => 'lektionen/bassriff']) ?></li>
-                    <li><?= Html::a('Rhythmikübungen für Bassisten', ['/lesson/index', 'path' => 'lektionen/rhythmik']) ?></li>
+                    <li><?= Html::a('Rhythmusübungen für Bassisten', ['/lesson/index', 'path' => 'lektionen/rhythmik']) ?></li>
                     <li><?= Html::a('Arpeggios für den E-Bass', ['/lesson/index', 'path' => 'lektionen/arpeggio']) ?></li>
                     <li><?= Html::a('Blues-Übungen für Bassisten', ['/lesson/index', 'path' => 'lektionen/blues']) ?></li>
                     <li><?= Html::a('Harmonielehre und Musiktheorie für E-Bass', ['/lesson/index', 'path' => 'lektionen/harmonielehre']) ?></li>
