@@ -39,7 +39,7 @@ $config = [
                 'class' => 'yii\web\UrlNormalizer',
                 'collapseSlashes' => true,
                 'normalizeTrailingSlash' => true,
-                'action' => null,
+                'action' => 301,
             ],
             'rules' => require(__DIR__ . '/rules.php'),
         ],
