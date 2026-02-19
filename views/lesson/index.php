@@ -23,7 +23,7 @@
         </div>
         <div class="col-md-8 content-wrap order-2 order-md-1">
             <h1 class="d-none d-md-block"><?= $model->title ?></h1>
-            <?= $this->render('_content', ['model' => $model, 'content' => $content, 'breadcrumbs' => $breadcrumbs]) ?>
+            <?= $this->render('/lesson/_content', ['model' => $model, 'content' => $content, 'breadcrumbs' => $breadcrumbs]) ?>
         </div>
         <div class="col-md-4 content-wrap order-1 order-md-2 sidebar">
             <div class="sidebar__inner"><!-- filled by javascript --></div>
@@ -31,7 +31,7 @@
     </div>
 <?php else: ?>
     <h1><?= $model->title ?></h1>
-    <?= $this->render('_content', ['model' => $model, 'content' => $content, 'breadcrumbs' => $breadcrumbs]) ?>
+    <?= $this->render('/lesson/_content', ['model' => $model, 'content' => $content, 'breadcrumbs' => $breadcrumbs]) ?>
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
         <?php if (!empty($similars)): ?>
