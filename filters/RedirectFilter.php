@@ -7,6 +7,9 @@ use Yii;
 use yii\base\ActionFilter;
 use yii\helpers\Html;
 
+/**
+ * @deprecated
+ */
 class RedirectFilter extends ActionFilter
 {
     public function afterAction($action, $result)

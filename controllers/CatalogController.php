@@ -16,18 +16,6 @@ use yii\web\NotFoundHttpException;
 
 final class CatalogController extends Controller
 {
-    /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ],
-        ];
-    }
-
     public function actionAll(string $category): string
     {
         $groupedEntries = $this->makeAtoZ(Catalog::findAllAtoZ($category));

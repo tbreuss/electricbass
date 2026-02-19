@@ -6,7 +6,6 @@ use app\entities\AtoZEntry;
 use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Website;
-use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -15,18 +14,6 @@ use yii\web\NotFoundHttpException;
  */
 final class WebsiteController extends Controller
 {
-    /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ],
-        ];
-    }
-
     /**
      * @return string
      */

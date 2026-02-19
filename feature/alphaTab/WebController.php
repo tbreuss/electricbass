@@ -10,18 +10,6 @@ use yii\web\UnauthorizedHttpException;
 
 final class WebController extends Controller
 {
-    /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ]
-        ];
-    }
-
     public function actionView(string $uid): string
     {
         $model = (new AlphaTab)->findByUid($uid);

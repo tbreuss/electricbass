@@ -12,18 +12,6 @@ final class SearchController extends Controller
 {
     const MIN_QUERY_LENGTH = 3;
 
-    /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ],
-        ];
-    }
-
     public function actionIndex(?string $term = null): string
     {
         $searched = $term !== null;

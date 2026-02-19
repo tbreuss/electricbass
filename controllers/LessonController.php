@@ -9,18 +9,6 @@ use yii\web\NotFoundHttpException;
 final class LessonController extends Controller
 {
     /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ],
-        ];
-    }
-
-    /**
      * @throws \yii\db\Exception
      * @throws \yii\web\NotFoundHttpException
      */

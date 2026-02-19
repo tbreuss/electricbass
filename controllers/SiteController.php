@@ -17,18 +17,6 @@ use yii\web\Response;
 final class SiteController extends Controller
 {
     /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter',
-            ],
-        ];
-    }
-
-    /**
      * @inheritdoc
      * @phpstan-return array<string, array<string, mixed>>
      */

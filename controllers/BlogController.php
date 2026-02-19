@@ -5,24 +5,11 @@ namespace app\controllers;
 use app\helpers\Url;
 use app\models\Blog;
 use app\models\Redirect;
-use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 final class BlogController extends Controller
 {
-    /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ],
-        ];
-    }
-
     /**
      * @return string
      */

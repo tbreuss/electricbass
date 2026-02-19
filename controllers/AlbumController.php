@@ -6,24 +6,11 @@ use app\entities\AtoZEntry;
 use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Album;
-use app\models\Catalog;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 final class AlbumController extends Controller
 {
-    /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ],
-        ];
-    }
-
     public function actionIndex(string $artist = ''): string
     {
         $filter = [];

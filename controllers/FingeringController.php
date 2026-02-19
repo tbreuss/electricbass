@@ -3,25 +3,12 @@
 namespace app\controllers;
 
 use app\models\Fingering;
-use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 final class FingeringController extends Controller
 {
     public $layout = 'empty';
-
-    /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ],
-        ];
-    }
 
     /**
      * @return string

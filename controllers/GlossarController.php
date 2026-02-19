@@ -3,25 +3,12 @@
 namespace app\controllers;
 
 use app\models\Glossar;
-use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 final class GlossarController extends Controller
 {
-    /**
-     * @phpstan-return array<array>
-     */
-    public function behaviors(): array
-    {
-        return [
-            [
-                'class' => 'app\filters\RedirectFilter'
-            ]
-        ];
-    }
-
     public function actionIndex(?string $category = null): string
     {
         $glossars = Glossar::findAllByCategory($category);
