@@ -40,11 +40,20 @@ final class LinksWidget extends Widget
 
         $linksByCategory = [];
         foreach ($links as $link) {
-            $linksByCategory[$this->translateCategory($link->category)][] = $link;
+            $category = $this->translateCategory($link->category);
+            $subtitle = $this->translateSubtitle($link->category);
+            if (!isset($linksByCategory[$category])) {
+                $linksByCategory[$category] = [
+                    'title' => $category,
+                    'subtitle' => $subtitle,
+                    'links' => [],
+                ];
+            }
+            $linksByCategory[$category]['links'][] = $link;
         }
 
         return $this->render('links-widget', [
-            'linksByCategory' => $linksByCategory,
+            'linkItems' => array_values($linksByCategory),
         ]);
     }
 
@@ -60,6 +69,22 @@ final class LinksWidget extends Widget
             'publisher' => Yii::t('app', 'Verlage'),
             'strings' => Yii::t('app', 'Saiten'),
             'website' => Yii::t('app', 'Blogs / Websites'),
+            default => $category,
+        };
+    }
+
+    private function translateSubtitle(string $category): string
+    {
+        return match ($category) {
+            'accessories' => Yii::t('app', 'Links zu Herstellern von E-Bass Zubehör.'),
+            'amplifier/speaker' => Yii::t('app', 'Linksammlung zu Herstellern von Verstärkern, Lautsprechern, Effektgeräten und Audioprodukten für E-Bass.'),
+            'bassist' => Yii::t('app', 'Linksammlung mit Websites berühmter Bassisten und basslastiger Bands.'),
+            'instrument', 'luthier' => Yii::t('app', 'Links zu Herstellern von E-Bässen, Akustischen Bassgitarren und E-Kontrabässen.'),
+            'magazine' => Yii::t('app', 'Links zu Online-Magazinen'),
+            'pickup' => Yii::t('app', 'Linksammlung zu Herstellern von Tonabnehmern für E-Bässe.'),
+            'publisher' => Yii::t('app', 'Links zu Verlagen mit Noten für E-Bass.'),
+            'strings' => Yii::t('app', 'Links zu Herstellern von Saiten für E-Bässe.'),
+            'website' => Yii::t('app', 'Links zu Blogs, Foren und Websites zum Thema E-Bass.'),
             default => $category,
         };
     }

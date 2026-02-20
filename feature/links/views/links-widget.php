@@ -2,7 +2,7 @@
 <?php
 /**
  * @var \yii\web\View $this
- * @var array<string, app\feature\links\models\Links[]> $linksByCategory
+ * @var array<int, array{title: string, subtitle: string, links: app\feature\links\models\Links[]}> $linkItems
  */
 ?>
 <?php yii\widgets\Spaceless::begin() ?>
@@ -26,11 +26,12 @@
         padding-right: 0;
     }
 </style>
-<?php foreach ($linksByCategory as $category => $links): ?>
+<?php foreach ($linkItems as $item): ?>
 <details open>
-    <summary id="<?= Nette\Utils\Strings::webalize($category) ?>"><?= $category ?></summary>
+    <summary id="<?= Nette\Utils\Strings::webalize($item['title']) ?>"><?= $item['title'] ?></summary>
+    <p><?= $item['subtitle'] ?></p>
     <table class="table">
-    <?php foreach ($links as $link): ?>
+    <?php foreach ($item['links'] as $link): ?>
     <tr>
         <td><a rel="nofollow" href="<?= $link->website ?>"><?= $link->title ?></a></td>
         <td><?php if ($link->countryCode !== ''): ?><img src="/media/flags/<?= $link->countryCode ?>.svg" alt="<?= $link->countryCode ?>" height="16"><?php endif ?></td>
@@ -41,8 +42,8 @@
 <?php endforeach ?>
 
 <ul class="table-of-contents">
-    <?php foreach ($linksByCategory as $category => $links): ?>
-        <li><a href="#<?= Nette\Utils\Strings::webalize($category) ?>"><?= $category ?></a></li>
+    <?php foreach ($linkItems as $item): ?>
+        <li><a href="#<?= Nette\Utils\Strings::webalize($item['title']) ?>"><?= $item['title'] ?></a></li>
     <?php endforeach ?>
 </ul>
 <?php yii\widgets\Spaceless::end() ?>
