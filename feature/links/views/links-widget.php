@@ -7,29 +7,29 @@
 ?>
 <?php yii\widgets\Spaceless::begin() ?>
 <style>
-    details summary {
+    .lc h2 {
         font-size: 1.2rem;
         font-weight: 500;
         line-height: 1.375;
         margin-top: 0;
         margin-bottom: 0.7rem;
     }
-    details a {
+    .lc a {
         color: #5F5C52;
     }
-    details td:nth-child(1) {
+    .lc td:nth-child(1) {
         padding-left: 0;
     }
-    details td:nth-child(2) {
+    .lc td:nth-child(2) {
         text-align: center;
         width: 1%;
         padding-right: 0;
     }
 </style>
+<div class="lc">
 <?php foreach ($linkItems as $item): ?>
-<details open>
-    <summary id="<?= Nette\Utils\Strings::webalize($item['title']) ?>"><?= $item['title'] ?></summary>
-    <p><?= $item['subtitle'] ?></p>
+    <h2 id="<?= Nette\Utils\Strings::webalize($item['title']) ?>"><?= $item['title'] ?></h2>
+    <p class="lead"><?= $item['subtitle'] ?></p>
     <table class="table">
     <?php foreach ($item['links'] as $link): ?>
     <tr>
@@ -38,8 +38,8 @@
     </tr>
     <?php endforeach ?>
     </table>
-</details>
 <?php endforeach ?>
+</div>
 
 <ul class="table-of-contents">
     <?php foreach ($linkItems as $item): ?>
