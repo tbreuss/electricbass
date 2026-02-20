@@ -72,7 +72,7 @@ if (!empty($this->params['metaDescription'])) {
                 <li class="navbar__menu-item navbar-dropdown">
                     <a class="navbar__menu-link navbar-dropdown__button" href="#">Lektionen</a>
                     <ul class="navbar-dropdown__content">
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/fitness']) ?>">Fitness</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/fitness']) ?>">Fingerübungen</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/tonleiter']) ?>">Tonleitern</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/bassriff']) ?>">Bass-Riffs</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/rhythmik']) ?>">Rhythmus</a></li>
@@ -189,7 +189,7 @@ if (!empty($this->params['metaDescription'])) {
             <div class="col-12 col-md-4">
                 <h5 class="footer__title">Lektionen, Übungen & Ideen</h5>
                 <ul class="footer__list">
-                    <li><?= Html::a('Fitnessübungen für E-Bassisten', ['/lesson/index', 'path' => 'lektionen/fitness']) ?></li>
+                    <li><?= Html::a('Fingerübungen für E-Bassisten', ['/lesson/index', 'path' => 'lektionen/fitness']) ?></li>
                     <li><?= Html::a('Tonleiterübungen für den E-Bass', ['/lesson/index', 'path' => 'lektionen/tonleiter']) ?></li>
                     <li><?= Html::a('Bass-Riffs aller Stilrichtungen', ['/lesson/index', 'path' => 'lektionen/bassriff']) ?></li>
                     <li><?= Html::a('Rhythmusübungen für Bassisten', ['/lesson/index', 'path' => 'lektionen/rhythmik']) ?></li>
