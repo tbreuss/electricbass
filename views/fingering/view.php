@@ -18,7 +18,7 @@ use const tebe\tonal\fretboard\EXPAND_NO;
 use const tebe\tonal\fretboard\EXPAND_HIGHER;
 
 $this->title = $model->title . ' | Fingersätze';
-$this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
 $this->params['breadcrumbs'][] = $model->title;
 CanonicalLink::widget(['keepParams' => ['id']]);
@@ -259,7 +259,7 @@ function replaceStringDef(int $strings, string $note): string
 
     <?= $this->render('//_partials/meta', [
         'categories' => [
-            ['label' => 'Tools', 'url' => ['/tools']],
+            ['label' => 'Werkzeuge', 'url' => ['/tools']],
             ['label' => 'Fingersätze', 'url' => ['/fingering/index']]
         ],
         'tags' => $model->tags,

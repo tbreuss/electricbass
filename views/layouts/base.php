@@ -83,7 +83,7 @@ if (!empty($this->params['metaDescription'])) {
                     </ul>
                 </li>
                 <li class="navbar__menu-item navbar-dropdown">
-                    <a class="navbar__menu-link navbar-dropdown__button" href="#">Tools</a>
+                    <a class="navbar__menu-link navbar-dropdown__button" href="#">Werkzeuge</a>
                     <ul class="navbar-dropdown__content">
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/fingering/index']) ?>">Fingersätze</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/tool/metronome']) ?>">Metronom</a></li>

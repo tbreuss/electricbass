@@ -11,7 +11,7 @@ use app\widgets\CanonicalLink;
 $category = '';
 
 $this->title = 'Fingersätze für E-Bass';
-$this->params['breadcrumbs'][] = ['label' => 'Tools', 'url' => ['tool/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = 'Fingersätze';
 CanonicalLink::widget();
 ?>

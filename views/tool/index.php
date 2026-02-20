@@ -6,14 +6,14 @@
 
 use app\helpers\Html;
 
-$this->title = 'Tools';
-$this->params['breadcrumbs'][] = 'Tools';
+$this->title = 'Werkzeuge';
+$this->params['breadcrumbs'][] = 'Werkzeuge';
 
 ?>
 
 <div class="content">
 
-    <h1>Tools</h1>
+    <h1>Werkzeuge</h1>
 
     <div class="widget widget-listview">
         <div class="row">
