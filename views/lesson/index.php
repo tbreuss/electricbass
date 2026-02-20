@@ -35,7 +35,7 @@
     <?php $this->beginBlock('sidebar') ?>
     <div class="sidebarWidget">
         <?php if (!empty($similars)): ?>
-            <h3 class="sidebarWidget__title">Ähnliche Lektionen</h3>
+            <h3 class="sidebarWidget__title">Ähnliche Inhalte</h3>
             <ul class="sidebarWidget__list">
                 <?php foreach ($similars as $model): ?>
                     <li class="sidebarWidget__item">
@@ -47,7 +47,7 @@
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
-            <h3 class="sidebarWidget__title">Die neuesten Lektionen</h3>
+            <h3 class="sidebarWidget__title">Die neuesten Inhalte</h3>
             <ul class="sidebarWidget__list">
                 <?php foreach ($latest as $model): ?>
                     <li class="sidebarWidget__item">
