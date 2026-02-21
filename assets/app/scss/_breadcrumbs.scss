@@ -46,8 +46,18 @@ up-modal .breadcumbList {
   color: #c2c2c2;
 }
 
+.breadcumbList__home img {
+  height: 1.1em;
+  filter: invert(.7);
+  padding-bottom: 0.2em;
+}
+
 .breadcumbList__home:hover {
   color: #7f7f7f;
+}
+
+.breadcumbList__home:hover img {
+  filter: invert(.4);
 }
 
 .breadcumbList__home::after {
@@ -71,7 +81,7 @@ li[typeof=ListItem]::after {
 
 li:last-child[typeof=ListItem]::after {
   content: "";
-}            
+}
 
 li[typeof=ListItem] a {
   color: #c2c2c2;

@@ -123,7 +123,7 @@ if (!empty($this->params['metaDescription'])) {
 
     <?php if (!empty($this->params['breadcrumbs'])): ?>
     <div class="container breadcumbList">
-        <a class="breadcumbList__home" href="javascript:window.location.href='<?= Url::home() ?>'">Start</a>
+        <a class="breadcumbList__home" href="javascript:window.location.href='<?= Url::home() ?>'"><img src="/img/home.svg" alt="Home"></a>
         <ol vocab="https://schema.org/" typeof="BreadcrumbList">
             <?php foreach ($this->params['breadcrumbs'] as $itemCount => $item): ?>
                 <?php if (is_array($item)): ?>
