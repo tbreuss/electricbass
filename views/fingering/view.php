@@ -14,9 +14,6 @@ use app\widgets\Rating;
 use app\widgets\SocialBar;
 use yii\helpers\Markdown;
 
-use const tebe\tonal\fretboard\EXPAND_NO;
-use const tebe\tonal\fretboard\EXPAND_HIGHER;
-
 $this->title = $model->title . ' | Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
@@ -184,7 +181,7 @@ function replaceStringDef(int $strings, string $note): string
     $allPossibilitites = [];
     $expandPosition = $expand;
     foreach (range(1, 8) as $pos) {
-        $possibilities = \tebe\tonal\fretboard\get_all_possibilities($notes, $fingerings, $pos, $expandPosition);
+        $possibilities = tebe\tonal\fretboard\get_all_possibilities($notes, $fingerings, $pos, $expandPosition);
         if (!empty($possibilities)) {
             $allPossibilitites[$pos] = $possibilities;
         }
