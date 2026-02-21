@@ -136,7 +136,10 @@ function replaceStringDef(int $strings, string $note): string
                     ?>Tonleiter<?php
                 endif; ?>
                 <?php if ($model->category === 'akkord'):
-                    ?>Akkord/Arpeggio<?php
+                    ?>Akkord<?php
+                endif; ?>
+                <?php if ($model->category === 'arpeggio'):
+                    ?>Arpeggio<?php
                 endif; ?>
                 <?php if ($model->category === 'intervall'):
                     ?>Intervall<?php
@@ -283,7 +286,7 @@ function replaceStringDef(int $strings, string $note): string
                 <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#intervall">Intervalle</a>
             </li>
             <li class="sidebarWidget__item">
-                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#akkord">Akkorde & Arpeggios</a>
+                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#akkord">Arpeggios & Akkorde</a>
             </li>
             <li class="sidebarWidget__item">
                 <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#tonleiter">Tonleitern</a>

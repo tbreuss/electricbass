@@ -20,7 +20,7 @@ CanonicalLink::widget();
 
     <h1>Fingersätze für E-Bass</h1>
 
-    <p>Hier findest du Fingersätze und Griffbilder für die linke Hand für Intervalle, Akkorde (Arpeggios) und Tonleitern für vier-, fünf- und sechssaitige E-Bässe.</p>
+    <p>Hier findest du Fingersätze und Griffbilder für die linke Hand für Intervalle, Arpeggios und Tonleitern für vier-, fünf- und sechssaitige E-Bässe.</p>
 
     <?php foreach ($models as $mainCategory => $modelsGrouped): ?>
         <h2 id="<?= $mainCategory ?>"><?= Yii::t('app', $mainCategory) ?></h2>

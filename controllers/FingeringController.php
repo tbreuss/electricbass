@@ -17,7 +17,7 @@ final class FingeringController extends Controller
     {
         $models = Fingering::find()
             ->where('deleted=0')
-            ->orderBy([new \yii\db\Expression('FIELD (category, "intervall", "akkord", "tonleiter"), title ASC')])
+            ->orderBy([new \yii\db\Expression('FIELD (category, "intervall", "arpeggio", "tonleiter"), title ASC')])
             ->all();
 
         $modelsGroupedByCategory = array_reduce($models, function (array $accumulator, $model) {
@@ -62,7 +62,7 @@ final class FingeringController extends Controller
 
         $similars = Fingering::findSimilars($model->id, $model->getTagsAsArray(), 10);
 
-        #$model->increaseHits();
+        $model->increaseHits();
 
         return $this->render('view', [
             'model' => $model,
