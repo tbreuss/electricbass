@@ -48,7 +48,19 @@ function replaceStringDef(int $strings, string $note): string
 
 ?>
 
-<?php $this->beginBlock('tableOfContents') ?>
+<h1><?= $model->title ?></h1>
+
+<div class="input-group d-block d-md-none">
+    <div><?= Yii::t('app', $model->category) ?></div>
+    <select class="form-select" onchange="window.location.href = this.value">
+        <option selected>— Inhaltsverzeichnis —</option>
+        <?php foreach ($modelsPerCategory as $modelPerCategory): ?>
+            <option value="<?= $modelPerCategory->url ?>" <?= $model->url === $modelPerCategory->url ? 'selected' : '' ?>><?= $modelPerCategory->title ?></option>
+        <?php endforeach ?>
+    </select>
+</div>
+
+<?php $this->beginBlock('sidebar') ?>
 <?= $this->render('_toc', ['category' => $model->category]) ?>
 <?php $this->endBlock() ?>
 
@@ -67,7 +79,7 @@ function replaceStringDef(int $strings, string $note): string
     <form class="fretboardForm" action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="get">
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormRoot">Grundton</label>
-            <?php $roots = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F'] ?>
+            <?php $roots = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'] ?>
             <?php echo Html::dropDownList('root', $root, array_combine($roots, $roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
         </div>
         <div class="fretboardForm__column">
@@ -162,6 +174,49 @@ function replaceStringDef(int $strings, string $note): string
     </table>
     </div>
 
+
+<h2>Griffbrett</h2>
+
+<p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> auf dem Griffbrett bis zum zwölften Bund:</p>
+
+<?php
+
+$fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes);
+
+echo app\widgets\Fretboard::widget([
+        'colors' => 'diatonic',
+        'strings' => $FRETBOARD_STRINGS,
+        'frets' => $FRETBOARD_FRETS,
+        'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['note'], $fingerings),
+        'root' => $rootFingering
+]);
+?>
+
+<p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> in der Intervallschrift bis zum zwölften Bund:</p>
+
+<?php
+echo app\widgets\Fretboard::widget([
+        'colors' => 'diatonic',
+        'strings' => $FRETBOARD_STRINGS,
+        'frets' => $FRETBOARD_FRETS,
+        'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['label'], $fingerings),
+        'root' => $rootFingering
+]);
+?>
+
+<p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
+
+<?php
+echo app\widgets\Fretboard::widget([
+        'colors' => 'diatonic',
+        'strings' => $FRETBOARD_STRINGS,
+        'frets' => $FRETBOARD_FRETS,
+        'notes' => array_map(fn($note) => $note['coord'] . '-' . $model::convertNotesToOldFormat($note['label']), $fingerings),
+        'root' => $rootFingering
+]);
+?>
+
+
     <?php if (!empty($model->fingering)): ?>
         <h2>Fingersatz</h2>
         <p>Der meist verwendete Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> sieht wie folgt aus.</p>
@@ -211,47 +266,6 @@ function replaceStringDef(int $strings, string $note): string
             <?php endforeach; ?>
         <?php endforeach; ?>
     <?php endif; ?>
-
-    <h2>Griffbrett</h2>
-
-    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> auf dem Griffbrett bis zum zwölften Bund:</p>
-
-    <?php
-
-    $fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes);
-
-    echo app\widgets\Fretboard::widget([
-        'colors' => 'diatonic',
-        'strings' => $FRETBOARD_STRINGS,
-        'frets' => $FRETBOARD_FRETS,
-        'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['note'], $fingerings),
-        'root' => $rootFingering
-    ]);
-    ?>
-
-    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> in der Intervallschrift bis zum zwölften Bund:</p>
-
-    <?php
-    echo app\widgets\Fretboard::widget([
-        'colors' => 'diatonic',
-        'strings' => $FRETBOARD_STRINGS,
-        'frets' => $FRETBOARD_FRETS,
-        'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['label'], $fingerings),
-        'root' => $rootFingering
-    ]);
-    ?>
-
-    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
-
-    <?php
-    echo app\widgets\Fretboard::widget([
-        'colors' => 'diatonic',
-        'strings' => $FRETBOARD_STRINGS,
-        'frets' => $FRETBOARD_FRETS,
-        'notes' => array_map(fn($note) => $note['coord'] . '-' . $model::convertNotesToOldFormat($note['label']), $fingerings),
-        'root' => $rootFingering
-    ]);
-    ?>
 
     <?php if (!empty($model->abstract)): ?>
         <div class="markdown"><?= Markdown::process($model->abstract) ?></div>

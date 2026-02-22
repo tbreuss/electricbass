@@ -5,7 +5,7 @@ return [
     'bassistenwitze' => 'joke/index',
     'blog' => 'blog/index',
     'blog/<id:[A-Za-z0-9-]+>' => 'blog/view',
-    'tools/xxx' => 'fingering/category',
+    'tools/fingersaetze/inhaltsverzeichnis' => 'fingering/table-of-contents',
     'tools/fingersaetze/<category:(arpeggio|intervall|tonleiter)>' => 'fingering/index',
     'tools/fingersaetze/<id:[A-Za-z0-9-]+>' => 'fingering/view',
     'tools/fingersaetze' => 'fingering/index',

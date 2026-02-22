@@ -12,8 +12,6 @@ use yii\web\NotFoundHttpException;
 
 final class FingeringController extends Controller
 {
-    public $layout = 'toc';
-
     public function actionIndex(string $category = ''): string
     {
         $models = [];
@@ -48,7 +46,7 @@ final class FingeringController extends Controller
         ]);
     }
 
-    public function actionCategory(): string
+    public function actionTableOfContents(): string
     {
         if (!Yii::$app->request->isPost) {
             throw new MethodNotAllowedHttpException();

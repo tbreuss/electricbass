@@ -1,7 +1,7 @@
 <div id="responseDiv"></div>
 <script>
     window.addEventListener('load', function() {
-        fetch('<?= app\helpers\Url::to(['/fingering/category']) ?>', {
+        fetch('<?= app\helpers\Url::to(['/fingering/table-of-contents']) ?>', {
             method: 'POST',
             headers: {
                 'X-CSRF-Token': document.head.querySelector("[name~=csrf-token][content]").content,
