@@ -161,7 +161,7 @@ CanonicalLink::widget();
 
 <?php $this->beginBlock('jumbotron') ?>
 <div class="jumbotron">
-    <div class="jumbotron__wrapper container">
+    <div class="jumbotron__wrapper container-fluid">
         <div class="jumbotron__heading">Hallo Bassist*in</div>
         <div class="jumbotron__text">Auf diesem Blog findest du mehr als <strong><?= $count ?> Artikel</strong> über das bässte Instrument der Welt. Viel Spass beim Surfen 🤘</div>
         <a class="jumbotron__copy" target="_blank" href="https://www.pexels.com/photo/singer-singing-on-stage-beside-guitar-player-and-bass-player-167636/">Photo by Thibault Trillet from Pexels</a>

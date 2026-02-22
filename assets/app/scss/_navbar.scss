@@ -28,7 +28,7 @@
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
-  .navbar > .container {
+  .navbar > .container-fluid {
     display: flex;
     flex-wrap: inherit;
     align-items: center;
@@ -131,7 +131,7 @@
   }
   */
 
-  .navbar .container {
+  .navbar .container-fluid {
     padding-bottom: 1rem;
   }
   .navbar__menu {

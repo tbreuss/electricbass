@@ -60,7 +60,7 @@ if (!empty($this->params['metaDescription'])) {
         </div>
     <?php endif; ?>
     <nav class="navbar">
-        <div class="container">
+        <div class="container-fluid">
             <a class="navbar__logo" href="<?= Yii::$app->homeUrl ?>">
                 <img src="/img/logo.png" alt="Logo" width="21" height="21">
                 <span>ELECTRICBASS</span>
@@ -119,10 +119,10 @@ if (!empty($this->params['metaDescription'])) {
         </div>
     </nav>
 
-    <div class="container navbar-border-bottom"><div class="border"></div></div>
+    <div class="container-fluid navbar-border-bottom"><div class="border"></div></div>
 
     <?php if (!empty($this->params['breadcrumbs'])): ?>
-    <div class="container breadcumbList">
+    <div class="container-fluid breadcumbList">
         <a class="breadcumbList__home" href="javascript:window.location.href='<?= Url::home() ?>'"><img src="/img/home.svg" alt="Home"></a>
         <ol vocab="https://schema.org/" typeof="BreadcrumbList">
             <?php foreach ($this->params['breadcrumbs'] as $itemCount => $item): ?>
@@ -148,13 +148,13 @@ if (!empty($this->params['metaDescription'])) {
         <?= $this->blocks['jumbotron'] ?>
     <?php endif; ?>
 
-    <div class="container container--content">
+    <div class="container-fluid container--content">
         <?= $content ?>
     </div>
 
 </main>
 <footer class="footer">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row links">
             <div class="col-md-5 col-xs-10">
                 <h5 class="footer__title">Über ELECTRICBASS</h5>
