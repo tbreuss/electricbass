@@ -4685,6 +4685,10 @@ progress {
 ≥1200px	xl
 ≥1400px xxl
 */
+.container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+  max-width: 1320px;
+}
+
 /** components */
 .sidebar__inner {
   border-left: 1px solid #ddd;
@@ -4695,7 +4699,7 @@ progress {
   padding: 0;
 }
 
-.navbar .container {
+.navbar .container-fluid, .navbar .container-sm, .navbar .container-md, .navbar .container-lg, .navbar .container-xl, .navbar .container-xxl {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
@@ -4853,7 +4857,7 @@ up-modal-content .top {
   color: #9F9C92;
 }
 
-.container .border {
+.container-fluid .border, .container-sm .border, .container-md .border, .container-lg .border, .container-xl .border, .container-xxl .border {
   border-top: 1px solid #ccc;
 }
 
@@ -5589,7 +5593,7 @@ li[typeof=ListItem] a:hover {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
-  .navbar > .container {
+  .navbar > .container-fluid, .navbar > .container-sm, .navbar > .container-md, .navbar > .container-lg, .navbar > .container-xl, .navbar > .container-xxl {
     display: flex;
     flex-wrap: inherit;
     align-items: center;
@@ -5672,7 +5676,7 @@ li[typeof=ListItem] a:hover {
       color: #423f37;
   }
   */
-  .navbar .container {
+  .navbar .container-fluid, .navbar .container-sm, .navbar .container-md, .navbar .container-lg, .navbar .container-xl, .navbar .container-xxl {
     padding-bottom: 1rem;
   }
   .navbar__menu {

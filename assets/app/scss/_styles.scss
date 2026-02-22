@@ -10,6 +10,10 @@
 ≥1400px xxl
 */
 
+.container-fluid {
+  max-width: 1320px;
+}
+
 /** components */
 
 .sidebar__inner {
@@ -21,7 +25,7 @@
   padding: 0;
 }
 
-.navbar .container {
+.navbar .container-fluid {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
@@ -183,7 +187,7 @@ up-modal-content .top {
   color: #9F9C92;
 }
 
-.container .border {
+.container-fluid .border {
   border-top: 1px solid #ccc;
 }
 
