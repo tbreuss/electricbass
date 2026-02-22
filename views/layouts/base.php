@@ -246,11 +246,11 @@ if (!empty($this->params['metaDescription'])) {
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         // move table of contents to sidebar
-        const tableOfContents = document.querySelector(".table-of-contents");
+        /*const tableOfContents = document.querySelector(".table-of-contents");
         const sidebar = document.querySelector(".sidebar__inner");
         if (tableOfContents && sidebar) {
             sidebar.prepend(tableOfContents);
-        }
+        }*/
         // open all external links in a new tab or window
         const currentHost = window.location.hostname.replace('https://', '').replace('http://', ''). replace('www.', '');
         const links = document.querySelectorAll("a");

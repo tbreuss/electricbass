@@ -6,7 +6,6 @@
  */
 
 use app\helpers\Html;
-use app\helpers\Url;
 use app\widgets\CanonicalLink;
 use app\widgets\Comments;
 use app\widgets\Hits;
@@ -14,6 +13,7 @@ use app\widgets\Rating;
 use app\widgets\SocialBar;
 use yii\helpers\Markdown;
 
+$this->blocks['title'] = $model->title;
 $this->title = $model->title . ' | Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
@@ -48,9 +48,9 @@ function replaceStringDef(int $strings, string $note): string
 
 ?>
 
-<div class="content col-12 col-lg-12 col-xl-11 col-xxl-10">
-
-    <h1><?= $model->title ?></h1>
+<?php $this->beginBlock('tableOfContents') ?>
+<?= $this->render('_toc', ['category' => $model->category]) ?>
+<?php $this->endBlock() ?>
 
     <?php
 
@@ -264,7 +264,6 @@ function replaceStringDef(int $strings, string $note): string
         ],
         'tags' => $model->tags,
     ]); ?>
-</div>
 
 <?= Rating::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
@@ -273,25 +272,6 @@ function replaceStringDef(int $strings, string $note): string
 <?= Comments::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
 <?= Hits::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
-
-<?php if (!empty($similars)): ?>
-    <?php $this->beginBlock('sidebar') ?>
-    <div class="sidebarWidget">
-        <h3 class="sidebarWidget__title">Fingersätze</h3>
-        <ul class="sidebarWidget__list">
-            <li class="sidebarWidget__item">
-                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#intervall">Intervalle</a>
-            </li>
-            <li class="sidebarWidget__item">
-                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#akkord">Arpeggios & Akkorde</a>
-            </li>
-            <li class="sidebarWidget__item">
-                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#tonleiter">Tonleitern</a>
-            </li>
-        </ul>
-    </div>
-    <?php $this->endBlock() ?>
-<?php endif; ?>
 
 <style>
     .fretboard {

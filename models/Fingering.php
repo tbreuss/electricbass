@@ -24,6 +24,21 @@ final class Fingering extends ActiveRecord
 {
     use SimilarModelsByTags;
 
+    public static function findAllByCategory($category): array
+    {
+        $orderBy = match($category) {
+            'intervall' => 'sorting ASC',
+            default => 'title ASC',
+        };
+
+        return self::find()
+            ->select('title, url, notes')
+            ->where('deleted=0')
+            ->andWhere(['category' => $category])
+            ->orderBy($orderBy)
+            ->all();
+    }
+
     /**
      * @param int|string $id
      */
