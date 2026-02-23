@@ -212,7 +212,7 @@ echo app\feature\fingering\Fretboard::widget([
 
     <?php if (!empty($model->fingering)): ?>
         <h2>Fingersatz</h2>
-        <p>Der gängigste Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> lautet wie folgt.</p>
+        <p>Der gängigste Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> lautet wie folgt:</p>
         <?= app\feature\fingering\Fretboard::widget([
             'showDots' => false,
             'showFretNumbers' => false,
