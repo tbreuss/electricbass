@@ -6,8 +6,6 @@
  * @var \app\feature\fingering\models\Fingering[] $models
  */
 
-use app\widgets\CanonicalLink;
-
 $this->title = 'Fingersätze für E-Bass';
 $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
 if (count($models) > 0) {
@@ -16,7 +14,6 @@ if (count($models) > 0) {
 } else {
     $this->params['breadcrumbs'][] = 'Fingersätze';
 }
-CanonicalLink::widget();
 ?>
 
 <?php $this->beginBlock('sidebar') ?>

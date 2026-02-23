@@ -10,7 +10,6 @@
  */
 
 use app\helpers\Html;
-use app\widgets\CanonicalLink;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Rating;
@@ -23,7 +22,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index'
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', $model->category), 'url' => ['fingering/index', 'category' => $model->category]];
 $this->params['breadcrumbs'][] = $model->title;
-CanonicalLink::widget(['keepParams' => ['id']]);
 
 /**
  * @return string[][]
