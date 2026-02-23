@@ -2,11 +2,13 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\Fingering $model
+ * @var app\feature\fingering\models\Fingering $model
+ * @var string $root
+ * @var string $strings
+ * @var string $expand
  */
 
 use app\helpers\Html;
-use app\helpers\Url;
 use app\widgets\CanonicalLink;
 use app\widgets\Comments;
 use app\widgets\Hits;
@@ -14,9 +16,11 @@ use app\widgets\Rating;
 use app\widgets\SocialBar;
 use yii\helpers\Markdown;
 
+$this->blocks['title'] = $model->title;
 $this->title = $model->title . ' | Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', $model->category), 'url' => ['fingering/index', 'category' => $model->category]];
 $this->params['breadcrumbs'][] = $model->title;
 CanonicalLink::widget(['keepParams' => ['id']]);
 
@@ -48,37 +52,42 @@ function replaceStringDef(int $strings, string $note): string
 
 ?>
 
-<div class="content col-12 col-lg-12 col-xl-11 col-xxl-10">
+<h1><?= $model->title ?></h1>
 
-    <h1><?= $model->title ?></h1>
+<div class="input-group d-block d-md-none">
+    <div><?= Yii::t('app', $model->category) ?></div>
+    <select class="form-select" onchange="window.location.href = this.value">
+        <option selected>— Inhaltsverzeichnis —</option>
+        <?php foreach ($modelsPerCategory as $modelPerCategory): ?>
+            <option value="<?= $modelPerCategory->url ?>" <?= $model->url === $modelPerCategory->url ? 'selected' : '' ?>><?= $modelPerCategory->title ?></option>
+        <?php endforeach ?>
+    </select>
+</div>
 
-    <?php
+<?php $this->beginBlock('sidebar') ?>
+<script>
+    document.querySelector('.sidebar__inner').style.visibility = 'hidden';
+    window.addEventListener('load', function() {
+        loadPartial('<?= app\helpers\Url::to(['/fingering/table-of-contents']) ?>', { category: '<?= $model->category ?>' }, '.sidebar__inner');
+    });
+</script>
+<?php $this->endBlock() ?>
 
-    $root = isset($_GET['root']) ? $_GET['root'] : $model->root;
-    $strings = isset($_GET['strings']) ? $_GET['strings'] : $model->strings;
-    $expand = isset($_GET['expand']) ? $_GET['expand'] : 0;
-
-    ?>
-
-    <?php if (isset($_GET['root'], $_GET['position'], $_GET['strings'])): ?>
-        <?php #$this->metaNoIndex = true ?>
-    <?php endif; ?>
-
-    <form class="fretboardForm" action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="get">
+    <div class="fretboardForm">
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormRoot">Grundton</label>
-            <?php $roots = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F'] ?>
-            <?php echo Html::dropDownList('root', $root, array_combine($roots, $roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
+            <?php $roots = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'] ?>
+            <?php echo Html::dropDownList('root', $root, array_combine($roots, $roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown', 'onchange' => 'inputChanged();']) ?>
         </div>
         <div class="fretboardForm__column">
-            <label class="fretboardForm__label" for="fretboardFormStrings">Saiten</label>
-            <?php echo Html::dropDownList('strings', $strings, ['4' => '4','5' => '5','6' => '6'], ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
+            <label class="fretboardForm__label" for="fretboardFormStrings">Anzahl Saiten</label>
+            <?php echo Html::dropDownList('strings', $strings, ['4' => '4','5' => '5','6' => '6'], ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown', 'onchange' => 'inputChanged();']) ?>
         </div>
         <div class="fretboardForm__column">
-            <label class="fretboardForm__label" for="fretboardFormExpand">Gestreckte Lage</label>
-            <?php echo Html::dropDownList('expand', $expand, ['0' => 'Nein', '1' => 'Ja'], ['id' => 'fretboardFormExpand', 'class' => 'fretboardForm__dropdown', 'onchange' => 'this.form.submit();']) ?>
+            <label class="fretboardForm__label" for="fretboardFormExpand">Erweiterte Lage</label>
+            <?php echo Html::dropDownList('expand', $expand, ['0' => 'Nein', '1' => 'Ja'], ['id' => 'fretboardFormExpand', 'class' => 'fretboardForm__dropdown', 'onchange' => 'inputChanged();']) ?>
         </div>
-    </form>
+    </div>
 
     <?php
 
@@ -162,10 +171,53 @@ function replaceStringDef(int $strings, string $note): string
     </table>
     </div>
 
+
+<h2>Griffbrett</h2>
+
+<p>Darstellung aller Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> auf dem Griffbrett bis zum zwölften Bund:</p>
+
+<?php
+
+$fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes);
+
+echo app\feature\fingering\Fretboard::widget([
+        'colors' => 'diatonic',
+        'strings' => $FRETBOARD_STRINGS,
+        'frets' => $FRETBOARD_FRETS,
+        'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['note'], $fingerings),
+        'root' => $rootFingering
+]);
+?>
+
+<p>Darstellung aller Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> in Intervallschrift auf dem Griffbrett bis zum zwölften Bund:</p>
+
+<?php
+echo app\feature\fingering\Fretboard::widget([
+        'colors' => 'diatonic',
+        'strings' => $FRETBOARD_STRINGS,
+        'frets' => $FRETBOARD_FRETS,
+        'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['label'], $fingerings),
+        'root' => $rootFingering
+]);
+?>
+
+<p>Darstellung aller Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> in vereinfachter Intervallschrift auf dem Griffbrett bis zum zwölften Bund:</p>
+
+<?php
+echo app\feature\fingering\Fretboard::widget([
+        'colors' => 'diatonic',
+        'strings' => $FRETBOARD_STRINGS,
+        'frets' => $FRETBOARD_FRETS,
+        'notes' => array_map(fn($note) => $note['coord'] . '-' . $model::convertNotesToOldFormat($note['label']), $fingerings),
+        'root' => $rootFingering
+]);
+?>
+
+
     <?php if (!empty($model->fingering)): ?>
         <h2>Fingersatz</h2>
-        <p>Der meist verwendete Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> sieht wie folgt aus.</p>
-        <?= app\widgets\Fretboard::widget([
+        <p>Der gängigste Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> lautet wie folgt:</p>
+        <?= app\feature\fingering\Fretboard::widget([
             'showDots' => false,
             'showFretNumbers' => false,
             'showStringNames' => false,
@@ -192,14 +244,14 @@ function replaceStringDef(int $strings, string $note): string
         <h2>Lagen</h2>
         <p>
             Für <?= $model->title_accusative ? $model->title_accusative : $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> auf dem <?= $strings ?>-saitigen E-Bass wurde kein Fingersatz gefunden.
-            Probiere es mit der <a href="?root=<?= $root ?>&strings=<?= $strings ?>&expand=1">gestreckten Lage</a>.
+            In diesem Fall empfiehlt sich die Nutzung einer <a href="?root=<?= $root ?>&strings=<?= $strings ?>&expand=1">erweiterten Lage</a>.
         </p>
     <?php else: ?>
         <h2>Lagen</h2>
-        <p>Für <?= $model->title_accusative ? $model->title_accusative : $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> gibt es auf dem <?= $strings ?>-saitigen E-Bass Griffbilder in den folgenden Lagen.</p>
+        <p><?= ucfirst($model->title_nominative) ?> mit Grundton <?= $root ?> lässt sich auf dem <?= $strings ?>-saitigen E-Bass in folgenden Lagen greifen:</p>
         <?php foreach ($allPossibilitites as $pos => $possibilitiesPerPosition): ?>
             <?php foreach ($possibilitiesPerPosition as $result): ?>
-                <?= app\widgets\Fretboard::widget([
+                <?= app\feature\fingering\Fretboard::widget([
                     'position' => $pos,
                     'expandPosition' => $expandPosition,
                     'strings' => $FRETBOARD_STRINGS,
@@ -212,47 +264,6 @@ function replaceStringDef(int $strings, string $note): string
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <h2>Griffbrett</h2>
-
-    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> auf dem Griffbrett bis zum zwölften Bund:</p>
-
-    <?php
-
-    $fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes);
-
-    echo app\widgets\Fretboard::widget([
-        'colors' => 'diatonic',
-        'strings' => $FRETBOARD_STRINGS,
-        'frets' => $FRETBOARD_FRETS,
-        'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['note'], $fingerings),
-        'root' => $rootFingering
-    ]);
-    ?>
-
-    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> in der Intervallschrift bis zum zwölften Bund:</p>
-
-    <?php
-    echo app\widgets\Fretboard::widget([
-        'colors' => 'diatonic',
-        'strings' => $FRETBOARD_STRINGS,
-        'frets' => $FRETBOARD_FRETS,
-        'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['label'], $fingerings),
-        'root' => $rootFingering
-    ]);
-    ?>
-
-    <p>Alle Noten <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> mit Grundton <?= $root ?> in der vereinfachten Intervallschrift bis zum zwölften Bund:</p>
-
-    <?php
-    echo app\widgets\Fretboard::widget([
-        'colors' => 'diatonic',
-        'strings' => $FRETBOARD_STRINGS,
-        'frets' => $FRETBOARD_FRETS,
-        'notes' => array_map(fn($note) => $note['coord'] . '-' . $model::convertNotesToOldFormat($note['label']), $fingerings),
-        'root' => $rootFingering
-    ]);
-    ?>
-
     <?php if (!empty($model->abstract)): ?>
         <div class="markdown"><?= Markdown::process($model->abstract) ?></div>
     <?php endif; ?>
@@ -264,7 +275,6 @@ function replaceStringDef(int $strings, string $note): string
         ],
         'tags' => $model->tags,
     ]); ?>
-</div>
 
 <?= Rating::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
@@ -273,25 +283,6 @@ function replaceStringDef(int $strings, string $note): string
 <?= Comments::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
 <?= Hits::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
-
-<?php if (!empty($similars)): ?>
-    <?php $this->beginBlock('sidebar') ?>
-    <div class="sidebarWidget">
-        <h3 class="sidebarWidget__title">Fingersätze</h3>
-        <ul class="sidebarWidget__list">
-            <li class="sidebarWidget__item">
-                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#intervall">Intervalle</a>
-            </li>
-            <li class="sidebarWidget__item">
-                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#akkord">Arpeggios & Akkorde</a>
-            </li>
-            <li class="sidebarWidget__item">
-                <a class="sidebarWidget__link" href="<?= Url::to(['/fingering/index']) ?>#tonleiter">Tonleitern</a>
-            </li>
-        </ul>
-    </div>
-    <?php $this->endBlock() ?>
-<?php endif; ?>
 
 <style>
     .fretboard {
@@ -317,3 +308,62 @@ function replaceStringDef(int $strings, string $note): string
         font-size: 0.8rem;
     }
 </style>
+<script>
+    function inputChanged() {
+        const root = document.getElementById('fretboardFormRoot').value;
+        const strings = document.getElementById('fretboardFormStrings').value;
+        const expand = document.getElementById('fretboardFormExpand').value;
+        window.location.href = '#root=' + root + '&strings=' + strings + '&expand=' + expand;
+    }
+
+    function sendForm(hash) {
+        const params = new URLSearchParams(hash.substring(1));
+        if (!(params.has('root') && params.has('strings') && params.has('expand'))) {
+            return;
+        }
+
+        // Create a form
+        const form = document.createElement("form");
+        form.method = "POST";
+
+        const csrfInput = document.createElement("input");
+        csrfInput.type = "text";
+        csrfInput.name = "_csrf";
+        csrfInput.value = document.head.querySelector("[name~=csrf-token][content]").content;
+        form.appendChild(csrfInput);
+
+        const rootInput = document.createElement("input");
+        rootInput.type = "text";
+        rootInput.name = "root";
+        rootInput.value = params.get('root');
+        form.appendChild(rootInput);
+
+        const stringsInput = document.createElement("input");
+        stringsInput.type = "text";
+        stringsInput.name = "strings";
+        stringsInput.value = params.get('strings');
+        form.appendChild(stringsInput);
+
+        const expandInput = document.createElement("input");
+        expandInput.type = "text";
+        expandInput.name = "expand";
+        expandInput.value = params.get('expand');
+        form.appendChild(expandInput);
+
+        document.body.appendChild(form);
+
+        form.submit();
+    }
+
+    window.addEventListener("hashchange", (event) => {
+        const hashPart = event.newURL.split('#');
+        if (hashPart[1]) {
+            sendForm(location.hash);
+        }
+    });
+
+    const loadedHash = '#root=<?= $root ?>&strings=<?= $strings ?>&expand=<?= $expand ?>';
+    if ((location.hash !== '') && (loadedHash !== location.hash)) {
+        sendForm(location.hash);
+    }
+</script>

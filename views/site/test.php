@@ -91,7 +91,7 @@ $lowest = tebe\tonal\fretboard\findLowestNote($TUNING, $root);
 $fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes);
 
 echo "<h2>Alle Noten</h2>";
-echo app\widgets\Fretboard::widget([
+echo \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -104,7 +104,7 @@ foreach (range(1, 8) as $position) {
     echo "<h2>$position. Lage</h2>";
 
     foreach ($possibilities as $i => $result) {
-        echo app\widgets\Fretboard::widget([
+        echo \app\feature\fingering\Fretboard::widget([
             'position' => $position,
             'expandPosition' => $expandPosition,
             'strings' => STRINGS,
@@ -118,7 +118,7 @@ foreach (range(1, 8) as $position) {
 
 ?>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -127,7 +127,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Form mit Notennamen (Default-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'default',
@@ -136,7 +136,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Form mit Fingersatz (Default-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'default',
@@ -145,7 +145,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Form mit Intervallen (Default-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -154,7 +154,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Form mit Intervallen und Fingersatz (Default-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -163,7 +163,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Form mit Intervallen (Intervall-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -172,7 +172,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Form mit Intervallen und Fingersatz (Intervall-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -181,7 +181,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Chromatische Tonleiter aufsteigend (Default-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -204,7 +204,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Chromatische Tonleiter absteigend (Default-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -225,7 +225,7 @@ foreach (range(1, 8) as $position) {
     ]
 ]) ?>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'default',
@@ -233,7 +233,7 @@ foreach (range(1, 8) as $position) {
     'root' => '3/3'
 ]) ?>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -242,7 +242,7 @@ foreach (range(1, 8) as $position) {
 
 <h2>Null-Bünde (Default-Farben)</h2>
 
-<?= app\widgets\Fretboard::widget([
+<?= \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'notes' => ['0/4-X', '0/3-X', '0/2-X', '0/1-X']
@@ -305,7 +305,7 @@ foreach (range(1, 8) as $position) {
 
 <?php
 $notes = tebe\tonal\fretboard\findNotes($tuning, ['C', 'D', 'E', 'F', 'G', 'A', 'B']);
-echo app\widgets\Fretboard::widget([
+echo \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'notes' => array_map(fn($note) => $note['coord'] . '-' . $note['label'], $notes),
@@ -313,7 +313,7 @@ echo app\widgets\Fretboard::widget([
 ]); ?>
 
 <?php $notes = tebe\tonal\fretboard\findNotes($tuning, [['C', 'P1'], ['C#', 'A1'], ['D', 'M2'], ['D#', 'A2'], ['E', 'M3'], ['F', 'P4'], ['F#', 'A4'], ['G', 'P5'], ['G#', 'A5'], ['A', 'M6'], ['A#', 'A6'], ['B', 'M7']]);
-echo app\widgets\Fretboard::widget([
+echo \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -322,7 +322,7 @@ echo app\widgets\Fretboard::widget([
 ]); ?>
 
 <?php $notes = tebe\tonal\fretboard\findNotes($tuning, ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']);
-echo app\widgets\Fretboard::widget([
+echo \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',
@@ -332,7 +332,7 @@ echo app\widgets\Fretboard::widget([
 
 <?php $test = array_map(fn($interval) => transpose("C", $interval), ['P1', 'M3', 'P5', 'M7', 'M9', 'P11', 'M13']);
 $notes = tebe\tonal\fretboard\findNotes($tuning, $test);
-echo app\widgets\Fretboard::widget([
+echo \app\feature\fingering\Fretboard::widget([
     'strings' => STRINGS,
     'frets' => FRETS,
     'colors' => 'diatonic',

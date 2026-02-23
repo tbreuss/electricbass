@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\fingering\models;
 
 use app\traits\SimilarModelsByTags;
 use Yii;
@@ -9,6 +9,7 @@ use yii\db\ActiveRecord;
 /**
  * @property int $id
  * @property string $title
+ * @property string $title_nominative
  * @property string $title_accusative
  * @property string $title_genitive
  * @property string $root
@@ -23,6 +24,21 @@ use yii\db\ActiveRecord;
 final class Fingering extends ActiveRecord
 {
     use SimilarModelsByTags;
+
+    public static function findAllByCategory($category): array
+    {
+        $orderBy = match($category) {
+            'intervall' => 'sorting ASC',
+            default => 'title ASC',
+        };
+
+        return self::find()
+            ->select('title, url, notes')
+            ->where('deleted=0')
+            ->andWhere(['category' => $category])
+            ->orderBy($orderBy)
+            ->all();
+    }
 
     /**
      * @param int|string $id
@@ -72,21 +88,21 @@ final class Fingering extends ActiveRecord
 
     public function categoryAsGenitive(): string
     {
-        $genitivs = [
+        $genitives = [
             'intervall' => 'des Intervalls',
-            'akkord' => 'des Akkords',
+            'akkord' => 'dieses Arpeggios',
             'tonleiter' => 'der Tonleiter',
         ];
-        return $genitivs[$this->category];
+        return $genitives[$this->category];
     }
 
     public function categoryAsAccusative(): string
     {
-        $genitivs = [
+        $accusatives = [
             'intervall' => 'dieses Intervall',
-            'akkord' => 'diesen Akkord',
+            'akkord' => 'dieses Arpeggio',
             'tonleiter' => 'diese Tonleiter',
         ];
-        return $genitivs[$this->category];
+        return $accusatives[$this->category];
     }
 }
