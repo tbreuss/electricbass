@@ -155,8 +155,10 @@ final class SiteController extends Controller
 
             Log404::log404Error($requestUrl, $referrer, date('Y-m-d H:i:s'));
 
+            Yii::$app->response->setStatusCode(410);
             return $this->render('error', ['exception' => $exception]);
         }
+        Yii::$app->response->setStatusCode(410);
         return $this->render('error', ['exception' => $exception]);
     }
 }

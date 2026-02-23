@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="content">
-    <h1>Fehler <?= $exception->statusCode ?></h1>
+    <h1>Fehler?!</h1>
     <?php $message = $exception->getMessage() ?>
     <?php if (($message === '') || str_contains($exception->getFile(), 'yii2/web/ViewAction.php')): ?>
         <p>Die angeforderte URL <?= $_SERVER['REQUEST_URI'] ?> wurde auf diesem Server nicht gefunden.</p>
