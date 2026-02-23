@@ -13,6 +13,7 @@ $config = [
     ],
     'controllerMap' => [
         'alpha-tab' => 'app\feature\alphaTab\WebController',
+        'fingering' => 'app\feature\fingering\Controller',
     ],
     'components' => [
         'request' => [

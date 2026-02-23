@@ -1,6 +1,6 @@
 <?php
 
-namespace app\widgets;
+namespace app\feature\fingering;
 
 use app\widgets\assets\FretboardAsset;
 use yii\base\Widget;

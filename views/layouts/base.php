@@ -244,13 +244,36 @@ if (!empty($this->params['metaDescription'])) {
 </footer>
 <?php $this->endBody() ?>
 <script>
+    function loadPartial(url, bodyParams, intoElement) {
+        const element = document.querySelector(intoElement);
+        element.style.visibility = 'hidden';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-Token': document.head.querySelector("[name~=csrf-token][content]").content,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bodyParams)
+        })
+            .then(response => response.text())
+            .then(html => {
+                element.innerHTML = html + element.innerHTML;
+                element.style.visibility = 'visible';
+            })
+            .catch(error => {
+                element.innerHTML = 'Fehler: ' + error.message + element.innerHTML;
+                element.style.visibility = 'visible';
+            });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         // move table of contents to sidebar
-        /*const tableOfContents = document.querySelector(".table-of-contents");
+        const tableOfContents = document.querySelector(".table-of-contents");
         const sidebar = document.querySelector(".sidebar__inner");
         if (tableOfContents && sidebar) {
             sidebar.prepend(tableOfContents);
-        }*/
+        }
+
         // open all external links in a new tab or window
         const currentHost = window.location.hostname.replace('https://', '').replace('http://', ''). replace('www.', '');
         const links = document.querySelectorAll("a");

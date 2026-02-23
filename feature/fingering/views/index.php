@@ -3,7 +3,7 @@
 /**
  * @var yii\web\View $this
  * @var string $category
- * @var app\models\Fingering[] $models
+ * @var \app\feature\fingering\models\Fingering[] $models
  */
 
 use app\widgets\CanonicalLink;
@@ -15,7 +15,7 @@ CanonicalLink::widget();
 ?>
 
 <?php $this->beginBlock('sidebar') ?>
-<ul class="table-of-contents">
+<ul class="table-of-contents d-none d-md-block">
     <li><a href="<?= app\helpers\Url::to(['/fingering/index', 'category' => 'arpeggio']) ?>">Arpeggios</a></li>
     <li><a href="<?= app\helpers\Url::to(['/fingering/index', 'category' => 'intervall']) ?>">Intervalle</a></li>
     <li><a href="<?= app\helpers\Url::to(['/fingering/index', 'category' => 'tonleiter']) ?>">Tonleitern</a></li>

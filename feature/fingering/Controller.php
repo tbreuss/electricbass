@@ -1,16 +1,14 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\fingering;
 
-use app\models\Fingering;
+use app\feature\fingering\models\Fingering;
 use Yii;
 use yii\helpers\Json;
-use yii\web\Controller;
-use yii\web\JsonParser;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
 
-final class FingeringController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionIndex(string $category = ''): string
     {
@@ -20,7 +18,7 @@ final class FingeringController extends Controller
             $models = Fingering::findAllByCategory($category);
         }
 
-        return $this->render('index', [
+        return $this->render('@app/feature/fingering/views/index', [
             'category' => $category,
             'models' => $models,
         ]);
@@ -40,9 +38,12 @@ final class FingeringController extends Controller
         $modelsPerCategory = Fingering::findAllByCategory($model->category);
         $model->increaseHits();
 
-        return $this->render('view', [
+        return $this->render('@app/feature/fingering/views/view', [
             'model' => $model,
             'modelsPerCategory' => $modelsPerCategory,
+            'root' => Yii::$app->request->getBodyParam('root', $model->root),
+            'strings' => Yii::$app->request->getBodyParam('strings', $model->strings),
+            'expand' => Yii::$app->request->getBodyParam('expand', '0'),
         ]);
     }
 
@@ -55,7 +56,7 @@ final class FingeringController extends Controller
         $body = Json::decode(Yii::$app->request->getRawBody());
         $models = Fingering::findAllByCategory($body['category']);
 
-        return $this->renderPartial('category', [
+        return $this->renderPartial('@app/feature/fingering/views/category', [
             'models' => $models,
         ]);
     }
