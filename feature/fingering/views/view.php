@@ -3,6 +3,9 @@
 /**
  * @var yii\web\View $this
  * @var app\feature\fingering\models\Fingering $model
+ * @var string $root
+ * @var string $strings
+ * @var string $expand
  */
 
 use app\helpers\Html;
@@ -17,6 +20,7 @@ $this->blocks['title'] = $model->title;
 $this->title = $model->title . ' | Fingersätze';
 $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', $model->category), 'url' => ['fingering/index', 'category' => $model->category]];
 $this->params['breadcrumbs'][] = $model->title;
 CanonicalLink::widget(['keepParams' => ['id']]);
 
@@ -73,15 +77,15 @@ function replaceStringDef(int $strings, string $note): string
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormRoot">Grundton</label>
             <?php $roots = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'] ?>
-            <?php echo Html::dropDownList('root', $root, array_combine($roots, $roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown', 'onchange' => 'xxx(this.value, "root");']) ?>
+            <?php echo Html::dropDownList('root', $root, array_combine($roots, $roots), ['id' => 'fretboardFormRoot', 'class' => 'fretboardForm__dropdown', 'onchange' => 'inputChanged();']) ?>
         </div>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormStrings">Anzahl Saiten</label>
-            <?php echo Html::dropDownList('strings', $strings, ['4' => '4','5' => '5','6' => '6'], ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown', 'onchange' => 'xxx(this.value, "strings");']) ?>
+            <?php echo Html::dropDownList('strings', $strings, ['4' => '4','5' => '5','6' => '6'], ['id' => 'fretboardFormStrings', 'class' => 'fretboardForm__dropdown', 'onchange' => 'inputChanged();']) ?>
         </div>
         <div class="fretboardForm__column">
             <label class="fretboardForm__label" for="fretboardFormExpand">Erweiterte Lage</label>
-            <?php echo Html::dropDownList('expand', $expand, ['0' => 'Nein', '1' => 'Ja'], ['id' => 'fretboardFormExpand', 'class' => 'fretboardForm__dropdown', 'onchange' => 'xxx(this.value, "expand");']) ?>
+            <?php echo Html::dropDownList('expand', $expand, ['0' => 'Nein', '1' => 'Ja'], ['id' => 'fretboardFormExpand', 'class' => 'fretboardForm__dropdown', 'onchange' => 'inputChanged();']) ?>
         </div>
     </div>
 
@@ -305,26 +309,18 @@ echo app\feature\fingering\Fretboard::widget([
     }
 </style>
 <script>
-    function xxx(element, field) {
+    function inputChanged() {
         const root = document.getElementById('fretboardFormRoot').value;
         const strings = document.getElementById('fretboardFormStrings').value;
         const expand = document.getElementById('fretboardFormExpand').value;
         window.location.href = '#root=' + root + '&strings=' + strings + '&expand=' + expand;
     }
-    window.addEventListener("hashchange", (event) => {
-        const hashPart = event.newURL.split('#');
-        if (!hashPart[1]) {
+
+    function sendForm(hash) {
+        const params = new URLSearchParams(hash.substring(1));
+        if (!(params.has('root') && params.has('strings') && params.has('expand'))) {
             return;
         }
-
-        console.log(hashPart[1]);
-        const params = new URLSearchParams(hashPart[1]);
-        const parsed = {
-            root: params.get('root'),
-            strings: parseInt(params.get('strings')),
-            expand: parseInt(params.get('expand'))
-        };
-        console.log(parsed);
 
         // Create a form
         const form = document.createElement("form");
@@ -354,10 +350,20 @@ echo app\feature\fingering\Fretboard::widget([
         expandInput.value = params.get('expand');
         form.appendChild(expandInput);
 
-        // Add the form to dom
         document.body.appendChild(form);
 
-        // Just submit
         form.submit();
+    }
+
+    window.addEventListener("hashchange", (event) => {
+        const hashPart = event.newURL.split('#');
+        if (hashPart[1]) {
+            sendForm(location.hash);
+        }
     });
+
+    const loadedHash = '#root=<?= $root ?>&strings=<?= $strings ?>&expand=<?= $expand ?>';
+    if ((location.hash !== '') && (loadedHash !== location.hash)) {
+        sendForm(location.hash);
+    }
 </script>

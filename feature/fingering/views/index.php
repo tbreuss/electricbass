@@ -10,7 +10,12 @@ use app\widgets\CanonicalLink;
 
 $this->title = 'Fingersätze für E-Bass';
 $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
-$this->params['breadcrumbs'][] = 'Fingersätze';
+if (count($models) > 0) {
+    $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
+    $this->params['breadcrumbs'][] = Yii::t('app', $category);
+} else {
+    $this->params['breadcrumbs'][] = 'Fingersätze';
+}
 CanonicalLink::widget();
 ?>
 

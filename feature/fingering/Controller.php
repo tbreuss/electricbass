@@ -5,8 +5,8 @@ namespace app\feature\fingering;
 use app\feature\fingering\models\Fingering;
 use Yii;
 use yii\helpers\Json;
+use yii\web\GoneHttpException;
 use yii\web\MethodNotAllowedHttpException;
-use yii\web\NotFoundHttpException;
 
 final class Controller extends \yii\web\Controller
 {
@@ -25,18 +25,18 @@ final class Controller extends \yii\web\Controller
     }
 
     /**
-     * @throws NotFoundHttpException
+     * @throws GoneHttpException
      */
     public function actionView(string $id): string
     {
         $model = Fingering::findOneOrNull('/tools/fingersaetze/' . $id);
 
-        if (is_null($model)) {
-            throw new NotFoundHttpException();
+        if (is_null($model) || count(\Yii::$app->request->getQueryParams()) > 1) {
+            throw new GoneHttpException();
         }
 
-        $modelsPerCategory = Fingering::findAllByCategory($model->category);
         $model->increaseHits();
+        $modelsPerCategory = Fingering::findAllByCategory($model->category);
 
         return $this->render('@app/feature/fingering/views/view', [
             'model' => $model,
