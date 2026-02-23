@@ -25,7 +25,10 @@ final class Fingering extends ActiveRecord
 {
     use SimilarModelsByTags;
 
-    public static function findAllByCategory($category): array
+    /**
+     * @return Fingering[]|array
+     */
+    public static function findAllByCategory(string $category): array
     {
         $orderBy = match($category) {
             'intervall' => 'sorting ASC',

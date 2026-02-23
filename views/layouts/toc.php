@@ -1,3 +1,5 @@
+<?php /** @var yii\web\View $this */ ?>
+<?php /** @var string $content */ ?>
 <?php $this->beginContent('@app/views/layouts/base.php'); ?>
 <div class="row">
     <div class="col-12 d-block d-md-none">

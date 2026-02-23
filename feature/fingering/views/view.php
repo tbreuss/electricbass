@@ -2,6 +2,7 @@
 
 /**
  * @var yii\web\View $this
+ * @var app\feature\fingering\models\Fingering[] $modelsPerCategory
  * @var app\feature\fingering\models\Fingering $model
  * @var string $root
  * @var string $strings
@@ -231,7 +232,7 @@ echo app\feature\fingering\Fretboard::widget([
     <?php
 
     $allPossibilitites = [];
-    $expandPosition = $expand;
+    $expandPosition = (int)$expand;
     foreach (range(1, 8) as $pos) {
         $possibilities = tebe\tonal\fretboard\get_all_possibilities($notes, $fingerings, $pos, $expandPosition);
         if (!empty($possibilities)) {
