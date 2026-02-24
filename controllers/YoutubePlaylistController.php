@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\models\YoutubePlaylist;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 
 final class YoutubePlaylistController extends Controller
 {
@@ -13,7 +13,7 @@ final class YoutubePlaylistController extends Controller
         $playlist = YoutubePlaylist::findPlaylist($segment);
 
         if ($playlist === false) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $playlistItems = YoutubePlaylist::findPlaylistItems($playlist['id']);
@@ -29,13 +29,13 @@ final class YoutubePlaylistController extends Controller
         $playlist = YoutubePlaylist::findPlaylist($segment);
 
         if ($playlist === false) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $playlistItem = YoutubePlaylist::findPlaylistItem($playlist['id'], $id);
 
         if ($playlistItem === false) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $this->layout = 'empty';
