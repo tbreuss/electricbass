@@ -7,7 +7,7 @@ use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Website;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 
 /**
  * @deprecated
@@ -35,14 +35,14 @@ final class WebsiteController extends Controller
     /**
      * @param int|string $id
      * @return string
-     * @throws NotFoundHttpException
+     * @throws GoneHttpException
      */
     public function actionView($id): string
     {
         $website = Website::findOneOrNull('/websites/' . $id);
 
         if (is_null($website)) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $similars = Website::findSimilars($website->id, $website->getTagsAsArray(), 10);
