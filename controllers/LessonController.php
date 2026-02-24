@@ -4,20 +4,20 @@ namespace app\controllers;
 
 use app\models\Lesson;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 
 final class LessonController extends Controller
 {
     /**
      * @throws \yii\db\Exception
-     * @throws \yii\web\NotFoundHttpException
+     * @throws \yii\web\GoneHttpException
      */
     public function actionIndex(string $path, ?string $preview = null): string
     {
         $model = Lesson::find()->where('url = :url', [':url' => '/' . $path])->one();
 
         if (is_null($model) || ($model->deleted === 1 && is_null($preview))) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $tags = empty($model->tags) ? [] : explode(',', $model->tags);
