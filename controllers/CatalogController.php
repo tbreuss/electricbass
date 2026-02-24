@@ -12,7 +12,7 @@ use Throwable;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 
 final class CatalogController extends Controller
 {
@@ -83,7 +83,7 @@ final class CatalogController extends Controller
         $provider = Catalog::getActiveDataProvider($category, $filter);
 
         if ($provider->getModels() === []) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $latest = Catalog::findLatest($category, 10);
@@ -108,14 +108,14 @@ final class CatalogController extends Controller
     /**
      * @param int|string $id
      * @throws \yii\db\Exception
-     * @throws NotFoundHttpException
+     * @throws GoneHttpException
      */
     public function actionView($id, string $category): string
     {
         $model = Catalog::findOneOrNull('/katalog/' . $category . '/' . $id, $category);
 
         if (is_null($model)) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $similars = Catalog::findSimilars($model->id, $model->getTagsAsArray(), 10);
