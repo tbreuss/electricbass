@@ -412,9 +412,8 @@ final class Advertisement extends ActiveRecord
 
     /**
      * @param int|string $id
-     * @throws NotFoundHttpException
      */
-    public static function findById($id, bool $strict): Advertisement
+    public static function findById($id, bool $strict): ?Advertisement
     {
         $condition = is_numeric($id) ? 'id=:id' : 'url=:id';
         $condition .= empty($strict) ? '' : ' AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60';
@@ -423,10 +422,6 @@ final class Advertisement extends ActiveRecord
             ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
             ->where($condition, [':id' => $id])
             ->one();
-
-        if (is_null($advertisement)) {
-            throw new NotFoundHttpException();
-        }
 
         return $advertisement;
     }

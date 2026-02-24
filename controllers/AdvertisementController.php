@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\GoneHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\web\UnauthorizedHttpException;
 
 /**
  * Class AdvertisementController
@@ -31,6 +32,10 @@ final class AdvertisementController extends Controller
     public function actionContact(string $id): Response|string
     {
         $advertisement = Advertisement::findById($id, true);
+        if (is_null($advertisement)) {
+            throw new NotFoundHttpException();
+        }
+
         $model = new AdvertisementContactForm();
 
         if (isset($_POST['AdvertisementContactForm'])) {
@@ -57,7 +62,9 @@ final class AdvertisementController extends Controller
     public function actionView(string $id): Response|string
     {
         $model = Advertisement::findById('/kleinanzeigen/' . $id, false);
-
+        if (is_null($model)) {
+            throw new NotFoundHttpException();
+        }
         if (!empty($model->spam)) {
             // if the ad was spam show the default not found error
             throw new GoneHttpException();
@@ -102,8 +109,11 @@ final class AdvertisementController extends Controller
     public function actionActivate(string $id, string $accessCode): string
     {
         $model = Advertisement::findById($id, false);
+        if (is_null($model)) {
+            throw new NotFoundHttpException();
+        }
         if (empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
-            throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
+            throw new UnauthorizedHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         $model->activate();
         return $this->render('renew', ['model' => $model]);
@@ -112,8 +122,11 @@ final class AdvertisementController extends Controller
     public function actionRenew(string $id, string $accessCode): string
     {
         $model = Advertisement::findById($id, false);
+        if (is_null($model)) {
+            throw new NotFoundHttpException();
+        }
         if (empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
-            throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
+            throw new UnauthorizedHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         $model->renew();
         $model->updateCounters(['renewals' => 1]);
@@ -123,8 +136,11 @@ final class AdvertisementController extends Controller
     public function actionDelete(string $id, string $accessCode, int $confirmed = 0): Response|string
     {
         $model = Advertisement::findById($id, true);
+        if (is_null($model)) {
+            throw new NotFoundHttpException();
+        }
         if (empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
-            throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
+            throw new UnauthorizedHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         if (!empty($confirmed)) {
             $model->softDelete();
@@ -137,8 +153,11 @@ final class AdvertisementController extends Controller
     public function actionUpdate(string $id, string $accessCode): Response|string
     {
         $model = Advertisement::findById($id, false);
+        if (is_null($model)) {
+            throw new NotFoundHttpException();
+        }
         if (empty($accessCode) || ($accessCode != Div::createAccessCode($model->id))) {
-            throw new NotFoundHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
+            throw new UnauthorizedHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         if (isset($_POST['Advertisement'])) {
             $model->attributes = $_POST['Advertisement'];

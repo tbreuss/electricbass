@@ -79,19 +79,6 @@ final class Glossar extends ActiveRecord
         return null;
     }
 
-    /**
-     * @param int|string $id
-     * @throws NotFoundHttpException
-     */
-    public static function findOneOrThrowException($id): Glossar
-    {
-        $glossar = self::findOneOrNull($id);
-        if (is_null($glossar)) {
-            throw new NotFoundHttpException();
-        }
-        return $glossar;
-    }
-
     public function findNextOneOrNull(): ?Glossar
     {
         $condition = 'autosort>:autosort AND deleted=0 AND hidden=0';
