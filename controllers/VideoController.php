@@ -8,7 +8,7 @@ use app\models\Blog;
 use app\models\Video;
 use SimpleXMLElement;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 
 final class VideoController extends Controller
 {
@@ -31,14 +31,14 @@ final class VideoController extends Controller
     /**
      * @param string $eid
      * @return string
-     * @throws NotFoundHttpException
+     * @throws GoneHttpException
      */
     public function actionView(string $eid): string
     {
         $video = Video::findOneOrNull('/videos/' . $eid);
 
         if (is_null($video)) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $similarVideos = Video::findSimilars($video->id, $video->getTagsAsArray(), 9);
