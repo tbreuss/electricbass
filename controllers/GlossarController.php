@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\models\Glossar;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 use yii\web\Response;
 
 final class GlossarController extends Controller
@@ -14,7 +14,7 @@ final class GlossarController extends Controller
         $glossars = Glossar::findAllByCategory($category);
 
         if (count($glossars) === 0) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         return $this->render('index', [
