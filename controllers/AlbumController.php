@@ -7,7 +7,7 @@ use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Album;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 
 final class AlbumController extends Controller
 {
@@ -36,14 +36,14 @@ final class AlbumController extends Controller
 
     /**
      * @param int|string $id
-     * @throws NotFoundHttpException
+     * @throws GoneHttpException
      */
     public function actionView($id): string
     {
         $model = Album::findOneOrNull('/katalog/alben/' . $id);
 
         if (is_null($model)) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $similars = Album::findSimilars($model->id, $model->getTagsAsArray(), 10);
