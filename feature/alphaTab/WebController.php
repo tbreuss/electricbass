@@ -5,7 +5,7 @@ namespace app\feature\alphaTab;
 use app\feature\alphaTab\components\AlphaTabApi;
 use app\feature\alphaTab\models\AlphaTab;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 use yii\web\UnauthorizedHttpException;
 
 final class WebController extends Controller
@@ -15,7 +15,7 @@ final class WebController extends Controller
         $model = (new AlphaTab)->findByUid($uid);
 
         if (is_null($model)) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $this->layout = 'empty';
