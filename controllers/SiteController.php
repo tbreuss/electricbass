@@ -116,7 +116,8 @@ final class SiteController extends Controller
         $referrer = Yii::$app->request->getReferrer();
 
         $exception = Yii::$app->errorHandler->exception;
-        if ($exception instanceof \yii\web\NotFoundHttpException) {
+
+        if ($exception->statusCode >= 400 && $exception->statusCode < 500) {
             // - www.electricbass.ch/12994
             // - www.electricbass.ch/links/le-fay-1525
 
@@ -153,12 +154,10 @@ final class SiteController extends Controller
                 return $this->redirect($redirect->to, 301);
             }
 
-            Log404::log404Error($requestUrl, $referrer, date('Y-m-d H:i:s'));
+            Log404::log404Error($requestUrl, $referrer, date('Y-m-d H:i:s'), $exception->statusCode);
 
-            Yii::$app->response->setStatusCode(410);
             return $this->render('error', ['exception' => $exception]);
         }
-        Yii::$app->response->setStatusCode(410);
         return $this->render('error', ['exception' => $exception]);
     }
 }

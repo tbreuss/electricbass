@@ -22,7 +22,7 @@ final class Log404 extends ActiveRecord
         return '{{log_404}}';
     }
 
-    public static function log404Error(string $pathInfo, ?string $referrer, string $now): bool
+    public static function log404Error(string $pathInfo, ?string $referrer, string $now, int $statusCode = 0): bool
     {
         $model = Log404::find()
             ->where(['requestUrl' => $pathInfo])
@@ -30,7 +30,7 @@ final class Log404 extends ActiveRecord
 
         if ($model === null) {
             $model = new Log404();
-            $model->code = 404;
+            $model->code = $statusCode;
             $model->requestUrl = $pathInfo;
             $model->created = $now;
         }
