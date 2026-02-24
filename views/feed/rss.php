@@ -15,7 +15,7 @@ use yii\helpers\Url;
     <channel>
         <atom:link href="<?= Url::to(['/feed/rss'], true) ?>" rel="self" type="application/rss+xml" />
         <title>Electricbass.ch | Wissen und Lernen</title>
-        <link>https://www.electricbass.ch</link>
+        <link><?= Url::home(true) ?></link>
         <description>Umfangreiche Informationen zum Thema E-Bass mit Artikeln, Lektionen, Bassriffs, einem Glossar, Lernvideos und vielem mehr.</description>
         <language>de</language>
         <pubDate><?= date(DATE_RSS, time()) ?></pubDate>

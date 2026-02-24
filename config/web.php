@@ -33,6 +33,7 @@ $config = [
         'log' => require(__DIR__ . '/log.php'),
         'db' => require(__DIR__ . '/db.php'),
         'urlManager' => [
+            'hostInfo' => $_ENV['HOST_INFO'],
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => true,

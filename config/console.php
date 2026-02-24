@@ -16,7 +16,7 @@ $config = [
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             /* @phpstan-ignore-next-line */
-            'hostInfo' => YII_ENV_DEV ? 'http://electricbass.test' : 'https://www.electricbass.ch',
+            'hostInfo' => $_ENV['HOST_INFO'],
             'scriptUrl' => '',
             'enablePrettyUrl' => true,
             'rules' => require(__DIR__ . '/rules.php')

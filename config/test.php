@@ -26,6 +26,7 @@ return [
             'basePath' => __DIR__ . '/../web/assets',
         ],
         'urlManager' => [
+            'hostInfo' => $_ENV['HOST_INFO'],
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => require(__DIR__ . '/rules.php'),

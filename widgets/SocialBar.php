@@ -23,6 +23,6 @@ final class SocialBar extends Widget
 
     private function getUrl(): string
     {
-        return 'https://www.electricbass.ch/' . Yii::$app->request->pathInfo;
+        return Yii::$app->request->getAbsoluteUrl();
     }
 }
