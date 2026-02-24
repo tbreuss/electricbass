@@ -6,7 +6,7 @@ use app\helpers\Url;
 use app\models\Blog;
 use app\models\Redirect;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 
 final class BlogController extends Controller
 {
@@ -31,14 +31,14 @@ final class BlogController extends Controller
     /**
      * @param int|string $id
      * @return string
-     * @throws NotFoundHttpException
+     * @throws GoneHttpException
      */
     public function actionView($id): string
     {
         $blog = Blog::findOneOrNull('/blog/' . $id);
 
         if (is_null($blog)) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         $similars = Blog::findSimilars($blog->id, $blog->getTagsAsArray(), 10);
