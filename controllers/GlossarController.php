@@ -25,7 +25,11 @@ final class GlossarController extends Controller
 
     public function actionView(string $id, string $category): string
     {
-        $glossar = Glossar::findOneOrThrowException('/glossar/' . $category . '/' . $id);
+        $glossar = Glossar::findOneOrNull('/glossar/' . $category . '/' . $id);
+
+        if (is_null($glossar)) {
+            throw new GoneHttpException();
+        }
 
         #$glossar->increaseHits();
 
