@@ -7,7 +7,7 @@ use app\models\Comment;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\web\GoneHttpException;
 
 final class CommentController extends Controller
 {
@@ -19,11 +19,11 @@ final class CommentController extends Controller
         $hostInfo = $request->getHostInfo();
 
         if (!empty($queryParams)) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         if (is_string($referrer) && is_string($hostInfo) && !str_starts_with($referrer, $hostInfo)) {
-            throw new NotFoundHttpException();
+            throw new GoneHttpException();
         }
 
         [$title, $url] = $this->fetchTitleAndUrlFromParentTable($name, $id);
@@ -127,6 +127,6 @@ final class CommentController extends Controller
             return [$row['title'], $row['url']];
         }
 
-        throw new NotFoundHttpException();
+        throw new GoneHttpException();
     }
 }
