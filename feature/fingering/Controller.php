@@ -19,7 +19,8 @@ final class Controller extends \yii\web\Controller
         }
 
         return $this->render('@app/feature/fingering/views/index', [
-            'category' => $category,
+            'category' => ucfirst($category),
+            'categoryPlural' => $this->categoryPlural($category),
             'models' => $models,
         ]);
     }
@@ -59,5 +60,15 @@ final class Controller extends \yii\web\Controller
         return $this->renderPartial('@app/feature/fingering/views/category', [
             'models' => $models,
         ]);
+    }
+
+    private function categoryPlural(string $category): string
+    {
+        return match ($category) {
+            'arpeggio' => 'Arpeggios',
+            'intervall' => 'Intervalle',
+            'tonleiter' => 'Tonleitern',
+            default => ucfirst($category),
+        };
     }
 }

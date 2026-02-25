@@ -36,7 +36,7 @@ final class Fingering extends ActiveRecord
         };
 
         return self::find()
-            ->select('title, url, notes')
+            ->select('title, url, notes, fingering')
             ->where('deleted=0')
             ->andWhere(['category' => $category])
             ->orderBy($orderBy)

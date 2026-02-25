@@ -56,7 +56,6 @@ function replaceStringDef(int $strings, string $note): string
 <div class="input-group d-block d-md-none">
     <div><?= Yii::t('app', $model->category) ?></div>
     <select class="form-select" onchange="window.location.href = this.value">
-        <option selected>— Inhaltsverzeichnis —</option>
         <?php foreach ($modelsPerCategory as $modelPerCategory): ?>
             <option value="<?= $modelPerCategory->url ?>" <?= $model->url === $modelPerCategory->url ? 'selected' : '' ?>><?= $modelPerCategory->title ?></option>
         <?php endforeach ?>
@@ -170,6 +169,19 @@ function replaceStringDef(int $strings, string $note): string
     </table>
     </div>
 
+<?php if (!empty($model->fingering)): ?>
+    <h2>Fingersatz</h2>
+    <p>Der gängigste Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> lautet wie folgt:</p>
+    <?= app\feature\fingering\Fretboard::widget([
+            'showDots' => false,
+            'showFretNumbers' => false,
+            'showStringNames' => false,
+            'colors' => 'default',
+            'strings' => ['G', 'D', 'A', 'E'],
+            'frets' => range(0, 12),
+            'notes' => preg_split('/\s+/', $model->fingering),
+    ]); ?>
+<?php endif; ?>
 
 <h2>Griffbrett</h2>
 
@@ -212,21 +224,6 @@ echo app\feature\fingering\Fretboard::widget([
 ]);
 ?>
 
-
-    <?php if (!empty($model->fingering)): ?>
-        <h2>Fingersatz</h2>
-        <p>Der gängigste Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> lautet wie folgt:</p>
-        <?= app\feature\fingering\Fretboard::widget([
-            'showDots' => false,
-            'showFretNumbers' => false,
-            'showStringNames' => false,
-            'colors' => 'default',
-            'strings' => $FRETBOARD_STRINGS,
-            'frets' => $FRETBOARD_FRETS,
-            'notes' => preg_split('/\s+/', $model->fingering),
-        ]); ?>
-    <?php endif; ?>
-
     <?php
 
     $allPossibilitites = [];
@@ -243,7 +240,7 @@ echo app\feature\fingering\Fretboard::widget([
         <h2>Lagen</h2>
         <p>
             Für <?= $model->title_accusative ? $model->title_accusative : $model->categoryAsAccusative() ?> mit Grundton <?= $root ?> auf dem <?= $strings ?>-saitigen E-Bass wurde kein Fingersatz gefunden.
-            In diesem Fall empfiehlt sich die Nutzung einer <a href="?root=<?= $root ?>&strings=<?= $strings ?>&expand=1">erweiterten Lage</a>.
+            In diesem Fall empfiehlt sich die Nutzung der erweiterten Lage.
         </p>
     <?php else: ?>
         <h2>Lagen</h2>

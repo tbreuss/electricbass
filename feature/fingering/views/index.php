@@ -3,6 +3,7 @@
 /**
  * @var yii\web\View $this
  * @var string $category
+ * @var string $categoryPlural
  * @var \app\feature\fingering\models\Fingering[] $models
  */
 
@@ -10,7 +11,7 @@ $this->title = 'Fingersätze für E-Bass';
 $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
 if (count($models) > 0) {
     $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
-    $this->params['breadcrumbs'][] = Yii::t('app', $category);
+    $this->params['breadcrumbs'][] = $categoryPlural;
 } else {
     $this->params['breadcrumbs'][] = 'Fingersätze';
 }
@@ -36,17 +37,27 @@ if (count($models) > 0) {
     <h3 class="title"><?= app\helpers\Html::a('Tonleitern', ['/fingering/index', 'category' => 'tonleiter']) ?></h3>
     <p>Fingersätze für Tonleitern für vier-, fünf- und sechssaitige E-Bässe.</p>
 <?php else: ?>
-    <h1>Fingersätze <?= Yii::t('app', $category) ?></h1>
-    <table class="table">
-        <colgroup>
-            <col style="width:50%" />
-            <col style="width:50%" />
-        </colgroup>
+    <h1>Fingersätze <?= $categoryPlural ?></h1>
+    <select class="form-select mb-3" onchange="window.location.href = this.value">
+        <option selected disabled><?= $category ?> auswählen</option>
         <?php foreach ($models as $model): ?>
-            <tr>
-                <td><?= app\helpers\Html::a($model->title, $model->url) ?></td>
-                <td><?= join(' ', $model->getNotesInStandardFormat()) ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+            <option value="<?= $model->url ?>"><?= $model->title ?></option>
+        <?php endforeach ?>
+    </select>
+    <div class="row">
+    <?php foreach ($models as $model): ?>
+        <div class="col-12 col-md-6">
+        <?= app\helpers\Html::a($model->title, $model->url, ['style' => 'color:#222']) ?>
+        <a href="<?= $model->url ?>"><?= app\feature\fingering\Fretboard::widget([
+                'showDots' => false,
+                'showFretNumbers' => false,
+                'showStringNames' => false,
+                'colors' => 'default',
+                'strings' => ['G', 'D', 'A', 'E'],
+                'frets' => range(0, 12),
+                'notes' => preg_split('/\s+/', $model->fingering),
+        ]); ?></a>
+        </div>
+    <?php endforeach ?>
+    </div>
 <?php endif ?>
