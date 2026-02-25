@@ -16,6 +16,7 @@
     "devDependencies": {
         "bootstrap": "^5.3.8",
         "nodemon": "^3.1.11",
+        "puppeteer": "^24.37.5",
         "sass": "^1.97.1",
         "terser": "^5.44.1"
     }
