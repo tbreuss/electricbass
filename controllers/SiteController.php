@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\Comment;
 use app\models\Log404;
-use app\models\Page;
 use app\models\Rating;
 use app\models\Redirect;
 use Yii;
@@ -12,6 +11,7 @@ use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use app\models\ContactForm;
 use app\models\Search;
+use yii\web\HttpException;
 use yii\web\Response;
 
 final class SiteController extends Controller
@@ -117,7 +117,7 @@ final class SiteController extends Controller
 
         $exception = Yii::$app->errorHandler->exception;
 
-        if ($exception->statusCode >= 400 && $exception->statusCode < 500) {
+        if ($exception instanceof HttpException && $exception->statusCode >= 400 && $exception->statusCode < 500) {
             // - www.electricbass.ch/12994
             // - www.electricbass.ch/links/le-fay-1525
 

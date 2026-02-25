@@ -15,7 +15,6 @@ $config = [
         'db' => require(__DIR__ . '/db.php'),
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
-            /* @phpstan-ignore-next-line */
             'hostInfo' => $_ENV['HOST_INFO'],
             'scriptUrl' => '',
             'enablePrettyUrl' => true,
