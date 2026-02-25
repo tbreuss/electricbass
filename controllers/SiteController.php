@@ -133,6 +133,7 @@ final class SiteController extends Controller
             }
 
             // basierend auf context und id
+            /*
             $id = Yii::$app->db->createCommand('SELECT id FROM oldurl WHERE url=:url')
                 ->bindValue(':url', $pathInfo)
                 ->queryScalar();
@@ -143,6 +144,7 @@ final class SiteController extends Controller
                     return $this->redirect($model->url, 301);
                 }
             }
+            */
 
             // basierend auf url
             $trimmedRequestUrl = '/' . trim(strval(preg_replace('#/{2,}#', '/', $requestUrl)), '/');
