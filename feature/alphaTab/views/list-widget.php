@@ -14,7 +14,7 @@
     <?php if ($alphaTab->uid() !== null): // no indentation due to markdown parsing ?>
         <a class="atw atw--clickable" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>">
             <div class="atw-play"><img src="/img/play-blue.svg" width="68" alt="Play"></div>
-            <div class="atw-notation" id="at<?= $alphaTab->uniqueId() ?>"><?= $alphaTab->notation() ?></div>
+            <div class="atw-notation" id="at<?= $alphaTab->uniqueId() ?>" data-uid="<?= $alphaTab->uidRef() ?>"><?= $alphaTab->notation() ?></div>
         </a>
     <?php else: // no indentation due to markdown parsing ?>
         <div class="atw">

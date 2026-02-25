@@ -64,6 +64,11 @@ final class AlphaTabApi
         return $this->uid;
     }
 
+    public function uidRef(): string
+    {
+        return $this->uid ? str_replace('/', '-', $this->uid) : '';
+    }
+
     public function previewImage(): ?string
     {
         if ($this->uid === null || $this->previewImagePath === null || $this->previewImageUrl === null) {
