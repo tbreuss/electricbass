@@ -7,6 +7,7 @@ use app\helpers\Url;
 use app\models\Blog;
 use app\models\Video;
 use SimpleXMLElement;
+use Yii;
 use yii\web\Controller;
 use yii\web\GoneHttpException;
 
@@ -17,6 +18,10 @@ final class VideoController extends Controller
      */
     public function actionIndex(): string
     {
+        if (Yii::$app->request->get('filter', '') !== '') {
+            throw new GoneHttpException();
+        }
+
         //$this->migrate();
         //$this->tags();
         $provider = Video::getActiveDataProvider();

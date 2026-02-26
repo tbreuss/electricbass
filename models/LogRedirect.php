@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
  * @property ?string $userAgent
  * @property int $counter
  * @property string $modified
+ * @deprecated
  */
 final class LogRedirect extends ActiveRecord
 {
