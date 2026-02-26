@@ -180,7 +180,7 @@ final class Search extends ActiveRecord
             case 'lehrbuch':
                 return 'Bass-Lehrbücher';
             case 'lesson':
-                return 'Bass-Lektionen';
+                return 'Bass lernen';
             case 'website':
                 return 'Bass-Websites';
             case 'video':

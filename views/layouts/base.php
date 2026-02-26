@@ -70,7 +70,7 @@ if (!empty($this->params['metaDescription'])) {
                     <a class="navbar__menu-link" href="<?= Url::to(['/blog/index']) ?>">Blog</a>
                 </li>
                 <li class="navbar__menu-item navbar-dropdown">
-                    <a class="navbar__menu-link navbar-dropdown__button" href="#">Lektionen</a>
+                    <a class="navbar__menu-link navbar-dropdown__button" href="#">Lernen</a>
                     <ul class="navbar-dropdown__content">
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/fitness']) ?>">Fingerübungen</a></li>
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/lesson/index', 'path' => 'lektionen/tonleiter']) ?>">Tonleitern</a></li>
@@ -187,7 +187,7 @@ if (!empty($this->params['metaDescription'])) {
         </div>
         <div class="row">
             <div class="col-12 col-md-4">
-                <h5 class="footer__title">Lektionen, Übungen & Ideen</h5>
+                <h5 class="footer__title">E-Bass lernen</h5>
                 <ul class="footer__list">
                     <li><?= Html::a('Fingerübungen für E-Bassisten', ['/lesson/index', 'path' => 'lektionen/fitness']) ?></li>
                     <li><?= Html::a('Tonleiterübungen für den E-Bass', ['/lesson/index', 'path' => 'lektionen/tonleiter']) ?></li>
