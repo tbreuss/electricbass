@@ -84,8 +84,6 @@ final class Search extends ActiveRecord
             case 'fingering':
             case 'glossar':
             case 'lesson':
-            case 'website':
-                return '';
             case 'video':
                 [$platform, $key] = explode(':', $this->contextKey);
                 if ($platform === 'youtube') {
@@ -119,8 +117,6 @@ final class Search extends ActiveRecord
                 return Url::to(['/glossar/index', 'category' => strtolower($this->category)], $scheme);
             case 'lesson':
                 return Url::to(['/lesson/index', 'path' => $this->category], $scheme);
-            //case 'website':
-            //    return Url::to(['/website/index'], $scheme);
             case 'video':
                 return Url::to(['/video/index'], $scheme);
         }
@@ -150,8 +146,6 @@ final class Search extends ActiveRecord
                 return 'Bass-Lehrbuch';
             case 'lesson':
                 return 'Bass-Lektion';
-            case 'website':
-                return 'Bass-Website';
             case 'video':
                 return 'Bass-Video';
         }
@@ -181,8 +175,6 @@ final class Search extends ActiveRecord
                 return 'Bass-Lehrbücher';
             case 'lesson':
                 return 'Bass lernen';
-            case 'website':
-                return 'Bass-Websites';
             case 'video':
                 return 'Bass-Videos';
         }

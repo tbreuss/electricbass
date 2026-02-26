@@ -32,7 +32,6 @@ final class Comment extends ActiveRecord
         'fingering',
         'glossar',
         'lesson',
-        'website',
         'video',
         'quote'
     ];
