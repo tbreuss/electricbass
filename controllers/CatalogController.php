@@ -68,6 +68,11 @@ final class CatalogController extends Controller
 
     public function actionIndex(string $category, string $autor = '', string $publisher = '', string $series = ''): string
     {
+        $whitelist = ['category' => '', 'autor' => '', 'publisher' => '', 'series' => '', 'page' => 0, 'sort' => ''];
+        if (array_diff_key(Yii::$app->request->getQueryParams(), $whitelist)) {
+            throw new GoneHttpException();
+        }
+
         $filter = [];
 
         if (!empty($autor)) {

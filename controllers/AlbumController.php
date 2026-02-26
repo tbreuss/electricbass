@@ -6,6 +6,7 @@ use app\entities\AtoZEntry;
 use app\entities\AtoZGroupedEntries;
 use app\helpers\Url;
 use app\models\Album;
+use Yii;
 use yii\web\Controller;
 use yii\web\GoneHttpException;
 
@@ -13,6 +14,10 @@ final class AlbumController extends Controller
 {
     public function actionIndex(string $artist = ''): string
     {
+        if (array_diff_key(Yii::$app->request->getQueryParams(), ['artist' => '', 'page' => 0, 'sort' => ''])) {
+            throw new GoneHttpException();
+        }
+
         $filter = [];
 
         if (!empty($artist)) {
