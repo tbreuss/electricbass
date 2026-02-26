@@ -75,8 +75,8 @@ final class AlphaTabApi
             return null;
         }
 
-        $imagePath = $this->previewImagePath . '/' . str_replace('/', '-', $this->uid) . '.png';
-        $imageUrl = $this->previewImageUrl . '/' . str_replace('/', '-', $this->uid) . '.png';
+        $imagePath = $this->previewImagePath . '/' . str_replace('/', '-', $this->uid) . '.webp';
+        $imageUrl = $this->previewImageUrl . '/' . str_replace('/', '-', $this->uid) . '.webp';
 
         return is_file($imagePath) ? $imageUrl : null;
     }

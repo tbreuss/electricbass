@@ -15,14 +15,18 @@ async function takeScreenshot(url) {
     await page.goto(url, { waitUntil: "networkidle2" });
 
     await page.screenshot({
-        path: "screenshots/page.png",
+        path: "screenshots/page.webp",
+        type: "webp",
     });
 
     const elements = await page.$$('.atw-notation');
     for(const element of elements ) {
         const uid = await page.evaluate(el => el.getAttribute("data-uid"), element);
         await element.scrollIntoView();
-        await element.screenshot({ path: "screenshots/" + uid + ".png" });
+        await element.screenshot({
+            path: "screenshots/" + uid + ".webp",
+            type: "webp",
+        });
         console.log(uid);
     }
 
