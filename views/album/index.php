@@ -46,7 +46,7 @@ CanonicalLink::widget(['isPaginated' => true]);
             <div class="col-6 col-sm-4 col-md-6 col-lg-4 albumlist__cell">
                 <a href="<?= $model->url ?>" class="albumlist__link">
                     <?php if ($model->hasDefaultImage()): ?>
-                        <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid albumlist__cover", "alt" => $model->fullTitle]) ?>
+                        <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid albumlist__cover", "alt" => $model->fullTitle, "loading" => "lazy"]) ?>
                     <?php else: ?>
                         <?= Html::img('/img/bg.png', ["width" => 290, "height" => 290, "class" => "img-fluid albumlist__cover", "alt" => $model->fullTitle]) ?>
                     <?php endif; ?>

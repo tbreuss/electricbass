@@ -96,7 +96,7 @@ CanonicalLink::widget();
             <div class="col-6 col-sm-3 col-md-6 col-lg-3 cataloglist__cell">
                 <a href="<?= $model->url ?>" class="cataloglist__link <?= $emptyClass ?>">
                     <?php if (!empty($relImage)): ?>
-                        <?= Html::resizeImage($relImage, 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title]) ?>
+                        <?= Html::resizeImage($relImage, 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title, "loading" => "lazy"]) ?>
                     <?php else: ?>
                         <span class="img-fluid cataloglist__cover"></span>
                     <?php endif; ?>
@@ -117,7 +117,7 @@ CanonicalLink::widget();
                 <div class="col-6 col-sm-3 col-md-6 col-lg-3 cataloglist__cell">
                     <a href="<?= $model->url ?>" class="cataloglist__link <?= $emptyClass ?>">
                         <?php if (!empty($relImage)): ?>
-                            <?= Html::resizeImage($relImage, 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title]) ?>
+                            <?= Html::resizeImage($relImage, 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title, "loading" => "lazy"]) ?>
                         <?php else: ?>
                             <span class="img-fluid cataloglist__cover"></span>
                         <?php endif; ?>

@@ -47,7 +47,7 @@ CanonicalLink::widget(['isPaginated' => true, 'keepParams' => ['category']]);
             <div class="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 cataloglist__cell">
                 <a href="<?= $model->url ?>" class="cataloglist__link <?= $emptyClass ?>">
                     <?php if ($model->hasDefaultImage()): ?>
-                        <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title]) ?>
+                        <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid cataloglist__cover", "alt" => $model->title, "loading" => "lazy"]) ?>
                     <?php else: ?>
                         <span class="img-fluid cataloglist__cover cataloglist__cover"></span>
                     <?php endif; ?>

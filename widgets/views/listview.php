@@ -23,7 +23,7 @@ use yii\helpers\Markdown;
             <?php if ($model->hasDefaultImage()): ?>
                 <div class="col-sm-3">
                     <a href="<?= $model->url ?>">
-                        <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid", "alt" => $model->title]) ?>
+                        <?= Html::resizeImage($model->getDefaultImage(), 290, 580, ["class" => "img-fluid", "alt" => $model->title, "loading" => "lazy"]) ?>
                     </a>
                 </div>
                 <div class="col-sm-9">

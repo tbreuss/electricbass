@@ -29,7 +29,7 @@ CanonicalLink::widget(['isPaginated' => true]);
             <div class="col-6 col-xl-4 videoList__cell">
                 <a href="<?= $video->url ?>" class="videoList__link">
                     <?php if ($video->platform === 'youtube'): ?>
-                        <img class="img-fluid videoList__cover" src="https://img.youtube.com/vi/<?php echo $video->key ?>/mqdefault.jpg" alt="<?php echo $video->title ?>">
+                        <img class="img-fluid videoList__cover" src="https://img.youtube.com/vi/<?php echo $video->key ?>/mqdefault.jpg" alt="<?php echo $video->title ?>" loading="lazy">
                     <?php endif; ?>
                     <div class="videoList__title"><?= $video->title ?></div>
                 </a>
