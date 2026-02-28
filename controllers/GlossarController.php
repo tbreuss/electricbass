@@ -9,17 +9,22 @@ use yii\web\Response;
 
 final class GlossarController extends Controller
 {
-    public function actionIndex(?string $category = null): string
+    public function actionIndex(): string
     {
-        $glossars = Glossar::findAllByCategory($category);
+        $glossars = Glossar::find()
+            ->where(['deleted' => 0, 'hidden' => 0])
+            ->orderBy('autosort')
+            ->all();
 
-        if (count($glossars) === 0) {
-            throw new GoneHttpException();
+        foreach ($glossars as $glossar) {
+            if (!isset($glossarsByCategory[$glossar->category])) {
+                $glossarsByCategory[$glossar->category] = [];
+            }
+            $glossarsByCategory[$glossar->category][] = $glossar;
         }
 
         return $this->render('index', [
-            'glossars' => $glossars,
-            'selectedCategory' => $category
+            'glossarsByCategory' => $glossarsByCategory,
         ]);
     }
 
