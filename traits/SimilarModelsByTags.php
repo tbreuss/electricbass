@@ -12,7 +12,7 @@ trait SimilarModelsByTags
      * @param string[] $tags
      * @param int $limit
      * @return array
-     * @phpstan-return \app\models\Album[]|\app\models\Blog[]|\app\models\Catalog[]|\app\feature\fingering\models\Fingering[]|\app\models\Lesson[]|\app\models\Video[]|\app\models\Website[]
+     * @phpstan-return \app\models\Album[]|\app\models\Blog[]|\app\models\Catalog[]|\app\feature\fingering\models\Fingering[]|\app\feature\lesson\models\Lesson[]|\app\models\Video[]|\app\models\Website[]
      * @throws \yii\db\Exception
      */
     public static function findSimilars(int $id, array $tags, int $limit = 10): array

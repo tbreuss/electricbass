@@ -14,6 +14,7 @@ $config = [
     'controllerMap' => [
         'alpha-tab' => 'app\feature\alphaTab\WebController',
         'fingering' => 'app\feature\fingering\Controller',
+        'lesson' => 'app\feature\lesson\Controller',
     ],
     'components' => [
         'request' => [

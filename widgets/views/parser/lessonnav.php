@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var app\models\Lesson[] $models
+ * @var \app\feature\lesson\models\Lesson[] $models
  */
 
 use app\widgets\ListView;

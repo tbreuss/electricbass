@@ -8,7 +8,7 @@ final class ListView extends Widget
 {
     public string $ratingStyle = '';
     public string $ratingContext = '';
-    /** @var \app\models\Blog[]|\app\models\Lesson[] */
+    /** @var \app\models\Blog[]|\app\feature\lesson\models\Lesson[] */
     public array $models = [];
 
     public function run()
