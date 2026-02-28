@@ -94,16 +94,6 @@ final class Parser extends Widget
         ]);
     }
 
-    public static function amazon(): string
-    {
-        return '<div class="shortcode shortcode--amazon"></div>';
-    }
-
-    public static function articles(): string
-    {
-        return '<div class="shortcode shortcode--articles"></div>';
-    }
-
     /**
      * @phpstan-param array<string, int|string> $options
      */
@@ -308,11 +298,6 @@ final class Parser extends Widget
         }
     }
 
-    public static function rssfeed(): string
-    {
-        return '<div class="shortcode shortcode--rssfeed"></div>';
-    }
-
     /**
      * @phpstan-param array{"label": string, "path": string} $options
      */
@@ -482,6 +467,7 @@ final class Parser extends Widget
     }
 
     /**
+     * @deprecated
      * @phpstan-param array{"id": int, "uid": string} $options
      */
     public static function playAlong(array $options, string $content): string
