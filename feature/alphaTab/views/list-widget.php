@@ -7,7 +7,7 @@
 <?php if ($previewImage = $alphaTab->previewImage()): ?>
     <a class="atw atw--clickable" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>">
         <div class="atw-play"><img src="/img/play-blue.svg" width="68" alt="Play"></div>
-        <img src="<?= $previewImage ?>" alt="<?= $alphaTab->previewImageAltText() ?>" width="100%">
+        <img src="<?= $previewImage ?>" alt="<?= $alphaTab->previewImageAltText() ?>" width="100%" loading="lazy">
     </a>
 <?php else: ?>
     <?php app\feature\alphaTab\WebAsset::register($this) ?>
