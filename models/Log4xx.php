@@ -5,14 +5,15 @@ namespace app\models;
 use yii\db\ActiveRecord;
 
 /**
- * @property int $code
- * @property string $requestUrl
- * @property string $created
+ * @property string $method
+ * @property string $url
  * @property string $referrer
+ * @property int $code
+ * @property string $created
  * @property int $counter
  * @property string $modified
  */
-final class Log404 extends ActiveRecord
+final class Log4xx extends ActiveRecord
 {
     /**
      * @return string the name of the table associated with this ActiveRecord class.
@@ -22,17 +23,18 @@ final class Log404 extends ActiveRecord
         return '{{log_404}}';
     }
 
-    public static function log404Error(string $pathInfo, ?string $referrer, string $now, int $statusCode = 0): bool
+    public static function create(string $method, string $url, ?string $referrer, int $statusCode = 0): bool
     {
-        $model = Log404::find()
-            ->where(['requestUrl' => $pathInfo])
+        $model = Log4xx::find()
+            ->where(['method' => $method, 'url' => $url])
             ->one();
 
         if ($model === null) {
-            $model = new Log404();
+            $model = new Log4xx();
+            $model->method = $method;
+            $model->url = $url;
             $model->code = $statusCode;
-            $model->requestUrl = $pathInfo;
-            $model->created = $now;
+            $model->created = date('Y-m-d H:i:s');
         }
 
         $referrers = [];
@@ -45,7 +47,7 @@ final class Log404 extends ActiveRecord
 
         $model->referrer = join(';', array_unique(array_filter($referrers)));
         $model->counter += 1;
-        $model->modified = $now;
+        $model->modified = date('Y-m-d H:i:s');
 
         return $model->save(false);
     }

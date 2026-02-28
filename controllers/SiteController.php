@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\models\Comment;
-use app\models\Log404;
+use app\models\Log4xx;
 use app\models\Rating;
 use app\models\Redirect;
 use Yii;
@@ -156,7 +156,7 @@ final class SiteController extends Controller
                 return $this->redirect($redirect->to, 301);
             }
 
-            Log404::log404Error($requestUrl, $referrer, date('Y-m-d H:i:s'), $exception->statusCode);
+            Log4xx::create(Yii::$app->request->getMethod(), $requestUrl, $referrer, $exception->statusCode);
 
             return $this->render('error', ['exception' => $exception]);
         }
