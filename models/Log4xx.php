@@ -20,7 +20,7 @@ final class Log4xx extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{log_404}}';
+        return '{{log_4xx}}';
     }
 
     public static function create(string $method, string $url, ?string $referrer, int $statusCode = 0): bool
