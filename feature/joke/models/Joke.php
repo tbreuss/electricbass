@@ -1,11 +1,11 @@
 <?php
 
-namespace app\models;
+namespace app\feature\joke\models;
 
-use yii\db\ActiveRecord;
-use yii\db\Expression;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * @property string $joke

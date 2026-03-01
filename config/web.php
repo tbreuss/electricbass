@@ -14,6 +14,7 @@ $config = [
     'controllerMap' => [
         'alpha-tab' => 'app\feature\alphaTab\WebController',
         'fingering' => 'app\feature\fingering\Controller',
+        'joke' => 'app\feature\joke\Controller',
         'lesson' => 'app\feature\lesson\Controller',
         'quote' => 'app\feature\quote\Controller',
     ],

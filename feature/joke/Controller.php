@@ -1,11 +1,10 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\joke;
 
-use app\models\Joke;
-use yii\web\Controller;
+use app\feature\joke\models\Joke;
 
-final class JokeController extends Controller
+final class Controller extends \yii\web\Controller
 {
     /**
      * @return string
@@ -13,7 +12,7 @@ final class JokeController extends Controller
     public function actionIndex(): string
     {
         $provider = Joke::getActiveDataProvider();
-        return $this->render('index', [
+        return $this->render('@app/feature/joke/views/index', [
             'dataProvider' => $provider,
             'models' => $provider->getModels(),
             'pagination' => $provider->getPagination(),
