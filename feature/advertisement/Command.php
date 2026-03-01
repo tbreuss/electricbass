@@ -1,13 +1,13 @@
 <?php
 
-namespace app\commands;
+namespace app\feature\advertisement;
 
 use app\models\Advertisement;
 use Yii;
 use yii\console\Controller;
 use yii\db\Expression;
 
-final class AdvertisementController extends Controller
+final class Command extends Controller
 {
     /**
      * Reminder Action

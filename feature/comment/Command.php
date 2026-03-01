@@ -1,11 +1,11 @@
 <?php
 
-namespace app\commands;
+namespace app\feature\comment;
 
 use app\models\Comment;
 use yii\console\Controller;
 
-final class CommentController extends Controller
+final class Command extends Controller
 {
     /**
      * Syncronizes comments in table comment with specific tables.

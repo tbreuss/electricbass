@@ -1,11 +1,11 @@
 <?php
 
-namespace app\commands;
+namespace app\feature\rating;
 
 use app\models\Rating;
 use yii\console\Controller;
 
-final class RatingController extends Controller
+final class Command extends Controller
 {
     /**
      * Syncronizes ratings in table rating with specific tables.

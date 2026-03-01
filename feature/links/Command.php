@@ -1,11 +1,11 @@
 <?php
 
-namespace app\commands;
+namespace app\feature\links;
 
 use app\feature\links\models\Links;
 use yii\console\Controller;
 
-final class WebsiteController extends Controller
+final class Command extends Controller
 {
     /**
      * Grab Favicons from Website URLs

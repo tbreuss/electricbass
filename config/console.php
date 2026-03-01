@@ -6,7 +6,13 @@ $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'app\commands',
+    'controllerMap' => [
+        'advertisement' => 'app\feature\advertisement\Command',
+        'comment' => 'app\feature\comment\Command',
+        'link' => 'app\feature\links\Command',
+        'rating' => 'app\feature\rating\Command',
+        'youtube' => 'app\feature\youtube\Command',
+    ],
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',

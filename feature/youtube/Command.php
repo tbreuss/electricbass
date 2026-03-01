@@ -1,11 +1,11 @@
 <?php
 
-namespace app\commands;
+namespace app\feature\youtube;
 
 use JmesPath;
 use yii\console\Controller;
 
-final class YoutubeController extends Controller
+final class Command extends Controller
 {
     /**
      * Sync all playlists from YouTube
