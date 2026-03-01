@@ -6,10 +6,13 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * @property string $title
+ * @property string $abstract
+ * @property int $archived
  * @property string $category
- * @property string $website
  * @property string $countryCode
+ * @property string $subtitle
+ * @property string $title
+ * @property string $website
  */
 class Links extends ActiveRecord
 {
