@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\Quote[] $models
+ * @var \models\Quote[] $models
  */
 
 use app\widgets\Comments;

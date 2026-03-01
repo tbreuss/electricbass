@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\quote\models;
 
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;

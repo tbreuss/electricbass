@@ -1,11 +1,10 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\quote;
 
-use app\models\Quote;
-use yii\web\Controller;
+use app\feature\quote\models\Quote;
 
-final class QuoteController extends Controller
+final class Controller extends \yii\web\Controller
 {
     /**
      * @return string
@@ -13,7 +12,7 @@ final class QuoteController extends Controller
     public function actionIndex(): string
     {
         $provider = Quote::getActiveDataProvider();
-        return $this->render('index', [
+        return $this->render('@app/feature/quote/views/index', [
             'dataProvider' => $provider,
             'models' => $provider->getModels(),
             'pagination' => $provider->getPagination(),
