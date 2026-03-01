@@ -57,7 +57,6 @@ final class AdvertisementController extends Controller
         // Add Return-Path
         // @todo Return-Path wird nicht hinzugefügt
         reset(Yii::$app->params['senderEmail']);
-        /* @phpstan-ignore-next-line */
         $message->getSwiftMessage()->getHeaders()
             ->addPathHeader('Return-Path', key(Yii::$app->params['senderEmail']));
 

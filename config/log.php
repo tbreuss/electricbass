@@ -20,7 +20,6 @@ $maskVars = [
     '_SERVER.MAILER_PASSWORD',
 ];
 
-/* @phpstan-ignore-next-line */
 if (YII_ENV_DEV) {
     return [
         'traceLevel' => 3,

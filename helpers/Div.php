@@ -134,7 +134,6 @@ final class Div
     {
         $tags = [];
         foreach ($models as $model) {
-            /* @phpstan-ignore-next-line */
             $tags = array_merge($tags, explode(',', $model->tags));
         }
         return array_unique($tags);

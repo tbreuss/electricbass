@@ -11,9 +11,9 @@ final class Fretboard extends Widget
     public bool $showDots = true;
     public bool $showFretNumbers = true;
     public bool $showStringNames = true;
-    public array $notes = []; // @phpstan-ignore-line
-    public array $strings = []; // @phpstan-ignore-line
-    public array $frets = []; // @phpstan-ignore-line
+    public array $notes = [];
+    public array $strings = [];
+    public array $frets = [];
     public ?string $root = null;
     public ?int $position = null;
     public bool $expandPosition = false;
@@ -33,8 +33,8 @@ final class Fretboard extends Widget
             $this->root = $fret . '/' . $string;
         }
 
-        [$absFret, $absString] = explode('/', $this->root); // @phpstan-ignore-line
-        $absRoot = $this->calcAbsoluteValue($absFret, $absString); // @phpstan-ignore-line
+        [$absFret, $absString] = explode('/', $this->root);
+        $absRoot = $this->calcAbsoluteValue($absFret, $absString);
 
         foreach ($notes as &$note) {
             $abs = $this->calcAbsoluteValue($note['fret'], $note['string']);
@@ -76,7 +76,6 @@ final class Fretboard extends Widget
         */
     }
 
-    // @phpstan-ignore-next-line
     private function stringNumberFromNote(array|string $note): ?array
     {
         if (is_array($note)) {

@@ -116,7 +116,7 @@ function replaceStringDef(int $strings, string $note): string
     $notesInStandardFormat = $model->getNotesInStandardFormat();
     $notes = array_map(function ($interval) use ($root) {
         $transposed = tebe\tonal\core\distance\transpose($root, $interval);
-        if (abs(tebe\tonal\note\get($transposed)->alt) > 1) { // @phpstan-ignore-line
+        if (abs(tebe\tonal\note\get($transposed)->alt) > 1) {
             return [tebe\tonal\note\simplify($transposed), $interval];
         }
         return [$transposed, $interval];

@@ -265,11 +265,19 @@ final class Parser extends Widget
     {
         $options = array_merge([
             'title' => '',
+            'urls' => '',
+            'labels' => '',
+            'descriptions' => '',
         ], $options);
 
-        $options += json_decode($content, true);
+        $options = array_merge($options, json_decode($content, true));
 
-        return self::renderPartial('jsonlinks', $options);
+        return self::renderPartial('jsonlinks', [
+            'title' => $options['title'],
+            'urls' => array_map('trim', explode("\n", $options['urls'])),
+            'labels' => array_map('trim', explode("\n", $options['labels'])),
+            'descriptions' => array_map('trim', explode("\n", $options['descriptions'])),
+        ]);
     }
 
     /**

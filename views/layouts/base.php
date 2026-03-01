@@ -24,7 +24,7 @@ if (!empty($this->params['metaDescription'])) {
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" style="scroll-behavior: auto !important;">
 <head>
-    <?php if (!YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
+    <?php if (!YII_ENV_DEV): ?>
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2624727-1"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -49,7 +49,7 @@ if (!empty($this->params['metaDescription'])) {
 <body class="controller-<?= Yii::$app->controller->id ?> action-<?= Yii::$app->controller->id ?>-<?= isset(Yii::$app->controller->action) ? Yii::$app->controller->action->id : 'nil' ?>" itemscope itemtype="http://schema.org/WebPage">
 <?php $this->beginBody() ?>
 <main role="main">
-    <?php if (YII_ENV_DEV): /* @phpstan-ignore-line */ ?>
+    <?php if (YII_ENV_DEV): ?>
         <div class="sizer">
             <div class="d-sm-none">X-SMALL</div>
             <div class="d-none d-sm-block d-md-none">SMALL</div>

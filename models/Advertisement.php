@@ -186,7 +186,7 @@ final class Advertisement extends ActiveRecord
     {
         if (!empty($this->geocodingAddress)) {
             $coords = Div::getGoogleMapCoords($this->geocodingAddress);
-            if (!empty($coords) && (count($coords) == 2) && (array_sum($coords) <> 0)) {
+            if (array_sum($coords) <> 0) {
                 self::updateAll($coords, 'id=:id', ['id' => $this->id]);
             }
         }
@@ -399,7 +399,7 @@ final class Advertisement extends ActiveRecord
     public static function findAllByCoordinate(string $position): array
     {
         $coords = explode(',', $position);
-        if (!empty($coords) && count($coords) == 2) {
+        if (count($coords) == 2) {
             $criteria = [
                 'select' => '*, UNIX_TIMESTAMP(date) AS date, (DATEDIFF(NOW(), date)>60) AS expired',
                 'condition' => 'latitude LIKE :latitude AND longitude LIKE :longitude AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60',

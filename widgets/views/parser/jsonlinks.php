@@ -1,18 +1,16 @@
 <?php
-
-use app\helpers\Url;
-use yii\widgets\Spaceless;
-
+/**
+ * @var string $title
+ * @var string[] $urls
+ * @var string[] $labels
+ * @var string[] $description
+ */
 ?>
-
-<?php if (empty($urls)) {
+<?php if (count($urls) === 0) {
     return;
 } ?>
 
-<?php Spaceless::begin(); ?>
-<?php $urls = empty($urls) ? [] : explode("\n", $urls) ?>
-<?php $labels = empty($labels) ? [] : explode("\n", $labels) ?>
-<?php $descriptions = empty($descriptions) ? [] : explode("\n", $descriptions) ?>
+<?php yii\widgets\Spaceless::begin(); ?>
 
 <div class="shortcode shortcode--links">
 
@@ -33,7 +31,7 @@ use yii\widgets\Spaceless;
                     <?php elseif (strpos($url, '@')): ?>
                         <a href="mailto:<?php echo $url ?>"><?php echo $label ?></a>
                     <?php elseif (is_file($url)): ?>
-                        <a href="<?php echo Url::base(true) ?>/<?php echo $url ?>"><?php echo $label ?></a>
+                        <a href="<?php echo app\helpers\Url::base(true) ?>/<?php echo $url ?>"><?php echo $label ?></a>
                     <?php endif; ?>
                     <?php if (!empty($description)): ?>
                         <?php echo $description ?>
@@ -44,4 +42,4 @@ use yii\widgets\Spaceless;
     </ul>
 
 </div>
-<?php Spaceless::end(); ?>
+<?php yii\widgets\Spaceless::end(); ?>

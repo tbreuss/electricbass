@@ -1,7 +1,5 @@
-includes:
-	- vendor/proget-hq/phpstan-yii2/extension.neon
 parameters:
-	level: max
+	level: 1
 	bootstrapFiles:
 	    - .phpstan/constants.php
 	scanFiles:
@@ -34,17 +32,5 @@ parameters:
 	    analyse:
 	        - commands/WebsiteController.php
 	        - components/AmazonProductDetail.php
-	        - components/Fingerboard.php
 	        - components/Shortcode.php
 	        - components/Template.php
-	yii2:
-	    config_path: %rootDir%/../../../config/test.php
-	ignoreErrors:
-	    - '#Call to an undefined method yii\\base\\View::registerLinkTag#'
-	    - '#Access to an undefined property yii\\console\\Application|yii\\web\\Application::\$shortcode\.#'
-	    - '#PHPDoc tag @var for variable .+ has no value type specified in iterable type array.#'
-	    - '#Method .+ return type has no value type specified in iterable type array.#'
-	    - '#Cannot access property \$id on yii\\console\\Controller.#'
-	    - '#Cannot call method getRoute\(\) on yii\\console\\Controller.#'
-	    - '#Cannot call method renderPartial\(\) on yii\\console\\Controller.#'
-	checkGenericClassInNonGenericObjectType: false

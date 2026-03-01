@@ -2,7 +2,7 @@
 
 /**
  * @var app\models\Blog $blog
- * @var app\models\Redirect $redirect
+ * @var ?app\models\Redirect $redirect
  * @var app\models\Blog[] $similars
  * @var yii\web\View $this
  */
