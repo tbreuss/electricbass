@@ -59,7 +59,7 @@ if (!empty($this->params['metaDescription'])) {
             <div class="d-none d-xxl-block">EXTRA EXTRA LARGE</div>
         </div>
     <?php endif; ?>
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Hauptmenü">
         <div class="container-fluid">
             <a class="navbar__logo" href="<?= Yii::$app->homeUrl ?>">
                 <img src="/img/logo.png" alt="Logo" width="21" height="21">
@@ -122,7 +122,7 @@ if (!empty($this->params['metaDescription'])) {
     <div class="container-fluid navbar-border-bottom"><div class="border"></div></div>
 
     <?php if (!empty($this->params['breadcrumbs'])): ?>
-    <div class="container-fluid breadcumbList">
+    <nav class="container-fluid breadcumbList" aria-label="Breadcrumbmenü">
         <a class="breadcumbList__home" href="javascript:window.location.href='<?= Url::home() ?>'"><img src="/img/home.svg" alt="Home"></a>
         <ol vocab="https://schema.org/" typeof="BreadcrumbList">
             <?php foreach ($this->params['breadcrumbs'] as $itemCount => $item): ?>
@@ -141,7 +141,7 @@ if (!empty($this->params['metaDescription'])) {
                 <?php endif; ?>
             <?php endforeach; ?>
         </ol>
-    </div>
+    </nav>
     <?php endif; ?>
 
     <?php if (isset($this->blocks['jumbotron'])): ?>
@@ -155,12 +155,12 @@ if (!empty($this->params['metaDescription'])) {
 </main>
 <footer class="footer">
     <div class="container-fluid">
-        <div class="row links">
+        <div class="row">
             <div class="col-md-5 col-xs-10">
                 <h5 class="footer__title">Über ELECTRICBASS</h5>
                 <p class="footer__text">ELECTRICBASS ist ein Blog und eine Website für E-Bassisten und Bassistinnen und bietet umfangreiche Informationen zum Thema Bass, Kontrabass und E-Bass, dem bässten Instrument der Welt!</p>
             </div>
-            <div class="col-md-3 offset-md-1 col-xs-6">
+            <nav class="col-md-3 offset-md-1 col-xs-6" aria-label="Fusszeilenmenü: Kontakt &amp; Info">
                 <h5 class="footer__title">Kontakt &amp; Info</h5>
                 <?= Menu::widget([
                     'options' => ['class' => 'footer__list'],
@@ -171,22 +171,18 @@ if (!empty($this->params['metaDescription'])) {
                         ['label' => 'Facebook', 'url' => 'https://www.facebook.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],
                         ['label' => 'Twitter', 'url' => 'https://twitter.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],
                     ]]); ?>
-            </div>
+            </nav>
             <div class="col-md-3 col-xs-6">
                 <form class="search" action="/suche" method="get">
                     <input class="search__input navbar-dropdown__search" type="text" name="term" placeholder="Suchen nach...">
                     <input class="search__submit" type="submit" value="Suchen">
                 </form>
             </div>
-        </div>
-        <?php if (Yii::$app->controller->id === 'site' && isset(Yii::$app->controller->action) && Yii::$app->controller->action->id === 'index'): ?>
-        <div class="row">
+            <?php if (Yii::$app->controller->id === 'site' && isset(Yii::$app->controller->action) && Yii::$app->controller->action->id === 'index'): ?>
             <div class="col-md-12">
                 <hr class="footer__hr">
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-md-4">
+            <nav class="col-12 col-md-4" aria-label="Fusszeilenmenü: E-Bass lernen">
                 <h5 class="footer__title">E-Bass lernen</h5>
                 <ul class="footer__list">
                     <li><?= Html::a('Fingerübungen für E-Bassisten', ['/lesson/index', 'path' => 'lektionen/fitness']) ?></li>
@@ -198,8 +194,8 @@ if (!empty($this->params['metaDescription'])) {
                     <li><?= Html::a('Harmonielehre und Musiktheorie für E-Bass', ['/lesson/index', 'path' => 'lektionen/harmonielehre']) ?></li>
                     <li><?= Html::a('Walking Bass Übungen für E- und Kontrabass', ['/lesson/index', 'path' => 'lektionen/walking-bass']) ?></li>
                 </ul>
-            </div>
-            <div class="col-12 col-md-4">
+            </nav>
+            <nav class="col-12 col-md-4" aria-label="Fusszeilenmenü: Kataloge &amp; mehr">
                 <h5 class="footer__title">Kataloge & mehr</h5>
                 <ul class="footer__list">
                     <li><?= Html::a('Lehrbücher mit CDs für E-Bass', ['/catalog/index', 'category' => 'lehrbuecher']) ?></li>
@@ -211,28 +207,22 @@ if (!empty($this->params['metaDescription'])) {
                     <li><?= Html::a('Witze über Bassisten', ['/joke/index']) ?></li>
                     <li><?= Html::a('Zitate berühmter Bassisten', ['/quote/index']) ?></li>
                 </ul>
-            </div>
-            <div class="col-12 col-md-4">
-                <h5 class="footer__title">weitere Infos</h5>
-                <div class="sitemap">
-                    <ul class="footer__list">
-                        <li><?= Html::a('Blog für E-Bass und Bassisten', ['/blog']) ?></li>
-                        <li><?= Html::a('Fingersätze für Tonleitern, Intervalle und Akkorde', ['/fingering/index']) ?></li>
-                        <li><?= Html::a('Einfaches Online Metronom', ['/tool/metronome']) ?></li>
-                        <li><?= Html::a('Notenpapier zum Herunterladen und Ausdrucken', ['/tool/musicpaper']) ?></li>
-                        <li><?= Html::a('Kleinanzeigen für Bassisten', ['/advertisement/index']) ?></li>
-                        <li><?= Html::a('Glossar für Bassisten', ['/glossar/index']) ?></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <?php endif; ?>
-        <div class="row">
+            </nav>
+            <nav class="col-12 col-md-4" aria-label="Fusszeilenmenü: Weitere Infos">
+                <h5 class="footer__title">Weitere Infos</h5>
+                <ul class="footer__list">
+                    <li><?= Html::a('Blog für E-Bass und Bassisten', ['/blog']) ?></li>
+                    <li><?= Html::a('Fingersätze für Tonleitern, Intervalle und Akkorde', ['/fingering/index']) ?></li>
+                    <li><?= Html::a('Einfaches Online Metronom', ['/tool/metronome']) ?></li>
+                    <li><?= Html::a('Notenpapier zum Herunterladen und Ausdrucken', ['/tool/musicpaper']) ?></li>
+                    <li><?= Html::a('Kleinanzeigen für Bassisten', ['/advertisement/index']) ?></li>
+                    <li><?= Html::a('Glossar für Bassisten', ['/glossar/index']) ?></li>
+                </ul>
+            </nav>
+            <?php endif; ?>
             <div class="col-md-12">
                 <hr class="footer__hr">
             </div>
-        </div>
-        <div class="row footer__copy">
             <div class="col-md-6">
                 <p class="footer__text">&copy; 1998-<?= date('Y') ?> ELECTRICBASS</p>
             </div>
