@@ -3,7 +3,7 @@
 /**
  * @var string $ratingContext
  * @var string $ratingStyle
- * @var app\models\Blog[]|app\models\Lesson[] $models
+ * @var app\models\Blog[]|\app\feature\lesson\models\Lesson[] $models
  */
 
 use app\helpers\Html;

@@ -1,12 +1,11 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\lesson;
 
-use app\models\Lesson;
-use yii\web\Controller;
+use app\feature\lesson\models\Lesson;
 use yii\web\GoneHttpException;
 
-final class LessonController extends Controller
+final class Controller extends \yii\web\Controller
 {
     /**
      * @throws \yii\db\Exception
@@ -29,7 +28,7 @@ final class LessonController extends Controller
 
         #$model->increaseHits();
 
-        return $this->render('index', [
+        return $this->render('@app/feature/lesson/views/index', [
             'model' => $model,
             'title' => $this->getTitle($model),
             'breadcrumbs' => $this->getBreadcrumbs($model),

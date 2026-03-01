@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\lesson\models;
 
 use app\components\ActiveRecord;
 use app\traits\SimilarModelsByTags;
