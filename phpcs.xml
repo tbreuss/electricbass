@@ -15,7 +15,6 @@
     <file>./config</file>
     <file>./controllers</file>
     <file>./entities</file>
-    <file>./filters</file>
     <file>./helpers</file>
     <file>./mail</file>
     <file>./messages</file>
