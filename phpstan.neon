@@ -10,7 +10,6 @@ parameters:
 	    - .phpstan/stubs/View.stub
 	paths:
 		- assets
-		- commands
 		- components
 		- config
 		- controllers
@@ -30,7 +29,7 @@ parameters:
 		- widgets
 	excludePaths:
 	    analyse:
-	        - commands/WebsiteController.php
+	        - feature/links/Command.php
 	        - components/AmazonProductDetail.php
 	        - components/Shortcode.php
 	        - components/Template.php
