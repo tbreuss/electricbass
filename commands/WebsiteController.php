@@ -2,7 +2,7 @@
 
 namespace app\commands;
 
-use app\models\Website;
+use app\feature\links\models\Links;
 use yii\console\Controller;
 
 final class WebsiteController extends Controller
@@ -12,7 +12,7 @@ final class WebsiteController extends Controller
      */
     public function actionFavicons(): void
     {
-        $urls = Website::findUrls();
+        $urls = Links::findUrls();
 
         foreach ($urls as $url) {
             $options = [

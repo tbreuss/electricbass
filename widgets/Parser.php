@@ -3,7 +3,7 @@
 namespace app\widgets;
 
 use app\feature\lesson\models\Lesson;
-use app\models\Website;
+use app\feature\links\models\Links;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
@@ -471,10 +471,7 @@ final class Parser extends Widget
             'tags' => ''
         ], $options);
 
-        $models = Website::find()
-            ->where('deleted IS NULL AND countryCode=:countrycode AND FIND_IN_SET(:tags, tags)', $options)
-            ->orderBy('title ASC')
-            ->all();
+        $models = Links::findByCountryCodeAndTags($options['countrycode'], $options['tags']);
 
         return self::renderPartial('websites', [
             'models' => $models
