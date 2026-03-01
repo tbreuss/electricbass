@@ -66,7 +66,7 @@ final class RatingReadOnly extends Widget
 
         if (is_array($row)) {
             $data['ratingCount'] = (int)$row['count'];
-            $data['ratingAverage'] = round($row['average'], 1);
+            $data['ratingAverage'] = round((float)$row['average'], 1);
         }
         return $data;
     }

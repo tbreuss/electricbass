@@ -3,7 +3,7 @@
 namespace app\traits;
 
 /**
- * @property string $changes
+ * @property ?string $changes
  */
 trait WithChanges
 {
@@ -12,6 +12,9 @@ trait WithChanges
      */
     public function hasChanges(): bool
     {
+        if ($this->changes === null) {
+            return false;
+        }
         $changes = trim($this->changes);
         return mb_strlen($changes) > 0;
     }

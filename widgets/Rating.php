@@ -138,17 +138,17 @@ final class Rating extends Widget
             ->queryAll();
 
         $data = [
-            'ratingCount' => (int)0,
-            'ratingAverage' => '0.0',
-            'yourRating' => '0.0',
+            'ratingCount' => 0,
+            'ratingAverage' => 0.0,
+            'yourRating' => 0.0,
         ];
 
         foreach ($rows as $row) {
             if ($row['type'] == 'all') {
                 $data['ratingCount'] = (int)$row['count'];
-                $data['ratingAverage'] = number_format(round($row['average'], 1), 1, '.', '');
+                $data['ratingAverage'] = number_format(round((float)$row['average'], 1), 1, '.', '');
             } else {
-                $data['yourRating'] = number_format(round($row['average'], 1), 1, '.', '');
+                $data['yourRating'] = number_format(round((float)$row['average'], 1), 1, '.', '');
             }
         }
 
