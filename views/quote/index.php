@@ -16,36 +16,20 @@ $this->params['metaDescription'] = 'Die Sammlung mit den besten Zitaten berühmt
 
 ?>
 <div class="content">
-
-    <h1>Zitate von Bassisten</h1>
-
-    <?php // ListSummary::widget(['pagination' => $pagination, 'sort' => $sort]) ?>
-
+    <h1>Zitate berühmter Bassisten</h1>
     <div class="widget widget-listview">
         <?php foreach ($models as $i => $model): ?>
-            <div class="row">
-                <div class="col-sm-12">
-                    <figure>
-                        <blockquote class="blockquote">
-                            <p><?= nl2br(strip_tags($model->text)) ?></p>
-                        </blockquote>
-                        <figcaption class="blockquote-footer">
-                            <?= $model->author ?>
-                        </figcaption>
-                    </figure>
-                </div>
-            </div>
+            <figure>
+                <blockquote class="blockquote">
+                    <p><?= nl2br(strip_tags($model->text)) ?></p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    <?= $model->author ?>
+                </figcaption>
+            </figure>
         <?php endforeach; ?>
     </div>
-
-    <?= $this->render('//_partials/meta', [
-            'categories' => [
-                    ['label' => 'Zitate von Bassisten', 'url' => ['quote/index']]
-            ]
-    ]); ?>
 </div>
-
-<?php // LinkPager::widget(['pagination' => $pagination]) ?>
 
 <?= Rating::widget(["tableName" => "quote", "tableId" => 0]) ?>
 
