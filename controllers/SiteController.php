@@ -11,6 +11,7 @@ use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use app\models\ContactForm;
 use app\models\Search;
+use yii\web\GoneHttpException;
 use yii\web\HttpException;
 use yii\web\Response;
 
@@ -33,9 +34,14 @@ final class SiteController extends Controller
 
     public function actionTest(): string
     {
+        if (!YII_ENV_DEV) {
+            throw new GoneHttpException();
+        }
+
         if (Yii::$app->request->headers->has('HX-Request')) {
             return $this->renderPartial('test');
         }
+
         return $this->render('test');
     }
 
