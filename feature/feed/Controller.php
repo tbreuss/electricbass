@@ -1,13 +1,12 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\feed;
 
 use Yii;
 use yii\db\Query;
-use yii\web\Controller;
 use yii\web\Response;
 
-final class FeedController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionRss(): string
     {
@@ -29,7 +28,7 @@ final class FeedController extends Controller
             ->orderBy('modified DESC')
             ->limit(500);
 
-        return $this->renderPartial('rss', [
+        return $this->renderPartial('@app/feature/feed/views/rss', [
             'query' => $query
         ]);
     }

@@ -1,5 +1,72 @@
-<?php
+<?php $asset = app\feature\alphaTab\WebAsset::register($this) ?>
 
+<svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        @font-face {
+            font-family: "Bravura";
+            src:
+                    url("<?= $asset->baseUrl ?>/font/Bravura.woff2")
+                    format("woff2"),
+        }
+        text {
+            font-family: "Bravura", sans-serif;
+        }
+        .key {
+            font-size: 84px;
+        }
+        .accidentals, .note {
+            font-size: 70px;
+        }
+        .lines {
+            fill: red;
+        }
+        .note-xt:hover line, .note-xt:hover text {
+            fill: red;
+        }
+    </style>
+    <g class="lines" stroke="#555">
+        <line x1="0" y1="74" x2="999" y2="74" stroke-width="2"></line>
+        <line x1="0" y1="94" x2="999" y2="94" stroke-width="2"></line>
+        <line x1="0" y1="114" x2="999" y2="114" stroke-width="2"></line>
+        <line x1="0" y1="134" x2="999" y2="134" stroke-width="2"></line>
+        <line x1="0" y1="154" x2="999" y2="154" stroke-width="2"></line>
+    </g>
+    <g class="lines" stroke="#000">
+        <line x1="94" x2="144" y1="174" y2="174" stroke="#000" stroke-width="2"></line>
+        <line x1="94" x2="144" y1="174" y2="174" stroke="#000" stroke-width="2"></line>
+    </g>
+    <text x="20" y="94" class="key"></text>
+    <text x="100" y="184" class="note">𝅝</text>
+    <text x="150" y="174" class="note">𝅝</text>
+    <text x="200" y="164" class="note">𝅝</text>
+    <text x="250" y="154" class="note">𝅝</text>
+    <text x="300" y="144" class="note">𝅝</text>
+    <text x="350" y="134" class="note">𝅝</text>
+    <text x="400" y="124" class="note">𝅝</text>
+    <text x="450" y="114" class="note">𝅝</text>
+    <text x="500" y="104" class="note">𝅝</text>
+    <text x="550" y="94" class="note">𝅝</text>
+    <text x="600" y="84" class="note">𝅝</text>
+    <text x="650" y="74" class="note">𝅝</text>
+    <text x="700" y="64" class="note">𝅝</text>
+
+    <g class="note-xt">
+        <rect x="0" y="48" width="999" height="12" fill="#eee" stroke-width="2"></rect>
+        <line x1="744" x2="800" y1="54" y2="54" stroke="#000" stroke-width="2"></line>
+        <text x="750" y="54" class="note" fill="#000">𝅝</text>
+        <text class="label" x="757" y="34">C</text>
+    </g>
+
+    <text x="550" y="200" class="accidentals">♭    ♮  ♯  </text>
+    <text x="750" y="155" class="lines"></text>
+
+    <line x1="20" x2="95" y1="184" y2="188" stroke="#f00" stroke-width="5"></line>
+    <line x1="100" x2="104" y1="184" y2="188" stroke="#f00" stroke-width="5"></line>
+
+</svg>
+
+<?php
+return;
 use function tebe\tonal\core\transpose;
 
 use const tebe\tonal\fretboard\EXPAND_HIGHER;

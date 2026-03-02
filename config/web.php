@@ -13,6 +13,7 @@ $config = [
     ],
     'controllerMap' => [
         'alpha-tab' => 'app\feature\alphaTab\WebController',
+        'feed' => 'app\feature\feed\Controller',
         'fingering' => 'app\feature\fingering\Controller',
         'joke' => 'app\feature\joke\Controller',
         'lesson' => 'app\feature\lesson\Controller',
