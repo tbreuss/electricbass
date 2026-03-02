@@ -12,12 +12,13 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'controllerMap' => [
-        'alpha-tab' => 'app\feature\alphaTab\WebController',
-        'feed' => 'app\feature\feed\Controller',
-        'fingering' => 'app\feature\fingering\Controller',
-        'joke' => 'app\feature\joke\Controller',
-        'lesson' => 'app\feature\lesson\Controller',
-        'quote' => 'app\feature\quote\Controller',
+        'alpha-tab' => app\feature\alphaTab\WebController::class,
+        'feed' => app\feature\feed\Controller::class,
+        'fingering' => app\feature\fingering\Controller::class,
+        'joke' => app\feature\joke\Controller::class,
+        'lesson' => app\feature\lesson\Controller::class,
+        'quote' => app\feature\quote\Controller::class,
+        'sitemap' => app\feature\sitemap\Controller::class,
     ],
     'components' => [
         'request' => [

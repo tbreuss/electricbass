@@ -1,14 +1,13 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\sitemap;
 
+use app\models\Search;
 use Yii;
 use yii\helpers\Url;
-use yii\web\Controller;
 use yii\web\Response;
-use app\models\Search;
 
-final class SitemapController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionGoogle(): string
     {
@@ -16,7 +15,7 @@ final class SitemapController extends Controller
         Yii::$app->response->headers->add('Content-Type', 'text/xml');
 
         $query = Search::getQueryObject();
-        return $this->renderPartial('google', [
+        return $this->renderPartial('@app/feature/sitemap/views/google', [
             'query' => $query,
             'staticPages' => $this->getStaticPages()
         ]);
