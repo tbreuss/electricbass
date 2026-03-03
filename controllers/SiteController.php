@@ -2,15 +2,15 @@
 
 namespace app\controllers;
 
+use app\feature\search\models\Search;
 use app\models\Comment;
+use app\models\ContactForm;
 use app\models\Log4xx;
 use app\models\Rating;
 use app\models\Redirect;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\web\Controller;
-use app\models\ContactForm;
-use app\models\Search;
 use yii\web\GoneHttpException;
 use yii\web\HttpException;
 use yii\web\Response;
@@ -59,7 +59,6 @@ final class SiteController extends Controller
         ];
 
         $latests = Search::findLatestGroupedBy($contexts);
-
         $latestComments = Comment::findLatestComments(5);
         $latestRatings = Rating::findLatestRatings(5);
 

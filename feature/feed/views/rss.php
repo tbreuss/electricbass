@@ -4,7 +4,7 @@
  * @var yii\db\Query $query
  */
 
-use app\models\Search;
+use app\feature\search\models\Search;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 

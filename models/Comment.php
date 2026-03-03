@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\feature\search\models\Search;
 use app\helpers\Div;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -97,8 +98,7 @@ final class Comment extends ActiveRecord
             /*['verifyCode', 'captcha'],*/
             ['check', 'required', 'requiredValue' => 1, 'message' => 'Du musst dich mit den Kommentarregeln einverstanden erklären.'],
             // nsmp
-            ['nspm', 'filter', 'filter' => 'strip_tags'],
-            ['nspm', 'filter', 'filter' => 'trim'],
+            ['nspm', 'safe'],
             ['ipAddress', 'safe']
         ];
     }

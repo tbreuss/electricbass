@@ -1,14 +1,13 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\search;
 
-use app\models\Search;
-use app\models\Searchlog;
+use app\feature\search\models\Search;
+use app\feature\search\models\Searchlog;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
-use yii\web\Controller;
 
-final class SearchController extends Controller
+final class Controller extends \yii\web\Controller
 {
     const MIN_QUERY_LENGTH = 3;
 
@@ -21,7 +20,7 @@ final class SearchController extends Controller
 
         $provider = null;
 
-        if (!empty($term) && (mb_strlen($term) >= SearchController::MIN_QUERY_LENGTH)) {
+        if (!empty($term) && (mb_strlen($term) >= Controller::MIN_QUERY_LENGTH)) {
             $condition = '';
             $fields = ['title', 'subtitle', 'abstract', 'content', 'keywords'];
             $queryParts = explode(' ', $term);
@@ -92,7 +91,7 @@ final class SearchController extends Controller
         }
 
         $this->layout = 'onecol_empty';
-        return $this->render('index', [
+        return $this->render('@app/feature/search/views/index', [
             'dataProvider' => $provider,
             'term' => $term,
             'searched' => $searched

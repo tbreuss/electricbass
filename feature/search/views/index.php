@@ -7,7 +7,7 @@
  * @var string $term
  */
 
-use app\controllers\SearchController;
+use app\feature\search\Controller;
 use app\helpers\Html;
 use app\widgets\CanonicalLink;
 use app\widgets\LinkPager;
@@ -61,7 +61,7 @@ function highlightWords(string $text, string $words): string
         <p>Suche gezielt nach einem Beitrag. Gib dazu ein oder mehrere ganze Wörter ein. Das Wort kann auch ein ASIN-, ISBN-10 oder ISBN-13-Code sein.</p>
         <p>Beispiele: Jaco Pastorius, Rock Bass, Tonleiter, Lehrbuch, Album, B000PY31I4, 1617806013, 9780793592746</p>
 
-    <?php elseif (mb_strlen($term) < SearchController::MIN_QUERY_LENGTH): ?>
+    <?php elseif (mb_strlen($term) < Controller::MIN_QUERY_LENGTH): ?>
         <p>Die Suchanfrage muss mindestens drei Zeichen lang sein.</p>
 
     <?php elseif ($dataProvider->getTotalCount() === 0): ?>
@@ -74,7 +74,7 @@ function highlightWords(string $text, string $words): string
 
     <?php else: ?>
         <?php
-        /** @var app\models\Search[] $models */
+        /** @var app\feature\search\models\Search[] $models */
         $models = $dataProvider->getModels();
         $pagination = $dataProvider->getPagination();
         ?>

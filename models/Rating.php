@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\feature\search\models\Search;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;

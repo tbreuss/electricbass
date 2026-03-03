@@ -2,6 +2,7 @@
 
 namespace app\widgets;
 
+use app\feature\search\models\Search;
 use yii\base\Widget;
 
 final class Articles extends Widget
@@ -15,7 +16,7 @@ final class Articles extends Widget
 
     public function run(): string
     {
-        $query = \app\models\Search::find();
+        $query = Search::find();
 
         if (!empty($this->excludeTableNames)) {
             $query->where(['not in', 'tableName', $this->excludeTableNames]);

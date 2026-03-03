@@ -2,7 +2,7 @@
 
 namespace app\feature\sitemap;
 
-use app\models\Search;
+use app\feature\search\models\Search;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Response;

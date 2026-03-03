@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\search\models;
 
 use app\components\ActiveRecord;
 use app\helpers\Media;

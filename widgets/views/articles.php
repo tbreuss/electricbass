@@ -1,7 +1,7 @@
 <?php
 /**
  * @var ?string $title
- * @var app\models\Search[] $models
+ * @var app\feature\search\models\Search[] $models
  */
 ?>
 <div class="widget widget-advertisement">
