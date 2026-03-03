@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\Comment $model
+ * @var \app\feature\comment\models\Comment $model
  * @var string $title
  * @var string $url
  */

@@ -14,6 +14,7 @@ $config = [
     'controllerMap' => [
         'alpha-tab' => app\feature\alphaTab\WebController::class,
         'api' => app\feature\api\Controller::class,
+        'comment' => app\feature\comment\Controller::class,
         'feed' => app\feature\feed\Controller::class,
         'fingering' => app\feature\fingering\Controller::class,
         'joke' => app\feature\joke\Controller::class,

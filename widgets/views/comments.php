@@ -2,11 +2,12 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\Comment[] $models
+ * @var \app\feature\comment\models\Comment[] $models
  * @var string $tableName
  * @var int $tableId
  * @var int $count
  */
+
 use app\helpers\Html;
 
 ?>

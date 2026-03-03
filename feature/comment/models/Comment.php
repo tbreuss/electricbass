@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\comment\models;
 
 use app\feature\search\models\Search;
 use app\helpers\Div;

@@ -4,7 +4,7 @@
  * @var yii\web\View $this
  * @var app\feature\search\models\Search[] $models
  * @var int $count
- * @var app\models\Comment[] $latestComments
+ * @var \app\feature\comment\models\Comment[] $latestComments
  * @var app\models\Rating[] $latestRatings
  */
 

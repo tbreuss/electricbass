@@ -2,8 +2,8 @@
 
 namespace app\controllers;
 
+use app\feature\comment\models\Comment;
 use app\feature\search\models\Search;
-use app\models\Comment;
 use app\models\ContactForm;
 use app\models\Log4xx;
 use app\models\Rating;

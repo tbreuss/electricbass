@@ -2,7 +2,7 @@
 
 namespace app\feature\comment;
 
-use app\models\Comment;
+use app\feature\comment\models\Comment;
 use yii\console\Controller;
 
 final class Command extends Controller

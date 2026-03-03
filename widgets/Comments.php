@@ -2,8 +2,7 @@
 
 namespace app\widgets;
 
-use app\models\Comment;
-use Yii;
+use app\feature\comment\models\Comment;
 use yii\base\Widget;
 
 final class Comments extends Widget

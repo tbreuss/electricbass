@@ -1,15 +1,14 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\comment;
 
+use app\feature\comment\models\Comment;
 use app\helpers\Url;
-use app\models\Comment;
 use Yii;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\web\GoneHttpException;
 
-final class CommentController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionIndex(string $name, int $id): string
     {
@@ -62,7 +61,7 @@ final class CommentController extends Controller
             }
         }
 
-        return $this->render('index', [
+        return $this->render('@app/feature/comment/views/index', [
             'model' => $model,
             'count' => $count,
             'url' => $url,
@@ -72,7 +71,7 @@ final class CommentController extends Controller
 
     public function actionRules(): string
     {
-        return $this->render('rules');
+        return $this->render('@app/feature/comment/views/rules');
     }
 
     protected function sendMailToAdmin(Comment $model): bool
