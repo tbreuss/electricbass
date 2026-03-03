@@ -8,7 +8,7 @@
  */
 
 $this->title = 'Fingersätze für E-Bass';
-$this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => '/tools'];
 if (count($models) > 0) {
     $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
     $this->params['breadcrumbs'][] = $categoryPlural;

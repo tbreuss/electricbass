@@ -18,7 +18,7 @@ use yii\helpers\Markdown;
 
 $this->blocks['title'] = $model->title;
 $this->title = $model->title . ' | Fingersätze';
-$this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => ['tool/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => '/tools'];
 $this->params['breadcrumbs'][] = ['label' => 'Fingersätze', 'url' => ['fingering/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', $model->category), 'url' => ['fingering/index', 'category' => $model->category]];
 $this->params['breadcrumbs'][] = $model->title;
