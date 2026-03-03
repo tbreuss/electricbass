@@ -1,7 +1,6 @@
 <?php /** @var yii\web\View $this */ ?>
 <?php $asset = app\feature\alphaTab\WebAsset::register($this) ?>
 
-
 <svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" class="test">
     <rect x="0" y="174" width="999" height="74" fill="#eee" stroke-width="2"></rect>
     <g class="lines" stroke="#555">
@@ -11,18 +10,27 @@
         <line x1="0" y1="134" x2="999" y2="134" stroke-width="2"></line>
         <line x1="0" y1="154" x2="999" y2="154" stroke-width="2"></line>
     </g>
-    <text x="100" y="184" class="note">𝅝</text>
+    <text x="20" y="94" class="key"></text>
+    <text x="200" y="184" class="note" visibility="visible">𝅝</text>
 </svg>
 
 <script>
+    function calcNoteY(offsetY) {
+        return Math.floor((offsetY - 5) / 10) * 10 + 4;
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
-        const note = document.querySelector(".test .note");
-        document.querySelector(".test").addEventListener('pointerenter', function(event) {
-            note.setAttribute("visibility", "visible");
+        const note = document.querySelector(".note");
+        document.querySelector(".test").addEventListener("pointermove", function(event) {
+            const y = calcNoteY(event.offsetY);
+            console.log(y);
+            note.setAttribute("y", y);
+            //note.setAttribute("visibility", "visible");
         });
         document.querySelector(".test").addEventListener('pointerleave', function(event) {
             //console.log(event.offsetX, event.offsetY);
-            note.setAttribute("visibility", "hidden");
+            //calcNoteY(event.offsetY);
+            //note.setAttribute("visibility", "hidden");
         });
     });
 </script>

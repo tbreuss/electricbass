@@ -1,17 +1,16 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\api;
 
 use app\widgets\Rating;
 use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\rest\Controller;
 use yii\web\GoneHttpException;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\ServerErrorHttpException;
 
-final class ApiController extends Controller
+final class Controller extends \yii\rest\Controller
 {
     /**
      * @throws GoneHttpException
