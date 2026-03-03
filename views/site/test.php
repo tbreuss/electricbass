@@ -1,8 +1,35 @@
 <?php /** @var yii\web\View $this */ ?>
 <?php $asset = app\feature\alphaTab\WebAsset::register($this) ?>
 
-<svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" class="test">
-    <rect x="0" y="174" width="999" height="74" fill="#eee" stroke-width="2"></rect>
+<svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" class="test">
+    <style>
+        @font-face {
+            font-family: "Bravura";
+            src: url("<?= $asset->baseUrl ?>/font/Bravura.woff2") format("woff2");
+        }
+        .test {
+            border: 1px solid green;
+            cursor: pointer;
+        }
+        .test .note {
+            fill: #999;
+        }
+        .test text {
+            font-family: "Bravura", sans-serif;
+        }
+        .test .key {
+            font-size: 84px;
+        }
+        .test .accidentals, .test .note, .test .selected-note {
+            font-size: 70px;
+        }
+        .test .lines {
+            fill: red;
+        }
+        .test .note-xt:hover line, .test .note-xt:hover text {
+            fill: red;
+        }
+    </style>
     <g class="lines" stroke="#555">
         <line x1="0" y1="74" x2="999" y2="74" stroke-width="2"></line>
         <line x1="0" y1="94" x2="999" y2="94" stroke-width="2"></line>
@@ -11,26 +38,36 @@
         <line x1="0" y1="154" x2="999" y2="154" stroke-width="2"></line>
     </g>
     <text x="20" y="94" class="key"></text>
-    <text x="200" y="184" class="note" visibility="visible">𝅝</text>
+    <text x="200" y="184" class="note" visibility="hidden">𝅝</text>
+    <text x="200" y="184" class="selected-note" visibility="hidden">𝅝</text>
 </svg>
 
 <script>
     function calcNoteY(offsetY) {
-        return Math.floor((offsetY - 5) / 10) * 10 + 4;
+        let y = Math.floor((offsetY - 5) / 10) * 10 + 4;
+        y = Math.min(204, y);
+        y = Math.max(14, y);
+        return y;
     }
 
     document.addEventListener("DOMContentLoaded", () => {
         const note = document.querySelector(".note");
+        const selectedNote = document.querySelector(".selected-note");
+        document.querySelector(".test").addEventListener("pointerdown", function(event) {
+            const y = calcNoteY(event.offsetY);
+            selectedNote.setAttribute("y", y);
+            selectedNote.setAttribute("visibility", "visible");
+        });
         document.querySelector(".test").addEventListener("pointermove", function(event) {
             const y = calcNoteY(event.offsetY);
-            console.log(y);
+            note.setAttribute("visibility", "visible");
             note.setAttribute("y", y);
-            //note.setAttribute("visibility", "visible");
+        });
+        document.querySelector(".test").addEventListener('pointerenter', function(event) {
+            note.setAttribute("visibility", "visible");
         });
         document.querySelector(".test").addEventListener('pointerleave', function(event) {
-            //console.log(event.offsetX, event.offsetY);
-            //calcNoteY(event.offsetY);
-            //note.setAttribute("visibility", "hidden");
+            note.setAttribute("visibility", "hidden");
         });
     });
 </script>
