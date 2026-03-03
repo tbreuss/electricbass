@@ -10,8 +10,9 @@
         .test {
             border: 1px solid green;
             cursor: pointer;
+            width: 800px;
         }
-        .test .note {
+        .test .draggable-note {
             fill: #999;
         }
         .test text {
@@ -20,7 +21,7 @@
         .test .key {
             font-size: 84px;
         }
-        .test .accidentals, .test .note, .test .selected-note {
+        .test .draggable-note, .test .selected-note {
             font-size: 70px;
         }
         .test .lines {
@@ -30,51 +31,93 @@
             fill: red;
         }
     </style>
+    <g class="upper-help-lines" stroke="#555">
+        <line class="upper-ledger-line-3" x1="193" y1="14" x2="240" y2="14" stroke-width="2" visibility="hidden"></line>
+        <line class="upper-ledger-line-2" x1="193" y1="34" x2="240" y2="34" stroke-width="2" visibility="hidden"></line>
+        <line class="upper-ledger-line-1" x1="193" y1="54" x2="240" y2="54" stroke-width="2" visibility="hidden"></line>
+    </g>
     <g class="lines" stroke="#555">
-        <line x1="0" y1="74" x2="999" y2="74" stroke-width="2"></line>
-        <line x1="0" y1="94" x2="999" y2="94" stroke-width="2"></line>
-        <line x1="0" y1="114" x2="999" y2="114" stroke-width="2"></line>
-        <line x1="0" y1="134" x2="999" y2="134" stroke-width="2"></line>
-        <line x1="0" y1="154" x2="999" y2="154" stroke-width="2"></line>
+        <line x1="0" y1="74" x2="800" y2="74" stroke-width="2"></line>
+        <line x1="0" y1="94" x2="800" y2="94" stroke-width="2"></line>
+        <line x1="0" y1="114" x2="800" y2="114" stroke-width="2"></line>
+        <line x1="0" y1="134" x2="800" y2="134" stroke-width="2"></line>
+        <line x1="0" y1="154" x2="800" y2="154" stroke-width="2"></line>
+    </g>
+    <g class="lower-help-lines" stroke="#555">
+        <line class="lower-ledger-line-1" x1="193" y1="174" x2="240" y2="174" stroke-width="2" visibility="hidden"></line>
+        <line class="lower-ledger-line-2" x1="193" y1="194" x2="240" y2="194" stroke-width="2" visibility="hidden"></line>
     </g>
     <text x="20" y="94" class="key"></text>
-    <text x="200" y="184" class="note" visibility="hidden">𝅝</text>
-    <text x="200" y="184" class="selected-note" visibility="hidden">𝅝</text>
+    <text x="200" y="94" class="draggable-note" visibility="hidden">𝅝</text>
+    <text x="200" y="94" class="selected-note" visibility="hidden">𝅝</text>
 </svg>
 
 <script>
-    function calcNoteY(offsetY) {
-        let y = Math.floor((offsetY - 5) / 10) * 10 + 4;
-        y = Math.min(204, y);
-        y = Math.max(14, y);
-        return y;
-    }
-
     document.addEventListener("DOMContentLoaded", () => {
-        const note = document.querySelector(".note");
+
+        const draggableNote = document.querySelector(".draggable-note");
         const selectedNote = document.querySelector(".selected-note");
-        document.querySelector(".test").addEventListener("pointerdown", function(event) {
-            const y = calcNoteY(event.offsetY);
+        const upperLedgerLine1 = document.querySelector(".upper-ledger-line-1");
+        const upperLedgerLine2 = document.querySelector(".upper-ledger-line-2");
+        const upperLedgerLine3 = document.querySelector(".upper-ledger-line-3");
+        const lowerLedgerLine1 = document.querySelector(".lower-ledger-line-1");
+        const lowerLedgerLine2 = document.querySelector(".lower-ledger-line-2");
+
+        function calcNoteY(offsetY) {
+            let y = Math.floor(offsetY / 10) * 10 + 4;
+            y = Math.min(204, y);
+            y = Math.max(14, y);
+            return y;
+        }
+
+        function selectNote(offsetY) {
+            const y = calcNoteY(offsetY);
             selectedNote.setAttribute("y", y);
             selectedNote.setAttribute("visibility", "visible");
+        }
+
+        function showNote(offsetY) {
+            const y = calcNoteY(offsetY);
+            const ySelected = selectedNote.getAttribute("y");
+            draggableNote.setAttribute("visibility", "visible");
+            draggableNote.setAttribute("y", y);
+            upperLedgerLine1.setAttribute("visibility", y <= 54 || ySelected <= 54 ? "visible" : "hidden");
+            upperLedgerLine2.setAttribute("visibility", y <= 34 || ySelected <= 34 ? "visible" : "hidden");
+            upperLedgerLine3.setAttribute("visibility", y <= 14 || ySelected <= 14 ? "visible" : "hidden");
+            lowerLedgerLine1.setAttribute("visibility", y >= 174 || ySelected >= 174 ? "visible" : "hidden");
+            lowerLedgerLine2.setAttribute("visibility", y >= 194 || ySelected >= 194 ? "visible" : "hidden");
+        }
+
+        function hideNote() {
+            draggableNote.setAttribute("visibility", "hidden");
+            const ySelected = selectedNote.getAttribute("y");
+            upperLedgerLine1.setAttribute("visibility", ySelected <= 54 ? "visible" : "hidden");
+            upperLedgerLine2.setAttribute("visibility", ySelected <= 34 ? "visible" : "hidden");
+            upperLedgerLine3.setAttribute("visibility", ySelected <= 14 ? "visible" : "hidden");
+            lowerLedgerLine1.setAttribute("visibility", ySelected >= 174 ? "visible" : "hidden");
+            lowerLedgerLine2.setAttribute("visibility", ySelected >= 194 ? "visible" : "hidden");
+        }
+
+        document.querySelector(".test").addEventListener("pointerdown", function(event) {
+            selectNote(event.offsetY);
+            showNote(event.offsetY);
         });
+
         document.querySelector(".test").addEventListener("pointermove", function(event) {
-            const y = calcNoteY(event.offsetY);
-            note.setAttribute("visibility", "visible");
-            note.setAttribute("y", y);
+            showNote(event.offsetY);
         });
+
         document.querySelector(".test").addEventListener('pointerenter', function(event) {
-            note.setAttribute("visibility", "visible");
+            showNote(event.offsetY);
         });
+
         document.querySelector(".test").addEventListener('pointerleave', function(event) {
-            note.setAttribute("visibility", "hidden");
+            hideNote();
         });
     });
 </script>
 
-
-
-<svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
+<?php /*<svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
     <style>
         @font-face {
             font-family: "Bravura";
@@ -137,7 +180,7 @@
     <line x1="20" x2="95" y1="184" y2="188" stroke="#f00" stroke-width="5"></line>
     <line x1="100" x2="104" y1="184" y2="188" stroke="#f00" stroke-width="5"></line>
 
-</svg>
+</svg>*/ ?>
 
 <?php
 return;
