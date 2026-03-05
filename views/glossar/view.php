@@ -8,12 +8,11 @@
  * @var string $selectedCategory
  */
 
+use app\feature\rating\RatingShare;
 use app\helpers\Html;
 use app\widgets\Comments;
-use app\widgets\Parser;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
 use app\widgets\Hits;
+use app\widgets\Parser;
 
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
 $this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];
@@ -51,9 +50,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
     <?php echo $this->render('_sidebar', ['glossar' => $glossar, 'selectedCategory' => $selectedCategory]) ?>
 </div>
 
-<?= Rating::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
-
-<?= SocialBar::widget(["id" => $glossar->id, "text" => $glossar->title]) ?>
+<?= RatingShare::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
 
 <?= Hits::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
 

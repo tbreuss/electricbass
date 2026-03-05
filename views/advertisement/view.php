@@ -5,12 +5,11 @@
  * @var yii\web\View $this
  */
 
+use app\feature\rating\RatingShare;
 use app\helpers\Html;
 use app\widgets\Comments;
 use app\widgets\GoogleMaps;
 use app\widgets\Hits;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
 use yii\helpers\Markdown;
 
 #$this->metaDescription = mb_strimwidth(str_replace("\n", ' ' , strip_tags(Markdown::process($model->longtext))), 0, 240, '...', 'UTF-8');
@@ -84,9 +83,7 @@ $this->title = $model->getPageTitle();
         ]); ?>
     </div>
 
-    <?= Rating::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
-
-    <?= SocialBar::widget(["text" => $model->title]) ?>
+    <?= RatingShare::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
 
     <?= Comments::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
 

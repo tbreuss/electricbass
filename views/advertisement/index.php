@@ -5,8 +5,8 @@
  * @var yii\web\View $this
  */
 
+use app\feature\rating\RatingReadOnly;
 use app\helpers\Html;
-use app\widgets\RatingReadOnly;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 

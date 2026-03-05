@@ -31,12 +31,10 @@
 </div>
 
 <?php if (!empty($model->text)): ?>
-    <?= app\widgets\Rating::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
+    <?= app\feature\rating\RatingShare::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
 <?php else: ?>
-    <?= app\widgets\RatingReadOnly::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
+    <?= app\feature\rating\RatingReadOnly::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
 <?php endif; ?>
-
-<?= app\widgets\SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
 
 <?= app\widgets\Comments::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
 

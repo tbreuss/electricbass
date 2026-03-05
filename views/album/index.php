@@ -10,12 +10,12 @@
  * @var app\models\Album[] $popular
  */
 
+use app\feature\rating\RatingReadOnly;
 use app\helpers\Html;
 use app\helpers\Url;
 use app\widgets\CanonicalLink;
-use app\widgets\ListSummary;
 use app\widgets\LinkPager;
-use app\widgets\RatingReadOnly;
+use app\widgets\ListSummary;
 
 ?>
 

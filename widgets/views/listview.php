@@ -6,8 +6,8 @@
  * @var app\models\Blog[]|\app\feature\lesson\models\Lesson[] $models
  */
 
+use app\feature\rating\RatingReadOnly;
 use app\helpers\Html;
-use app\widgets\RatingReadOnly;
 use yii\helpers\Markdown;
 
 ?>

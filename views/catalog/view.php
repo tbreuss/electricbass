@@ -7,12 +7,11 @@
  * @var string $title
  */
 
-use app\widgets\Comments;
-use app\widgets\Hits;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
+use app\feature\rating\RatingShare;
 use app\helpers\Html;
 use app\helpers\Url;
+use app\widgets\Comments;
+use app\widgets\Hits;
 use yii\helpers\Markdown;
 
 $this->title = $model->title . ' | ' . $title . ' | Katalog';
@@ -110,9 +109,7 @@ $this->params['metaDescription'] = join($metaDescription);
     ]); ?>
 </div>
 
-<?= Rating::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
-
-<?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
+<?= RatingShare::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
 
 <?= Comments::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
 
