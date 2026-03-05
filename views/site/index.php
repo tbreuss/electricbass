@@ -8,11 +8,11 @@
  * @var app\models\Rating[] $latestRatings
  */
 
+use app\feature\rating\RatingReadOnly;
 use app\helpers\Html;
 use app\widgets\Advertisement;
 use app\widgets\Birthday;
 use app\widgets\CanonicalLink;
-use app\widgets\RatingReadOnly;
 use yii\helpers\Markdown;
 
 $this->title = 'ELECTRICBASS - Alles über das bässte Instrument der Welt';

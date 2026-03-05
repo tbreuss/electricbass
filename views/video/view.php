@@ -9,11 +9,10 @@
  * @var int $width
  */
 
+use app\feature\rating\RatingShare;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
 use yii\helpers\Url;
 
 $this->title = $video->title . ' | Videos';
@@ -71,8 +70,7 @@ $moreVideos = array_slice($similarVideos, 3);
     'tags' => $video->tags,
 ]); ?>
 
-<?= Rating::widget(["tableName" => "video", "tableId" => $video->id]) ?>
-<?= SocialBar::widget(["id" => $video->id, "text" => $video->title]) ?>
+<?= RatingShare::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 <?= Comments::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 <?= Hits::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 

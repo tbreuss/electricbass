@@ -5,7 +5,6 @@
  */
 
 use app\helpers\Html;
-use app\widgets\SocialBar;
 
 $this->params['pageTitle'] = 'Leeres Notenpapier als PDF herunterladen und ausdrucken';
 $this->params['metaDescription'] = 'Blanko Notenpapier zum Herunterladen und Ausdrucken ✓ PDFs mit Notenlinien ✚ Für alle Instrumente ✚ Für E-Bass und Gitarre mit Tabulatur ➨ Gratis!';
@@ -151,5 +150,3 @@ $this->params['breadcrumbs'][] = 'Leeres Notenpapier als PDF';
     <?php endforeach; ?>
     </div>
 </div>
-
-<?= SocialBar::widget(["text" => "Notenpapier zum Herunterladen und Ausdrucken"]) ?>

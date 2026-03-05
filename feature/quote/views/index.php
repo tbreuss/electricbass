@@ -5,9 +5,8 @@
  * @var \models\Quote[] $models
  */
 
+use app\feature\rating\RatingShare;
 use app\widgets\Comments;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
 
 $this->title = 'Zitate von Bassisten';
 $this->params['breadcrumbs'][] = 'Zitate von Bassisten';
@@ -31,8 +30,6 @@ $this->params['metaDescription'] = 'Die Sammlung mit den besten Zitaten berühmt
     </div>
 </div>
 
-<?= Rating::widget(["tableName" => "quote", "tableId" => 0]) ?>
-
-<?= SocialBar::widget(["id" => null, "text" => "Zitate von Bassisten"]) ?>
+<?= RatingShare::widget(["tableName" => "quote", "tableId" => 0]) ?>
 
 <?= Comments::widget(["tableName" => "quote", "tableId" => 0]) ?>

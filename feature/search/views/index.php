@@ -7,12 +7,12 @@
  * @var string $term
  */
 
+use app\feature\rating\RatingReadOnly;
 use app\feature\search\Controller;
 use app\helpers\Html;
 use app\widgets\CanonicalLink;
 use app\widgets\LinkPager;
 use app\widgets\ListSummary;
-use app\widgets\RatingReadOnly;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 

@@ -1,15 +1,15 @@
 <?php
 
-namespace app\widgets;
+namespace app\feature\rating;
 
 use app\models\Rating as RatingModel;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
-use yii\helpers\Url;
 use yii\db\Expression;
+use yii\helpers\Url;
 
-final class Rating extends Widget
+final class RatingShare extends Widget
 {
     public string $tableName = '';
     public int $tableId = 0;
@@ -19,7 +19,7 @@ final class Rating extends Widget
     public function run(): string
     {
         $data = $this->loadData();
-        return $this->render('rating', [
+        return $this->render('rating-share', [
             'url' => strval($this->getUrl()),
             'tableName' => strval($this->tableName),
             'tableId' => intval($this->tableId),

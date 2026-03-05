@@ -1,10 +1,23 @@
+.rating-share {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 0;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
 .rating {
   display: flex;
   color: #cccccc;
   width: auto;
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid #ddd;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  border: none;
+  align-items: center;
 }
 
 .rating__star {
@@ -63,4 +76,31 @@
 
 .rating__empty--hidden {
   display: none;
+}
+
+.share {
+  display: flex;
+  align-items: center;
+}
+
+.share-title {
+  color: #d8d8d8;
+  font-weight: 500;
+  font-size: 15px;
+  float: none;
+  line-height: inherit;
+  border-right: none;
+  margin-right: 0.375rem;
+  padding: 0;
+}
+
+.share-button {
+  background: #6495ed;
+  fill: #ffffff;
+  padding: 0 0.25rem;
+  border-radius: 5px;
+}
+
+.share-button:hover {
+  background: #3465cd;
 }

@@ -5,12 +5,11 @@
  * @var yii\web\View $this
  */
 
-use app\widgets\Comments;
-use app\widgets\Hits;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
+use app\feature\rating\RatingShare;
 use app\helpers\Html;
 use app\helpers\Url;
+use app\widgets\Comments;
+use app\widgets\Hits;
 use yii\helpers\Markdown;
 
 $this->title = $model->title . ' | Bass-Alben | Katalog';
@@ -120,9 +119,7 @@ $this->params['breadcrumbs'][] = $model->title;
     ]); ?>
 </div>
 
-<?= Rating::widget(["tableName" => "album", "tableId" => $model->id]) ?>
-
-<?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
+<?= RatingShare::widget(["tableName" => "album", "tableId" => $model->id]) ?>
 
 <?= Comments::widget(["tableName" => "album", "tableId" => $model->id]) ?>
 

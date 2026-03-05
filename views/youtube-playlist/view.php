@@ -7,7 +7,7 @@
  * @var ?string $nextId
  */
 ?>
- 
+
 <?php $this->title = $playlistItem['title'] . ' | ' . $playlist['title'] . ' | Videos' ?>
 <?php $this->params['breadcrumbs'][] = ['label' => 'Videos', 'url' => '/videos']; ?>
 <?php $this->params['breadcrumbs'][] = ['label' => $playlist['title'], 'url' => '/videos/' . $playlist['segment']]; ?>
@@ -39,8 +39,6 @@
     </div>
 </div>
 
-<?= app\widgets\SocialBar::widget(["text" => $playlist['title'] . ': ' . $playlistItem['title']]) ?>
-
 <style>
     .pager {
         width: 100%;
@@ -56,5 +54,5 @@
     }
     up-modal .pager__prev, up-modal .pager__next {
         display: block;
-    } 
+    }
 </style>

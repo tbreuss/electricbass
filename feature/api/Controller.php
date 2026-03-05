@@ -2,7 +2,7 @@
 
 namespace app\feature\api;
 
-use app\widgets\Rating;
+use app\feature\rating\RatingShare;
 use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -37,7 +37,7 @@ final class Controller extends \yii\rest\Controller
 
         try {
             $json = json_decode($request->getRawBody(), true);
-            $widget = new Rating();
+            $widget = new RatingShare();
             $widget->tableName = $json['tableName'];
             $widget->tableId = $json['tableId'];
             $widget->ratingValue = $json['ratingValue'];

@@ -1,8 +1,7 @@
 <?php
 
-namespace app\widgets;
+namespace app\feature\rating;
 
-use JetBrains\PhpStorm\ArrayShape;
 use Yii;
 use yii\base\Widget;
 
@@ -26,7 +25,7 @@ final class RatingReadOnly extends Widget
             $this->ratingAverage = $data['ratingAverage'];
         }
 
-        return $this->render('rating_readonly', [
+        return $this->render('rating-readonly', [
             'style' => $this->getStyle(),
             'ratingCount' => $this->ratingCount,
             'ratingAverage' => $this->ratingAverage

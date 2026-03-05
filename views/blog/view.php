@@ -7,12 +7,11 @@
  * @var yii\web\View $this
  */
 
+use app\feature\rating\RatingShare;
+use app\helpers\Html;
 use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
-use app\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = $blog->title . ' | Blog';
@@ -72,10 +71,8 @@ $this->params['breadcrumbs'][] = $blog->title;
 </div>
 
 <?php if (empty($redirect)): ?>
-    <?= Rating::widget(["tableName" => "blog", "tableId" => $blog->id]) ?>
+    <?= RatingShare::widget(["tableName" => "blog", "tableId" => $blog->id]) ?>
 <?php endif; ?>
-
-<?= SocialBar::widget(["id" => $blog->id, "text" => $blog->title]) ?>
 
 <?php if (!empty($redirect)): ?>
     <div class="flash flash--info"><?= Html::a('Dieser Artikel wurde in diesen neuen Bereich der Website verschoben', $redirect->to) ?></div>

@@ -7,12 +7,10 @@
  * @var \Joke[] $models
  */
 
+use app\feature\rating\RatingShare;
 use app\widgets\CanonicalLink;
 use app\widgets\Comments;
-use app\widgets\LinkPager;
 use app\widgets\ListSummary;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
 
 $this->title = 'Bassistenwitze';
 $this->params['breadcrumbs'][] = 'Bassistenwitze';
@@ -33,6 +31,5 @@ CanonicalLink::widget(['isPaginated' => false]);
     </div>
 </div>
 
-<?= Rating::widget(["tableName" => "joke", "tableId" => 0]) ?>
-<?= SocialBar::widget(["id" => null, "text" => "Bassistenwitze"]) ?>
+<?= RatingShare::widget(["tableName" => "joke", "tableId" => 0]) ?>
 <?= Comments::widget(["tableName" => "joke", "tableId" => 0]) ?>

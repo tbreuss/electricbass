@@ -9,11 +9,10 @@
  * @var string $expand
  */
 
+use app\feature\rating\RatingShare;
 use app\helpers\Html;
 use app\widgets\Comments;
 use app\widgets\Hits;
-use app\widgets\Rating;
-use app\widgets\SocialBar;
 use yii\helpers\Markdown;
 
 $this->blocks['title'] = $model->title;
@@ -272,9 +271,7 @@ echo app\feature\fingering\Fretboard::widget([
         'tags' => $model->tags,
     ]); ?>
 
-<?= Rating::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
-
-<?= SocialBar::widget(["id" => $model->id, "text" => $model->title]) ?>
+<?= RatingShare::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
 <?= Comments::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
