@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\rating\models;
 
 use app\feature\search\models\Search;
 use Yii;

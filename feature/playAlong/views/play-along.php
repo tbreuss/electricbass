@@ -8,7 +8,7 @@
  * @var string $uniqid
  */
 ?>
-<?php app\assets\Abcjs::register($this); ?>
+<?php app\feature\playAlong\Asset::register($this); ?>
 <div class="play-along">
     <div class="play-along__notation" id="play-along-<?= $uniqid ?>"></div>
 </div>

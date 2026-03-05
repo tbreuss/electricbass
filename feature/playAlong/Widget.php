@@ -1,17 +1,16 @@
 <?php
 
-namespace app\widgets;
+namespace app\feature\playAlong;
 
-use app\models\PlayAlong as PlayAlongModel;
-use yii\base\Widget;
+use app\feature\playAlong\models\PlayAlong;
 
-final class PlayAlong extends Widget
+final class Widget extends \yii\base\Widget
 {
     public int $id = 0;
     public string $uid = '';
 
     public function __construct(
-        private PlayAlongModel $model,
+        private PlayAlong $model,
         array $config = [],
     ) {
         parent::__construct($config);

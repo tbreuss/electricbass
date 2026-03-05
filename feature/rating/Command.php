@@ -2,7 +2,7 @@
 
 namespace app\feature\rating;
 
-use app\models\Rating;
+use app\feature\rating\models\Rating;
 use yii\console\Controller;
 
 final class Command extends Controller

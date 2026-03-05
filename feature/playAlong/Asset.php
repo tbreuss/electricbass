@@ -1,10 +1,10 @@
 <?php
 
-namespace app\assets;
+namespace app\feature\playAlong;
 
 use yii\web\AssetBundle;
 
-final class Abcjs extends AssetBundle
+final class Asset extends AssetBundle
 {
     /** @var string */
     public $sourcePath = '@app/assets/abcjs';

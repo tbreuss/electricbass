@@ -2,7 +2,7 @@
 
 namespace app\feature\rating;
 
-use app\models\Rating as RatingModel;
+use app\feature\rating\models\Rating;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Widget;
@@ -36,7 +36,7 @@ final class RatingShare extends Widget
 
     protected function isNotAllowed(): bool
     {
-        if (in_array($this->tableName, RatingModel::$ALLOWED)) {
+        if (in_array($this->tableName, Rating::$ALLOWED)) {
             return false;
         }
         return true;
@@ -76,10 +76,10 @@ final class RatingShare extends Widget
             'tableId' => $this->tableId,
             'sessionId' => Yii::$app->session->id,
         ];
-        $model = RatingModel::findOne($params);
+        $model = Rating::findOne($params);
 
         if (is_null($model)) {
-            $model = new RatingModel($params);
+            $model = new Rating($params);
             $model->created = new Expression('NOW()');
         }
 

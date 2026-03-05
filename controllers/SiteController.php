@@ -3,10 +3,10 @@
 namespace app\controllers;
 
 use app\feature\comment\models\Comment;
+use app\feature\rating\models\Rating;
 use app\feature\search\models\Search;
 use app\models\ContactForm;
 use app\models\Log4xx;
-use app\models\Rating;
 use app\models\Redirect;
 use Yii;
 use yii\base\InvalidConfigException;

@@ -5,7 +5,7 @@
  * @var app\feature\search\models\Search[] $models
  * @var int $count
  * @var \app\feature\comment\models\Comment[] $latestComments
- * @var app\models\Rating[] $latestRatings
+ * @var \app\feature\rating\models\Rating[] $latestRatings
  */
 
 use app\feature\rating\RatingReadOnly;
