@@ -12,7 +12,6 @@ parameters:
 		- assets
 		- components
 		- config
-		- controllers
 		- feature
 		- helpers
 		- mail
