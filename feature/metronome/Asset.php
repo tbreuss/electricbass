@@ -1,13 +1,13 @@
 <?php
 
-namespace app\widgets\assets;
+namespace app\feature\metronome;
 
 use yii\web\AssetBundle;
 
-final class MetronomeAsset extends AssetBundle
+final class Asset extends AssetBundle
 {
     /** @var string */
-    public $sourcePath = '@app/widgets/assets/metronome';
+    public $sourcePath = '@app/feature/metronome/assets';
 
     /** @var string */
     public $baseUrl = '@web';

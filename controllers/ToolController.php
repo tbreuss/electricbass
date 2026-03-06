@@ -11,10 +11,4 @@ final class ToolController extends Controller
         $this->layout = 'onecol';
         return $this->render('musicpaper');
     }
-
-    public function actionMetronome(): string
-    {
-        $this->layout = 'empty';
-        return $this->render('metronome');
-    }
 }

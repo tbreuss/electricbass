@@ -9,7 +9,7 @@ return [
     'tools/fingersaetze/<category:(arpeggio|intervall|tonleiter)>' => 'fingering/index',
     'tools/fingersaetze/<id:[A-Za-z0-9-]+>' => 'fingering/view',
     'tools/fingersaetze' => 'fingering/index',
-    'tools/metronom' => 'tool/metronome',
+    'tools/metronom' => 'metronome/index',
     'tools/notenpapier' => 'tool/musicpaper',
     'glossar/reorder' => 'glossar/reorder',
     'glossar/<category>/<id>' => 'glossar/view',

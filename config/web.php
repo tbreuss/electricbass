@@ -19,6 +19,7 @@ $config = [
         'fingering' => app\feature\fingering\Controller::class,
         'joke' => app\feature\joke\Controller::class,
         'lesson' => app\feature\lesson\Controller::class,
+        'metronome' => app\feature\metronome\Controller::class,
         'quote' => app\feature\quote\Controller::class,
         'search' => app\feature\search\Controller::class,
         'sitemap' => app\feature\sitemap\Controller::class,

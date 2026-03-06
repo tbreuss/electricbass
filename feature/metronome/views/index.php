@@ -4,14 +4,14 @@
  * @var yii\web\View $this
  */
 
-use app\widgets\Metronome;
+use app\feature\metronome\Widget;
 
 $this->title = 'Online Metronom | Werkzeuge';
 $this->params['breadcrumbs'][] = ['label' => 'Werkzeuge', 'url' => '/tools'];
 $this->params['breadcrumbs'][] = 'Metronom';
 ?>
 
-<?= Metronome::widget(); ?>
+<?= Widget::widget(); ?>
 
 <h2 style="margin-top:3em">Metronom zum Üben verwenden</h2>
 

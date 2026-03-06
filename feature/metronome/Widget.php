@@ -1,24 +1,21 @@
 <?php
 
-namespace app\widgets;
-
-use app\widgets\assets\MetronomeAsset;
-use yii\base\Widget;
+namespace app\feature\metronome;
 
 /**
  * @see https://github.com/seanwayland/waylonome
  * @see https://seanwayland.github.io/waylonome
  * @see https://github.com/grantjames/metronome
  */
-class Metronome extends Widget
+class Widget extends \yii\base\Widget
 {
     public function init(): void
     {
-        MetronomeAsset::register($this->getView());
+        Asset::register($this->getView());
     }
 
     public function run(): string
     {
-        return $this->render('metronome');
+        return $this->render('widget');
     }
 }
