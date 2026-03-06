@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var app\models\Album $model
+ * @var app\feature\album\models\Album $model
  * @var yii\web\View $this
  */
 

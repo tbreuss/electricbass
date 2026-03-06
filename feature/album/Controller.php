@@ -1,16 +1,15 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\album;
 
 use app\entities\AtoZEntry;
 use app\entities\AtoZGroupedEntries;
+use app\feature\album\models\Album;
 use app\helpers\Url;
-use app\models\Album;
 use Yii;
-use yii\web\Controller;
 use yii\web\GoneHttpException;
 
-final class AlbumController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionIndex(string $artist = ''): string
     {
@@ -28,7 +27,7 @@ final class AlbumController extends Controller
         $latest = Album::findLatest(5);
         $popular = Album::findPopular(5);
 
-        return $this->render('index', [
+        return $this->render('@app/feature/album/views/index', [
             'dataProvider' => $provider,
             'models' => $provider->getModels(),
             'pagination' => $provider->getPagination(),
@@ -56,7 +55,7 @@ final class AlbumController extends Controller
         Url::rememberReferrer(['album/index'], 'album');
         #$model->increaseHits();
 
-        return $this->render('view', [
+        return $this->render('@app/feature/album/views/view', [
             'model' => $model,
             'similars' => $similars
         ]);
@@ -67,7 +66,7 @@ final class AlbumController extends Controller
         $groupedEntries = $this->makeAtoZ(Album::findAllAtoZ());
         $latest = Album::findLatest(5);
         $popular = Album::findPopular(5);
-        return $this->render('all', [
+        return $this->render('@app/feature/album/views/all', [
             'groupedEntries' => $groupedEntries,
             'latest' => $latest,
             'popular' => $popular

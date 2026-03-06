@@ -5,9 +5,9 @@
  * @var yii\web\View $this
  * @var array<string, string> $filter
  * @var string $sort
- * @var app\models\Album[] $models
- * @var app\models\Album[] $latest
- * @var app\models\Album[] $popular
+ * @var app\feature\album\models\Album[] $models
+ * @var app\feature\album\models\Album[] $latest
+ * @var app\feature\album\models\Album[] $popular
  */
 
 use app\feature\rating\RatingReadOnly;

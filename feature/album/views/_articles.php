@@ -1,6 +1,6 @@
 <?php
 /**
- * @var app\models\Album[] $models
+ * @var app\feature\album\models\Album[] $models
  * @var string $title
  */
 ?>

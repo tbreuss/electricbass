@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\album\models;
 
 use app\components\ActiveRecord;
 use app\helpers\Media;
