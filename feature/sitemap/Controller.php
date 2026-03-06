@@ -28,7 +28,7 @@ final class Controller extends \yii\web\Controller
     {
         return [
             [
-                Url::to(['/tool/musicpaper'], true),
+                Url::to(['/music-paper/index'], true),
                 date(\DateTime::ATOM, strtotime('2020-12-06 09:30'))
             ],
             [

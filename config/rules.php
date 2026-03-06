@@ -10,7 +10,7 @@ return [
     'tools/fingersaetze/<id:[A-Za-z0-9-]+>' => 'fingering/view',
     'tools/fingersaetze' => 'fingering/index',
     'tools/metronom' => 'metronome/index',
-    'tools/notenpapier' => 'tool/musicpaper',
+    'tools/notenpapier' => 'music-paper/index',
     'glossar/reorder' => 'glossar/reorder',
     'glossar/<category>/<id>' => 'glossar/view',
     'glossar/<category>' => 'glossar/index',

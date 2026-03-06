@@ -86,8 +86,8 @@ if (!empty($this->params['metaDescription'])) {
                     <a class="navbar__menu-link navbar-dropdown__button" href="#">Werkzeuge</a>
                     <ul class="navbar-dropdown__content">
                         <li class="navbar-dropdown-item"><a href="<?= Url::to(['/fingering/index']) ?>">Fingersätze</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/tool/metronome']) ?>">Metronom</a></li>
-                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/tool/musicpaper']) ?>">Notenpapier</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/metronome/index']) ?>">Metronom</a></li>
+                        <li class="navbar-dropdown-item"><a href="<?= Url::to(['/music-paper/index']) ?>">Notenpapier</a></li>
                     </ul>
                 </li>
                 <li class="navbar__menu-item navbar-dropdown">
@@ -213,8 +213,8 @@ if (!empty($this->params['metaDescription'])) {
                 <ul class="footer__list">
                     <li><?= Html::a('Blog für E-Bass und Bassisten', ['/blog']) ?></li>
                     <li><?= Html::a('Fingersätze für Tonleitern, Intervalle und Akkorde', ['/fingering/index']) ?></li>
-                    <li><?= Html::a('Einfaches Online Metronom', ['/tool/metronome']) ?></li>
-                    <li><?= Html::a('Notenpapier zum Herunterladen und Ausdrucken', ['/tool/musicpaper']) ?></li>
+                    <li><?= Html::a('Einfaches Online Metronom', ['/metronome/index']) ?></li>
+                    <li><?= Html::a('Notenpapier zum Herunterladen und Ausdrucken', ['/music-paper/index']) ?></li>
                     <li><?= Html::a('Kleinanzeigen für Bassisten', ['/advertisement/index']) ?></li>
                     <li><?= Html::a('Glossar für Bassisten', ['/glossar/index']) ?></li>
                 </ul>
