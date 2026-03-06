@@ -2,9 +2,9 @@
 
 namespace app\controllers;
 
+use app\feature\blog\models\Blog;
 use app\helpers\Div;
 use app\helpers\Url;
-use app\models\Blog;
 use app\models\Video;
 use SimpleXMLElement;
 use Yii;

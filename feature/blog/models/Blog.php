@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\blog\models;
 
 use app\components\ActiveRecord;
 use app\components\traits\SimilarModelsByTags;

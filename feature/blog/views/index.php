@@ -4,15 +4,15 @@
  * @var yii\data\Pagination $pagination
  * @var yii\web\View $this
  * @var string $sort
- * @var app\models\Blog[] $blogs
- * @var app\models\Blog[] $latest
- * @var app\models\Blog[] $popular
+ * @var \app\feature\blog\models\Blog[] $blogs
+ * @var \app\feature\blog\models\Blog[] $latest
+ * @var \app\feature\blog\models\Blog[] $popular
  */
 
 use app\widgets\CanonicalLink;
+use app\widgets\LinkPager;
 use app\widgets\ListSummary;
 use app\widgets\ListView;
-use app\widgets\LinkPager;
 
 $this->title = 'Blog';
 $this->params['breadcrumbs'][] = 'Bass Blog';

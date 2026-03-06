@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @var app\models\Blog $blog
+ * @var \app\feature\blog\models\Blog $blog
  * @var ?app\models\Redirect $redirect
- * @var app\models\Blog[] $similars
+ * @var \app\feature\blog\models\Blog[] $similars
  * @var yii\web\View $this
  */
 

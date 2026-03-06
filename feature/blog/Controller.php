@@ -1,14 +1,13 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\blog;
 
+use app\feature\blog\models\Blog;
 use app\helpers\Url;
-use app\models\Blog;
 use app\models\Redirect;
-use yii\web\Controller;
 use yii\web\GoneHttpException;
 
-final class BlogController extends Controller
+final class Controller extends \yii\web\Controller
 {
     /**
      * @return string
@@ -18,7 +17,7 @@ final class BlogController extends Controller
         $provider = Blog::getActiveDataProvider();
         $latest = Blog::findLatest(5);
         $popular = Blog::findPopular(5);
-        return $this->render('index', [
+        return $this->render('@app/feature/blog/views/index', [
             'dataProvider' => $provider,
             'blogs' => $provider->getModels(),
             'pagination' => $provider->getPagination(),
@@ -48,7 +47,7 @@ final class BlogController extends Controller
 
         #$blog->increaseHits();
 
-        return $this->render('view', [
+        return $this->render('@app/feature/blog/views/view', [
             'blog' => $blog,
             'redirect' => $redirect,
             'similars' => $similars
