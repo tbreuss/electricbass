@@ -29,6 +29,7 @@ $config = [
         'music-paper' => app\feature\musicPaper\Controller::class,
         'quote' => app\feature\quote\Controller::class,
         'search' => app\feature\search\Controller::class,
+        'test' => app\feature\test\Controller::class,
         'sitemap' => app\feature\sitemap\Controller::class,
     ],
     'components' => [

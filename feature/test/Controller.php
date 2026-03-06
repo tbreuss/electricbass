@@ -1,14 +1,13 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\test;
 
 use Yii;
-use yii\web\Controller;
 use yii\web\GoneHttpException;
 
-final class SiteController extends Controller
+final class Controller extends \yii\web\Controller
 {
-    public function actionTest(): string
+    public function actionIndex(): string
     {
         if (!YII_ENV_DEV) {
             throw new GoneHttpException();
@@ -18,6 +17,6 @@ final class SiteController extends Controller
             return $this->renderPartial('test');
         }
 
-        return $this->render('test');
+        return $this->render('@app/feature/test/views/index');
     }
 }
