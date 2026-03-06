@@ -10,15 +10,15 @@
  * @var string $category
  * @var string $sort
  * @var array<string, string> $filter
- * @var app\models\Catalog[] $models
- * @var app\models\Catalog[] $latest
- * @var app\models\Catalog[] $popular
+ * @var \app\feature\catalog\models\Catalog[] $models
+ * @var \app\feature\catalog\models\Catalog[] $latest
+ * @var \app\feature\catalog\models\Catalog[] $popular
  */
 
 use app\helpers\Html;
 use app\widgets\CanonicalLink;
-use app\widgets\ListSummary;
 use app\widgets\LinkPager;
+use app\widgets\ListSummary;
 
 ?>
 

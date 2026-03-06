@@ -6,8 +6,8 @@
  * @var string $sidebarTitle
  * @var app\entities\AtoZGroupedEntries[] $groupedEntries
  * @var string $category
- * @var app\models\Catalog[] $latest
- * @var app\models\Catalog[] $popular
+ * @var \app\feature\catalog\models\Catalog[] $latest
+ * @var \app\feature\catalog\models\Catalog[] $popular
  */
 
 use app\helpers\Html;

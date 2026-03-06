@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\catalog\models;
 
 use app\components\ActiveRecord;
 use app\helpers\Html;
@@ -9,7 +9,6 @@ use app\traits\SimilarModelsByTags;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
-use yii\helpers\Url;
 
 /**
  * @property int $id

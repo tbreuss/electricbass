@@ -1,20 +1,19 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\catalog;
 
 use Amazon\ProductAdvertisingAPI\v1\ApiException;
 use app\components\AmazonProductDetail;
 use app\entities\AtoZEntry;
 use app\entities\AtoZGroupedEntries;
+use app\feature\catalog\models\Catalog;
 use app\helpers\Url;
-use app\models\Catalog;
 use Throwable;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 use yii\web\GoneHttpException;
 
-final class CatalogController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionAll(string $category): string
     {
@@ -25,7 +24,7 @@ final class CatalogController extends Controller
         Yii::$app->view->params['pageTitle'] = $this->getPageTitleForAtoZ($category);
         Yii::$app->view->params['metaDescription'] = $this->getMetaDescriptionForAtoZ($category);
 
-        return $this->render('all', [
+        return $this->render('@app/feature/catalog/views/all', [
             'groupedEntries' => $groupedEntries,
             'title' => $this->getListTitleForAtoZ($category),
             'category' => $category,
@@ -94,7 +93,7 @@ final class CatalogController extends Controller
         $latest = Catalog::findLatest($category, 10);
         $popular = Catalog::findPopular($category, 10);
 
-        return $this->render('index', [
+        return $this->render('@app/feature/catalog/views/index', [
             'models' => $provider->getModels(),
             'pagination' => $provider->getPagination(),
             'sort' => $provider->getSort(),
@@ -131,7 +130,7 @@ final class CatalogController extends Controller
 
         $amazonProductDetail = null; // $this->getAmazonDetail($model->asin);
 
-        return $this->render('view', [
+        return $this->render('@app/feature/catalog/views/view', [
             'title' => $this->getListTitle($category),
             'model' => $model,
             'amazonProductDetail' => $amazonProductDetail,
@@ -153,7 +152,7 @@ final class CatalogController extends Controller
     public function actionOverview(): string
     {
         $this->layout = 'onecol';
-        return $this->render('overview');
+        return $this->render('@app/feature/catalog/views/overview');
     }
 
     protected function getListTitle(string $category): string

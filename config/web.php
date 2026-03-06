@@ -16,6 +16,7 @@ $config = [
         'album' => app\feature\album\Controller::class,
         'alpha-tab' => app\feature\alphaTab\WebController::class,
         'api' => app\feature\api\Controller::class,
+        'catalog' => app\feature\catalog\Controller::class,
         'comment' => app\feature\comment\Controller::class,
         'contact' => app\feature\contact\Controller::class,
         'feed' => app\feature\feed\Controller::class,
