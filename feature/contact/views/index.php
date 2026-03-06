@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-12 col-sm-8 col-lg-6 form__row">
             <?php $errorClass = $model->hasErrors('verifyCode') ? 'is-invalid' : ''; ?>
             <?= Html::label($model->getAttributeLabel('verifyCode'), 'verifyCode', ['class' => 'form__label is-required']); ?>
-            <?= Captcha::widget(['name' => 'ContactForm[verifyCode]', 'options' => ['class' => 'form__textInput ' . $errorClass]]) ?>
+            <?= Captcha::widget(['captchaAction' => ['/contact/captcha'], 'name' => 'ContactForm[verifyCode]', 'options' => ['class' => 'form__textInput ' . $errorClass]]) ?>
             <?= Html::error($model, 'verifyCode', ['class' => 'invalid-feedback']); ?>
         </div>
 

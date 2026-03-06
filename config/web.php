@@ -18,6 +18,7 @@ $config = [
         'contact' => app\feature\contact\Controller::class,
         'feed' => app\feature\feed\Controller::class,
         'fingering' => app\feature\fingering\Controller::class,
+        'homepage' => app\feature\homepage\Controller::class,
         'joke' => app\feature\joke\Controller::class,
         'lesson' => app\feature\lesson\Controller::class,
         'metronome' => app\feature\metronome\Controller::class,

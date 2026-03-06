@@ -1,7 +1,7 @@
 <?php
 
 return [
-    '' => 'site/index',
+    '' => 'homepage/index',
     'bassistenwitze' => 'joke/index',
     'blog' => 'blog/index',
     'blog/<id:[A-Za-z0-9-]+>' => 'blog/view',
@@ -33,6 +33,7 @@ return [
     'kommentar/<name>-<id>' => 'comment/index',
     'kommentar/regeln' => 'comment/rules',
     'kontakt' => 'contact/index',
+    'kontakt/captcha' => 'contact/captcha',
     'suche' => 'search/index',
     'videos/<segment:isolierter-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
     'videos/<segment:isolierter-bass>' => 'youtube-playlist/index',
@@ -47,7 +48,6 @@ return [
     'feed/rss' => 'feed/rss',
     'api/hits' => 'api/hits',
     'api/rate' => 'api/rate',
-    'site/captcha' => 'site/captcha',
     'admin/<controller>/<action>' => 'admin/<controller>/<action>',
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',

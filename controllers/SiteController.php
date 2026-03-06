@@ -2,9 +2,6 @@
 
 namespace app\controllers;
 
-use app\feature\comment\models\Comment;
-use app\feature\contact\models\ContactForm;
-use app\feature\rating\models\Rating;
 use app\feature\search\models\Search;
 use app\models\Log4xx;
 use app\models\Redirect;
@@ -17,21 +14,6 @@ use yii\web\Response;
 
 final class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     * @phpstan-return array<string, array<string, mixed>>
-     */
-    public function actions(): array
-    {
-        return [
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'offset' => 0,
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
-
     public function actionTest(): string
     {
         if (!YII_ENV_DEV) {
@@ -43,61 +25,6 @@ final class SiteController extends Controller
         }
 
         return $this->render('test');
-    }
-
-    public function actionIndex(): string
-    {
-        $count = Search::find()->where([])->count();
-
-        $contexts = [
-            'video' => 6,
-            'blog' => 3,
-            'album' => 6,
-            'lesson' => 3,
-            'lehrbuch' => 4,
-            'buch' => 4
-        ];
-
-        $latests = Search::findLatestGroupedBy($contexts);
-        $latestComments = Comment::findLatestComments(5);
-        $latestRatings = Rating::findLatestRatings(5);
-
-        return $this->render('index', [
-            'count' => $count,
-            'latests' => $latests,
-            'latestComments' => $latestComments,
-            'latestRatings' => $latestRatings,
-            'latestVideos' => $latests['video'] ?? [],
-            'latestBlogs' => $latests['blog'] ?? [],
-            'latestAlbums' => $latests['album'] ?? [],
-            'latestLessons' => $latests['lesson'] ?? [],
-            'latestLehrbuecher' => $latests['lehrbuch'] ?? [],
-            'latestBuecher' => $latests['buch'] ?? [],
-        ]);
-    }
-
-    public function actionContact(): Response|string
-    {
-        $model = new ContactForm();
-        if (Yii::$app->request->isPost) {
-            if (!$model->load(Yii::$app->request->post())) {
-                $error = 'Beim Laden der Formulardaten ist ein Fehler aufgetreten.';
-            } elseif (!$model->validate()) {
-                $error = 'Beim Validieren der Formulardaten ist ein Fehler aufgetreten.';
-            } elseif (!$model->contact(Yii::$app->params['adminEmail'])) {
-                $error = 'Beim Versenden der Nachricht via E-Mail ist ein Fehler aufgetreten.';
-            } else {
-                $success = 'Danke für deine Nachricht. Ich melde mich möglichst rasch bei dir.';
-                Yii::$app->session->setFlash('contact/success', $success);
-                return $this->refresh();
-            }
-            // TODO Fehler protokollieren
-            Yii::$app->session->setFlash('contact/error', $error);
-        }
-        $this->layout = 'onecol';
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
     }
 
     public function actionFeed(): Response
