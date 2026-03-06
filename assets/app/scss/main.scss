@@ -28,10 +28,9 @@
 @import "./module/website";
 
 // widgets
-@import "../../../widgets/scss/comments";
-@import "../../../widgets/scss/socialbar";
-@import "../../../widgets/scss/rating";
-@import "../../../widgets/scss/rating_readonly";
+@import "../../../feature/comment/scss/comments";
+@import "../../../feature/rating/scss/rating";
+@import "../../../feature/rating/scss/rating-readonly";
 
 // feature
 @import "../../../feature/alphaTab/assets/styles";
