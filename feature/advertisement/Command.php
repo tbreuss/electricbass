@@ -45,8 +45,8 @@ final class Command extends Controller
     public function sendReminderMail(Advertisement $model): bool
     {
         $message = Yii::$app->mailer->compose([
-            'html' => 'advertisement/reminder_html',
-            'text' => 'advertisement/reminder_text',
+            'html' => '@app/feature/advertisement/mail/reminder_html',
+            'text' => '@app/feature/advertisement/mail/reminder_text',
         ], [
             'model' => $model
         ]);

@@ -244,8 +244,8 @@ final class Controller extends \yii\web\Controller
         $models = Advertisement::findAllByEmail($model->email);
 
         $message = Yii::$app->mailer->compose([
-            'html' => 'advertisement/confirmation_html',
-            'text' => 'advertisement/confirmation_text',
+            'html' => '@app/feature/advertisement/mail/confirmation_html',
+            'text' => '@app/feature/advertisement/mail/confirmation_text',
         ], [
             'models' => $models,
             'model' => $model
@@ -261,8 +261,8 @@ final class Controller extends \yii\web\Controller
     protected function sendContactMail(AdvertisementContactForm $model, Advertisement $advertisement): bool
     {
         $message = Yii::$app->mailer->compose([
-            'html' => 'advertisement/contact_html',
-            'text' => 'advertisement/contact_text',
+            'html' => '@app/feature/advertisement/mail/contact_html',
+            'text' => '@app/feature/advertisement/mail/contact_text',
         ], [
             'advertisement' => $advertisement,
             'model' => $model
@@ -284,8 +284,8 @@ final class Controller extends \yii\web\Controller
     protected function sendManageMail(array $models, string $email): bool
     {
         $message = Yii::$app->mailer->compose([
-            'html' => 'advertisement/manage_html',
-            'text' => 'advertisement/manage_text',
+            'html' => '@app/feature/advertisement/mail/manage_html',
+            'text' => '@app/feature/advertisement/mail/manage_text',
         ], [
             'models' => $models,
             'email' => $email
