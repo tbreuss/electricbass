@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $blog->title;
         ?>
     <?php endif; ?>
 
-    <?= $this->render('//_partials/header', [
+    <?= $this->render('_header', [
         'title' => $blog->title,
         'date' => $blog->modified,
         'comments' => $blog->comments

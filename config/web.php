@@ -48,7 +48,7 @@ $config = [
             'errorAction' => 'error/index',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\components\User',
         ],
         'mailer' => require(__DIR__ . '/mailer.php'),
         'log' => require(__DIR__ . '/log.php'),
