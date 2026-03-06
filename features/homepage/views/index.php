@@ -10,7 +10,6 @@
 
 use app\features\rating\RatingReadOnly;
 use app\helpers\Html;
-use app\widgets\Birthday;
 use app\widgets\CanonicalLink;
 use yii\helpers\Markdown;
 
@@ -223,7 +222,7 @@ CanonicalLink::widget();
     <?= app\widgets\Banner::widget() ?>
 </div>
 
-<?= Birthday::widget() ?>
+<?= app\features\birthday\Widget::widget() ?>
 <?= app\features\quote\Widget::widget() ?>
 <?= app\features\joke\Widget::widget() ?>
 <?php $this->endBlock() ?>

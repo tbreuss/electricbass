@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\features\birthday\models;
 
 use yii\db\ActiveRecord;
 

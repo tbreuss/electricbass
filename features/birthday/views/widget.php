@@ -1,6 +1,6 @@
 <?php
 /**
- * @var app\models\Birthday $models
+ * @var app\features\birthday\models\Birthday $models
  */
 ?>
 <div class="sidebarWidget">
