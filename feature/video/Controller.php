@@ -1,17 +1,16 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\video;
 
 use app\feature\blog\models\Blog;
+use app\feature\video\models\Video;
 use app\helpers\Div;
 use app\helpers\Url;
-use app\models\Video;
 use SimpleXMLElement;
 use Yii;
-use yii\web\Controller;
 use yii\web\GoneHttpException;
 
-final class VideoController extends Controller
+final class Controller extends \yii\web\Controller
 {
     /**
      * @return string
@@ -25,7 +24,7 @@ final class VideoController extends Controller
         //$this->migrate();
         //$this->tags();
         $provider = Video::getActiveDataProvider();
-        return $this->render('index', [
+        return $this->render('@app/feature/video/views/index', [
             'dataProvider' => $provider,
             'videos' => $provider->getModels(),
             'pagination' => $provider->getPagination(),
@@ -53,7 +52,7 @@ final class VideoController extends Controller
 
         Url::rememberReferrer(['video/index'], 'video');
 
-        return $this->render('view', [
+        return $this->render('@app/feature/video/views/view', [
             'video' => $video,
             'similarVideos' => $similarVideos
         ]);

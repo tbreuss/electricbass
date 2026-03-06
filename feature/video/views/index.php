@@ -4,12 +4,12 @@
  * @var yii\web\View $this
  * @var yii\data\Pagination $pagination
  * @var string $sort
- * @var app\models\Video[] $videos
+ * @var \app\feature\video\models\Video[] $videos
  */
 
 use app\widgets\CanonicalLink;
-use app\widgets\ListSummary;
 use app\widgets\LinkPager;
+use app\widgets\ListSummary;
 
 $this->title = 'Videos';
 $this->params['breadcrumbs'][] = 'Videos';

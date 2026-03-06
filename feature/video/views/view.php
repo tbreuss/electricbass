@@ -2,8 +2,8 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\Video $video
- * @var app\models\Video[] $similarVideos
+ * @var \app\feature\video\models\Video $video
+ * @var \app\feature\video\models\Video[] $similarVideos
  * @var int $height
  * @var string $key
  * @var int $width
