@@ -1,14 +1,13 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\advertisement;
 
+use app\feature\advertisement\models\Advertisement;
+use app\feature\advertisement\models\AdvertisementContactForm;
+use app\feature\advertisement\models\AdvertisementEmailForm;
 use app\helpers\Div;
-use app\models\Advertisement;
-use app\models\AdvertisementContactForm;
-use app\models\AdvertisementEmailForm;
 use Yii;
 use yii\db\Expression;
-use yii\web\Controller;
 use yii\web\GoneHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -18,7 +17,7 @@ use yii\web\UnauthorizedHttpException;
  * Class AdvertisementController
  * @package app\controllers
  */
-final class AdvertisementController extends Controller
+final class Controller extends \yii\web\Controller
 {
     /**
      * @inheritdoc
@@ -38,7 +37,7 @@ final class AdvertisementController extends Controller
     public function actionIndex(int $page = 0): string
     {
         $models = Advertisement::findAllForAdvertisementIndexController();
-        return $this->render('index', [
+        return $this->render('@app/feature/advertisement/views/index', [
             'models' => $models,
             'page' => $page
         ]);
@@ -68,7 +67,7 @@ final class AdvertisementController extends Controller
             }
         }
 
-        return $this->render('contact', [
+        return $this->render('@app/feature/advertisement/views/contact', [
             'model' => $model,
             'advertisement' => $advertisement
         ]);
@@ -92,7 +91,7 @@ final class AdvertisementController extends Controller
 
         #$model->increaseHits();
 
-        return $this->render('view', [
+        return $this->render('@app/feature/advertisement/views/view', [
             'model' => $model
         ]);
     }
@@ -118,7 +117,7 @@ final class AdvertisementController extends Controller
                 return $this->redirect(['index']);
             }
         }
-        return $this->render('add', ['model' => $model]);
+        return $this->render('@app/feature/advertisement/views/add', ['model' => $model]);
     }
 
     public function actionActivate(string $id, string $accessCode): string
@@ -131,7 +130,7 @@ final class AdvertisementController extends Controller
             throw new UnauthorizedHttpException('Die Seite wurde mit ungültigen Parametern aufgerufen.');
         }
         $model->activate();
-        return $this->render('renew', ['model' => $model]);
+        return $this->render('@app/feature/advertisement/views/renew', ['model' => $model]);
     }
 
     public function actionRenew(string $id, string $accessCode): string
@@ -145,7 +144,7 @@ final class AdvertisementController extends Controller
         }
         $model->renew();
         $model->updateCounters(['renewals' => 1]);
-        return $this->render('renew', ['model' => $model]);
+        return $this->render('@app/feature/advertisement/views/renew', ['model' => $model]);
     }
 
     public function actionDelete(string $id, string $accessCode, int $confirmed = 0): Response|string
@@ -162,7 +161,7 @@ final class AdvertisementController extends Controller
             Yii::$app->session->setFlash('deleteConfirmed');
             return $this->redirect(['index']);
         }
-        return $this->render('delete', ['model' => $model, 'confirmed' => $confirmed]);
+        return $this->render('@app/feature/advertisement/views/delete', ['model' => $model, 'confirmed' => $confirmed]);
     }
 
     public function actionUpdate(string $id, string $accessCode): Response|string
@@ -190,7 +189,7 @@ final class AdvertisementController extends Controller
                 return $this->refresh();
             }
         }
-        return $this->render('update', ['model' => $model]);
+        return $this->render('@app/feature/advertisement/views/update', ['model' => $model]);
     }
 
     public function actionManage(): Response|string
@@ -211,7 +210,7 @@ final class AdvertisementController extends Controller
                 return $this->refresh();
             }
         }
-        return $this->render('manage', [
+        return $this->render('@app/feature/advertisement/views/manage', [
             'model' => $model
         ]);
     }
@@ -245,8 +244,8 @@ final class AdvertisementController extends Controller
         $models = Advertisement::findAllByEmail($model->email);
 
         $message = Yii::$app->mailer->compose([
-            'html' => 'advertisement/confirmation_html',
-            'text' => 'advertisement/confirmation_text',
+            'html' => '@app/feature/advertisement/mail/confirmation_html',
+            'text' => '@app/feature/advertisement/mail/confirmation_text',
         ], [
             'models' => $models,
             'model' => $model
@@ -262,8 +261,8 @@ final class AdvertisementController extends Controller
     protected function sendContactMail(AdvertisementContactForm $model, Advertisement $advertisement): bool
     {
         $message = Yii::$app->mailer->compose([
-            'html' => 'advertisement/contact_html',
-            'text' => 'advertisement/contact_text',
+            'html' => '@app/feature/advertisement/mail/contact_html',
+            'text' => '@app/feature/advertisement/mail/contact_text',
         ], [
             'advertisement' => $advertisement,
             'model' => $model
@@ -285,8 +284,8 @@ final class AdvertisementController extends Controller
     protected function sendManageMail(array $models, string $email): bool
     {
         $message = Yii::$app->mailer->compose([
-            'html' => 'advertisement/manage_html',
-            'text' => 'advertisement/manage_text',
+            'html' => '@app/feature/advertisement/mail/manage_html',
+            'text' => '@app/feature/advertisement/mail/manage_text',
         ], [
             'models' => $models,
             'email' => $email

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\advertisement\models;
 
 use app\helpers\Div;
 use app\helpers\Html;
@@ -11,7 +11,6 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\helpers\Url;
-use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 /**

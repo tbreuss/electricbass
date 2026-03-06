@@ -10,7 +10,6 @@
 
 use app\feature\rating\RatingReadOnly;
 use app\helpers\Html;
-use app\widgets\Advertisement;
 use app\widgets\Birthday;
 use app\widgets\CanonicalLink;
 use yii\helpers\Markdown;
@@ -218,7 +217,7 @@ CanonicalLink::widget();
 <?php $this->endBlock() ?>
 
 <?php $this->beginBlock('sidebar') ?>
-<?= Advertisement::widget() ?>
+<?= app\feature\advertisement\Widget::widget() ?>
 
 <div style="margin-bottom: 1rem">
     <?= app\widgets\Banner::widget() ?>

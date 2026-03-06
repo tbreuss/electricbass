@@ -12,6 +12,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'controllerMap' => [
+        'advertisement' => app\feature\advertisement\Controller::class,
         'alpha-tab' => app\feature\alphaTab\WebController::class,
         'api' => app\feature\api\Controller::class,
         'comment' => app\feature\comment\Controller::class,
