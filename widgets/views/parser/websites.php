@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var app\feature\links\models\Links[] $models
+ * @var app\features\links\models\Links[] $models
  */
 
 use app\helpers\Html;

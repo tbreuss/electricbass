@@ -12,7 +12,7 @@ parameters:
 		- assets
 		- components
 		- config
-		- feature
+		- features
 		- helpers
 		- mail
 		- messages
@@ -25,7 +25,7 @@ parameters:
 		- widgets
 	excludePaths:
 	    analyse:
-	        - feature/links/Command.php
+	        - features/links/Command.php
 	        - components/AmazonProductDetail.php
 	        - components/Shortcode.php
 	        - components/Template.php

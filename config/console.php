@@ -7,11 +7,11 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerMap' => [
-        'advertisement' => 'app\feature\advertisement\Command',
-        'comment' => 'app\feature\comment\Command',
-        'link' => 'app\feature\links\Command',
-        'rating' => 'app\feature\rating\Command',
-        'youtube' => 'app\feature\youtube\Command',
+        'advertisement' => 'app\features\advertisement\Command',
+        'comment' => 'app\features\comment\Command',
+        'link' => 'app\features\links\Command',
+        'rating' => 'app\features\rating\Command',
+        'youtube' => 'app\features\youtube\Command',
     ],
     'components' => [
         'cache' => [

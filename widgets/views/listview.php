@@ -3,10 +3,10 @@
 /**
  * @var string $ratingContext
  * @var string $ratingStyle
- * @var \app\feature\blog\models\Blog[]|app\feature\lesson\models\Lesson[] $models
+ * @var \app\features\blog\models\Blog[]|app\features\lesson\models\Lesson[] $models
  */
 
-use app\feature\rating\RatingReadOnly;
+use app\features\rating\RatingReadOnly;
 use app\helpers\Html;
 use yii\helpers\Markdown;
 

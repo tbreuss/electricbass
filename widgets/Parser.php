@@ -2,8 +2,8 @@
 
 namespace app\widgets;
 
-use app\feature\lesson\models\Lesson;
-use app\feature\links\models\Links;
+use app\features\lesson\models\Lesson;
+use app\features\links\models\Links;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
@@ -15,9 +15,9 @@ use yii\base\Widget;
 
 final class Parser extends Widget
 {
-    /** @var app\models\Blog|app\feature\lesson\models\Lesson|app\feature\search\models\Search */
+    /** @var app\models\Blog|app\features\lesson\models\Lesson|app\features\search\models\Search */
     public static $MODEL;
-    /** @var app\models\Blog|app\feature\lesson\models\Lesson|app\feature\search\models\Search */
+    /** @var app\models\Blog|app\features\lesson\models\Lesson|app\features\search\models\Search */
     public $model;
     /** @var string */
     public $attribute;

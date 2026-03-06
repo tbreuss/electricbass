@@ -7,5 +7,5 @@
 
 ?>
 <div class="shortcode shortcode--play-along">
-    <?= app\feature\playAlong\Widget::widget(['id' => $id, 'uid' => $uid]) ?>
+    <?= app\features\playAlong\Widget::widget(['id' => $id, 'uid' => $uid]) ?>
 </div>

@@ -2,7 +2,7 @@
 
 namespace app\widgets;
 
-use app\feature\search\models\Search;
+use app\features\search\models\Search;
 use yii\base\Widget;
 
 final class Articles extends Widget

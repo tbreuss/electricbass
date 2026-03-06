@@ -28,12 +28,12 @@
 @import "./module/website";
 
 // widgets
-@import "../../../feature/comment/scss/comments";
-@import "../../../feature/rating/scss/rating";
-@import "../../../feature/rating/scss/rating-readonly";
+@import "../../../features/comment/scss/comments";
+@import "../../../features/rating/scss/rating";
+@import "../../../features/rating/scss/rating-readonly";
 
-// feature
-@import "../../../feature/alphaTab/assets/styles";
+// features
+@import "../../../features/alphaTab/assets/styles";
 
 // unpoly
 @import "./unpoly";
