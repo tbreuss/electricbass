@@ -4,7 +4,7 @@
  * @var yii\web\View $this
  * @var string $title
  * @var string $sidebarTitle
- * @var app\entities\AtoZGroupedEntries[] $groupedEntries
+ * @var app\components\entities\AtoZGroupedEntries[] $groupedEntries
  * @var string $category
  * @var \app\feature\catalog\models\Catalog[] $latest
  * @var \app\feature\catalog\models\Catalog[] $popular

@@ -2,8 +2,8 @@
 
 namespace app\feature\album;
 
-use app\entities\AtoZEntry;
-use app\entities\AtoZGroupedEntries;
+use app\components\entities\AtoZEntry;
+use app\components\entities\AtoZGroupedEntries;
 use app\feature\album\models\Album;
 use app\helpers\Url;
 use Yii;

@@ -4,8 +4,8 @@ namespace app\feature\catalog;
 
 use Amazon\ProductAdvertisingAPI\v1\ApiException;
 use app\components\AmazonProductDetail;
-use app\entities\AtoZEntry;
-use app\entities\AtoZGroupedEntries;
+use app\components\entities\AtoZEntry;
+use app\components\entities\AtoZGroupedEntries;
 use app\feature\catalog\models\Catalog;
 use app\helpers\Url;
 use Throwable;

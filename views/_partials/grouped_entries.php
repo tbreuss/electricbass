@@ -1,6 +1,6 @@
 <?php
 /**
- * @var app\entities\AtoZGroupedEntries[] $groupedEntries
+ * @var app\components\entities\AtoZGroupedEntries[] $groupedEntries
  */
 ?>
 <?php foreach ($groupedEntries as $group): ?>

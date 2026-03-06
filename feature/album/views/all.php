@@ -4,7 +4,7 @@
  * @var yii\web\View $this
  * @var app\feature\album\models\Album[] $latest
  * @var app\feature\album\models\Album[] $popular
- * @var app\entities\AtoZGroupedEntries[] $groupedEntries
+ * @var app\components\entities\AtoZGroupedEntries[] $groupedEntries
  * @var string $title
  */
 
