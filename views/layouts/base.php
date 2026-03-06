@@ -178,7 +178,7 @@ if (!empty($this->params['metaDescription'])) {
                     <input class="search__submit" type="submit" value="Suchen">
                 </form>
             </div>
-            <?php if (Yii::$app->controller->id === 'site' && isset(Yii::$app->controller->action) && Yii::$app->controller->action->id === 'index'): ?>
+            <?php if (Yii::$app->controller->id === 'homepage' && isset(Yii::$app->controller->action) && Yii::$app->controller->action->id === 'index'): ?>
             <div class="col-md-12">
                 <hr class="footer__hr">
             </div>
