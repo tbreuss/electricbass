@@ -19,6 +19,7 @@ $config = [
         'catalog' => app\feature\catalog\Controller::class,
         'comment' => app\feature\comment\Controller::class,
         'contact' => app\feature\contact\Controller::class,
+        'error' => app\feature\error\Controller::class,
         'feed' => app\feature\feed\Controller::class,
         'fingering' => app\feature\fingering\Controller::class,
         'homepage' => app\feature\homepage\Controller::class,
@@ -39,7 +40,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'error/index',
         ],
         'user' => [
             'identityClass' => 'app\models\User',

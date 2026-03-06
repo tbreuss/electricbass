@@ -29,5 +29,4 @@ $this->params['breadcrumbs'][] = $this->title;
         <li>Nutze die <?= Html::a('interne Suche', ['/search/index']) ?>, um die gewünschte Information zu finden.</li>
         <li>Klicke den Zurück-Button des Browsers an.</li>
     </ul>
-
 </div>

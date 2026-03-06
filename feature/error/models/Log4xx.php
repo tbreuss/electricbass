@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\error\models;
 
 use yii\db\ActiveRecord;
 
