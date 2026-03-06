@@ -37,5 +37,5 @@
 </div>
 
 <?php $this->beginBlock('sidebar') ?>
-    <?= app\widgets\YoutubePlaylistMenu::widget() ?>
+    <?= app\feature\youtube\YoutubePlaylistMenu::widget() ?>
 <?php $this->endBlock() ?>

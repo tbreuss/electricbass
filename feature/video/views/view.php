@@ -74,7 +74,7 @@ $moreVideos = array_slice($similarVideos, 3);
 <?= Hits::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 
 <?php $this->beginBlock('sidebar') ?>
-    <?= app\widgets\YoutubePlaylistMenu::widget() ?>
+    <?= app\feature\youtube\YoutubePlaylistMenu::widget() ?>
     <div class="topVideos">
         <h2 class="topVideos__heading">Ähnliche Videos</h2>
         <?php foreach ($topVideos as $topVideo): ?>

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\widgets;
+namespace app\feature\youtube;
 
 use app\feature\youtube\models\YoutubePlaylist;
 use yii\base\Widget;
