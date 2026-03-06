@@ -1,7 +1,7 @@
 <?php
 /**
- * @var app\models\AdvertisementContactForm $model
- * @var app\models\Advertisement $advertisement
+ * @var \app\feature\advertisement\models\AdvertisementContactForm $model
+ * @var \app\feature\advertisement\models\Advertisement $advertisement
  * @var string $email
  */
 ?>

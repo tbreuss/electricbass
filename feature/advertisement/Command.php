@@ -2,7 +2,7 @@
 
 namespace app\feature\advertisement;
 
-use app\models\Advertisement;
+use app\feature\advertisement\models\Advertisement;
 use Yii;
 use yii\console\Controller;
 use yii\db\Expression;

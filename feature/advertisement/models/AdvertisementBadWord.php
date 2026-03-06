@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\advertisement\models;
 
 use yii\db\ActiveRecord;
 
