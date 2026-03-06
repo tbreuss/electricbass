@@ -14,14 +14,12 @@
     <file>./components</file>
     <file>./config</file>
     <file>./controllers</file>
-    <file>./entities</file>
     <file>./helpers</file>
     <file>./mail</file>
     <file>./messages</file>
     <!-- <file>./migrations</file> -->
     <file>./models</file>
     <file>./modules</file>
-    <file>./traits</file>
     <file>./views</file>
     <file>./web/index.php</file>
     <file>./web/index-test.php</file>

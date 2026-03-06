@@ -13,7 +13,6 @@ parameters:
 		- components
 		- config
 		- controllers
-		- entities
 		- feature
 		- helpers
 		- mail
@@ -22,7 +21,6 @@ parameters:
 		- models
 		- modules
 		#- tests
-		- traits
 		- views
 		#- web
 		- widgets
