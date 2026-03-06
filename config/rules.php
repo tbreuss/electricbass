@@ -30,6 +30,7 @@ return [
     'advertisement/renew' => 'advertisement/renew',
     'advertisement/delete' => 'advertisement/delete',
     'advertisement/update' => 'advertisement/update',
+    'advertisement/captcha' => 'advertisement/captcha',
     'kommentar/<name>-<id>' => 'comment/index',
     'kommentar/regeln' => 'comment/rules',
     'kontakt' => 'contact/index',

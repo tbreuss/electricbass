@@ -20,6 +20,21 @@ use yii\web\UnauthorizedHttpException;
  */
 final class AdvertisementController extends Controller
 {
+    /**
+     * @inheritdoc
+     * @phpstan-return array<string, array<string, mixed>>
+     */
+    public function actions(): array
+    {
+        return [
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'offset' => 0,
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
+
     public function actionIndex(int $page = 0): string
     {
         $models = Advertisement::findAllForAdvertisementIndexController();

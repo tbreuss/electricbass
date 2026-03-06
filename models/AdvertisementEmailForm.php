@@ -48,7 +48,7 @@ final class AdvertisementEmailForm extends Model
             ['email', 'string', 'max' => 100, 'encoding' => 'utf-8'],
             ['email', 'email'],
             // verifyCode
-            ['verifyCode', 'captcha'],
+            ['verifyCode', 'captcha', 'captchaAction' => '/advertisement/captcha'],
         ];
     }
 }

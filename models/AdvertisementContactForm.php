@@ -55,7 +55,7 @@ final class AdvertisementContactForm extends Model
             // nspm
             ['nspm', 'safe'],
             // verifyCode
-            ['verifyCode', 'captcha'],
+            ['verifyCode', 'captcha', 'captchaAction' => '/advertisement/captcha'],
         ];
     }
 }
