@@ -1,13 +1,13 @@
 <?php
 
-namespace app\widgets\assets;
+namespace app\feature\fingering;
 
 use yii\web\AssetBundle;
 
-final class FretboardAsset extends AssetBundle
+final class Asset extends AssetBundle
 {
     /** @var string */
-    public $sourcePath = '@app/widgets/assets/fretboard';
+    public $sourcePath = '@app/feature/fingering/assets';
     /** @var string[] */
     public $css = ['main.css'];
     /** @var string[] */

@@ -2,7 +2,6 @@
 
 namespace app\feature\fingering;
 
-use app\widgets\assets\FretboardAsset;
 use yii\base\Widget;
 
 final class Fretboard extends Widget
@@ -20,7 +19,7 @@ final class Fretboard extends Widget
 
     public function init(): void
     {
-        FretboardAsset::register($this->getView());
+        Asset::register($this->getView());
     }
 
     public function run(): string
