@@ -5,8 +5,8 @@
  * @var string $selectedCategory
  */
 
+use app\feature\glossar\models\Glossar;
 use app\helpers\Html;
-use app\models\Glossar;
 
 ?>
 
@@ -19,7 +19,7 @@ use app\models\Glossar;
         <?php $class = empty($selectedCategory) ? 'sidebarWidget__link--active' : 'sidebarWidget__link' ?>
         <?php echo Html::a('Alle Einträge', ['/glossar/index'], ['class' => $class]) ?>
     </li>
-    <?php $categories = Glossar::queryAllCategories() ?>    
+    <?php $categories = Glossar::queryAllCategories() ?>
     <?php foreach ($categories as $category): ?>
     <li class="sidebarWidget__item">
         <?php $class = ($category['urlSegment'] == $selectedCategory) ? 'sidebarWidget__link--active' : 'sidebarWidget__link' ?>

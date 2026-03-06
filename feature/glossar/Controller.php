@@ -1,13 +1,12 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\glossar;
 
-use app\models\Glossar;
-use yii\web\Controller;
+use app\feature\glossar\models\Glossar;
 use yii\web\GoneHttpException;
 use yii\web\Response;
 
-final class GlossarController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionIndex(?string $category = null): string
     {
@@ -17,7 +16,7 @@ final class GlossarController extends Controller
             throw new GoneHttpException();
         }
 
-        return $this->render('index', [
+        return $this->render('@app/feature/glossar/views/index', [
             'glossars' => $glossars,
             'selectedCategory' => $category
         ]);
@@ -33,7 +32,7 @@ final class GlossarController extends Controller
 
         #$glossar->increaseHits();
 
-        return $this->render('view', [
+        return $this->render('@app/feature/glossar/views/view', [
             'glossar' => $glossar,
             'previous' => $glossar->findPreviousOneOrNull(),
             'next' => $glossar->findNextOneOrNull(),

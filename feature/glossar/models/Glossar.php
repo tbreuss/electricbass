@@ -1,11 +1,9 @@
 <?php
 
-namespace app\models;
+namespace app\feature\glossar\models;
 
 use app\components\ActiveRecord;
-use app\helpers\Html;
 use Yii;
-use yii\web\NotFoundHttpException;
 
 /**
  * @property int $id

@@ -2,9 +2,9 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\Glossar $glossar
- * @var app\models\Glossar $next
- * @var app\models\Glossar $previous
+ * @var \app\feature\glossar\models\Glossar $glossar
+ * @var \app\feature\glossar\models\Glossar $next
+ * @var \app\feature\glossar\models\Glossar $previous
  * @var string $selectedCategory
  */
 
@@ -15,7 +15,7 @@ use app\widgets\Parser;
 
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
 $this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];
-$this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['glossar/index', 'category' => strtolower($glossar->category)]];
+$this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['glossar/index', 'category' => $selectedCategory]];
 ;
 $this->params['breadcrumbs'][] = $glossar->title;
 ?>

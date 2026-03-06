@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\Glossar[] $glossars
+ * @var \app\feature\glossar\models\Glossar[] $glossars
  * @var string $selectedCategory
  */
 

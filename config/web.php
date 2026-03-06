@@ -23,6 +23,7 @@ $config = [
         'error' => app\feature\error\Controller::class,
         'feed' => app\feature\feed\Controller::class,
         'fingering' => app\feature\fingering\Controller::class,
+        'glossar' => app\feature\glossar\Controller::class,
         'homepage' => app\feature\homepage\Controller::class,
         'joke' => app\feature\joke\Controller::class,
         'lesson' => app\feature\lesson\Controller::class,
