@@ -3,12 +3,11 @@
 namespace app\models;
 
 use app\components\ActiveRecord;
+use app\components\traits\SimilarModelsByTags;
 use app\helpers\Media;
-use app\traits\SimilarModelsByTags;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
-use yii\helpers\Url;
 
 /**
  * @property int $id

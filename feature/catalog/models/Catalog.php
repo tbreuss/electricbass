@@ -3,9 +3,9 @@
 namespace app\feature\catalog\models;
 
 use app\components\ActiveRecord;
+use app\components\traits\SimilarModelsByTags;
 use app\helpers\Html;
 use app\helpers\Media;
-use app\traits\SimilarModelsByTags;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;

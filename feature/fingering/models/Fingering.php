@@ -2,7 +2,7 @@
 
 namespace app\feature\fingering\models;
 
-use app\traits\SimilarModelsByTags;
+use app\components\traits\SimilarModelsByTags;
 use Yii;
 use yii\db\ActiveRecord;
 

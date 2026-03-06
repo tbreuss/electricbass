@@ -3,9 +3,9 @@
 namespace app\models;
 
 use app\components\ActiveRecord;
+use app\components\traits\SimilarModelsByTags;
+use app\components\traits\WithChanges;
 use app\helpers\Media;
-use app\traits\SimilarModelsByTags;
-use app\traits\WithChanges;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;

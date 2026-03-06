@@ -3,8 +3,8 @@
 namespace app\feature\album\models;
 
 use app\components\ActiveRecord;
+use app\components\traits\SimilarModelsByTags;
 use app\helpers\Media;
-use app\traits\SimilarModelsByTags;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;

@@ -3,8 +3,8 @@
 namespace app\feature\lesson\models;
 
 use app\components\ActiveRecord;
-use app\traits\SimilarModelsByTags;
-use app\traits\WithChanges;
+use app\components\traits\SimilarModelsByTags;
+use app\components\traits\WithChanges;
 use Yii;
 
 /**
