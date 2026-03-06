@@ -10,7 +10,6 @@
 use app\feature\rating\RatingShare;
 use app\helpers\Html;
 use app\helpers\Url;
-use app\widgets\Comments;
 use app\widgets\Hits;
 use yii\helpers\Markdown;
 
@@ -111,7 +110,7 @@ $this->params['metaDescription'] = join($metaDescription);
 
 <?= RatingShare::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
 
-<?= Comments::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
+<?= app\feature\comment\Widget::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
 
 <?= Hits::widget(["tableName" => "catalog", "tableId" => $model->id]) ?>
 

@@ -8,7 +8,6 @@
 use app\feature\rating\RatingShare;
 use app\helpers\Html;
 use app\helpers\Url;
-use app\widgets\Comments;
 use app\widgets\Hits;
 use yii\helpers\Markdown;
 
@@ -121,7 +120,7 @@ $this->params['breadcrumbs'][] = $model->title;
 
 <?= RatingShare::widget(["tableName" => "album", "tableId" => $model->id]) ?>
 
-<?= Comments::widget(["tableName" => "album", "tableId" => $model->id]) ?>
+<?= app\feature\comment\Widget::widget(["tableName" => "album", "tableId" => $model->id]) ?>
 
 <?= Hits::widget(["tableName" => "album", "tableId" => $model->id]) ?>
 

@@ -9,7 +9,6 @@
 
 use app\feature\rating\RatingShare;
 use app\widgets\CanonicalLink;
-use app\widgets\Comments;
 use app\widgets\ListSummary;
 
 $this->title = 'Bassistenwitze';
@@ -32,4 +31,4 @@ CanonicalLink::widget(['isPaginated' => false]);
 </div>
 
 <?= RatingShare::widget(["tableName" => "joke", "tableId" => 0]) ?>
-<?= Comments::widget(["tableName" => "joke", "tableId" => 0]) ?>
+<?= app\feature\comment\Widget::widget(["tableName" => "joke", "tableId" => 0]) ?>

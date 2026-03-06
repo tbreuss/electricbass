@@ -10,7 +10,6 @@
 
 use app\feature\rating\RatingShare;
 use app\helpers\Html;
-use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
 
@@ -54,7 +53,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
 
 <?= Hits::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
 
-<?= Comments::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
+<?= app\feature\comment\Widget::widget(["tableName" => "glossar", "tableId" => $glossar->id]) ?>
 
 <style>
     .pager .next {

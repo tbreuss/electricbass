@@ -36,6 +36,6 @@
     <?= app\feature\rating\RatingReadOnly::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
 <?php endif; ?>
 
-<?= app\widgets\Comments::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
+<?= app\feature\comment\Widget::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
 
 <?= app\widgets\Hits::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>

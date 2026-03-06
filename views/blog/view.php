@@ -9,7 +9,6 @@
 
 use app\feature\rating\RatingShare;
 use app\helpers\Html;
-use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
 use yii\helpers\Url;
@@ -81,7 +80,7 @@ $this->params['breadcrumbs'][] = $blog->title;
 <?php /*<p><?= Html::a("Alle Blogposts anzeigen", Url::previous("blog")) ?></p>*/ ?>
 
 <?php if (empty($redirect)): ?>
-    <?= Comments::widget(["tableName" => "blog", "tableId" => $blog->id]) ?>
+    <?= app\feature\comment\Widget::widget(["tableName" => "blog", "tableId" => $blog->id]) ?>
     <?= Hits::widget(["tableName" => "blog", "tableId" => $blog->id]) ?>
 <?php endif; ?>
 

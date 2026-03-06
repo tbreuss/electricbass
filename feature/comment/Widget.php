@@ -1,11 +1,10 @@
 <?php
 
-namespace app\widgets;
+namespace app\feature\comment;
 
 use app\feature\comment\models\Comment;
-use yii\base\Widget;
 
-final class Comments extends Widget
+final class Widget extends \yii\base\Widget
 {
     public string $tableName = '';
     public int $tableId = 0;
@@ -23,7 +22,7 @@ final class Comments extends Widget
 
     public function run(): string
     {
-        return $this->render('comments', [
+        return $this->render('widget', [
             'models' => $this->models,
             'tableName' => $this->tableName,
             'tableId' => $this->tableId,

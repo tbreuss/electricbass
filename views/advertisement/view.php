@@ -7,7 +7,6 @@
 
 use app\feature\rating\RatingShare;
 use app\helpers\Html;
-use app\widgets\Comments;
 use app\widgets\GoogleMaps;
 use app\widgets\Hits;
 use yii\helpers\Markdown;
@@ -85,7 +84,7 @@ $this->title = $model->getPageTitle();
 
     <?= RatingShare::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
 
-    <?= Comments::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
+    <?= app\feature\comment\Widget::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
 
     <?= Hits::widget(["tableName" => "advertisement", "tableId" => $model->id]) ?>
 <?php endif; ?>

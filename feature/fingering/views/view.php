@@ -11,7 +11,6 @@
 
 use app\feature\rating\RatingShare;
 use app\helpers\Html;
-use app\widgets\Comments;
 use app\widgets\Hits;
 use yii\helpers\Markdown;
 
@@ -273,7 +272,7 @@ echo app\feature\fingering\Fretboard::widget([
 
 <?= RatingShare::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
-<?= Comments::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
+<?= app\feature\comment\Widget::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 
 <?= Hits::widget(["tableName" => "fingering", "tableId" => $model->id]) ?>
 

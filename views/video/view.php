@@ -10,7 +10,6 @@
  */
 
 use app\feature\rating\RatingShare;
-use app\widgets\Comments;
 use app\widgets\Hits;
 use app\widgets\Parser;
 use yii\helpers\Url;
@@ -71,7 +70,7 @@ $moreVideos = array_slice($similarVideos, 3);
 ]); ?>
 
 <?= RatingShare::widget(["tableName" => "video", "tableId" => $video->id]) ?>
-<?= Comments::widget(["tableName" => "video", "tableId" => $video->id]) ?>
+<?= app\feature\comment\Widget::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 <?= Hits::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 
 <?php $this->beginBlock('sidebar') ?>
