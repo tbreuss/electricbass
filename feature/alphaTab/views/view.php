@@ -25,7 +25,7 @@
             <?php if (str_contains((string)Yii::$app->request->referrer, (string)Yii::$app->request->hostName)): ?>
                 <?= app\helpers\Html::a('Zurück', app\helpers\Url::to((string)Yii::$app->request->referrer)) ?>
             <?php else: ?>
-                <?= app\helpers\Html::a('Zur Startseite', app\helpers\Url::to(['/site/index'])) ?>
+                <?= app\helpers\Html::a('Zur Startseite', app\helpers\Url::to(['/homepage/index'])) ?>
             <?php endif ?>
         </div>
     </div>
