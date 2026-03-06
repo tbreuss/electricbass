@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1>E-Bass-Glossar</h1>
 
     <?php if (empty($selectedCategory)): ?>
-        <p>In diesem E-Bass Lexikon findest Du Fachbegriffe, Abkürzungen und Erklärungen zum Instrument E-Bass, dem Equipment, der Hardware und weitere Begriffe der Musik. Das Lexikon ist in Kategorien eingeteilt und alphabetisch sortiert. Fehlt ein Begriff oder eine Bezeichnung? <?php echo Html::a('Sende mir eine kurze E-Mail', ['/site/contact']) ?></p>
+        <p>In diesem E-Bass Lexikon findest Du Fachbegriffe, Abkürzungen und Erklärungen zum Instrument E-Bass, dem Equipment, der Hardware und weitere Begriffe der Musik. Das Lexikon ist in Kategorien eingeteilt und alphabetisch sortiert. Fehlt ein Begriff oder eine Bezeichnung? <?php echo Html::a('Sende mir eine kurze E-Mail', ['/contact/index']) ?></p>
     <?php endif; ?>
 
     <?php

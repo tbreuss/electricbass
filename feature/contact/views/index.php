@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var app\models\ContactForm $model
+ * @var \app\feature\contact\models\ContactForm $model
  */
 
 use app\helpers\Html;
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
         <div class="col-6 form__row form__row--buttons">
-            <?= Html::a('Abbrechen', ['site/contact'], ['class' => 'form__cancel']) ?>
+            <?= Html::a('Abbrechen', ['/contact/index'], ['class' => 'form__cancel']) ?>
         </div>
 
     </div>

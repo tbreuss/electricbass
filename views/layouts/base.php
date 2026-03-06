@@ -166,7 +166,7 @@ if (!empty($this->params['metaDescription'])) {
                     'options' => ['class' => 'footer__list'],
                     'items' => [
                         ['label' => 'Impressum', 'url' => ['/lesson/index', 'path' => 'impressum']],
-                        ['label' => 'Kontakt', 'url' => ['/site/contact']],
+                        ['label' => 'Kontakt', 'url' => ['/contact/index']],
                         ['label' => 'Sitemap', 'url' => ['/lesson/index', 'path' => 'sitemap']],
                         ['label' => 'Facebook', 'url' => 'https://www.facebook.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],
                         ['label' => 'Twitter', 'url' => 'https://twitter.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],

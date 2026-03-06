@@ -32,7 +32,7 @@ return [
     'advertisement/update' => 'advertisement/update',
     'kommentar/<name>-<id>' => 'comment/index',
     'kommentar/regeln' => 'comment/rules',
-    'kontakt' => 'site/contact',
+    'kontakt' => 'contact/index',
     'suche' => 'search/index',
     'videos/<segment:isolierter-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
     'videos/<segment:isolierter-bass>' => 'youtube-playlist/index',

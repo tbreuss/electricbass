@@ -4,7 +4,7 @@ class ContactFormCest
 {
     public function _before(\FunctionalTester $I)
     {
-        $I->amOnPage(['site/contact']);
+        $I->amOnPage(['/contact/index']);
     }
 
     public function openContactPage(\FunctionalTester $I)
