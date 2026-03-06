@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \yii\web\View $this
- * @var \app\feature\alphaTab\models\AlphaTab[] $models
+ * @var app\feature\alphaTab\models\AlphaTab[] $models
  */
 ?>
 <?php $this->title = 'AlphaTab-Beispiele' ?>

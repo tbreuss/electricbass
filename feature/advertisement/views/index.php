@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var \app\feature\advertisement\models\Advertisement[] $models
+ * @var app\feature\advertisement\models\Advertisement[] $models
  * @var yii\web\View $this
  */
 
@@ -44,7 +44,7 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
     <?php $categories = []; ?>
     <?php foreach ($models as $model): ?>
         <?php if (!array_key_exists($model->category_id, $categories)): ?>
-            <?php $categories[$model->category_id] = ['title' => \app\feature\advertisement\models\Advertisement::$categories[$model->category_id]]; ?>
+            <?php $categories[$model->category_id] = ['title' => app\feature\advertisement\models\Advertisement::$categories[$model->category_id]]; ?>
             <?php $categories[$model->category_id]['counter'] = 0; ?>
         <?php endif ?>
         <?php $categories[$model->category_id]['counter']++ ?>

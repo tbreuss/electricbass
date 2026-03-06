@@ -1,13 +1,13 @@
 <?php
 /**
  * @var \yii\web\View $this
- * @var \app\feature\alphaTab\components\AlphaTabApi $alphaTab
+ * @var app\feature\alphaTab\components\AlphaTabApi $alphaTab
  */
 ?>
 
 <?php $this->title = $alphaTab->title() . ' | Play' ?>
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
-<?php $asset = \app\feature\alphaTab\WebAsset::register($this) ?>
+<?php $asset = app\feature\alphaTab\WebAsset::register($this) ?>
 
 <div class="atv">
     <div class="at-wrap">

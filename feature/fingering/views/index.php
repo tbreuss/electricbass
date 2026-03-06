@@ -4,7 +4,7 @@
  * @var yii\web\View $this
  * @var string $category
  * @var string $categoryPlural
- * @var \app\feature\fingering\models\Fingering[] $models
+ * @var app\feature\fingering\models\Fingering[] $models
  */
 
 $this->title = 'Fingersätze für E-Bass';

@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \app\feature\advertisement\models\Advertisement $model
+ * @var app\feature\advertisement\models\Advertisement $model
  */
 ?>
 Bestätigung Deines Inserats „<?php echo $model->title ?>“ auf electricbass.ch

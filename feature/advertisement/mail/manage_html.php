@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \app\feature\advertisement\models\Advertisement[] $models
+ * @var app\feature\advertisement\models\Advertisement[] $models
  * @var string $email
  */
 ?>

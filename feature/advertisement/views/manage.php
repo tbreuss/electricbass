@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var \app\feature\advertisement\models\AdvertisementEmailForm $model
+ * @var app\feature\advertisement\models\AdvertisementEmailForm $model
  * @var yii\web\View $this
  */
 

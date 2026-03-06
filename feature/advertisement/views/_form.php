@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var \app\feature\advertisement\models\Advertisement $model
+ * @var app\feature\advertisement\models\Advertisement $model
  */
 
 use app\helpers\Html;

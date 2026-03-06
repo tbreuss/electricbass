@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $blog->title;
         <?php
         $this->registerLinkTag([
             'rel' => 'canonical',
-            'href' => \app\helpers\Url::to($redirect->to, true)
+            'href' => app\helpers\Url::to($redirect->to, true)
         ]);
         ?>
     <?php endif; ?>

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @var \app\feature\advertisement\models\Advertisement $advertisement
- * @var \app\feature\advertisement\models\AdvertisementContactForm $model
+ * @var app\feature\advertisement\models\Advertisement $advertisement
+ * @var app\feature\advertisement\models\AdvertisementContactForm $model
  * @var yii\web\View $this
  */
 

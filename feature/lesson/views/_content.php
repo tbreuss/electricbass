@@ -1,9 +1,9 @@
 <?php
 /**
  * @var yii\web\View $this
- * @var \app\feature\lesson\models\Lesson $model
- * @var \app\feature\lesson\models\Lesson[] $similars
- * @var \app\feature\lesson\models\Lesson[] $latest
+ * @var app\feature\lesson\models\Lesson $model
+ * @var app\feature\lesson\models\Lesson[] $similars
+ * @var app\feature\lesson\models\Lesson[] $latest
  * @var array $breadcrumbs
  * @var string $title
  * @var string $content

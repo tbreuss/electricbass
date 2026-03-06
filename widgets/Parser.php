@@ -15,9 +15,9 @@ use yii\base\Widget;
 
 final class Parser extends Widget
 {
-    /** @var \app\models\Blog|\app\feature\lesson\models\Lesson|\app\feature\search\models\Search */
+    /** @var app\models\Blog|app\feature\lesson\models\Lesson|app\feature\search\models\Search */
     public static $MODEL;
-    /** @var \app\models\Blog|\app\feature\lesson\models\Lesson|\app\feature\search\models\Search */
+    /** @var app\models\Blog|app\feature\lesson\models\Lesson|app\feature\search\models\Search */
     public $model;
     /** @var string */
     public $attribute;

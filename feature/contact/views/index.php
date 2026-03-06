@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var \app\feature\contact\models\ContactForm $model
+ * @var app\feature\contact\models\ContactForm $model
  */
 
 use app\helpers\Html;
