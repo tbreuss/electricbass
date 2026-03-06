@@ -1,12 +1,11 @@
 <?php
 
-namespace app\controllers;
+namespace app\feature\youtube;
 
-use app\models\YoutubePlaylist;
-use yii\web\Controller;
+use app\feature\youtube\models\YoutubePlaylist;
 use yii\web\GoneHttpException;
 
-final class YoutubePlaylistController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionIndex(string $segment): string
     {
@@ -18,7 +17,7 @@ final class YoutubePlaylistController extends Controller
 
         $playlistItems = YoutubePlaylist::findPlaylistItems($playlist['id']);
 
-        return $this->render('index', [
+        return $this->render('@app/feature/youtube/views/index', [
             'playlist' => $playlist,
             'playlistItems' => $playlistItems
         ]);
@@ -42,7 +41,7 @@ final class YoutubePlaylistController extends Controller
 
         [$prevId, $nextId] = YoutubePlaylist::findPrevNext($playlist['id'], $playlistItem['row']);
 
-        return $this->render('view', [
+        return $this->render('@app/feature/youtube/views/view', [
             'playlist' => $playlist,
             'playlistItem' => $playlistItem,
             'prevId' => $prevId,

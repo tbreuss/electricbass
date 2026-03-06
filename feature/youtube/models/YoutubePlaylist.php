@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\feature\youtube\models;
 
 final class YoutubePlaylist
 {

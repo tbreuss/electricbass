@@ -34,6 +34,7 @@ $config = [
         'sitemap' => app\feature\sitemap\Controller::class,
         'test' => app\feature\test\Controller::class,
         'video' => app\feature\video\Controller::class,
+        'youtube' => app\feature\youtube\Controller::class,
     ],
     'components' => [
         'request' => [

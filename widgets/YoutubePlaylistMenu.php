@@ -2,7 +2,7 @@
 
 namespace app\widgets;
 
-use app\models\YoutubePlaylist;
+use app\feature\youtube\models\YoutubePlaylist;
 use yii\base\Widget;
 
 final class YoutubePlaylistMenu extends Widget
