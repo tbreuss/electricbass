@@ -24,7 +24,6 @@ final class Controller extends \yii\web\Controller
         $exception = Yii::$app->errorHandler->exception;
 
         if ($exception instanceof HttpException && $exception->statusCode >= 400 && $exception->statusCode < 500) {
-
             $trimmedRequestUrl = '/' . trim(strval(preg_replace('#/{2,}#', '/', $requestUrl)), '/');
             $redirect = Redirect::findOneByRequestUrl($trimmedRequestUrl);
             if ($redirect) {
