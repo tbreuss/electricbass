@@ -1,10 +1,10 @@
 <?php
 
-namespace app\layouts\assets;
+namespace layouts;
 
 use yii\web\AssetBundle;
 
-final class Layout extends AssetBundle
+final class Asset extends AssetBundle
 {
     /** @var string */
     public $sourcePath = '@app/layouts/assets/dist';
