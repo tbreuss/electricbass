@@ -183,7 +183,7 @@ function replaceStringDef(int $strings, string $note): string
 
 <h2>Griffbrett</h2>
 
-<p>Darstellung aller Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> auf dem Griffbrett bis zum zwölften Bund:</p>
+<p>Alle Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> auf dem Griffbrett bis zum zwölften Bund:</p>
 
 <?php
 
@@ -198,7 +198,7 @@ echo app\features\fingering\Widget::widget([
 ]);
 ?>
 
-<p>Darstellung aller Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> in Intervallschrift auf dem Griffbrett bis zum zwölften Bund:</p>
+<p>Alle Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> in Intervallschrift auf dem Griffbrett bis zum zwölften Bund:</p>
 
 <?php
 echo app\features\fingering\Widget::widget([
@@ -210,7 +210,7 @@ echo app\features\fingering\Widget::widget([
 ]);
 ?>
 
-<p>Darstellung aller Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> in vereinfachter Intervallschrift auf dem Griffbrett bis zum zwölften Bund:</p>
+<p>Alle Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> in vereinfachter Intervallschrift auf dem Griffbrett bis zum zwölften Bund:</p>
 
 <?php
 echo app\features\fingering\Widget::widget([
