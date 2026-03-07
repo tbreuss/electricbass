@@ -11,6 +11,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'layoutPath' => '@app/layouts/web',
     'controllerMap' => [
         'advertisement' => app\features\advertisement\Controller::class,
         'album' => app\features\album\Controller::class,

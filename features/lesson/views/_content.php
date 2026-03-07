@@ -23,7 +23,7 @@
                 </ul>
             </div>
         <?php endif; ?>
-        <?= $this->render('//_partials/meta', [
+        <?= $this->render('@app/features/_partials/meta', [
             'categories' => $breadcrumbs,
             'tags' => $model->tags,
         ]); ?>

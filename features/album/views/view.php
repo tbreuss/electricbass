@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $model->title;
         </table>
     <?php endif; ?>
 
-    <?= $this->render('//_partials/meta', [
+    <?= $this->render('@app/features/_partials/meta', [
         'categories' => [
             ['label' => 'Katalog', 'url' => ['/catalog/overview']],
             ['label' => 'Bass-Alben', 'url' => Url::previous("album")]

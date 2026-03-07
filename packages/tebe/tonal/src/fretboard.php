@@ -23,15 +23,15 @@ function getNote(Tuning $tuning, string $fingering): array
     }
 
     $stringIndex = $string - 1;
-    
+
     if (!isset($tuning->strings[$stringIndex])) {
         return [];
     }
 
     $emptyFretNote = $tuning->strings[$stringIndex][0];
     $midi = get($emptyFretNote)->midi + $fret;
-    
-    $note = midiToNoteName($midi);    
+
+    $note = midiToNoteName($midi);
     $enharmonic = enharmonic($note);
 
     return $note === $enharmonic ? [$note] : [$note, $enharmonic];
@@ -103,6 +103,7 @@ function findHighestNote(Tuning $tuning, string $note): string
             return $fretString;
         }
     }
+    return '';
 }
 
 function midi(Tuning $tuning, int $fretTo = FRET_TO): array
@@ -158,7 +159,7 @@ function print_array(array $cartesion): void
         }
         echo '</tr>';
     }
-    echo '</table border="0">';    
+    echo '</table border="0">';
 }
 
 function toAbsFingerings(array $fingerings): array
@@ -230,7 +231,7 @@ function recognizePattern(array $fingerings, array $notes): array
     }
 
     $noteCount = count($notes);
-    
+
     $results = [];
     foreach ($slices as $slice) {
 
@@ -264,7 +265,7 @@ function get_all_possibilities(array $notes, array $fingerings, int $position, i
 {
     $lowestNote = reset($notes)[0];
     $highestNote = end($notes)[0];
-    
+
     // determine frets from/to for position
     [$fretFrom, $fretTo] = positionBound($position, $expand);
 
@@ -285,7 +286,7 @@ function get_all_possibilities(array $notes, array $fingerings, int $position, i
 
     // split fingerings if we have multiple forms within a position
     $patternResults = recognizePattern($absFingerings, $notes);
-    
+
     $posibilities = [];
 
     // go through all splitted fingerings
@@ -306,7 +307,7 @@ function get_all_possibilities(array $notes, array $fingerings, int $position, i
  */
 function notes(Tuning $tuning, int $fretTo = FRET_TO): array
 {
-    $notes = [];    
+    $notes = [];
     $stringCount = count($tuning->strings);
     foreach (array_reverse($tuning->strings) as $stringIndex => $string) {
         $stringNumber = $stringCount - $stringIndex;
@@ -354,9 +355,10 @@ function positionBound(int $position, int $expand = EXPAND_NO): array
             return [max(0, $fretFrom - 1), $fretTo];
         case EXPAND_HIGHER:
             return [$fretFrom, $fretTo + 1];
-        case EXPAND_LOWER|EXPAND_HIGHER: 
+        case EXPAND_LOWER|EXPAND_HIGHER:
             return [max(0, $fretFrom - 1), $fretTo + 1];
-    };
+    }
+    return [$fretFrom, $fretTo];
 }
 
 function coordToAbs(int $stringCount, string $coord): int
@@ -370,7 +372,7 @@ function tuning(string $name, array $strings): Tuning
     return new Tuning($name, $strings);
 }
 
-class Tuning 
+class Tuning
 {
     public function __construct(
         public string $tuning,

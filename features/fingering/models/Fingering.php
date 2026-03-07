@@ -30,7 +30,7 @@ final class Fingering extends ActiveRecord
      */
     public static function findAllByCategory(string $category): array
     {
-        $orderBy = match($category) {
+        $orderBy = match ($category) {
             'intervall' => 'sorting ASC',
             default => 'title ASC',
         };

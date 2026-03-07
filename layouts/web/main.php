@@ -8,7 +8,7 @@
 use yii\helpers\ArrayHelper;
 
 ?>
-<?php $this->beginContent('@app/views/layouts/base.php'); ?>
+<?php $this->beginContent('@app/layouts/web/base.php'); ?>
     <div class="row">
         <div class="col-md-8 content-wrap">
             <?= $content ?>

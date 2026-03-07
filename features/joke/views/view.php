@@ -1,4 +1,6 @@
-<?php if (empty($model)) {
+<?php
+
+if (empty($model)) {
     return;
 } ?>
 

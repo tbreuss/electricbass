@@ -12,7 +12,7 @@ final class WebController extends Controller
 {
     public function actionView(string $uid): string
     {
-        $model = (new AlphaTab)->findByUid($uid);
+        $model = (new AlphaTab())->findByUid($uid);
 
         if (is_null($model)) {
             throw new GoneHttpException();

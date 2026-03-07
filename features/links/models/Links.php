@@ -16,7 +16,7 @@ use yii\db\ActiveRecord;
  */
 class Links extends ActiveRecord
 {
-    static function tableName(): string
+    public static function tableName(): string
     {
         return '{{website}}';
     }

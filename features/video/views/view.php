@@ -61,7 +61,7 @@ $moreVideos = array_slice($similarVideos, 3);
     </div>
 </div>
 
-<?= $this->render('//_partials/meta', [
+<?= $this->render('@app/features/_partials/meta', [
     'categories' => [
         ['label' => 'Katalog', 'url' => ['/catalog/overview']],
         ['label' => 'Bass-Videos', 'url' => Url::previous("video")]

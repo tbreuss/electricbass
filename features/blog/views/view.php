@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $blog->title;
         </div>
     <?php endif; ?>
 
-    <?= $this->render('//_partials/meta', [
+    <?= $this->render('@app/features/_partials/meta', [
         'categories' => [
             ['label' => 'Blog', 'url' => Url::previous("blog")],
         ],

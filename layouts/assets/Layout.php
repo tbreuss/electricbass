@@ -1,13 +1,13 @@
 <?php
 
-namespace app\assets;
+namespace app\layouts\assets;
 
 use yii\web\AssetBundle;
 
-final class AppAsset extends AssetBundle
+final class Layout extends AssetBundle
 {
     /** @var string */
-    public $sourcePath = '@app/assets/app/dist';
+    public $sourcePath = '@app/layouts/assets/dist';
 
     /** @var string[] */
     public $css = [

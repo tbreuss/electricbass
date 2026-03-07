@@ -8,7 +8,7 @@
 use yii\helpers\ArrayHelper;
 
 ?>
-<?php $this->beginContent('@app/views/layouts/base.php'); ?>
+<?php $this->beginContent('@app/layouts/web/base.php'); ?>
     <?= $content ?>
     <?= ArrayHelper::getValue($this->blocks, 'comments') ?>
     <div class="top">

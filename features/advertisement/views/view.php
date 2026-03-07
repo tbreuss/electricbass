@@ -76,7 +76,7 @@ $this->title = $model->getPageTitle();
             'title' => 'Standort',
         ]) ?>
 
-        <?= $this->render('//_partials/meta', [
+        <?= $this->render('@app/features/_partials/meta', [
             'categories' => [['label' => 'Kleinanzeigen', 'url' => ['/advertisement/index']]],
             'tags' => [],
         ]); ?>

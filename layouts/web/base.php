@@ -5,12 +5,11 @@
  * @var string $content
  */
 
-use app\assets\AppAsset;
 use app\helpers\Html;
 use app\helpers\Url;
 use yii\widgets\Menu;
 
-AppAsset::register($this);
+app\layouts\assets\Layout::register($this);
 
 if (!empty($this->params['metaDescription'])) {
     $this->registerMetaTag([

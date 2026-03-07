@@ -262,7 +262,7 @@ echo app\features\fingering\Fretboard::widget([
         <div class="markdown"><?= Markdown::process($model->abstract) ?></div>
     <?php endif; ?>
 
-    <?= $this->render('//_partials/meta', [
+    <?= $this->render('@app/features/_partials/meta', [
         'categories' => [
             ['label' => 'Werkzeuge', 'url' => ['/tools']],
             ['label' => 'Fingersätze', 'url' => ['/fingering/index']]

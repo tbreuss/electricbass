@@ -1,6 +1,6 @@
 <?php /** @var yii\web\View $this */ ?>
 <?php /** @var string $content */ ?>
-<?php $this->beginContent('@app/views/layouts/base.php'); ?>
+<?php $this->beginContent('@app/layouts/web/base.php'); ?>
 <div class="row">
     <div class="col-12 d-block d-md-none">
         <h1><?= app\helpers\Html::encode($this->blocks['title']) ?></h1>

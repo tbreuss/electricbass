@@ -99,7 +99,7 @@ $this->params['metaDescription'] = join($metaDescription);
         </table>
     <?php endif; ?>
 
-    <?= $this->render('//_partials/meta', [
+    <?= $this->render('@app/features/_partials/meta', [
             'categories' => [
                     ['label' => 'Katalog', 'url' => ['/catalog/overview']],
                     ['label' => $title, 'url' => Url::previous('catalog' . $model->category)]

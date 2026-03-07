@@ -245,7 +245,7 @@ function grap_favicon(array $options = []): string
 
     // Return Favicon Url
     return $filePath;
-} // END MAIN Function
+}
 
 /* HELPER load use curl or file_get_contents (both with user_agent) and fopen/fread as fallback */
 function load(string $url, string $DEBUG): string

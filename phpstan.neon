@@ -9,19 +9,16 @@ parameters:
 	stubFiles:
 	    - .phpstan/stubs/View.stub
 	paths:
-		- assets
 		- components
 		- config
 		- features
 		- helpers
-		- mail
+		- layouts
 		- messages
 		- migrations
-		- models
 		- modules
-		#- tests
-		- views
-		#- web
+		- packages
+		- web
 		- widgets
 	excludePaths:
 	    analyse:
