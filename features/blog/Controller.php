@@ -2,9 +2,9 @@
 
 namespace app\features\blog;
 
+use app\components\Redirect;
 use app\features\blog\models\Blog;
 use app\helpers\Url;
-use app\models\Redirect;
 use yii\web\GoneHttpException;
 
 final class Controller extends \yii\web\Controller

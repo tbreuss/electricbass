@@ -2,9 +2,9 @@
 
 namespace app\features\error;
 
+use app\components\Redirect;
 use app\features\error\models\Log4xx;
 use app\features\search\models\Search;
-use app\models\Redirect;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\web\HttpException;
