@@ -9,7 +9,7 @@ use app\helpers\Html;
 use app\helpers\Url;
 use yii\widgets\Menu;
 
-layouts\Layout::register($this);
+app\layouts\Asset::register($this);
 
 if (!empty($this->params['metaDescription'])) {
     $this->registerMetaTag([

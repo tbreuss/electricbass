@@ -1,6 +1,6 @@
 <?php
 
-namespace layouts;
+namespace app\layouts;
 
 use yii\web\AssetBundle;
 
