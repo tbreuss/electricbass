@@ -168,7 +168,7 @@ if (!empty($this->params['metaDescription'])) {
                         ['label' => 'Kontakt', 'url' => ['/contact/index']],
                         ['label' => 'Sitemap', 'url' => ['/lesson/index', 'path' => 'sitemap']],
                         ['label' => 'Facebook', 'url' => 'https://www.facebook.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],
-                        ['label' => 'Twitter', 'url' => 'https://twitter.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],
+                        ['label' => 'X.com', 'url' => 'https://x.com/ElectricBassCH', 'template' => '<a href="{url}" target="_blank" rel="nofollow">{label}</a>'],
                     ]]); ?>
             </nav>
             <div class="col-md-3 col-xs-6">
