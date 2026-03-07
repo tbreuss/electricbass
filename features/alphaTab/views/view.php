@@ -7,7 +7,7 @@
 
 <?php $this->title = $alphaTab->title() . ' | Play' ?>
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
-<?php $asset = app\features\alphaTab\WebAsset::register($this) ?>
+<?php $asset = app\features\alphaTab\Asset::register($this) ?>
 
 <div class="atv">
     <div class="at-wrap">

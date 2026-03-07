@@ -6,6 +6,6 @@ class Shortcode
 {
     public static function render(): string
     {
-        return LinksWidget::widget();
+        return Widget::widget();
     }
 }

@@ -48,7 +48,7 @@ if (count($models) > 0) {
     <?php foreach ($models as $model): ?>
         <div class="col-12 col-md-6">
         <?= app\helpers\Html::a($model->title, $model->url, ['style' => 'color:#222']) ?>
-        <a href="<?= $model->url ?>"><?= app\features\fingering\Fretboard::widget([
+        <a href="<?= $model->url ?>"><?= app\features\fingering\Widget::widget([
                 'showDots' => false,
                 'showFretNumbers' => false,
                 'showStringNames' => false,

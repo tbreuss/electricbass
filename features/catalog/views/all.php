@@ -6,8 +6,8 @@
  * @var string $sidebarTitle
  * @var app\components\entities\AtoZGroupedEntries[] $groupedEntries
  * @var string $category
- * @var \app\features\catalog\models\Catalog[] $latest
- * @var \app\features\catalog\models\Catalog[] $popular
+ * @var app\features\catalog\models\Catalog[] $latest
+ * @var app\features\catalog\models\Catalog[] $popular
  */
 
 use app\helpers\Html;
@@ -16,7 +16,7 @@ use app\helpers\Html;
 <div class="content catalog-all">
     <h1><?= $title ?></h1>
     <div class="row">
-        <?= $this->render('/_partials/grouped_entries', ['groupedEntries' => $groupedEntries]) ?>
+        <?= $this->render('@app/features/_partials/grouped-entries', ['groupedEntries' => $groupedEntries]) ?>
     </div>
 </div>
 

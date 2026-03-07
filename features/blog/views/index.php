@@ -4,9 +4,9 @@
  * @var yii\data\Pagination $pagination
  * @var yii\web\View $this
  * @var string $sort
- * @var \app\features\blog\models\Blog[] $blogs
- * @var \app\features\blog\models\Blog[] $latest
- * @var \app\features\blog\models\Blog[] $popular
+ * @var app\features\blog\models\Blog[] $blogs
+ * @var app\features\blog\models\Blog[] $latest
+ * @var app\features\blog\models\Blog[] $popular
  */
 
 use app\widgets\CanonicalLink;

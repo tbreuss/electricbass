@@ -4,7 +4,7 @@ namespace app\features\alphaTab;
 
 use yii\web\AssetBundle;
 
-final class WebAsset extends AssetBundle
+final class Asset extends AssetBundle
 {
     /** @var string */
     public $sourcePath = '@app/features/alphaTab/assets';

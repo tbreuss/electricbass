@@ -9,7 +9,7 @@
 
 <?php foreach ($models as $model): ?>
     <h2 id="<?= $model->uid ?>"><?= $model->title ?> <span><?= $model->subtitle ?></span></h2>
-    <?= app\features\alphaTab\ListWidget::widget(['uid' => $model->uid]) ?>
+    <?= app\features\alphaTab\Widget::widget(['uid' => $model->uid]) ?>
 <?php endforeach ?>
 
 <?php $this->beginBlock('sidebar') ?>

@@ -4,7 +4,7 @@
  * @var yii\web\View $this
  * @var yii\data\Pagination $pagination
  * @var string $sort
- * @var \app\features\video\models\Video[] $videos
+ * @var app\features\video\models\Video[] $videos
  */
 
 use app\widgets\CanonicalLink;
@@ -42,5 +42,5 @@ CanonicalLink::widget(['isPaginated' => true]);
 <?= LinkPager::widget(['pagination' => $pagination]) ?>
 
 <?php $this->beginBlock('sidebar') ?>
-    <?= app\features\youtube\YoutubePlaylistMenu::widget() ?>
+    <?= app\features\youtube\Widget::widget() ?>
 <?php $this->endBlock() ?>

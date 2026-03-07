@@ -2,9 +2,7 @@
 
 namespace app\features\fingering;
 
-use yii\base\Widget;
-
-final class Fretboard extends Widget
+final class Widget extends \yii\base\Widget
 {
     public string $colors = 'default'; // default|diatonic
     public bool $showDots = true;
@@ -42,7 +40,7 @@ final class Fretboard extends Widget
             $note['chroma'] = $chroma < 0 ? 12 + $chroma : $chroma;
         }
 
-        return $this->render('fretboard', [
+        return $this->render('widget', [
             'config' => [
                 'colors' => $this->colors,
                 'showDots' => $this->showDots,

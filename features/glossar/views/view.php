@@ -2,9 +2,9 @@
 
 /**
  * @var yii\web\View $this
- * @var \app\features\glossar\models\Glossar $glossar
- * @var \app\features\glossar\models\Glossar $next
- * @var \app\features\glossar\models\Glossar $previous
+ * @var app\features\glossar\models\Glossar $glossar
+ * @var app\features\glossar\models\Glossar $next
+ * @var app\features\glossar\models\Glossar $previous
  * @var string $selectedCategory
  */
 

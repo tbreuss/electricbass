@@ -4,9 +4,8 @@ namespace app\features\links;
 
 use app\features\links\models\Links;
 use Yii;
-use yii\base\Widget;
 
-final class LinksWidget extends Widget
+final class Widget extends \yii\base\Widget
 {
     /**
      * @return string|void
@@ -52,7 +51,7 @@ final class LinksWidget extends Widget
             $linksByCategory[$category]['links'][] = $link;
         }
 
-        return $this->render('links-widget', [
+        return $this->render('widget', [
             'linkItems' => array_values($linksByCategory),
         ]);
     }

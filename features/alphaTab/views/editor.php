@@ -10,7 +10,7 @@
 
 <?php $this->title = 'Editor | ' ?>
 <?php $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']) ?>
-<?php app\features\alphaTab\WebAsset::register($this) ?>
+<?php app\features\alphaTab\Asset::register($this) ?>
 
 <div class="alpha-tab">
     <?php if ($alphaTab->uid() !== null): ?>

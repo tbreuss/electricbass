@@ -17,7 +17,7 @@ $this->params['metaDescription'] = 'Inspirierende und hörenswerte Musikalben be
 <div class="content catalog-all">
     <h1>Musikalben von E-Bassisten von A-Z</h1>
     <div class="row">
-        <?= $this->render('/_partials/grouped_entries', ['groupedEntries' => $groupedEntries]) ?>
+        <?= $this->render('@app/features/_partials/grouped-entries', ['groupedEntries' => $groupedEntries]) ?>
     </div>
 </div>
 

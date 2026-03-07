@@ -2,8 +2,8 @@
 
 /**
  * @var yii\web\View $this
- * @var \app\features\video\models\Video $video
- * @var \app\features\video\models\Video[] $similarVideos
+ * @var app\features\video\models\Video $video
+ * @var app\features\video\models\Video[] $similarVideos
  * @var int $height
  * @var string $key
  * @var int $width
@@ -74,7 +74,7 @@ $moreVideos = array_slice($similarVideos, 3);
 <?= Hits::widget(["tableName" => "video", "tableId" => $video->id]) ?>
 
 <?php $this->beginBlock('sidebar') ?>
-    <?= app\features\youtube\YoutubePlaylistMenu::widget() ?>
+    <?= app\features\youtube\Widget::widget() ?>
     <div class="topVideos">
         <h2 class="topVideos__heading">Ähnliche Videos</h2>
         <?php foreach ($topVideos as $topVideo): ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \app\features\catalog\models\Catalog[] $models
+ * @var app\features\catalog\models\Catalog[] $models
  * @var string $title
  */
 ?>

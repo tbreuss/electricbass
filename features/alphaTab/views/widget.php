@@ -10,7 +10,7 @@
         <img src="<?= $previewImage ?>" alt="<?= $alphaTab->previewImageAltText() ?>" width="100%" loading="lazy">
     </a>
 <?php else: ?>
-    <?php app\features\alphaTab\WebAsset::register($this) ?>
+    <?php app\features\alphaTab\Asset::register($this) ?>
     <?php if ($alphaTab->uid() !== null): // no indentation due to markdown parsing ?>
         <a class="atw atw--clickable" href="<?= app\helpers\Url::to(['/alpha-tab/view', 'uid' => $alphaTab->uid()]) ?>">
             <div class="atw-play"><img src="/img/play-blue.svg" width="68" alt="Play"></div>

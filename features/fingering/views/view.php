@@ -170,7 +170,7 @@ function replaceStringDef(int $strings, string $note): string
 <?php if (!empty($model->fingering)): ?>
     <h2>Fingersatz</h2>
     <p>Der gängigste Fingersatz <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> lautet wie folgt:</p>
-    <?= app\features\fingering\Fretboard::widget([
+    <?= app\features\fingering\Widget::widget([
             'showDots' => false,
             'showFretNumbers' => false,
             'showStringNames' => false,
@@ -189,7 +189,7 @@ function replaceStringDef(int $strings, string $note): string
 
 $fingerings = tebe\tonal\fretboard\findNotes($TUNING, $notes);
 
-echo app\features\fingering\Fretboard::widget([
+echo app\features\fingering\Widget::widget([
         'colors' => 'diatonic',
         'strings' => $FRETBOARD_STRINGS,
         'frets' => $FRETBOARD_FRETS,
@@ -201,7 +201,7 @@ echo app\features\fingering\Fretboard::widget([
 <p>Darstellung aller Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> in Intervallschrift auf dem Griffbrett bis zum zwölften Bund:</p>
 
 <?php
-echo app\features\fingering\Fretboard::widget([
+echo app\features\fingering\Widget::widget([
         'colors' => 'diatonic',
         'strings' => $FRETBOARD_STRINGS,
         'frets' => $FRETBOARD_FRETS,
@@ -213,7 +213,7 @@ echo app\features\fingering\Fretboard::widget([
 <p>Darstellung aller Töne <?= $model->title_genitive ? $model->title_genitive : $model->categoryAsGenitive() ?> in vereinfachter Intervallschrift auf dem Griffbrett bis zum zwölften Bund:</p>
 
 <?php
-echo app\features\fingering\Fretboard::widget([
+echo app\features\fingering\Widget::widget([
         'colors' => 'diatonic',
         'strings' => $FRETBOARD_STRINGS,
         'frets' => $FRETBOARD_FRETS,
@@ -245,7 +245,7 @@ echo app\features\fingering\Fretboard::widget([
         <p><?= ucfirst($model->title_nominative) ?> mit Grundton <?= $root ?> lässt sich auf dem <?= $strings ?>-saitigen E-Bass in folgenden Lagen greifen:</p>
         <?php foreach ($allPossibilitites as $pos => $possibilitiesPerPosition): ?>
             <?php foreach ($possibilitiesPerPosition as $result): ?>
-                <?= app\features\fingering\Fretboard::widget([
+                <?= app\features\fingering\Widget::widget([
                     'position' => $pos,
                     'expandPosition' => $expandPosition,
                     'strings' => $FRETBOARD_STRINGS,

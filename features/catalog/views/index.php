@@ -10,9 +10,9 @@
  * @var string $category
  * @var string $sort
  * @var array<string, string> $filter
- * @var \app\features\catalog\models\Catalog[] $models
- * @var \app\features\catalog\models\Catalog[] $latest
- * @var \app\features\catalog\models\Catalog[] $popular
+ * @var app\features\catalog\models\Catalog[] $models
+ * @var app\features\catalog\models\Catalog[] $latest
+ * @var app\features\catalog\models\Catalog[] $popular
  */
 
 use app\helpers\Html;

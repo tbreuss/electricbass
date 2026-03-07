@@ -4,11 +4,10 @@ namespace app\features\alphaTab;
 
 use app\features\alphaTab\components\AlphaTabApi;
 use app\features\alphaTab\models\AlphaTab;
-use yii\web\Controller;
 use yii\web\GoneHttpException;
 use yii\web\UnauthorizedHttpException;
 
-final class WebController extends Controller
+final class Controller extends \yii\web\Controller
 {
     public function actionView(string $uid): string
     {

@@ -3,7 +3,7 @@
 /**
  * @var string $ratingContext
  * @var string $ratingStyle
- * @var \app\features\blog\models\Blog[]|app\features\lesson\models\Lesson[] $models
+ * @var app\features\blog\models\Blog[]|app\features\lesson\models\Lesson[] $models
  */
 
 use app\features\rating\RatingReadOnly;
