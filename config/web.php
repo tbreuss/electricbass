@@ -34,7 +34,6 @@ $config = [
         'quiz' => app\features\quiz\Controller::class,
         'search' => app\features\search\Controller::class,
         'sitemap' => app\features\sitemap\Controller::class,
-        'test' => app\features\test\Controller::class,
         'video' => app\features\video\Controller::class,
         'youtube' => app\features\youtube\Controller::class,
     ],
