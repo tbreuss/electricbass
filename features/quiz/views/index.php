@@ -1,4 +1,5 @@
 <?= app\features\quiz\ReadNoteWidget::widget(); ?>
+<?= ''//app\features\quiz\WriteNoteWidget::widget(); ?>
 
 <?php /*<svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
     <style>
