@@ -31,6 +31,7 @@ $config = [
         'metronome' => app\features\metronome\Controller::class,
         'music-paper' => app\features\musicPaper\Controller::class,
         'quote' => app\features\quote\Controller::class,
+        'quiz' => app\features\quiz\Controller::class,
         'search' => app\features\search\Controller::class,
         'sitemap' => app\features\sitemap\Controller::class,
         'test' => app\features\test\Controller::class,

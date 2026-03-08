@@ -52,7 +52,7 @@ return [
     'admin/<controller>/<action>' => 'admin/<controller>/<action>',
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
-    'test' => 'test/index',
+    'quiz' => 'quiz/index',
     'alpha-tab/debug' => 'alpha-tab/debug',
     'alpha-tab/editor' => 'alpha-tab/editor',
     [

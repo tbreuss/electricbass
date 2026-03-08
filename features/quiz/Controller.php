@@ -1,6 +1,6 @@
 <?php
 
-namespace app\features\test;
+namespace app\features\quiz;
 
 use Yii;
 use yii\web\GoneHttpException;
@@ -16,7 +16,7 @@ final class Controller extends \yii\web\Controller
         if (Yii::$app->request->headers->has('HX-Request')) {
             return $this->renderPartial('test');
         }
-
-        return $this->render('@app/features/test/views/index');
+        $this->layout = 'empty';
+        return $this->render('@app/features/quiz/views/index');
     }
 }
