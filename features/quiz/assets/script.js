@@ -9,6 +9,29 @@ const lowerLedgerLine2 = document.querySelector(".quiz-score-lower-ledger-lines-
 const xCoordinate = document.querySelector(".quiz-score-x-coordinate");
 const yCoordinate = document.querySelector(".quiz-score-y-coordinate");
 
+const noteToCoord = [
+    ['g1', 14],
+    ['f1', 24],
+    ['e1', 34],
+    ['d1', 44],
+    ['c1', 54],
+    ['b', 64],
+    ['a', 74],
+    ['g', 84],
+    ['f', 94],
+    ['e', 104],
+    ['d', 114],
+    ['c', 124],
+    ['B', 134],
+    ['A', 144],
+    ['G', 154],
+    ['F', 164],
+    ['E', 174],
+    ['D', 184],
+    ['C', 194],
+    ['B1', 204],
+];
+
 function calcNoteY(offsetY) {
     let y = Math.floor(offsetY / 10) * 10 + 4;
     y = Math.min(204, y);
@@ -59,9 +82,21 @@ function showCoordinate(x, y) {
     yCoordinate.setAttribute("x2", x);
 }
 
+function setNote(note) {
+    for (let i = 0; i < noteToCoord.length; i++) {
+        if (noteToCoord[i][0] === note) {
+            selectNote(noteToCoord[i][1]);
+            showNote(noteToCoord[i][1]);
+        }
+    }
+}
+
 export {
     hideNote,
     showNote,
     selectNote,
+    setNote,
+    showCoordinate,
+    toSvgX,
     toSvgY,
 };
