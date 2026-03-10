@@ -10,7 +10,7 @@
     <div class="quiz-header">
         <img class="quiz-header-close" src="<?= $quizAsset->baseUrl ?>/x-circle.svg" width="24" height="24" alt="Schliessen">
         <div class="quiz-header-progress">
-            <div style="background-color: rgb(114, 172, 81); width: 16.6667%;">&nbsp;</div>
+            <div style="background-color: rgb(114, 172, 81);">&nbsp;</div>
         </div>
         <img class="quiz-header-help" src="<?= $quizAsset->baseUrl ?>/help-circle.svg" width="24" height="24" alt="Hilfe">
     </div>
