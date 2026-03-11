@@ -8,6 +8,7 @@
 }
 .quiz-header-close, .quiz-header-help {
     filter: brightness(0) saturate(100%) invert(66%) sepia(94%) saturate(1%) hue-rotate(6deg) brightness(106%) contrast(89%);
+    cursor: pointer;
 }
 .quiz-header-progress {
     width: 100%;
@@ -70,4 +71,13 @@
 }
 .quiz-score-x-coordinate, .quiz-score-y-coordinate {
     stroke: #eee;
+}
+.quiz-debug {
+    text-align: center;
+}
+.quiz-result {
+    text-align: center;
+}
+.is-hidden {
+    display: none;
 }

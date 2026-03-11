@@ -10,64 +10,93 @@
     'mode' => 'read-note',
 ]) ?>
 
-<div class="quiz-output"></div>
-
 <script type="module">
     import { setNote } from '<?= app\features\quiz\Asset::register($this)->baseUrl ?>/script.js';
 
-    const progress = document.querySelector(".quiz-header-progress div");
-    const output = document.querySelector(".quiz-output");
+    const uiForm = document.querySelector(".quiz-form");
+    const uiResult = document.querySelector(".quiz-result");
+    const uiProgress = document.querySelector(".quiz-header-progress div");
+    const uiDebug = document.querySelector(".quiz-debug");
+    const uiNotes = document.querySelector(".quiz-notes");
+    const uiButtonAgain = document.querySelector(".quiz-result-again-button");
+    const uiButtonNext = document.querySelector(".quiz-result-next-button");
+    const uiButtonClose = document.querySelector(".quiz-header-close");
+    const uiButtonHelp = document.querySelector(".quiz-header-help");
 
-    const notes = <?= json_encode($quiz) ?>;
+    let notes = [];
     let note = 0;
     let attempts = [];
     let attempt = 0;
 
-    setNote(notes[note]);
+    function init() {
+        notes = <?= json_encode($quiz) ?>;
+        note = 0;
+        attempts = [];
+        attempt = 0;
 
-    document.querySelector(".quiz-notes").addEventListener("click", (event) => {
+        const buttons = uiNotes.querySelectorAll(".quiz-notes-button")
+        buttons.forEach((button) => {
+            const [note, _] = button.value.split(':');
+            if (notes.includes(note)) {
+                button.disabled = false;
+            }
+        });
+
+        uiProgress.style.width = 0;
+    }
+
+    function showForm() {
+        setNote(notes[note]);
+        uiProgress.style.width = (100 / notes.length * note) + "%";
+        uiForm.classList.remove("is-hidden");
+        uiResult.classList.add("is-hidden");
+    }
+
+    function showResult() {
+        uiForm.classList.add("is-hidden");
+        uiResult.classList.remove("is-hidden");
+    }
+
+    uiNotes.addEventListener("click", (event) => {
         if (event.target.tagName !== "BUTTON") {
-            return;
-        }
-
-        if (note >= notes.length) {
-            // finished
             return;
         }
 
         attempt++;
 
-        const [selectedNote, _] = event.target.value.split(':');
+        const [selectedNote, _] = event.target.value.split(":");
 
         if (selectedNote === notes[note]) {
             attempts[note] = attempt;
             note++;
-            progress.style.width = (100 / 10 * note) + '%';
-            setNote(notes[note]);
+            uiProgress.style.width = (100 / 10 * note) + "%";
+            showForm();
             attempt = 0;
         } else {
             attempts[note] = attempt;
         }
 
+        uiDebug.innerHTML = JSON.stringify(attempts);
+
         if (note >= notes.length) {
-            // finished
+            showResult();
+            return;
         }
-
-        output.innerHTML = JSON.stringify(attempts);
     });
 
-    /*
-    const notes = ['B1', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'c', 'd', 'e', 'f', 'g', 'a', 'b', 'c1', 'd1', 'e1', 'f1', 'g1'];
-
-    for (let i=0; i <= notes.length; i++){
-        setTimeout(() => {
-            setNote(notes[i]);
-            console.log(notes[i]);
-        }, i * 250);
-    }
-
-    document.querySelector(".quiz-score").addEventListener("pointermove", (event) => {
-        //showCoordinate(toSvgX(event.offsetX), toSvgY(event.offsetY));
+    uiButtonAgain.addEventListener("click", () => {
+        init();
+        showForm();
     });
-    */
+
+    uiButtonNext.addEventListener("click", () => {
+        window.open("/quiz?uebung=2", "_self");
+    });
+
+    uiButtonClose.addEventListener("click", () => alert("Close clicked"));
+
+    uiButtonHelp.addEventListener("click", () => alert("Help clicked"));
+
+    init();
+    showForm();
 </script>
