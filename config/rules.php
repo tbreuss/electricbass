@@ -52,6 +52,11 @@ return [
     'admin/<controller>/<action>' => 'admin/<controller>/<action>',
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
+    [
+        'pattern' => 'quiz/<url:.+>',
+        'route' => 'quiz/view',
+        'encodeParams' => false,
+    ],
     'quiz' => 'quiz/index',
     'alpha-tab/debug' => 'alpha-tab/debug',
     'alpha-tab/editor' => 'alpha-tab/editor',

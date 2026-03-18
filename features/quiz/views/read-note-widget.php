@@ -4,6 +4,7 @@
  * @var yii\web\View $this
  * @var string[] $notes
  * @var int $length
+ * @var ?string $nextUrl
  */
 ?>
 
@@ -33,6 +34,7 @@
     let note = 0;
     let attempts = [];
     let attempt = 0;
+    let showNextButton = <?= $nextUrl ? 'true' : 'false' ?>;
 
     function start() {
         notes = getRandomListEvenlyDistributed(<?= json_encode($notes) ?>, <?= $length ?>);
@@ -153,6 +155,10 @@
 
         uiForm.classList.add("is-hidden");
         uiResult.classList.remove("is-hidden");
+        if (!showNextButton) {
+            uiNextQuizButton.classList.add('is-hidden');
+        }
+
     }
 
     uiNotes.addEventListener("click", (event) => {
@@ -188,10 +194,12 @@
     });
 
     uiNextQuizButton.addEventListener("click", () => {
-        window.open("/quiz?uebung=2", "_self");
+        window.open("<?= app\helpers\Url::to('/quiz/' . $nextUrl) ?>", "_self");
     });
 
-    uiCloseButton.addEventListener("click", () => alert("Close clicked"));
+    uiCloseButton.addEventListener("click", () => {
+        window.open("<?= app\helpers\Url::to(['/quiz/index']) ?>", "_self");
+    });
 
     uiHelpButton.addEventListener("click", () => alert("Help clicked"));
 

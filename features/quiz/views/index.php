@@ -1,5 +1,13 @@
-<?= app\features\quiz\ReadNoteWidget::widget(); ?>
-<?= ''//app\features\quiz\WriteNoteWidget::widget(); ?>
+<?php
+
+/**
+ * @var app\features\quiz\models\Quiz[] $models
+ * @var yii\web\View $this
+ */
+?>
+<?php foreach ($models as $model): ?>
+    <div><a href="/quiz/<?= $model->url ?>"><?= $model->title ?></a></div>
+<?php endforeach ?>
 
 <?php /*<svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
     <style>
