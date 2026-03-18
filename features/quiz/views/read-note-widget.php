@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @var yii\web\View $this
  * @var string[] $quiz
@@ -19,31 +18,36 @@
     const uiProgress = document.querySelector(".quiz-header-progress div");
     const uiDebug = document.querySelector(".quiz-debug");
     const uiNotes = document.querySelector(".quiz-notes");
-    const uiButtonAgain = document.querySelector(".quiz-result-again-button");
-    const uiButtonNext = document.querySelector(".quiz-result-next-button");
-    const uiButtonClose = document.querySelector(".quiz-header-close");
-    const uiButtonHelp = document.querySelector(".quiz-header-help");
+    const uiButtons = uiNotes.querySelectorAll(".quiz-notes-button")
+    const uiPlayAgainButton = document.querySelector(".quiz-result-again-button");
+    const uiNextQuizButton = document.querySelector(".quiz-result-next-button");
+    const uiCloseButton = document.querySelector(".quiz-header-close");
+    const uiHelpButton = document.querySelector(".quiz-header-help");
+    const uiResultTitle = document.querySelector(".quiz-result-title");
+    const uiResultPoints = document.querySelector(".quiz-result-boxes-points-value");
+    const uiResultAccuracy = document.querySelector(".quiz-result-boxes-accuracy-value");
 
     let notes = [];
     let note = 0;
     let attempts = [];
     let attempt = 0;
 
-    function init() {
+    function start() {
         notes = <?= json_encode($quiz) ?>;
         note = 0;
         attempts = [];
         attempt = 0;
+        initButtons();
+        showForm();
+    }
 
-        const buttons = uiNotes.querySelectorAll(".quiz-notes-button")
-        buttons.forEach((button) => {
+    function initButtons() {
+        uiButtons.forEach((button) => {
             const [note, _] = button.value.split(':');
             if (notes.includes(note)) {
                 button.disabled = false;
             }
         });
-
-        uiProgress.style.width = 0;
     }
 
     function showForm() {
@@ -54,6 +58,33 @@
     }
 
     function showResult() {
+        const uniqueNotes = notes.filter((note, index, ref) => ref.indexOf(note) === index);
+        const minimumNumberOfAttempts = attempts.length;
+        const maximumNumberOfAttempts = uniqueNotes.length * attempts.length;
+        const diffAttempts = maximumNumberOfAttempts - minimumNumberOfAttempts;
+        const effectiveAttempts = attempts.reduce((acc, num) => acc + num, 0) - minimumNumberOfAttempts;
+        const accuracy = 100 - (100 / diffAttempts * effectiveAttempts);
+
+        let title = "Zurück zum Start";
+        let points = 10;
+        if (accuracy === 100) {
+            title = "Perfekt gemacht!";
+            points = 50;
+        } else if (accuracy >= 75) {
+            title = "Gut gemacht!";
+            points = 40;
+        } else if (accuracy >= 50) {
+            title = "Okay gemacht";
+            points = 30;
+        } else if (accuracy >= 25) {
+            title = "Das geht noch besser";
+            points = 20;
+        }
+
+        uiResultTitle.innerHTML = title;
+        uiResultPoints.innerHTML = points;
+        uiResultAccuracy.innerHTML = accuracy + "%";
+
         uiForm.classList.add("is-hidden");
         uiResult.classList.remove("is-hidden");
     }
@@ -72,32 +103,31 @@
             note++;
             uiProgress.style.width = (100 / 10 * note) + "%";
             showForm();
+            initButtons();
             attempt = 0;
         } else {
             attempts[note] = attempt;
+            event.target.disabled = true;
         }
 
-        uiDebug.innerHTML = JSON.stringify(attempts);
+        //uiDebug.innerHTML = JSON.stringify(attempts);
 
         if (note >= notes.length) {
             showResult();
-            return;
         }
     });
 
-    uiButtonAgain.addEventListener("click", () => {
-        init();
-        showForm();
+    uiPlayAgainButton.addEventListener("click", () => {
+        start();
     });
 
-    uiButtonNext.addEventListener("click", () => {
+    uiNextQuizButton.addEventListener("click", () => {
         window.open("/quiz?uebung=2", "_self");
     });
 
-    uiButtonClose.addEventListener("click", () => alert("Close clicked"));
+    uiCloseButton.addEventListener("click", () => alert("Close clicked"));
 
-    uiButtonHelp.addEventListener("click", () => alert("Help clicked"));
+    uiHelpButton.addEventListener("click", () => alert("Help clicked"));
 
-    init();
-    showForm();
+    start();
 </script>

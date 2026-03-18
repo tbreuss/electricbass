@@ -75,8 +75,48 @@
 .quiz-debug {
     text-align: center;
 }
+
 .quiz-result {
     text-align: center;
+}
+.quiz-result-boxes {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 18px;
+    margin: 20px 0;
+}
+.quiz-result-boxes-points {
+    background-color: #ffc802;
+    border-color: #ffc802;
+    color: #fff;
+    min-width: 160px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 8px;
+}
+.quiz-result-boxes-points-value {
+    background-color: #fff;
+    color: #ffc802;
+    border-radius: 8px;
+}
+.quiz-result-boxes-accuracy {
+    background-color: #72ac52;
+    border-color: #72ac52;
+    color: #fff;
+    min-width: 160px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 8px;
+}
+.quiz-result-boxes-accuracy-value {
+    background-color: #fff;
+    color: #72ac52;
+    border-radius: 8px;
 }
 .is-hidden {
     display: none;

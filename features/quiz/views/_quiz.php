@@ -52,7 +52,17 @@
         <?php endif ?>
     </div>
     <div class="quiz-result is-hidden">
-        <h1 class="quiz-title">Perfekt gemacht!</h1>
+        <h1 class="quiz-result-title"></h1>
+        <div class="quiz-result-boxes">
+            <div class="quiz-result-boxes-points">
+                <h3>Punkte</h3>
+                <div class="quiz-result-boxes-points-value"></div>
+            </div>
+            <div class="quiz-result-boxes-accuracy">
+                <h3>Genauigkeit</h3>
+                <div class="quiz-result-boxes-accuracy-value"></div>
+            </div>
+        </div>
         <button class="quiz-result-again-button">Noch einmal</button>
         <button class="quiz-result-next-button">Nächste Übung</button>
     </div>
