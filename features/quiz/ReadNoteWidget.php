@@ -8,9 +8,12 @@ class ReadNoteWidget extends Widget
 {
     public function run(): string
     {
-        $quiz = ['c', 'd', 'e', 'c', 'e', 'd', 'c', 'e', 'd', 'c'];
+        $notes = ['c', 'd', 'e'];
+        $length = 10;
+
         return $this->render('read-note-widget', [
-            'quiz' => $quiz,
+            'notes' => $notes,
+            'length' => $length,
         ]);
     }
 }

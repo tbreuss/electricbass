@@ -2,7 +2,8 @@
 
 /**
  * @var yii\web\View $this
- * @var string[] $quiz
+ * @var string[] $notes
+ * @var int $length
  */
 ?>
 
@@ -34,12 +35,19 @@
     let attempt = 0;
 
     function start() {
-        notes = <?= json_encode($quiz) ?>;
+        notes = getRandomListEvenlyDistributed(<?= json_encode($notes) ?>, <?= $length ?>);
         note = 0;
         attempts = [];
         attempt = 0;
         initButtons();
         showForm();
+
+        // const counts = {};
+        // notes.forEach((x) => {
+        //     counts[x] = (counts[x] || 0) + 1;
+        // });
+        // console.log(notes)
+        // console.log(counts)
     }
 
     function initButtons() {
@@ -49,6 +57,63 @@
                 button.disabled = false;
             }
         });
+    }
+
+    // Fair Random with Forced Balance
+    function getRandomListEvenlyDistributed(values, count) {
+        // Erstelle Pool mit exakter Verteilung
+        const minPerValue = Math.floor(count / values.length);
+        const remainder = count % values.length;
+
+        let pool = [];
+        for (let i = 0; i < values.length; i++) {
+            const repeats = i < remainder ? minPerValue + 1 : minPerValue;
+            for (let j = 0; j < repeats; j++) {
+                pool.push(values[i]);
+            }
+        }
+
+        // Mische Pool zufällig
+        shuffleArray(pool);
+
+        const result = [];
+        let lastSelected = null;
+
+        for (let i = 0; i < count; i++) {
+            let selected = pool[i];
+
+            // Vermeide direkte Wiederholung
+            if (selected === lastSelected) {
+                // Suche *irgendeinen* anderen Wert im Pool
+                let found = false;
+                for (let j = 0; j < pool.length; j++) {
+                    if (pool[j] !== selected) {
+                        // Tausche mit diesem Wert
+                        [pool[i], pool[j]] = [pool[j], pool[i]];
+                        selected = pool[i];
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    // Notfall: kein anderer Wert → erlaube Wiederholung
+                    console.warn("Kein anderer Wert gefunden — Wiederholung erlaubt");
+                }
+            }
+
+            result.push(selected);
+            lastSelected = selected;
+        }
+
+        return result;
+    }
+
+    // Hilfsfunktion: Fisher-Yates Shuffle
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
     }
 
     function showForm() {
