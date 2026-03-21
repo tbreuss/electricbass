@@ -89,6 +89,7 @@ $config = [
                 'websites' => ['app\widgets\Parser', 'websites'],
                 'youtube' => ['app\widgets\Parser', 'youtube'],
                 'play-along' => ['app\widgets\Parser', 'playAlong'],
+                'quiz-list' => ['app\features\quiz\Shortcode', 'list'],
             ],
         ],
         'i18n' => [

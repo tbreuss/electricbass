@@ -4,7 +4,7 @@ namespace app\features\quiz;
 
 use yii\base\Widget;
 
-class WriteNoteWidget extends Widget
+final class WriteNoteWidget extends Widget
 {
     public function run(): string
     {

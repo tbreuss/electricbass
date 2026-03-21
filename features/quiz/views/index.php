@@ -5,9 +5,31 @@
  * @var yii\web\View $this
  */
 ?>
-<?php foreach ($models as $model): ?>
-    <div><a href="/quiz/<?= $model->url ?>"><?= $model->title ?></a></div>
+<h1>Noten lesen</h1>
+<div class="row gy-4 exercises">
+<?php foreach ($models as $index => $model): ?>
+    <div class="col-6 col-md-4">
+        <div class="exercise">
+            <h2><?= $index + 1 ?></h2>
+            <p><?= $model->title ?></p>
+            <a class="btn btn-primary" href="/quiz/<?= $model->uid ?>">Anfangen</a>
+        </div>
+    </div>
 <?php endforeach ?>
+</div>
+<style>
+    .exercise {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+    .exercise h2 {
+        margin-bottom: 0;
+    }
+    .exercise p {
+        margin-bottom: 1rem;
+    }
+</style>
 
 <?php /*<svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg">
     <style>

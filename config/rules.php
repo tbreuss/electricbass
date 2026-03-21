@@ -53,7 +53,7 @@ return [
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
     [
-        'pattern' => 'quiz/<url:.+>',
+        'pattern' => 'quiz/<uid:.+>',
         'route' => 'quiz/view',
         'encodeParams' => false,
     ],

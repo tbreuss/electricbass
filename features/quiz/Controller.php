@@ -18,11 +18,11 @@ final class Controller extends \yii\web\Controller
         return $this->render('@app/features/quiz/views/index', ['models' => $models]);
     }
 
-    public function actionView(string $url): string
+    public function actionView(string $uid): string
     {
         Yii::$app->response->statusCode = 410;
 
-        $model = Quiz::findOneByUrl($url);
+        $model = Quiz::findOneByUid($uid);
 
         if ($model === null) {
             throw new GoneHttpException();

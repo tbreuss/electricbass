@@ -4,7 +4,7 @@
  * @var yii\web\View $this
  * @var string[] $notes
  * @var int $length
- * @var ?string $nextUrl
+ * @var ?string $nextQuizUid
  */
 ?>
 
@@ -31,96 +31,72 @@
     const uiResultAccuracy = document.querySelector(".quiz-result-boxes-accuracy-value");
 
     let notes = [];
-    let note = 0;
+    let notesOnly = [];
+    let noteIndex = 0;
     let attempts = [];
     let attempt = 0;
-    let showNextButton = <?= $nextUrl ? 'true' : 'false' ?>;
+    let showNextButton = <?= $nextQuizUid ? 'true' : 'false' ?>;
 
     function start() {
-        notes = getRandomListEvenlyDistributed(<?= json_encode($notes) ?>, <?= $length ?>);
-        note = 0;
+        notes = getPerfectlyBalancedNonConsecutive(<?= json_encode($notes) ?>, <?= $length ?>);
+        notesOnly = notesWithoutHeight(notes);
+        noteIndex = 0;
         attempts = [];
         attempt = 0;
         initButtons();
         showForm();
+    }
 
-        // const counts = {};
-        // notes.forEach((x) => {
-        //     counts[x] = (counts[x] || 0) + 1;
-        // });
-        // console.log(notes)
-        // console.log(counts)
+    function notesWithoutHeight(notes) {
+        const notesOnly = [];
+        notes.forEach((note) => {
+            notesOnly.push(note.toLowerCase().substring(0, 1));
+        });
+        return notesOnly;
     }
 
     function initButtons() {
         uiButtons.forEach((button) => {
             const [note, _] = button.value.split(':');
-            if (notes.includes(note)) {
+            if (notesOnly.includes(note)) {
                 button.disabled = false;
             }
         });
     }
 
-    // Fair Random with Forced Balance
-    function getRandomListEvenlyDistributed(values, count) {
-        // Erstelle Pool mit exakter Verteilung
-        const minPerValue = Math.floor(count / values.length);
-        const remainder = count % values.length;
-
-        let pool = [];
-        for (let i = 0; i < values.length; i++) {
-            const repeats = i < remainder ? minPerValue + 1 : minPerValue;
-            for (let j = 0; j < repeats; j++) {
-                pool.push(values[i]);
-            }
-        }
-
-        // Mische Pool zufällig
-        shuffleArray(pool);
+    function getPerfectlyBalancedNonConsecutive(array, count) {
+        if (array.length === 0) return [];
+        if (array.length === 1) return Array(count).fill(array);
 
         const result = [];
-        let lastSelected = null;
+        let last = null;
+        let remaining = [...array]; // Will rebuild after each full cycle
 
         for (let i = 0; i < count; i++) {
-            let selected = pool[i];
-
-            // Vermeide direkte Wiederholung
-            if (selected === lastSelected) {
-                // Suche *irgendeinen* anderen Wert im Pool
-                let found = false;
-                for (let j = 0; j < pool.length; j++) {
-                    if (pool[j] !== selected) {
-                        // Tausche mit diesem Wert
-                        [pool[i], pool[j]] = [pool[j], pool[i]];
-                        selected = pool[i];
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    // Notfall: kein anderer Wert → erlaube Wiederholung
-                    console.warn("Kein anderer Wert gefunden — Wiederholung erlaubt");
-                }
+            if (remaining.length === 0) {
+                remaining = [...array]; // Reset for next cycle
             }
 
-            result.push(selected);
-            lastSelected = selected;
+            // Filter out last item if possible
+            let candidates = remaining.filter(item => item !== last);
+            if (candidates.length === 0) candidates = remaining; // fallback
+
+            // Pick random
+            const pick = candidates[Math.floor(Math.random() * candidates.length)];
+            result.push(pick);
+            last = pick;
+
+            // Remove from remaining (for this cycle)
+            const index = remaining.indexOf(pick);
+            if (index > -1) remaining.splice(index, 1);
         }
 
         return result;
     }
 
-    // Hilfsfunktion: Fisher-Yates Shuffle
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
     function showForm() {
-        setNote(notes[note]);
-        uiProgress.style.width = (100 / notes.length * note) + "%";
+        setNote(notes[noteIndex]);
+        uiProgress.style.width = (100 / notes.length * noteIndex) + "%";
         uiForm.classList.remove("is-hidden");
         uiResult.classList.add("is-hidden");
     }
@@ -131,7 +107,7 @@
         const maximumNumberOfAttempts = uniqueNotes.length * attempts.length;
         const diffAttempts = maximumNumberOfAttempts - minimumNumberOfAttempts;
         const effectiveAttempts = attempts.reduce((acc, num) => acc + num, 0) - minimumNumberOfAttempts;
-        const accuracy = 100 - (100 / diffAttempts * effectiveAttempts);
+        const accuracy = Math.round((100 - (100 / diffAttempts * effectiveAttempts)) * 10) / 10;
 
         let title = "Zurück zum Start";
         let points = 10;
@@ -170,21 +146,21 @@
 
         const [selectedNote, _] = event.target.value.split(":");
 
-        if (selectedNote === notes[note]) {
-            attempts[note] = attempt;
-            note++;
-            uiProgress.style.width = (100 / 10 * note) + "%";
+        if (selectedNote === notesOnly[noteIndex]) {
+            attempts[noteIndex] = attempt;
+            noteIndex++;
+            uiProgress.style.width = (100 / 10 * noteIndex) + "%";
             showForm();
             initButtons();
             attempt = 0;
         } else {
-            attempts[note] = attempt;
+            attempts[noteIndex] = attempt;
             event.target.disabled = true;
         }
 
         //uiDebug.innerHTML = JSON.stringify(attempts);
 
-        if (note >= notes.length) {
+        if (noteIndex >= notes.length) {
             showResult();
         }
     });
@@ -194,7 +170,7 @@
     });
 
     uiNextQuizButton.addEventListener("click", () => {
-        window.open("<?= app\helpers\Url::to('/quiz/' . $nextUrl) ?>", "_self");
+        window.open("<?= app\helpers\Url::to('/quiz/' . $nextQuizUid) ?>", "_self");
     });
 
     uiCloseButton.addEventListener("click", () => {

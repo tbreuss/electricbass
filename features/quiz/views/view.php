@@ -7,7 +7,7 @@
 ?>
 <div>
 <?php if ($model->widget === 'ReadNote'): ?>
-    <?= app\features\quiz\ReadNoteWidget::widget(array_merge($model->widgetOptions, ['nextUrl' => $model->next->url ?? null])); ?>
+    <?= app\features\quiz\ReadNoteWidget::widget(array_merge($model->widgetOptions, ['nextQuizUid' => $model->nextQuiz->uid ?? null])); ?>
 <?php elseif ($model->widget === 'WriteNote'): ?>
     <?= app\features\quiz\WriteNoteWidget::widget($model->widgetOptions); ?>
 <?php endif ?>

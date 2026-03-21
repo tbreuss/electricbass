@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 
 /**
  * @property int $id
+ * @property int $uid
  * @property int $nextId
  * @property string $title
  * @property string $widget
@@ -20,12 +21,12 @@ class Quiz extends ActiveRecord
         return '{{quiz}}';
     }
 
-    public static function findOneByUrl(string $url): ?self
+    public static function findOneByUid(string $uid): ?self
     {
-        return self::find()->where(['url' => $url])->one();
+        return self::find()->where(['uid' => $uid, 'deleted' => null])->one();
     }
 
-    public function getNext(): ActiveQuery
+    public function getNextQuiz(): ActiveQuery
     {
         return $this->hasOne(Quiz::class, ['id' => 'nextId']);
     }
