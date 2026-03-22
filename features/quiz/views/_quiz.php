@@ -1,6 +1,10 @@
 <?php /** @var yii\web\View $this */ ?>
 <?php /** @var string $mode */ ?>
 <?php /** @var string $title */ ?>
+<?php /** @var ?string $lead */ ?>
+<?php /** @var ?string $hint */ ?>
+<?php /** @var int $numberOfQuestions */ ?>
+
 <?php $alphaTabAsset = app\features\alphaTab\Asset::register($this) ?>
 <?php $quizAsset = app\features\quiz\Asset::register($this) ?>
 
@@ -13,9 +17,12 @@
             <div class="quiz-header-progress">
                 <div style="background-color: rgb(114, 172, 81);">&nbsp;</div>
             </div>
-            <img class="quiz-header-help" src="<?= $quizAsset->baseUrl ?>/help-circle.svg" width="24" height="24" alt="Hilfe">
+            <?php if ($hint):
+                ?><img class="quiz-header-help" src="<?= $quizAsset->baseUrl ?>/help-circle.svg" width="24" height="24" alt="Hilfe"><?php
+            endif ?>
         </div>
         <h1 class="quiz-title"><?= $title ?></h1>
+        <p class="quiz-lead"><?= $lead ? $lead . ' – ' : '' ?><?= $numberOfQuestions ?> Fragen</p>
         <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" class="quiz-score">
             <g class="quiz-score-upper-ledger-lines">
                 <line class="quiz-score-upper-ledger-lines-3" x1="193" y1="14" x2="240" y2="14" stroke-width="2" visibility="hidden"></line>
@@ -53,6 +60,7 @@
     </div>
     <div class="quiz-result is-hidden">
         <h1 class="quiz-result-title"></h1>
+        <p class="quiz-lead"><?= $lead ?></p>
         <div class="quiz-result-boxes">
             <div class="quiz-result-boxes-points">
                 <h3>Punkte</h3>

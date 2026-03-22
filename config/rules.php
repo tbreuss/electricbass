@@ -57,7 +57,6 @@ return [
         'route' => 'quiz/view',
         'encodeParams' => false,
     ],
-    'quiz' => 'quiz/index',
     'alpha-tab/debug' => 'alpha-tab/debug',
     'alpha-tab/editor' => 'alpha-tab/editor',
     [

@@ -21,13 +21,17 @@ class Quiz extends ActiveRecord
         return '{{quiz}}';
     }
 
+    public static function findAllByUidLike(string $like): array
+    {
+        return Quiz::find()
+            ->where(['deleted' => null])
+            ->where('uid LIKE :uid', [':uid' => $like])
+            ->orderBy(['uid' => SORT_ASC])
+            ->all();
+    }
+
     public static function findOneByUid(string $uid): ?self
     {
         return self::find()->where(['uid' => $uid, 'deleted' => null])->one();
-    }
-
-    public function getNextQuiz(): ActiveQuery
-    {
-        return $this->hasOne(Quiz::class, ['id' => 'nextId']);
     }
 }

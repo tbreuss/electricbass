@@ -8,20 +8,10 @@ use yii\web\GoneHttpException;
 
 final class Controller extends \yii\web\Controller
 {
-    public $layout = 'empty';
-
-    public function actionIndex(): string
-    {
-        Yii::$app->response->statusCode = 410;
-
-        $models = Quiz::findAll(['deleted' => null]);
-        return $this->render('@app/features/quiz/views/index', ['models' => $models]);
-    }
+    public $layout = '@app/features/quiz/views/layout';
 
     public function actionView(string $uid): string
     {
-        Yii::$app->response->statusCode = 410;
-
         $model = Quiz::findOneByUid($uid);
 
         if ($model === null) {

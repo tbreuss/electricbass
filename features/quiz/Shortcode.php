@@ -16,13 +16,8 @@ final class Shortcode
             'uid' => '',
         ], $options);
 
-        $models = Quiz::find()
-            ->where(['deleted' => null])
-            ->where('uid LIKE :uid', [':uid' => $options['uid']])
-            ->all();
-
         return Yii::$app->controller->renderPartial('@app/features/quiz/views/list-shortcode', [
-            'models' => $models,
+            'models' => Quiz::findAllByUidLike($options['uid']),
         ]);
     }
 }

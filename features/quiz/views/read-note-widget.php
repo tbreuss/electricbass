@@ -3,14 +3,22 @@
 /**
  * @var yii\web\View $this
  * @var string[] $notes
+ * @var ?string $lead
+ * @var ?string $hint
  * @var int $length
  * @var ?string $nextQuizUid
+ * @var ?string $categoryUrl
  */
+
+$this->title = 'Bezeichne die Note – ' . $lead . ' | Quiz';
 ?>
 
 <?= $this->render('_quiz', [
     'title' => 'Bezeichne die Note',
+    'lead' => $lead,
+    'hint' => $hint,
     'mode' => 'read-note',
+    'numberOfQuestions' => $length,
 ]) ?>
 
 <script type="module">
@@ -174,10 +182,10 @@
     });
 
     uiCloseButton.addEventListener("click", () => {
-        window.open("<?= app\helpers\Url::to(['/quiz/index']) ?>", "_self");
+        window.open("<?= app\helpers\Url::to($categoryUrl) ?>", "_self");
     });
 
-    uiHelpButton.addEventListener("click", () => alert("Help clicked"));
+    uiHelpButton && uiHelpButton.addEventListener("click", () => alert("Help clicked"));
 
     start();
 </script>
