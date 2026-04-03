@@ -13,9 +13,10 @@ final class ListSummary extends Widget
 
     public function run(): string
     {
-        [$sortLabel, $sortDirection] = $this->getSelectedSort();
+        [$sortName, $sortLabel, $sortDirection] = $this->getSelectedSort();
         return $this->render('listsummary', [
             'sort' => $this->sort,
+            'sortName' => $sortName,
             'sortLabel' => $sortLabel,
             'sortDirection' => $sortDirection,
             'summary' => $this->getSummary()
@@ -51,9 +52,9 @@ final class ListSummary extends Widget
                 } else {
                     $direction = 'desc';
                 }
-                return [$label, $direction];
+                return [$sortKey, $label, $direction];
             }
         }
-        return ['', ''];
+        return ['', '', ''];
     }
 }

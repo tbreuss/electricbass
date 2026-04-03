@@ -23,7 +23,15 @@ final class Controller extends \yii\web\Controller
             $filter['artist'] = $artist;
         }
 
-        $provider = Album::getActiveDataProvider($filter);
+        $currentPage = (int)Yii::$app->request->getBodyParam('page', '0');
+        $currentSort = Yii::$app->request->getBodyParam('sort', '-modified');
+
+        $provider = Album::getActiveDataProvider(
+            page: $currentPage,
+            sort: $currentSort,
+            additionalWhere: $filter,
+        );
+
         $latest = Album::findLatest(5);
         $popular = Album::findPopular(5);
 
@@ -34,7 +42,9 @@ final class Controller extends \yii\web\Controller
             'sort' => $provider->getSort(),
             'filter' => $filter,
             'latest' => $latest,
-            'popular' => $popular
+            'popular' => $popular,
+            'currentPage' => $currentPage,
+            'currentSort' => $currentSort,
         ]);
     }
 

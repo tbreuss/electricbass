@@ -28,11 +28,11 @@ final class Album extends ActiveRecord
     }
 
     /**
-     * @phpstan-param array<string, string> $filter
+     * @phpstan-param array<string, string> $additionalWhere
      */
-    public static function getActiveDataProvider(array $filter): ActiveDataProvider
+    public static function getActiveDataProvider(int $page, string $sort, array $additionalWhere): ActiveDataProvider
     {
-        $sort = new Sort([
+        $sortObj = new Sort([
             'attributes' => [
                 'rating' => [
                     'asc' => ['ratingAvg' => SORT_ASC, 'ratings' => SORT_DESC],
@@ -71,24 +71,23 @@ final class Album extends ActiveRecord
                     'label' => 'Kommentare',
                 ],
             ],
-            'defaultOrder' => [
-                'modified' => SORT_DESC,
-            ]
+            'defaultOrder' => str_starts_with($sort, '-') ? [substr($sort, 1) => SORT_DESC] : [$sort => SORT_ASC],
         ]);
 
-        $where = array_merge(['deleted' => 0], $filter);
+        $where = array_merge(['deleted' => 0], $additionalWhere);
 
         $query = self::find()
             ->select('id, title, artist, abstract, url')
             ->where($where)
-            ->orderBy($sort->orders);
+            ->orderBy($sortObj->orders);
 
         return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
+                'page' => $page,
                 'defaultPageSize' => 24,
             ],
-            'sort' => $sort,
+            'sort' => $sortObj,
         ]);
     }
 

@@ -71,3 +71,60 @@ CanonicalLink::widget(['isPaginated' => true]);
 <?= $this->render('_articles', ['title' => 'Beliebte Musikalben', 'models' => $popular]) ?>
 
 <?php $this->endBlock() ?>
+
+<script>
+    let page = 0;
+    let sort = '-modified';
+
+    function inputChanged(newPage = null, newSort = null) {
+        page = newPage ?? page;
+        sort = newSort ?? sort;
+        window.location.href = '#page=' + page + '&sort=' + sort;
+    }
+
+    function sendForm(hash) {
+        const params = new URLSearchParams(hash);
+        if (!(params.has('page') && params.has('sort'))) {
+            return;
+        }
+
+        // Create a form
+        const form = document.createElement("form");
+        form.method = "POST";
+
+        const csrfInput = document.createElement("input");
+        csrfInput.type = "text";
+        csrfInput.name = "_csrf";
+        csrfInput.value = document.head.querySelector("[name~=csrf-token][content]").content;
+        form.appendChild(csrfInput);
+
+        const pageInput = document.createElement("input");
+        pageInput.type = "text";
+        pageInput.name = "page";
+        pageInput.value = params.get(pageInput.name);
+        form.appendChild(pageInput);
+
+        const sortInput = document.createElement("input");
+        sortInput.type = "text";
+        sortInput.name = "sort";
+        sortInput.value = params.get(sortInput.name);
+        form.appendChild(sortInput);
+
+        document.body.appendChild(form);
+
+        form.submit();
+    }
+
+    window.addEventListener("hashchange", (event) => {
+        event.preventDefault();
+        const hashPart = event.newURL.split('#');
+        if (hashPart[1]) {
+            sendForm(hashPart[1]);
+        }
+    });
+
+    const loadedHash = '#page=<?= $currentPage ?>&sort=<?= $currentSort ?>';
+    if ((location.hash !== '') && (loadedHash !== location.hash)) {
+        sendForm(location.hash.substring(1));
+    }
+</script>
