@@ -9,8 +9,9 @@
  */
 
 use app\features\rating\RatingReadOnly;
+use app\features\widgets\Articles;
+use app\features\widgets\CanonicalLink;
 use app\helpers\Html;
-use app\widgets\CanonicalLink;
 use yii\helpers\Markdown;
 
 $this->title = 'ELECTRICBASS - Alles über das bässte Instrument der Welt';
@@ -18,6 +19,8 @@ $this->params['pageTitle'] = 'ELECTRICBASS - Alles über das bässte Instrument 
 $this->params['metaDescription'] = 'Umfangreiche Informationen zum E-Bass mit Lektionen, Musikalben, Lehrbüchern, Lehrvideos, Videos, Websites und mehr. Lass dich zum Bass spielen inspirieren!';
 CanonicalLink::widget();
 ?>
+
+<?= Articles::widget() ?>
 
 <div class="content">
 
@@ -219,7 +222,7 @@ CanonicalLink::widget();
 <?= app\features\advertisement\Widget::widget() ?>
 
 <div style="margin-bottom: 1rem">
-    <?= app\widgets\Banner::widget() ?>
+    <?= \app\features\widgets\Banner::widget() ?>
 </div>
 
 <?= app\features\birthday\Widget::widget() ?>

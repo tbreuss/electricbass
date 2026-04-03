@@ -9,10 +9,10 @@
 
 use app\features\rating\RatingReadOnly;
 use app\features\search\Controller;
+use app\features\widgets\CanonicalLink;
+use app\features\widgets\LinkPager;
+use app\features\widgets\ListSummary;
 use app\helpers\Html;
-use app\widgets\CanonicalLink;
-use app\widgets\LinkPager;
-use app\widgets\ListSummary;
 use yii\helpers\Markdown;
 use yii\helpers\Url;
 

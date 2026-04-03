@@ -17,7 +17,7 @@
         </div>
         <div class="quiz-result">
             <h1 class="quiz-title"><?= $model->title ?></h1>
-            <div><?= app\widgets\Parser::widget(["model" => $model, "attribute" => "content"]) ?></div>
+            <div><?= \app\features\widgets\Parser::widget(["model" => $model, "attribute" => "content"]) ?></div>
             <button class="quiz-result-next-button" onclick="window.open('<?= app\helpers\Url::to('/quiz/' . $model->nextUid) ?>', '_self');">Nächste Übung</button>
         </div>
     </div>

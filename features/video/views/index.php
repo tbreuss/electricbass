@@ -7,9 +7,9 @@
  * @var app\features\video\models\Video[] $videos
  */
 
-use app\widgets\CanonicalLink;
-use app\widgets\LinkPager;
-use app\widgets\ListSummary;
+use app\features\widgets\CanonicalLink;
+use app\features\widgets\LinkPager;
+use app\features\widgets\ListSummary;
 
 $this->title = 'Videos';
 $this->params['breadcrumbs'][] = 'Videos';

@@ -1,9 +1,10 @@
 <?php
 
-namespace app\widgets;
+namespace app\features\widgets;
 
 use app\features\lesson\models\Lesson;
 use app\features\links\models\Links;
+use app\widgets\app;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
@@ -513,7 +514,7 @@ final class Parser extends Widget
      */
     protected static function renderPartial(string $view, array $options): string
     {
-        return Yii::$app->controller->renderPartial('@app/widgets/views/parser/' . $view, $options);
+        return Yii::$app->controller->renderPartial('@app/features/widgets/views/parser/' . $view, $options);
     }
 
     protected static function checkYouTubeVideo(string $id): void

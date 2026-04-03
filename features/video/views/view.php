@@ -10,8 +10,8 @@
  */
 
 use app\features\rating\RatingShare;
-use app\widgets\Hits;
-use app\widgets\Parser;
+use app\features\widgets\Hits;
+use app\features\widgets\Parser;
 use yii\helpers\Url;
 
 $this->title = $video->title . ' | Videos';

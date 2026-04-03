@@ -10,8 +10,8 @@
  */
 
 use app\features\rating\RatingShare;
+use app\features\widgets\Hits;
 use app\helpers\Html;
-use app\widgets\Hits;
 use yii\helpers\Markdown;
 
 $this->blocks['title'] = $model->title;

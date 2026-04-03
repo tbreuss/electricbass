@@ -38,4 +38,4 @@
 
 <?= app\features\comment\Widget::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
 
-<?= app\widgets\Hits::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>
+<?= \app\features\widgets\Hits::widget(["tableName" => "lesson", "tableId" => $model->id]) ?>

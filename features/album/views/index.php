@@ -11,11 +11,11 @@
  */
 
 use app\features\rating\RatingReadOnly;
+use app\features\widgets\CanonicalLink;
+use app\features\widgets\LinkPager;
+use app\features\widgets\ListSummary;
 use app\helpers\Html;
 use app\helpers\Url;
-use app\widgets\CanonicalLink;
-use app\widgets\LinkPager;
-use app\widgets\ListSummary;
 
 ?>
 

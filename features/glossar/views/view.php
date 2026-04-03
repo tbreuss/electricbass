@@ -9,9 +9,9 @@
  */
 
 use app\features\rating\RatingShare;
+use app\features\widgets\Hits;
+use app\features\widgets\Parser;
 use app\helpers\Html;
-use app\widgets\Hits;
-use app\widgets\Parser;
 
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
 $this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];

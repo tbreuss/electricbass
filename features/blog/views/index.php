@@ -9,10 +9,10 @@
  * @var app\features\blog\models\Blog[] $popular
  */
 
-use app\widgets\CanonicalLink;
-use app\widgets\LinkPager;
-use app\widgets\ListSummary;
-use app\widgets\ListView;
+use app\features\widgets\CanonicalLink;
+use app\features\widgets\LinkPager;
+use app\features\widgets\ListSummary;
+use app\features\widgets\ListView;
 
 $this->title = 'Blog';
 $this->params['breadcrumbs'][] = 'Bass Blog';

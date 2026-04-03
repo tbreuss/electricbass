@@ -15,10 +15,10 @@
  * @var app\features\catalog\models\Catalog[] $popular
  */
 
+use app\features\widgets\CanonicalLink;
+use app\features\widgets\LinkPager;
+use app\features\widgets\ListSummary;
 use app\helpers\Html;
-use app\widgets\CanonicalLink;
-use app\widgets\LinkPager;
-use app\widgets\ListSummary;
 
 ?>
 

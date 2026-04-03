@@ -1,13 +1,11 @@
 <?php
 
-namespace app\widgets;
+namespace app\features\widgets;
 
 use Yii;
-use yii\base\Widget;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 
 /**

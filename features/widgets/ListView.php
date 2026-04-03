@@ -1,7 +1,8 @@
 <?php
 
-namespace app\widgets;
+namespace app\features\widgets;
 
+use app\widgets\app;
 use yii\base\Widget;
 
 final class ListView extends Widget

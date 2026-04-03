@@ -6,9 +6,9 @@
  */
 
 use app\features\rating\RatingShare;
+use app\features\widgets\Hits;
 use app\helpers\Html;
 use app\helpers\Url;
-use app\widgets\Hits;
 use yii\helpers\Markdown;
 
 $this->title = $model->title . ' | Bass-Alben | Katalog';

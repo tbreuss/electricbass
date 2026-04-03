@@ -8,9 +8,9 @@
  */
 
 use app\features\rating\RatingShare;
+use app\features\widgets\Hits;
+use app\features\widgets\Parser;
 use app\helpers\Html;
-use app\widgets\Hits;
-use app\widgets\Parser;
 use yii\helpers\Url;
 
 $this->title = $blog->title . ' | Blog';

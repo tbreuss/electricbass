@@ -8,8 +8,8 @@
  */
 
 use app\features\rating\RatingShare;
-use app\widgets\CanonicalLink;
-use app\widgets\ListSummary;
+use app\features\widgets\CanonicalLink;
+use app\features\widgets\ListSummary;
 
 $this->title = 'Bassistenwitze';
 $this->params['breadcrumbs'][] = 'Bassistenwitze';

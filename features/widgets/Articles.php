@@ -1,6 +1,6 @@
 <?php
 
-namespace app\widgets;
+namespace app\features\widgets;
 
 use app\features\search\models\Search;
 use yii\base\Widget;

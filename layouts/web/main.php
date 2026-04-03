@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
                 <?php if (!empty($this->blocks['sidebar'])): ?>
                     <?= ArrayHelper::getValue($this->blocks, 'sidebar') ?>
                 <?php endif; ?>
-                <div style="margin-bottom:1rem"><?= app\widgets\Banner::widget() ?></div>
+                <div style="margin-bottom:1rem"><?= \app\features\widgets\Banner::widget() ?></div>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@
  * @var app\features\lesson\models\Lesson[] $models
  */
 
-use app\widgets\ListView;
+use app\features\widgets\ListView;
 use yii\widgets\Spaceless;
 
 ?>

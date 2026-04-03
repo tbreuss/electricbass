@@ -11,8 +11,8 @@
 ?>
 <?php $this->params['breadcrumbs'] = $breadcrumbs ?>
 <?php $this->title = $title ?>
-<?php app\widgets\CanonicalLink::widget(['keepParams' => ['path']]) ?>
-<?php $content = app\widgets\Parser::widget(["model" => $model, "attribute" => "text", "tableOfContents" => $model->tableOfContents > 0, "headingPermalink" => $model->headingPermalink > 0]) ?>
+<?php \app\features\widgets\CanonicalLink::widget(['keepParams' => ['path']]) ?>
+<?php $content = \app\features\widgets\Parser::widget(["model" => $model, "attribute" => "text", "tableOfContents" => $model->tableOfContents > 0, "headingPermalink" => $model->headingPermalink > 0]) ?>
 <?php $withToc = str_contains($content, '<ul class="table-of-contents">') ?>
 
 <?php if ($withToc): ?>

@@ -6,9 +6,9 @@
  */
 
 use app\features\rating\RatingShare;
+use app\features\widgets\GoogleMaps;
+use app\features\widgets\Hits;
 use app\helpers\Html;
-use app\widgets\GoogleMaps;
-use app\widgets\Hits;
 use yii\helpers\Markdown;
 
 #$this->metaDescription = mb_strimwidth(str_replace("\n", ' ' , strip_tags(Markdown::process($model->longtext))), 0, 240, '...', 'UTF-8');
