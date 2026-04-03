@@ -19,7 +19,6 @@ parameters:
 		- modules
 		- packages
 		- web
-		- widgets
 	excludePaths:
 	    analyse:
 	        - features/links/Command.php

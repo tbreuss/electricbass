@@ -20,7 +20,6 @@
     <!-- file>./packages</file -->
     <file>./web/index.php</file>
     <file>./web/index-test.php</file>
-    <file>./widgets</file>
 
     <exclude-pattern>features/links/Command.php</exclude-pattern>
     <exclude-pattern>components/Fingerboard.php</exclude-pattern>
