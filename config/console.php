@@ -6,7 +6,13 @@ $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'app\commands',
+    'controllerMap' => [
+        'advertisement' => 'app\features\advertisement\Command',
+        'comment' => 'app\features\comment\Command',
+        'link' => 'app\features\links\Command',
+        'rating' => 'app\features\rating\Command',
+        'youtube' => 'app\features\youtube\Command',
+    ],
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -15,8 +21,7 @@ $config = [
         'db' => require(__DIR__ . '/db.php'),
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
-            /* @phpstan-ignore-next-line */
-            'hostInfo' => YII_ENV_DEV ? 'http://electricbass.test' : 'https://www.electricbass.ch',
+            'hostInfo' => $_ENV['HOST_INFO'],
             'scriptUrl' => '',
             'enablePrettyUrl' => true,
             'rules' => require(__DIR__ . '/rules.php')
@@ -33,7 +38,6 @@ $config = [
     */
 ];
 
-/* @phpstan-ignore-next-line */
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'gii';

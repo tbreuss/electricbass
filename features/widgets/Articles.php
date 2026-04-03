@@ -1,0 +1,50 @@
+<?php
+
+namespace app\features\widgets;
+
+use app\features\search\models\Search;
+use yii\base\Widget;
+
+final class Articles extends Widget
+{
+    public ?string $title = null;
+    public string $tableName = '';
+    public int $limit = 4;
+    public string $orderBy = 'created DESC';
+    /** @var string[] */
+    public array $excludeTableNames = ['advertisement', 'glossar'];
+
+    public function run(): string
+    {
+        $query = Search::find();
+
+        if (!empty($this->excludeTableNames)) {
+            $query->where(['not in', 'tableName', $this->excludeTableNames]);
+        }
+
+        if (!empty($this->tableName)) {
+            $query->andWhere('tableName=:tableName', [
+                'tableName' => $this->tableName
+            ]);
+        }
+
+        if (!empty($this->limit)) {
+            $query->limit($this->limit);
+        }
+
+        if (!empty($this->orderBy)) {
+            $query->orderBy($this->orderBy);
+        }
+
+        $models = $query->all();
+
+        if (empty($models)) {
+            return '';
+        }
+
+        return $this->render('articles', [
+            'title' => $this->title,
+            'models' => $models
+        ]);
+    }
+}

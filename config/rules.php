@@ -1,24 +1,20 @@
 <?php
 
 return [
-    // Bassistenwitze
+    '' => 'homepage/index',
     'bassistenwitze' => 'joke/index',
-    // Blog
-    'GET,POST blog' => 'blog/index',
+    'blog' => 'blog/index',
     'blog/<id:[A-Za-z0-9-]+>' => 'blog/view',
-    // Fingersätze
-    'tools/fingersaetze' => 'fingering/index',
+    'tools/fingersaetze/inhaltsverzeichnis' => 'fingering/table-of-contents',
+    'tools/fingersaetze/<category:(arpeggio|intervall|tonleiter)>' => 'fingering/index',
     'tools/fingersaetze/<id:[A-Za-z0-9-]+>' => 'fingering/view',
-    'tools/metronom' => 'tool/metronome',
-    // Glossar
+    'tools/fingersaetze' => 'fingering/index',
+    'tools/metronom' => 'metronome/index',
+    'tools/notenpapier' => 'music-paper/index',
     'glossar/reorder' => 'glossar/reorder',
     'glossar/<category>/<id>' => 'glossar/view',
     'glossar/<category>' => 'glossar/index',
     'glossar' => 'glossar/index',
-    // Impressum
-    'impressum' => 'site/impressum',
-    // Katalog
-    'katalog/hersteller' => 'manufacturer/index',
     'katalog/alben/index' => 'album/all',
     'katalog/alben/<id>' => 'album/view',
     'katalog/alben' => 'album/index',
@@ -26,59 +22,51 @@ return [
     'katalog/<category>/<id>' => 'catalog/view',
     'katalog/<category>' => 'catalog/index',
     'katalog' => 'catalog/overview',
-    // Kleinanzeigen
     'kleinanzeigen/' => 'advertisement/index',
     'kleinanzeigen/hinzufuegen' => 'advertisement/add',
     'kleinanzeigen/verwalten' => 'advertisement/manage',
+    'kleinanzeigen/kontaktieren' => 'advertisement/contact',
+    'kleinanzeigen/erneuern' => 'advertisement/renew',
+    'kleinanzeigen/loeschen' => 'advertisement/delete',
+    'kleinanzeigen/aktualisieren' => 'advertisement/update',
+    'kleinanzeigen/captcha' => 'advertisement/captcha',
     'kleinanzeigen/<id>' => 'advertisement/view',
-    'advertisement/contact' => 'advertisement/contact',
-    'advertisement/renew' => 'advertisement/renew',
-    'advertisement/delete' => 'advertisement/delete',
-    'advertisement/update' => 'advertisement/update',
     'kommentar/<name>-<id>' => 'comment/index',
     'kommentar/regeln' => 'comment/rules',
-    // Kontakt
-    'kontakt' => 'site/contact',
-    // Suche
+    'kontakt' => 'contact/index',
+    'kontakt/captcha' => 'contact/captcha',
     'suche' => 'search/index',
-    // Tools
-    'tools' => 'tool/index',
-    'tools/notenpapier' => 'tool/musicpaper',
-    // Websites
-    'websites/index' => 'website/all',
-    'websites/<id:[A-Za-z0-9-]+>' => 'website/view',
-    'websites' => 'website/index',
-    // Videos
-    'videos/<segment:isolierter-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
-    'videos/<segment:isolierter-bass>' => 'youtube-playlist/index',
-    'videos/<segment:klassische-musik>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
-    'videos/<segment:klassische-musik>' => 'youtube-playlist/index',
-    'videos/<segment:solo-bass>/<id:[a-z0-9]+>' => 'youtube-playlist/view',
-    'videos/<segment:solo-bass>' => 'youtube-playlist/index',
+    'videos/<segment:isolierter-bass>/<id:[a-z0-9]+>' => 'youtube/view',
+    'videos/<segment:isolierter-bass>' => 'youtube/index',
+    'videos/<segment:klassische-musik>/<id:[a-z0-9]+>' => 'youtube/view',
+    'videos/<segment:klassische-musik>' => 'youtube/index',
+    'videos/<segment:solo-bass>/<id:[a-z0-9]+>' => 'youtube/view',
+    'videos/<segment:solo-bass>' => 'youtube/index',
     'videos' => 'video/index',
     'videos/<eid:[A-Za-z0-9-]+>' => 'video/view',
-    // Sitemap
-    'sitemap' => 'sitemap/index',
     'sitemap/google' => 'sitemap/google',
-    // Zitate
     'zitate' => 'quote/index',
-    // RSS
     'feed/rss' => 'feed/rss',
-    // API
     'api/hits' => 'api/hits',
     'api/rate' => 'api/rate',
-    'manufacturer/data' => 'manufacturer/data',
-    'manufacturer/visit' => 'manufacturer/visit',
-    'site/captcha' => 'site/captcha',
-    'alpha-tab/editor' => 'alpha-tab/editor',
-    // Admin
     'admin/<controller>/<action>' => 'admin/<controller>/<action>',
     'admin/<controller>' => 'admin/<controller>/index',
     'admin' => 'admin',
-    'test' => 'site/test',
-    // Lektionen
     [
-        'class' => 'app\components\LessonUrlRule',
+        'pattern' => 'quiz/<uid:.+>',
+        'route' => 'quiz/view',
+        'encodeParams' => false,
     ],
-    '' => 'site/index',
+    'alpha-tab/debug' => 'alpha-tab/debug',
+    'alpha-tab/editor' => 'alpha-tab/editor',
+    [
+        'pattern' => 'play/<uid:.+>',
+        'route' => 'alpha-tab/view',
+        'encodeParams' => false,
+    ],
+    [
+        'pattern' => '<path:.+>',
+        'route' => 'lesson/index',
+        'encodeParams' => false,
+    ],
 ];

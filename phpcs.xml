@@ -10,26 +10,18 @@
     <config name="ignore_warnings_on_exit" value="1"/>
     <config name="php_version" value="80000"/>
 
-    <file>./assets</file>
-    <file>./commands</file>
     <file>./components</file>
     <file>./config</file>
-    <file>./controllers</file>
-    <file>./entities</file>
-    <file>./filters</file>
+    <file>./features</file>
     <file>./helpers</file>
-    <file>./mail</file>
+    <file>./layouts</file>
     <file>./messages</file>
-    <!-- <file>./migrations</file> -->
-    <file>./models</file>
     <file>./modules</file>
-    <file>./traits</file>
-    <file>./views</file>
+    <!-- file>./packages</file -->
     <file>./web/index.php</file>
     <file>./web/index-test.php</file>
-    <file>./widgets</file>
 
-    <exclude-pattern>commands/WebsiteController.php</exclude-pattern>
+    <exclude-pattern>features/links/Command.php</exclude-pattern>
     <exclude-pattern>components/Fingerboard.php</exclude-pattern>
     <exclude-pattern>components/Template.php</exclude-pattern>
 

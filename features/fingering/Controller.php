@@ -1,0 +1,74 @@
+<?php
+
+namespace app\features\fingering;
+
+use app\features\fingering\models\Fingering;
+use Yii;
+use yii\helpers\Json;
+use yii\web\GoneHttpException;
+use yii\web\MethodNotAllowedHttpException;
+
+final class Controller extends \yii\web\Controller
+{
+    public function actionIndex(string $category = ''): string
+    {
+        $models = [];
+
+        if ($category !== '') {
+            $models = Fingering::findAllByCategory($category);
+        }
+
+        return $this->render('@app/features/fingering/views/index', [
+            'category' => ucfirst($category),
+            'categoryPlural' => $this->categoryPlural($category),
+            'models' => $models,
+        ]);
+    }
+
+    /**
+     * @throws GoneHttpException
+     */
+    public function actionView(string $id): string
+    {
+        $model = Fingering::findOneOrNull('/tools/fingersaetze/' . $id);
+
+        if (is_null($model) || count(\Yii::$app->request->getQueryParams()) > 1) {
+            throw new GoneHttpException();
+        }
+
+        $model->increaseHits();
+        $modelsPerCategory = Fingering::findAllByCategory($model->category);
+
+        return $this->render('@app/features/fingering/views/view', [
+            'model' => $model,
+            'modelsPerCategory' => $modelsPerCategory,
+            'root' => Yii::$app->request->getBodyParam('root', $model->root),
+            'strings' => Yii::$app->request->getBodyParam('strings', $model->strings),
+            'expand' => Yii::$app->request->getBodyParam('expand', '0'),
+        ]);
+    }
+
+    public function actionTableOfContents(): string
+    {
+        if (!Yii::$app->request->isPost) {
+            throw new MethodNotAllowedHttpException();
+        }
+
+        $body = Json::decode(Yii::$app->request->getRawBody());
+        $models = Fingering::findAllByCategory($body['category']);
+
+        return $this->renderPartial('@app/features/fingering/views/category', [
+            'models' => $models,
+        ]);
+    }
+
+    private function categoryPlural(string $category): string
+    {
+        return match ($category) {
+            'arpeggio' => 'Arpeggios',
+            'intervall' => 'Intervalle',
+            'tonleiter' => 'Tonleitern',
+            default => ucfirst($category),
+        };
+    }
+}

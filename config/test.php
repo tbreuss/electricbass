@@ -26,12 +26,13 @@ return [
             'basePath' => __DIR__ . '/../web/assets',
         ],
         'urlManager' => [
+            'hostInfo' => $_ENV['HOST_INFO'],
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => require(__DIR__ . '/rules.php'),
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\components\User',
         ],
         'request' => [
             'cookieValidationKey' => 'test',

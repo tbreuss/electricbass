@@ -1,4 +1,11 @@
 RewriteEngine on
+
+# Only redirect if NOT already using https://www
+#RewriteCond %{HTTPS} off [OR]
+#RewriteCond %{HTTP_HOST} !^www\.electricbass\.ch [NC]
+#RewriteRule ^(.*)$ https://www.electricbass.ch/$1 [L,R=301]
+
+# Route to index.php only if file/directory doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [L]

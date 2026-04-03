@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @var app\features\advertisement\models\Advertisement $model
+ * @var yii\web\View $this
+ */
+
+$this->title = 'Inserat aktualisieren | Bassmarkt';
+$this->params['breadcrumbs'][] = ['label' => 'Bassmarkt', 'url' => ['advertisement/index']];
+$this->params['breadcrumbs'][] = 'Inserat aktualisieren';
+$this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
+?>
+
+<div class="content">
+    <h1>Inserat aktualisieren</h1>
+
+    <?= $this->render('_form', ['model' => $model]) ?>
+</div>
