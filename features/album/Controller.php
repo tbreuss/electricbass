@@ -13,13 +13,19 @@ final class Controller extends \yii\web\Controller
 {
     public function actionIndex(): string
     {
-        if (array_diff_key(Yii::$app->request->getQueryParams(), ['artist' => '', 'page' => 0, 'sort' => ''])) {
+        if (array_diff_key(Yii::$app->request->getQueryParams(), [])) {
             throw new GoneHttpException();
         }
 
-        $page = (int)Yii::$app->request->getBodyParam('page', '1');
-        $sort = Yii::$app->request->getBodyParam('sort', '-modified');
-        $artist = Yii::$app->request->getBodyParam('artist', '');
+        $defaults = [
+            'page' => '1',
+            'sort' => '-modified',
+            'artist' => '',
+        ];
+
+        $page = (int)Yii::$app->request->getBodyParam('page', $defaults['page']);
+        $sort = Yii::$app->request->getBodyParam('sort', $defaults['sort']);
+        $artist = Yii::$app->request->getBodyParam('artist', $defaults['artist']);
 
         $filter = [];
         if (!empty($artist)) {
@@ -49,6 +55,7 @@ final class Controller extends \yii\web\Controller
                 http_build_query(['page' => $page, 'sort' => $sort]),
                 http_build_query(['artist' => $artist]),
             ],
+            'defaults' => $defaults,
         ]);
     }
 

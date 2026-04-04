@@ -1,19 +1,22 @@
 <?php
 /**
  * @var string[][] $urlFragments
+ * @var string[] $defaults
  */
 ?>
 <script>
     function updatePage(page) {
         const params = new URLSearchParams(window.location.hash.substring(1));
-        const sort = params.get('sort') ?? '';
-        window.location.hash = '#page=' + page + '&sort=' + sort;
+        const sort = params.get('sort') ?? '<?= $defaults['sort'] ?>';
+        const artist = params.get('artist') ?? '<?= $defaults['artist'] ?>';
+        window.location.hash = '#page=' + page + '&sort=' + sort + '&artist=' + artist;
     }
 
     function updateSort(sort) {
         const params = new URLSearchParams(window.location.hash.substring(1));
-        const page = params.get('page') ?? '1';
-        window.location.hash = '#page=' + page + '&sort=' + sort;
+        const page = params.get('page') ?? '<?= $defaults['page'] ?>';
+        const artist = params.get('artist') ?? '<?= $defaults['artist'] ?>';
+        window.location.hash = '#page=' + page + '&sort=' + sort + '&artist=' + artist;
     }
 
     function replacePage(urlSearchParams) {
@@ -34,7 +37,6 @@
         window.addEventListener("hashchange", (event) => {
             const locationHash = location.hash.substring(1);
             const hashPart = event.newURL.split('#');
-            console.log(locationHash, hashPart[1]);
             if (hashPart[1]) {
                 replacePage(new URLSearchParams(hashPart[1]));
             }
@@ -42,7 +44,6 @@
 
         const urlFragments = <?= json_encode($urlFragments) ?>;
         const locationHash = location.hash.substring(1);
-        console.log(urlFragments, locationHash);
         if ((locationHash !== '') && !urlFragments.includes(locationHash)) {
             replacePage(new URLSearchParams(locationHash));
         }
