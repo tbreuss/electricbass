@@ -11,24 +11,24 @@ use yii\web\GoneHttpException;
 
 final class Controller extends \yii\web\Controller
 {
-    public function actionIndex(string $artist = ''): string
+    public function actionIndex(): string
     {
         if (array_diff_key(Yii::$app->request->getQueryParams(), ['artist' => '', 'page' => 0, 'sort' => ''])) {
             throw new GoneHttpException();
         }
 
-        $filter = [];
+        $page = (int)Yii::$app->request->getBodyParam('page', '1');
+        $sort = Yii::$app->request->getBodyParam('sort', '-modified');
+        $artist = Yii::$app->request->getBodyParam('artist', '');
 
+        $filter = [];
         if (!empty($artist)) {
             $filter['artist'] = $artist;
         }
 
-        $currentPage = (int)Yii::$app->request->getBodyParam('page', '0');
-        $currentSort = Yii::$app->request->getBodyParam('sort', '-modified');
-
         $provider = Album::getActiveDataProvider(
-            page: $currentPage,
-            sort: $currentSort,
+            page: $page,
+            sort: $sort,
             additionalWhere: $filter,
         );
 
@@ -43,8 +43,12 @@ final class Controller extends \yii\web\Controller
             'filter' => $filter,
             'latest' => $latest,
             'popular' => $popular,
-            'currentPage' => $currentPage,
-            'currentSort' => $currentSort,
+            'currentPage' => $page,
+            'currentSort' => $sort,
+            'urlFragments' => [
+                http_build_query(['page' => $page, 'sort' => $sort]),
+                http_build_query(['artist' => $artist]),
+            ],
         ]);
     }
 

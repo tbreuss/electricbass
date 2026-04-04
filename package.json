@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "build-css": "sass assets/app/scss/main.scss assets/app/dist/main.css",
-        "build-min-css": "sass assets/app/scss/main.scss assets/app/dist/main.min.css --style=compressed",
-        "build-js": "terser assets/app/js/*.js --output assets/app/dist/main.js",
-        "build-min-js": "terser assets/app/js/*.js --compress --output assets/app/dist/main.min.js",
+        "build-css": "sass layouts/assets/scss/main.scss layouts/assets/dist/main.css",
+        "build-min-css": "sass layouts/assets/scss/main.scss layouts/assets/dist/main.min.css --style=compressed",
+        "build-js": "terser layouts/assets/js/*.js --output layouts/assets/dist/main.js",
+        "build-min-js": "terser layouts/assets/js/*.js --compress --output layouts/assets/dist/main.min.js",
         "watch-css": "nodemon -e scss -x \"npm run build-css\""
     },
     "keywords": [],

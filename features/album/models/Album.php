@@ -84,7 +84,7 @@ final class Album extends ActiveRecord
         return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'page' => $page,
+                'page' => $page - 1, // zero-based
                 'defaultPageSize' => 24,
             ],
             'sort' => $sortObj,
