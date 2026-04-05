@@ -8,8 +8,7 @@
  * @var app\features\album\models\Album[] $models
  * @var app\features\album\models\Album[] $latest
  * @var app\features\album\models\Album[] $popular
- * @var string[][] $urlFragments
- * @var string[] $defaults
+ * @var array{applied: array<string, mixed>, defaults: array<string, mixed>} $urlFragments
  */
 
 use app\features\rating\RatingReadOnly;
@@ -74,4 +73,4 @@ CanonicalLink::widget(['isPaginated' => true]);
 
 <?php $this->endBlock() ?>
 
-<?= $this->render('@app/features/_partials/faceted-navigation', ['urlFragments' => $urlFragments, 'defaults' => $defaults]) ?>
+<?= $this->render('@app/features/_partials/faceted-navigation', ['applied' => $urlFragments['applied'], 'defaults' => $urlFragments['defaults']]) ?>

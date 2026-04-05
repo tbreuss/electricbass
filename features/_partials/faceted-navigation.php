@@ -1,22 +1,28 @@
 <?php
 /**
- * @var string[][] $urlFragments
- * @var string[] $defaults
+ * @var array<string, mixed> $applied
+ * @var array<string, mixed> $defaults
  */
 ?>
 <script>
-    function updatePage(page) {
-        const params = new URLSearchParams(window.location.hash.substring(1));
-        const sort = params.get('sort') ?? '<?= $defaults['sort'] ?>';
-        const artist = params.get('artist') ?? '<?= $defaults['artist'] ?>';
-        window.location.hash = '#page=' + page + '&sort=' + sort + '&artist=' + artist;
-    }
+    function updateLocationHash(params) {
+        const currentHash = new URLSearchParams(window.location.hash.substring(1));
+        const filters = <?= json_encode($defaults) ?>;
+        let newHash = new URLSearchParams();
 
-    function updateSort(sort) {
-        const params = new URLSearchParams(window.location.hash.substring(1));
-        const page = params.get('page') ?? '<?= $defaults['page'] ?>';
-        const artist = params.get('artist') ?? '<?= $defaults['artist'] ?>';
-        window.location.hash = '#page=' + page + '&sort=' + sort + '&artist=' + artist;
+        for (const key in filters) {
+            if (filters.hasOwnProperty(key)) {
+                if (params[key]) {
+                    newHash.append(key, params[key]);
+                } else if (currentHash.has(key)) {
+                    newHash.append(key, currentHash.get(key));
+                } else {
+                    newHash.append(key, filters[key])
+                }
+            }
+        }
+
+        window.location.hash = '#' + newHash.toString();
     }
 
     function replacePage(urlSearchParams) {
@@ -33,18 +39,17 @@
         });
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-        window.addEventListener("hashchange", (event) => {
-            const locationHash = location.hash.substring(1);
-            const hashPart = event.newURL.split('#');
-            if (hashPart[1]) {
-                replacePage(new URLSearchParams(hashPart[1]));
-            }
-        });
+    window.addEventListener("hashchange", (event) => {
+        const hashPart = event.newURL.split('#');
+        if (hashPart[1]) {
+            replacePage(new URLSearchParams(hashPart[1]));
+        }
+    });
 
-        const urlFragments = <?= json_encode($urlFragments) ?>;
+    window.addEventListener("DOMContentLoaded", () => {
+        const urlFragments = new URLSearchParams(<?= json_encode($applied) ?>);
         const locationHash = location.hash.substring(1);
-        if ((locationHash !== '') && !urlFragments.includes(locationHash)) {
+        if ((locationHash !== '') && urlFragments.toString() !== locationHash) {
             replacePage(new URLSearchParams(locationHash));
         }
     });

@@ -13,7 +13,7 @@ final class Controller extends \yii\web\Controller
 {
     public function actionIndex(): string
     {
-        if (array_diff_key(Yii::$app->request->getQueryParams(), [])) {
+        if (count(Yii::$app->request->getQueryParams()) > 0) {
             throw new GoneHttpException();
         }
 
@@ -52,10 +52,9 @@ final class Controller extends \yii\web\Controller
             'currentPage' => $page,
             'currentSort' => $sort,
             'urlFragments' => [
-                http_build_query(['page' => $page, 'sort' => $sort]),
-                http_build_query(['artist' => $artist]),
+                'applied' => ['page' => $page, 'sort' => $sort, 'artist' => $artist],
+                'defaults' => $defaults,
             ],
-            'defaults' => $defaults,
         ]);
     }
 

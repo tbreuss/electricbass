@@ -23,7 +23,7 @@ use yii\widgets\LinkSorter;
                     <ul class="dropdown__list">
                         <?php foreach ($sort->attributes as $name => $attribute): ?>
                             <?php $class = $sortName === $name ? ($sort->getAttributeOrder($name) === SORT_DESC ? 'desc' : 'asc') : '' ?>
-                            <li class="dropdown__item"><a class="dropdown__link <?= $class ?>" href="#" onclick="updateSort('<?= $sort->createSortParam($name) ?>');return false;"><?= $attribute['label'] ?></a></li>
+                            <li class="dropdown__item"><a class="dropdown__link <?= $class ?>" href="#" onclick="updateLocationHash({sort: '<?= $sort->createSortParam($name) ?>'});return false;"><?= $attribute['label'] ?></a></li>
                         <?php endforeach ?>
                     </ul>
                 </div>
