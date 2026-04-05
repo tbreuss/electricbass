@@ -34,7 +34,7 @@ final class Blog extends ActiveRecord
     use SimilarModelsByTags;
     use WithChanges;
 
-    public static function getActiveDataProvider(): ActiveDataProvider
+    public static function getActiveDataProvider(int $page, string $sort): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -75,9 +75,7 @@ final class Blog extends ActiveRecord
                     'label' => 'Kommentare',
                 ],
             ],
-            'defaultOrder' => [
-                'modified' => SORT_DESC,
-            ]
+            'defaultOrder' => str_starts_with($sort, '-') ? [substr($sort, 1) => SORT_DESC] : [$sort => SORT_ASC],
         ]);
 
         $query = Blog::find()
@@ -88,6 +86,7 @@ final class Blog extends ActiveRecord
         return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
+                'page' => $page - 1, // zero-based
                 'defaultPageSize' => 20,
             ],
             'sort' => $sort,

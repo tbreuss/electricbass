@@ -62,6 +62,7 @@ CanonicalLink::widget(['isPaginated' => true]);
 </div>
 
 <?= LinkPager::widget(['pagination' => $pagination]) ?>
+
 <?= $this->render('@app/features/_partials/faceted-navigation', ['applied' => $urlFragments['applied'], 'defaults' => $urlFragments['defaults']]) ?>
 
 <?php $this->beginBlock('sidebar') ?>
