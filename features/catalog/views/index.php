@@ -61,6 +61,8 @@ CanonicalLink::widget(['isPaginated' => true, 'keepParams' => ['category']]);
 
 <?= LinkPager::widget(['pagination' => $pagination]) ?>
 
+<?= $this->render('@app/features/_partials/faceted-navigation', ['applied' => $urlFragments['applied'], 'defaults' => $urlFragments['defaults']]) ?>
+
 <?php $this->beginBlock('sidebar') ?>
 
 <h3 class="sidebarWidget__title"><?= Html::a('Übersicht von A-Z anzeigen', ['/catalog/all', 'category' => $category]) ?></h3>

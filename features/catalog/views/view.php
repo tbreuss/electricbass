@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $model->title;
 
 // PageTitel
 $pageTitle = $model->title;
-if (strlen($model->autor) > 0) {
+if (is_string($model->autor) && strlen($model->autor) > 0) {
     if ((strlen($pageTitle) + strlen($model->autor) <= (60 - 5 - strlen($model->productNumber)))) {
         $pageTitle .= ' von ' . $model->autor;
     }

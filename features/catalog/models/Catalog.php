@@ -31,7 +31,7 @@ final class Catalog extends ActiveRecord
     /**
      * @phpstan-param array<string, string> $filter
      */
-    public static function getActiveDataProvider(string $category, array $filter = []): ActiveDataProvider
+    public static function getActiveDataProvider(int $page, string $sort, string $category, array $filter = []): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -72,9 +72,7 @@ final class Catalog extends ActiveRecord
                     'label' => 'Kommentare',
                 ],
             ],
-            'defaultOrder' => [
-                'modified' => SORT_DESC,
-            ]
+            'defaultOrder' => str_starts_with($sort, '-') ? [substr($sort, 1) => SORT_DESC] : [$sort => SORT_ASC],
         ]);
 
         $where = array_merge(['deleted' => 0, 'category' => $category], $filter);
@@ -87,6 +85,7 @@ final class Catalog extends ActiveRecord
         return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
+                'page' => $page - 1, // zero-based
                 'defaultPageSize' => 24,
             ],
             'sort' => $sort,
@@ -174,21 +173,21 @@ final class Catalog extends ActiveRecord
             $infos[] = [
                 'key' => 'publisher',
                 'label' => 'Verlag',
-                'value' => Html::a($this->publisher, ['catalog/index', 'category' => $this->category, 'publisher' => $this->publisher])
+                'value' => Html::a($this->publisher, ['catalog/index', 'category' => $this->category, '#' => http_build_query(['publisher' => $this->publisher])])
             ];
         }
         if (!empty($this->autor)) {
             $infos[] = [
                 'key' => 'autor',
                 'label' => 'Autor',
-                'value' => Html::a($this->autor, ['catalog/index', 'category' => $this->category, 'autor' => $this->autor])
+                'value' => Html::a($this->autor, ['catalog/index', 'category' => $this->category, '#' => http_build_query(['autor' => $this->autor])])
             ];
         }
         if (!empty($this->series)) {
             $infos[] = [
                 'key' => 'series',
                 'label' => 'Serie',
-                'value' => Html::a($this->series, ['catalog/index', 'category' => $this->category, 'series' => $this->series])
+                'value' => Html::a($this->series, ['catalog/index', 'category' => $this->category, '#' => http_build_query(['series' => $this->series])])
             ];
         }
         if (!empty($this->info)) {

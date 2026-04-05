@@ -65,12 +65,25 @@ final class Controller extends \yii\web\Controller
         return $groups;
     }
 
-    public function actionIndex(string $category, string $autor = '', string $publisher = '', string $series = ''): string
+    public function actionIndex(string $category): string
     {
-        $whitelist = ['category' => '', 'autor' => '', 'publisher' => '', 'series' => '', 'page' => 0, 'sort' => ''];
-        if (array_diff_key(Yii::$app->request->getQueryParams(), $whitelist)) {
+        if (array_diff_key(Yii::$app->request->getQueryParams(), ['category' => ''])) {
             throw new GoneHttpException();
         }
+
+        $defaults = [
+            'page' => '1',
+            'sort' => '-modified',
+            'autor' => '',
+            'publisher' => '',
+            'series' => '',
+        ];
+
+        $page = (int)Yii::$app->request->getBodyParam('page', $defaults['page']);
+        $sort = Yii::$app->request->getBodyParam('sort', $defaults['sort']);
+        $autor = Yii::$app->request->getBodyParam('autor', $defaults['autor']);
+        $publisher = Yii::$app->request->getBodyParam('publisher', $defaults['publisher']);
+        $series = Yii::$app->request->getBodyParam('series', $defaults['series']);
 
         $filter = [];
 
@@ -84,7 +97,12 @@ final class Controller extends \yii\web\Controller
             $filter['series'] = $series;
         }
 
-        $provider = Catalog::getActiveDataProvider($category, $filter);
+        $provider = Catalog::getActiveDataProvider(
+            page: $page,
+            sort: $sort,
+            category: $category,
+            filter: $filter,
+        );
 
         if ($provider->getModels() === []) {
             throw new GoneHttpException();
@@ -105,7 +123,17 @@ final class Controller extends \yii\web\Controller
             'category' => $category,
             'context' => $this->getContext($category),
             'latest' => $latest,
-            'popular' => $popular
+            'popular' => $popular,
+            'urlFragments' => [
+                'applied' => [
+                    'page' => $page,
+                    'sort' => $sort,
+                    'autor' => $autor,
+                    'publisher' => $publisher,
+                    'series' => $series,
+                ],
+                'defaults' => $defaults,
+            ],
         ]);
     }
 
