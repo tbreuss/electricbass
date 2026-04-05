@@ -13,6 +13,7 @@
  * @var app\features\catalog\models\Catalog[] $models
  * @var app\features\catalog\models\Catalog[] $latest
  * @var app\features\catalog\models\Catalog[] $popular
+ * @var array{applied: array<string, mixed>, defaults: array<string, mixed>} $urlFragments
  */
 
 use app\features\widgets\CanonicalLink;

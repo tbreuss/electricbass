@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var array<string, mixed> $applied
  * @var array<string, mixed> $defaults
