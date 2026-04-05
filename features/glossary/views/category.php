@@ -2,7 +2,7 @@
 
 /**
  * @var yii\web\View $this
- * @var app\features\glossar\models\Glossar[] $glossars
+ * @var app\features\glossary\models\Glossar[] $glossars
  */
 
 use app\helpers\Html;

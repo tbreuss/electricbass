@@ -2,9 +2,9 @@
 
 /**
  * @var yii\web\View $this
- * @var app\features\glossar\models\Glossar $glossar
- * @var app\features\glossar\models\Glossar $next
- * @var app\features\glossar\models\Glossar $previous
+ * @var app\features\glossary\models\Glossar $glossar
+ * @var app\features\glossary\models\Glossar $next
+ * @var app\features\glossary\models\Glossar $previous
  * @var string $selectedCategory
  */
 
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
     <h1><?php echo $glossar->title ?></h1>
     <?php #$this->metaDescription = strip_tags(Markdown::process($glossar->abstract)) ?>
 
-    <p>In <?php echo Html::a('Glossar', ['/glossar']) ?> / <?php echo Html::a($glossar->category, ['/glossar/index', 'category' => $selectedCategory]) ?></p>
+    <p>In <?php echo Html::a('Glossar', ['/glossary']) ?> / <?php echo Html::a($glossar->category, ['/glossary/index', 'category' => $selectedCategory]) ?></p>
 
     <?php if ($glossar->hasDefaultImage()): ?>
         <p><?= Html::img($glossar->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title]) ?></p>

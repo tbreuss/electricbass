@@ -1,8 +1,8 @@
 <?php
 
-namespace app\features\glossar;
+namespace app\features\glossary;
 
-use app\features\glossar\models\Glossar;
+use app\features\glossary\models\Glossar;
 use yii\web\GoneHttpException;
 use yii\web\Response;
 
@@ -16,7 +16,7 @@ final class Controller extends \yii\web\Controller
             throw new GoneHttpException();
         }
 
-        return $this->render('@app/features/glossar/views/index', [
+        return $this->render('@app/features/glossary/views/index', [
             'glossars' => $glossars,
             'selectedCategory' => $category
         ]);
@@ -32,7 +32,7 @@ final class Controller extends \yii\web\Controller
 
         #$glossar->increaseHits();
 
-        return $this->render('@app/features/glossar/views/view', [
+        return $this->render('@app/features/glossary/views/view', [
             'glossar' => $glossar,
             'previous' => $glossar->findPreviousOneOrNull(),
             'next' => $glossar->findNextOneOrNull(),
@@ -49,6 +49,6 @@ final class Controller extends \yii\web\Controller
             $glossar->save(false, ['autosort']);
             $i++;
         }
-        return $this->redirect(['/glossar/index']);
+        return $this->redirect(['/glossary/index']);
     }
 }

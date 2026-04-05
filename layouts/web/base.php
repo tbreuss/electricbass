@@ -215,7 +215,7 @@ if (!empty($this->params['metaDescription'])) {
                     <li><?= Html::a('Einfaches Online Metronom', ['/metronome/index']) ?></li>
                     <li><?= Html::a('Notenpapier zum Herunterladen und Ausdrucken', ['/music-paper/index']) ?></li>
                     <li><?= Html::a('Kleinanzeigen für Bassisten', ['/advertisement/index']) ?></li>
-                    <li><?= Html::a('Glossar für Bassisten', ['/glossar/index']) ?></li>
+                    <li><?= Html::a('Glossar für Bassisten', ['/glossary/index']) ?></li>
                 </ul>
             </nav>
             <?php endif; ?>

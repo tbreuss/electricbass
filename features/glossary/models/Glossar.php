@@ -1,6 +1,6 @@
 <?php
 
-namespace app\features\glossar\models;
+namespace app\features\glossary\models;
 
 use app\components\ActiveRecord;
 use Yii;

@@ -115,7 +115,7 @@ final class Search extends ActiveRecord
             case 'fingering':
                 return Url::to(['/fingering/index'], $scheme);
             case 'glossar':
-                return Url::to(['/glossar/index', 'category' => strtolower($this->category)], $scheme);
+                return Url::to(['/glossary/index', 'category' => strtolower($this->category)], $scheme);
             case 'lesson':
                 return Url::to(['/lesson/index', 'path' => $this->category], $scheme);
             case 'video':
