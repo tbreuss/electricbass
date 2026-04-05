@@ -26,7 +26,7 @@ use app\helpers\Html;
                 am <?= Yii::$app->formatter->asDate(Html::encode($model->created), "long") ?>
                 um <?= Yii::$app->formatter->asTime(Html::encode($model->created), "short") ?> Uhr
             </p>
-            <p class="comments__itemText"><?= nl2br(Html::encode(trim($model->text))) ?></p>
+            <p class="comments__itemText"><?= nl2br(trim($model->text)) ?></p>
         </div>
     <?php endforeach; ?>
 </div>
