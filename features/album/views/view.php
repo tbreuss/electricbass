@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $model->title;
     <h1 style="margin-bottom: 0.5rem"><?= $model->title ?></h1>
 
     <?php if (!empty($model->artist)): ?>
-        <p style="margin-bottom: 1.5rem">von <?= Html::a($model->artist, ['album/index', 'artist' => $model->artist]) ?></p>
+        <p style="margin-bottom: 1.5rem">von <?= Html::a($model->artist, ['album/index', '#' => http_build_query(['artist' => $model->artist])]) ?></p>
     <?php endif; ?>
 
     <?php if (!empty($model->subtitle)): ?>

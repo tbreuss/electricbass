@@ -45,7 +45,7 @@ final class Quote extends ActiveRecord
             'query' => $query,
             'pagination' => [
                 'pageSize' => 200,
-                'defaultPageSize' => 200,
+                'defaultPageSize' => 1000,
             ],
             'sort' => $sort,
         ]);

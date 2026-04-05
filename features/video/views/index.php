@@ -5,6 +5,7 @@
  * @var yii\data\Pagination $pagination
  * @var string $sort
  * @var app\features\video\models\Video[] $videos
+ * @var array{applied: array<string, mixed>, defaults: array<string, mixed>} $urlFragments
  */
 
 use app\features\widgets\CanonicalLink;
@@ -40,6 +41,7 @@ CanonicalLink::widget(['isPaginated' => true]);
 </div>
 
 <?= LinkPager::widget(['pagination' => $pagination]) ?>
+<?= $this->render('@app/features/_partials/faceted-navigation', ['applied' => $urlFragments['applied'], 'defaults' => $urlFragments['defaults']]) ?>
 
 <?php $this->beginBlock('sidebar') ?>
     <?= app\features\youtube\Widget::widget() ?>

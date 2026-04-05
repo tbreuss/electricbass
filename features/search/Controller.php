@@ -4,8 +4,10 @@ namespace app\features\search;
 
 use app\features\search\models\Search;
 use app\features\search\models\Searchlog;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Sort;
+use yii\web\GoneHttpException;
 
 final class Controller extends \yii\web\Controller
 {
@@ -13,6 +15,17 @@ final class Controller extends \yii\web\Controller
 
     public function actionIndex(?string $term = null): string
     {
+        if (array_diff_key(Yii::$app->request->getQueryParams(), ['term' => ''])) {
+            throw new GoneHttpException();
+        }
+        $defaults = [
+            'page' => '1',
+            'sort' => 'title',
+        ];
+
+        $page = (int)Yii::$app->request->getBodyParam('page', $defaults['page']);
+        $sort = Yii::$app->request->getBodyParam('sort', $defaults['sort']);
+
         $searched = $term !== null;
         $term = isset($term) ? trim($term) : '';
 
@@ -40,7 +53,7 @@ final class Controller extends \yii\web\Controller
                 $condition = implode(' OR ', $conditions);
             }
 
-            $sort = new Sort([
+            $sortObj = new Sort([
                 'attributes' => [
                     'rating' => [
                         'asc' => ['ratingAvg' => SORT_ASC, 'ratings' => SORT_DESC],
@@ -67,22 +80,21 @@ final class Controller extends \yii\web\Controller
                         'label' => 'Kommentare',
                     ],
                 ],
-                'defaultOrder' => [
-                    'title' => SORT_ASC,
-                ]
+                'defaultOrder' => str_starts_with($sort, '-') ? [substr($sort, 1) => SORT_DESC] : [$sort => SORT_ASC],
             ]);
 
             $query = Search::find()
                 ->select('tableName, tableId, context, id, title, abstract, url, category')
                 ->where($condition)
-                ->orderBy($sort->orders);
+                ->orderBy($sortObj->orders);
 
             $provider = new ActiveDataProvider([
                 'query' => $query,
                 'pagination' => [
+                    'page' => $page - 1, // zero-based
                     'defaultPageSize' => 20,
                 ],
-                'sort' => $sort,
+                'sort' => $sortObj,
             ]);
         }
 
@@ -94,7 +106,11 @@ final class Controller extends \yii\web\Controller
         return $this->render('@app/features/search/views/index', [
             'dataProvider' => $provider,
             'term' => $term,
-            'searched' => $searched
+            'searched' => $searched,
+            'urlFragments' => [
+                'applied' => ['page' => $page, 'sort' => $sort],
+                'defaults' => $defaults,
+            ],
         ]);
     }
 

@@ -3,6 +3,7 @@
 /**
  * @var string $summary
  * @var yii\data\Sort $sort
+ * @var string $sortName
  * @var string $sortLabel
  * @var string $sortDirection (up|down)
  */
@@ -19,18 +20,12 @@ use yii\widgets\LinkSorter;
                      Sortiert nach<span class="caret"></span>: <?= $sortLabel ?><?= $sortDirection === 'asc' ? '&uarr;' : '&darr;' ?></span>
                 </a>
                 <div class="dropdown__content">
-                    <?= LinkSorter::widget([
-                        'sort' => $sort,
-                        'options' => [
-                            'class' => 'dropdown__list',
-                            'itemOptions' => [
-                                'class' => 'dropdown__item'
-                            ],
-                        ],
-                        'linkOptions' => [
-                                'class' => 'dropdown__link'
-                        ]
-                    ]) ?>
+                    <ul class="dropdown__list">
+                        <?php foreach ($sort->attributes as $name => $attribute): ?>
+                            <?php $class = $sortName === $name ? ($sort->getAttributeOrder($name) === SORT_DESC ? 'desc' : 'asc') : '' ?>
+                            <li class="dropdown__item"><a class="dropdown__link <?= $class ?>" href="#" onclick="updateLocationHash({sort: '<?= $sort->createSortParam($name) ?>'});return false;"><?= $attribute['label'] ?></a></li>
+                        <?php endforeach ?>
+                    </ul>
                 </div>
             </div>
         </div>

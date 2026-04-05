@@ -5,6 +5,7 @@
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var bool $searched
  * @var string $term
+ * @var array{applied: array<string, mixed>, defaults: array<string, mixed>} $urlFragments
  */
 
 use app\features\rating\RatingReadOnly;
@@ -99,6 +100,8 @@ function highlightWords(string $text, string $words): string
         </div>
 
         <?= LinkPager::widget(['pagination' => $dataProvider->getPagination()]) ?>
+
+        <?= $this->render('@app/features/_partials/faceted-navigation', ['applied' => $urlFragments['applied'], 'defaults' => $urlFragments['defaults']]) ?>
 
     <?php endif; ?>
 </div>

@@ -21,4 +21,15 @@ final class LinkPager extends \yii\widgets\LinkPager
     public $disabledListItemSubTagOptions = ['class' => 'pagination__link'];
     //public $firstPageLabel = 'Erste Seite';
     //public $lastPageLabel = 'Letzte Seite';
+
+    protected function renderPageButton($label, $page, $class, $disabled, $active)
+    {
+        $button = parent::renderPageButton($label, $page, $class, $disabled, $active);
+
+        if (str_contains($button, '?')) {
+            $button = preg_replace('/(href=".+?page=(.+?)")/', 'href="#" onclick="updateLocationHash({page: \2});return false;"', $button);
+        }
+
+        return $button;
+    }
 }

@@ -11,19 +11,33 @@ use yii\web\GoneHttpException;
 
 final class Controller extends \yii\web\Controller
 {
-    public function actionIndex(string $artist = ''): string
+    public function actionIndex(): string
     {
-        if (array_diff_key(Yii::$app->request->getQueryParams(), ['artist' => '', 'page' => 0, 'sort' => ''])) {
+        if (count(Yii::$app->request->getQueryParams()) > 0) {
             throw new GoneHttpException();
         }
 
-        $filter = [];
+        $defaults = [
+            'page' => '1',
+            'sort' => '-modified',
+            'artist' => '',
+        ];
 
+        $page = (int)Yii::$app->request->getBodyParam('page', $defaults['page']);
+        $sort = Yii::$app->request->getBodyParam('sort', $defaults['sort']);
+        $artist = Yii::$app->request->getBodyParam('artist', $defaults['artist']);
+
+        $filter = [];
         if (!empty($artist)) {
             $filter['artist'] = $artist;
         }
 
-        $provider = Album::getActiveDataProvider($filter);
+        $provider = Album::getActiveDataProvider(
+            page: $page,
+            sort: $sort,
+            additionalWhere: $filter,
+        );
+
         $latest = Album::findLatest(5);
         $popular = Album::findPopular(5);
 
@@ -34,7 +48,13 @@ final class Controller extends \yii\web\Controller
             'sort' => $provider->getSort(),
             'filter' => $filter,
             'latest' => $latest,
-            'popular' => $popular
+            'popular' => $popular,
+            'currentPage' => $page,
+            'currentSort' => $sort,
+            'urlFragments' => [
+                'applied' => ['page' => $page, 'sort' => $sort, 'artist' => $artist],
+                'defaults' => $defaults,
+            ],
         ]);
     }
 

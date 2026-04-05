@@ -299,7 +299,6 @@
 
         function updateSelectElement(element, selected) {
             element.value = selected;
-            console.log(element, selected);
         }
 
         const layout = wrapper.querySelector(".at-controls .at-layout select");
