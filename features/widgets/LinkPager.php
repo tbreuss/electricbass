@@ -27,7 +27,7 @@ final class LinkPager extends \yii\widgets\LinkPager
         $button = parent::renderPageButton($label, $page, $class, $disabled, $active);
 
         if (str_contains($button, '?')) {
-            $button = preg_replace('/(href=".+\?page=(.+?)")/', 'href="#" onclick="updateLocationHash({page: \2});return false;"', $button);
+            $button = preg_replace('/(href=".+?page=(.+?)")/', 'href="#" onclick="updateLocationHash({page: \2});return false;"', $button);
         }
 
         return $button;
