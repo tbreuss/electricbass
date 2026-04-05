@@ -17,18 +17,31 @@ final class Controller extends \yii\web\Controller
      */
     public function actionIndex(): string
     {
-        if (Yii::$app->request->get('filter', '') !== '') {
+        if (count(Yii::$app->request->getQueryParams()) > 0) {
             throw new GoneHttpException();
         }
 
+        $defaults = [
+            'page' => '1',
+            'sort' => '-modified',
+        ];
+
+        $page = (int)Yii::$app->request->getBodyParam('page', $defaults['page']);
+        $sort = Yii::$app->request->getBodyParam('sort', $defaults['sort']);
+
         //$this->migrate();
         //$this->tags();
-        $provider = Video::getActiveDataProvider();
+        $provider = Video::getActiveDataProvider(page: $page, sort: $sort);
+
         return $this->render('@app/features/video/views/index', [
             'dataProvider' => $provider,
             'videos' => $provider->getModels(),
             'pagination' => $provider->getPagination(),
-            'sort' => $provider->getSort()
+            'sort' => $provider->getSort(),
+            'urlFragments' => [
+                'applied' => ['page' => $page, 'sort' => $sort],
+                'defaults' => $defaults,
+            ],
         ]);
     }
 

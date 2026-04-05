@@ -20,7 +20,7 @@ final class Video extends ActiveRecord
 {
     use SimilarModelsByTags;
 
-    public static function getActiveDataProvider(): ActiveDataProvider
+    public static function getActiveDataProvider(int $page, string $sort): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -55,9 +55,7 @@ final class Video extends ActiveRecord
                     'label' => 'Kommentare',
                 ],
             ],
-            'defaultOrder' => [
-                'modified' => SORT_DESC,
-            ]
+            'defaultOrder' => str_starts_with($sort, '-') ? [substr($sort, 1) => SORT_DESC] : [$sort => SORT_ASC],
         ]);
 
         $query = self::find()
@@ -68,6 +66,7 @@ final class Video extends ActiveRecord
         return new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
+                'page' => $page - 1, // zero-based
                 'defaultPageSize' => 24,
             ],
             'sort' => $sort,
