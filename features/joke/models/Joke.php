@@ -12,7 +12,7 @@ use yii\db\Expression;
  */
 final class Joke extends ActiveRecord
 {
-    public static function getActiveDataProvider(): ActiveDataProvider
+    public static function getActiveDataProvider(int $page, string $sort): ActiveDataProvider
     {
         $sort = new Sort([
             'attributes' => [
@@ -29,9 +29,7 @@ final class Joke extends ActiveRecord
                     'label' => 'Erstellungsdatum',
                 ],
             ],
-            'defaultOrder' => [
-                'joke' => SORT_ASC,
-            ]
+            'defaultOrder' => str_starts_with($sort, '-') ? [substr($sort, 1) => SORT_DESC] : [$sort => SORT_ASC],
         ]);
 
         $query = Joke::find()

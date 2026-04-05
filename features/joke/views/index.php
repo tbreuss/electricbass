@@ -5,6 +5,7 @@
  * @var yii\data\Pagination $pagination
  * @var string $sort
  * @var \Joke[] $models
+ * @var array{applied: array<string, mixed>, defaults: array<string, mixed>} $urlFragments
  */
 
 use app\features\rating\RatingShare;
@@ -29,6 +30,8 @@ CanonicalLink::widget(['isPaginated' => false]);
         <?php endforeach; ?>
     </div>
 </div>
+
+<?= $this->render('@app/features/_partials/faceted-navigation', ['applied' => $urlFragments['applied'], 'defaults' => $urlFragments['defaults']]) ?>
 
 <?= RatingShare::widget(["tableName" => "joke", "tableId" => 0]) ?>
 <?= app\features\comment\Widget::widget(["tableName" => "joke", "tableId" => 0]) ?>
