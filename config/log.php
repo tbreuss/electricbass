@@ -40,7 +40,10 @@ return [
             'class' => 'yii\log\DbTarget',
             'levels' => ['error', 'warning'],
             'maskVars' => $maskVars,
-            'except' => [],
+            'except' => [
+                'yii\web\HttpException:404',
+                'yii\web\HttpException:410',
+            ],
         ],
         [
             'class' => 'yii\log\EmailTarget',
