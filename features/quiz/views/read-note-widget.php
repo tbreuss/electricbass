@@ -117,8 +117,7 @@ $this->title = 'Bezeichne die Note – ' . $lead . ' | Quiz';
         const effectiveAttempts = attempts.reduce((acc, num) => acc + num, 0) - minimumNumberOfAttempts;
         const accuracy = Math.round((100 - (100 / diffAttempts * effectiveAttempts)) * 10) / 10;
 
-        let title = "Zurück zum Start";
-        let points = 10;
+        let title, points;
         if (accuracy === 100) {
             title = "Perfekt gemacht!";
             points = 50;
@@ -126,11 +125,14 @@ $this->title = 'Bezeichne die Note – ' . $lead . ' | Quiz';
             title = "Gut gemacht!";
             points = 40;
         } else if (accuracy >= 50) {
-            title = "Okay gemacht";
+            title = "In Ordnung";
             points = 30;
         } else if (accuracy >= 25) {
             title = "Das geht noch besser";
             points = 20;
+        } else {
+            title = "Zurück zum Start";
+            points = 10;
         }
 
         uiResultTitle.innerHTML = title;
@@ -155,22 +157,31 @@ $this->title = 'Bezeichne die Note – ' . $lead . ' | Quiz';
         const [selectedNote, _] = event.target.value.split(":");
 
         if (selectedNote === notesOnly[noteIndex]) {
-            attempts[noteIndex] = attempt;
-            noteIndex++;
-            uiProgress.style.width = (100 / 10 * noteIndex) + "%";
-            showForm();
-            initButtons();
-            attempt = 0;
+            event.target.classList.add("true");
+            setTimeout(() => {
+                attempts[noteIndex] = attempt;
+                noteIndex++;
+                uiProgress.style.width = (100 / 10 * noteIndex) + "%";
+                showForm();
+                initButtons();
+                attempt = 0;
+                event.target.classList.remove("true");
+            }, 500);
+            setTimeout(() => {
+                if (noteIndex >= notes.length) {
+                    showResult();
+                }
+            }, 1000); // first timeout plus css animation
         } else {
             attempts[noteIndex] = attempt;
-            event.target.disabled = true;
+            event.target.classList.add("false");
+            setTimeout(() => {
+                event.target.classList.remove("false");
+                event.target.disabled = true;
+            }, 500);
         }
 
         //uiDebug.innerHTML = JSON.stringify(attempts);
-
-        if (noteIndex >= notes.length) {
-            showResult();
-        }
     });
 
     uiPlayAgainButton.addEventListener("click", () => {

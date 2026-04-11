@@ -32,6 +32,29 @@ const noteToCoord = [
     ['B1', 204],
 ];
 
+const noteToFrequency = {
+    "g1": 195.9975,
+    "f1": 174.615,
+    "e1": 164.8125,
+    "d1": 146.8325,
+    "c1": 130.8125,
+    "b": 123.47,
+    "a": 110.00,
+    "g": 98.00,
+    "f": 87.3075,
+    "e": 82.4075,
+    "d": 73.415,
+    "c": 65.4075,
+    "B": 61.735,
+    "A": 55.00,
+    "G": 49.00,
+    "F": 43.6525,
+    "E": 41.2025,
+    "D": 36.7075,
+    "C": 32.7025,
+    "B1": 30.8675,
+};
+
 function calcNoteY(offsetY) {
     let y = Math.floor(offsetY / 10) * 10 + 4;
     y = Math.min(204, y);
@@ -91,8 +114,36 @@ function setNote(note) {
     }
 }
 
+function playTone(note) {
+    const frequency = noteToFrequency[note];
+    const context = new AudioContext();
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+    const filter = context.createBiquadFilter();
+
+    // Sägezahn-Welle für volleren Klang (besser als Sinus für Bass)
+    oscillator.type = 'sawtooth';
+    oscillator.frequency.setValueAtTime(frequency, context.currentTime); // E2 (Bass-E)
+
+    // Filter: Tiefpass für "dunklen" Bass-Klang
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(200, context.currentTime);
+
+    // Lautstärke
+    gainNode.gain.setValueAtTime(0.3, context.currentTime);
+
+    // Verbinden
+    oscillator.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(context.destination);
+
+    oscillator.start();
+    oscillator.stop(context.currentTime + 1); // 1 Sekunde
+}
+
 export {
     hideNote,
+    playTone,
     showNote,
     selectNote,
     setNote,

@@ -45,12 +45,26 @@
     max-width: 100%;
     text-align: center;
     color: #000;
+    transition: 0.25s;
 }
+
 .quiz-notes-button[disabled] {
     color: #e0e0e0;
     border-color: #e0e0e0;
     box-shadow: none;
     background-color: #fff;
+}
+.quiz-notes-button.false {
+    color: #fff;
+    background-color: #db4437;
+    border-color: #db4437;
+    transition: 0.25s;
+}
+.quiz-notes-button.true {
+    color: #fff;
+    background-color: #72ac51;
+    border-color: #72ac51;
+    transition: 0.25s;
 }
 .quiz-score {
     width: 100%;
