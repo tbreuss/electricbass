@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             if (!empty($selectedCategory)) {
                 $this->title = $category . ' | ' . $this->title;
-                $this->params['breadcrumbs'][count($this->params['breadcrumbs']) - 1] = ['label' => 'Glossar', 'url' => ['glossar/index']];
+                $this->params['breadcrumbs'][count($this->params['breadcrumbs']) - 1] = ['label' => 'Glossar', 'url' => ['/glossary/index']];
                 $this->params['breadcrumbs'][] = $category;
             }
             echo Html::tag('h3', $category);

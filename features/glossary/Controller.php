@@ -3,6 +3,7 @@
 namespace app\features\glossary;
 
 use app\features\glossary\models\Glossar;
+use Yii;
 use yii\web\GoneHttpException;
 use yii\web\Response;
 
@@ -10,6 +11,10 @@ final class Controller extends \yii\web\Controller
 {
     public function actionIndex(?string $category = null): string
     {
+        if (array_diff_key(Yii::$app->request->getQueryParams(), ['category' => ''])) {
+            throw new GoneHttpException();
+        }
+
         $glossars = Glossar::findAllByCategory($category);
 
         if (count($glossars) === 0) {

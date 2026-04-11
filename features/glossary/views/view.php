@@ -14,8 +14,8 @@ use app\features\widgets\Parser;
 use app\helpers\Html;
 
 $this->title = $glossar->title . ' | ' . $glossar->category . ' | Glossar';
-$this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['glossar/index']];
-$this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['glossar/index', 'category' => $selectedCategory]];
+$this->params['breadcrumbs'][] = ['label' => 'Glossar', 'url' => ['/glossary/index']];
+$this->params['breadcrumbs'][] = ['label' => $glossar->category, 'url' => ['/glossary/index', 'category' => $selectedCategory]];
 ;
 $this->params['breadcrumbs'][] = $glossar->title;
 ?>
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $glossar->title;
     <h1><?php echo $glossar->title ?></h1>
     <?php #$this->metaDescription = strip_tags(Markdown::process($glossar->abstract)) ?>
 
-    <p>In <?php echo Html::a('Glossar', ['/glossary']) ?> / <?php echo Html::a($glossar->category, ['/glossary/index', 'category' => $selectedCategory]) ?></p>
+    <p>In <?php echo Html::a('Glossar', ['/glossary/index']) ?> / <?php echo Html::a($glossar->category, ['/glossary/index', 'category' => $selectedCategory]) ?></p>
 
     <?php if ($glossar->hasDefaultImage()): ?>
         <p><?= Html::img($glossar->getDefaultImage('@web'), ["width" => 350, "class" => "img-fluid", "alt" => $glossar->title]) ?></p>
