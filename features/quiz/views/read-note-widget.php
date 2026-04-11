@@ -167,11 +167,6 @@ $this->title = 'Bezeichne die Note – ' . $lead . ' | Quiz';
                 attempt = 0;
                 event.target.classList.remove("true");
             }, 500);
-            setTimeout(() => {
-                if (noteIndex >= notes.length) {
-                    showResult();
-                }
-            }, 1000); // first timeout plus css animation
         } else {
             attempts[noteIndex] = attempt;
             event.target.classList.add("false");
@@ -182,6 +177,11 @@ $this->title = 'Bezeichne die Note – ' . $lead . ' | Quiz';
         }
 
         //uiDebug.innerHTML = JSON.stringify(attempts);
+        setTimeout(() => {
+            if (noteIndex >= notes.length) {
+                showResult();
+            }
+        }, 1000); // above timeout plus css animation
     });
 
     uiPlayAgainButton.addEventListener("click", () => {
