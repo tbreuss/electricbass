@@ -72,6 +72,12 @@ $this->title = 'Bezeichne die Note – ' . $lead . ' | Quiz';
         });
     }
 
+    function disableButtons() {
+        uiButtons.forEach((button) => {
+            button.disabled = true;
+        });
+    }
+
     function getPerfectlyBalancedNonConsecutive(array, count) {
         if (array.length === 0) return [];
         if (array.length === 1) return Array(count).fill(array);
@@ -157,6 +163,7 @@ $this->title = 'Bezeichne die Note – ' . $lead . ' | Quiz';
         const [selectedNote, _] = event.target.value.split(":");
 
         if (selectedNote === notesOnly[noteIndex]) {
+            disableButtons();
             event.target.classList.add("true");
             setTimeout(() => {
                 attempts[noteIndex] = attempt;
