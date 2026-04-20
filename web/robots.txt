@@ -1,1 +1,2 @@
-Sitemap: https://www.electricbass.ch/sitemap/google
+Sitemap: https://www.electricbass.ch/sitemap-images.xml
+Sitemap: https://www.electricbass.ch/sitemap-pages.xml
