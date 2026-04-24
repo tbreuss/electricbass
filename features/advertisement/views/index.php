@@ -22,7 +22,13 @@ $this->params['metaDescription'] = 'Schwarzes Brett für Bassisten mit Inseraten
     <h1><?= $this->title ?></h1>
 
     <?php if (Yii::$app->session->hasFlash('addFormSubmitted')): ?>
-        <div class="flash flash--success">Vielen Dank! Dein Inserat ist freigeschaltet. Wir behalten uns vor, unpassende oder missbräuchliche Inserate zu löschen.</div>
+        <div class="flash flash--success">
+            Vielen Dank!
+            Dein Inserat wurde erfolgreich eingereicht und ist jetzt online.
+            Es durchläuft derzeit eine manuelle Prüfung.
+            Bis zur Freigabe durch unseren Administrator ist die Seite für Suchmaschinen unsichtbar (Status 404), um eine vorzeitige Indexierung zu verhindern.
+            Wir behalten uns vor, unpassende oder missbräuchliche Anzeigen zu entfernen.
+        </div>
     <?php endif; ?>
 
     <?php if (Yii::$app->session->hasFlash('deleteConfirmed')): ?>

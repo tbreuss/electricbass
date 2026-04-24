@@ -76,12 +76,18 @@ final class Controller extends \yii\web\Controller
     public function actionView(string $id): Response|string
     {
         $model = Advertisement::findById('/kleinanzeigen/' . $id, false);
+
         if (is_null($model)) {
             throw new NotFoundHttpException();
         }
+
         if (!empty($model->spam)) {
             // if the ad was spam show the default not found error
             throw new GoneHttpException();
+        }
+
+        if (empty($model->approved)) {
+            Yii::$app->response->statusCode = 404;
         }
 
         // Umleitung bei Aufruf über ID, falls URL-Segment definiert ist

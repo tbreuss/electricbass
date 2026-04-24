@@ -39,6 +39,13 @@ $this->title = $model->getPageTitle();
             <div class="flash flash--success">Vielen Dank! Wir haben deine Nachricht an <?= $model->name ?> weitergeleitet.</div>
         <?php endif; ?>
 
+        <?php if (empty($model->approved)): ?>
+            <div class="flash flash--info">
+                Zur Vermeidung von Spam durchlaufen alle neuen Inserate eine manuelle Prüfung.
+                Bis zur Freigabe durch unseren Administrator ist die Seite für Suchmaschinen unsichtbar (Status 404), um eine vorzeitige Indexierung zu verhindern.
+            </div>
+        <?php endif ?>
+
         <?php if (($photo = $model->getPhoto()) != ''): ?>
             <div class="image mb-4">
                 <?= Html::img('@web/' . $photo, ["width" => 450, "alt" => $model->title, "class" => "img-fluid"]) ?>
@@ -47,7 +54,7 @@ $this->title = $model->getPageTitle();
 
         <div class="markdown"><?= strip_tags(Markdown::process($model->longtext), '<p><strong><b><ul><li><br>') ?></div>
 
-        <?php if (!empty($model->email)): ?>
+        <?php if (!empty($model->email) && !empty($model->approved)): ?>
             <p class="text-center"><?= Html::a('Anbieter kontaktieren', ['advertisement/contact', 'id' => $model->id], ['class' => 'button button--danger button--big']); ?></p>
         <?php endif; ?>
 
