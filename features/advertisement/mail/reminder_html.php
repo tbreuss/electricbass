@@ -5,7 +5,7 @@
 ?>
 Hallo <?php echo $model->name ?><br>
 <br>
-Dein Inserat bei electricbass.ch ist abgelaufen. Mit Klick auf den Link &laquo;Inserat verlängern&raquo; kannst du das Inserat um weitere 60 Tage verlängern.<br>
+Dein Inserat bei electricbass.ch ist abgelaufen. Mit Klick auf den Link &laquo;Inserat verlängern&raquo; kannst du das Inserat um weitere 90 Tage verlängern.<br>
 <br>
 <hr>
 <b><?php echo $model->title ?></b><br>

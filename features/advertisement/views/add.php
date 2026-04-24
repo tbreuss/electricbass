@@ -16,7 +16,7 @@ $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
     <h1>Inserat hinzufügen</h1>
 
     <p>Keine Anmeldung notwendig! Einfach das Inserat erfassen und fertig!<br />
-    Die Inserate haben eine Laufzeit von 60 Tagen.</p>
+    Die Inserate haben eine Laufzeit von 90 Tagen.</p>
 
     <?= $this->render('_form', ['model' => $model]) ?>
 

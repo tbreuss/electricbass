@@ -18,7 +18,7 @@ $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex']);
 
     <p>Dein Inserat <b><?php echo $model->title ?></b> wurde verlängert.</p>
 
-    <p>Nach 60 Tagen wird es automatisch gelöscht.<br />
+    <p>Nach 90 Tagen wird es automatisch gelöscht.<br />
     Antworten auf dein Inserat erhälst du direkt per E-Mail.</p>
 
     <p><?php echo Html::a('Alle Inserate', ['advertisement/index']) ?></p>

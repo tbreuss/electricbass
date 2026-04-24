@@ -349,8 +349,8 @@ final class Advertisement extends ActiveRecord
     public static function findAllForReminders(): array
     {
         return self::find()
-            ->select(['*, UNIX_TIMESTAMP(date) AS date, (DATEDIFF(NOW(), date)>60) AS expired'])
-            ->where('hidden=0 AND deleted=0 AND reminded IS NULL AND DATEDIFF(NOW(), date) BETWEEN 60 AND 67')
+            ->select(['*, UNIX_TIMESTAMP(date) AS date, (DATEDIFF(NOW(), date)>90) AS expired'])
+            ->where('hidden=0 AND deleted=0 AND reminded IS NULL AND DATEDIFF(NOW(), date) BETWEEN 90 AND 97')
             ->orderBy('date DESC')
             ->all();
     }
@@ -361,8 +361,8 @@ final class Advertisement extends ActiveRecord
     public static function findAllForAdvertisementIndexController(): array
     {
         return self::find()
-            ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
-            ->where('hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60')
+            ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>90) AS expired'])
+            ->where('hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 90')
             ->orderBy('date DESC')
             ->all();
     }
@@ -373,8 +373,8 @@ final class Advertisement extends ActiveRecord
     public static function findAllForFeed(): array
     {
         return self::find()
-            ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
-            ->where('hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60')
+            ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>90) AS expired'])
+            ->where('hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 90')
             ->orderBy('date DESC')
             ->all();
     }
@@ -386,7 +386,7 @@ final class Advertisement extends ActiveRecord
     public static function findAllByEmail(string $email): array
     {
         return self::find()
-            ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
+            ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>90) AS expired'])
             ->where('email=:email AND hidden=0 AND deleted=0', [':email' => $email])
             ->orderBy('id DESC')
             ->all();
@@ -400,8 +400,8 @@ final class Advertisement extends ActiveRecord
         $coords = explode(',', $position);
         if (count($coords) == 2) {
             $criteria = [
-                'select' => '*, UNIX_TIMESTAMP(date) AS date, (DATEDIFF(NOW(), date)>60) AS expired',
-                'condition' => 'latitude LIKE :latitude AND longitude LIKE :longitude AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60',
+                'select' => '*, UNIX_TIMESTAMP(date) AS date, (DATEDIFF(NOW(), date)>90) AS expired',
+                'condition' => 'latitude LIKE :latitude AND longitude LIKE :longitude AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 90',
                 'params' => [':latitude' => $coords[0] . '%', ':longitude' => $coords[1] . '%']
             ];
             #return self::model()->findAll($criteria);
@@ -415,10 +415,10 @@ final class Advertisement extends ActiveRecord
     public static function findById($id, bool $strict): ?Advertisement
     {
         $condition = is_numeric($id) ? 'id=:id' : 'url=:id';
-        $condition .= empty($strict) ? '' : ' AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60';
+        $condition .= empty($strict) ? '' : ' AND hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 90';
 
         $advertisement = self::find()
-            ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>60) AS expired'])
+            ->select(['*', 'UNIX_TIMESTAMP(date) AS date', '(DATEDIFF(NOW(), date)>90) AS expired'])
             ->where($condition, [':id' => $id])
             ->one();
 
@@ -529,7 +529,7 @@ final class Advertisement extends ActiveRecord
         $sql = "
             SELECT id,title,date,url,country,region
             FROM advertisement
-            WHERE hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 60
+            WHERE hidden=0 AND deleted=0 AND DATEDIFF(NOW(), date) < 90
             ORDER BY date DESC
             LIMIT {$limit}
         ";

@@ -10,7 +10,7 @@ use app\helpers\Url;
 Hallo!
 
 Dein Inserat auf electricbass.ch wurde erfolgreich verlängert.
-Nach einer Laufzeit von 60 Tagen wird es automatisch gelöscht.
+Nach einer Laufzeit von 90 Tagen wird es automatisch gelöscht.
 Antworten auf Dein Inserat erhälst Du direkt per E-Mail.
 
 Dein Inserat:
