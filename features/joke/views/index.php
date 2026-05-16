@@ -12,14 +12,13 @@ use app\features\rating\RatingShare;
 use app\features\widgets\CanonicalLink;
 use app\features\widgets\ListSummary;
 
-$this->title = 'Bassistenwitze';
 $this->params['breadcrumbs'][] = 'Bassistenwitze';
-$this->params['pageTitle'] = 'Die besten Bassistenwitze aller Zeiten';
-$this->params['metaDescription'] = 'Die Sammlung mit den besten Bassistenwitzen 😂 aller Zeiten. Mit Witzen über Bassisten oder zum Thema Bass. Jetzt lesen und ablachen.';
+$this->params['pageTitle'] = 'Witze, Flachwitze & Dad-Jokes: Die beste Sammlung für Bassisten ';
+$this->params['metaDescription'] = 'Sammlung der besten Witze, Flachwitze und Dad-Jokes aller Zeiten. Mit einem speziellen Fokus auf Humor für Bassisten und Witze rund ums Thema Bass. 😂';
 CanonicalLink::widget(['isPaginated' => false]);
 ?>
 <div class="content">
-    <h1>Bassistenwitze</h1>
+    <h1>Witze, Flachwitze & Dad-Jokes für Bassisten</h1>
     <?= ListSummary::widget(['pagination' => $pagination, 'sort' => $sort]) ?>
     <div class="widget widget-listview">
         <?php foreach ($models as $i => $model): ?>
